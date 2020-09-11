@@ -1,0 +1,123 @@
+@namespace(uri="http://www.neoflex.ru/meta/mspace", prefix="mspace")
+package mspace;
+
+abstract class Script extends File {
+  op EObject run();
+  attr String[1] name;
+  val StringParameter[*] parameters;
+  attr boolean runOnStatrup = true;
+  attr boolean runOnce = false;
+  attr boolean runOnShutdown = false;
+}
+
+class GroovyScript extends Script {
+}
+
+class AntScript extends Script {
+}
+
+class MavenScript extends Script {
+  attr String goals;
+  attr String home;
+  attr String repository;
+  attr String site;
+}
+
+abstract class EpsilonScript extends Script {
+  val ModelParameter[*] models;
+}
+
+class StringParameter {
+  attr String[1] name;
+  attr String[1] value;
+}
+
+abstract class ModelParameter {
+  attr String[1] name;
+}
+
+class EmfModelParameter extends ModelParameter {
+  attr boolean read = false;
+  attr boolean store = false;
+  attr boolean expand = true;
+  ref EmfModel[1] emfModel;
+}
+
+class RegisteredModelParameter extends ModelParameter {
+  ref RegisteredModel[1] registeredModel;
+}
+
+abstract class Model {
+  attr String[1] name;
+}
+
+abstract class EmfModel extends Model {
+  val MetaModelURI[*] mmUris;
+}
+
+class MetaModelURI {
+  attr String[1] uri;
+}
+
+class FileModel extends EmfModel {
+  attr FileModelType[1] fileModelType = "XMI";
+  attr String[1] path;
+  attr FileBaseType[1] fileBase = "MSPACE";
+}
+
+class URIModel extends EmfModel {
+  attr String[1] uri;
+}
+
+class RegisteredModel extends Model {
+  attr String[1] nsURI;
+}
+
+class EolScript extends EpsilonScript {
+}
+
+class EtlScript extends EpsilonScript {
+}
+
+class EclScript extends EpsilonScript {
+}
+
+class EglScript extends EpsilonScript {
+}
+
+class EgxScript extends EpsilonScript {
+}
+
+class FlockScript extends EpsilonScript {
+  val ModelParameter[1] source;
+  val ModelParameter[1] target;
+}
+
+class MetaServer {
+  attr String[1] name;
+  val Model[*] models;
+  ref FileModel[*] registerOnStartup;
+  ref FileModel[*] persistent;
+  val Script[*] scripts;
+  val Catalog[*] groovyScriptBases;
+}
+
+abstract class File {
+  attr String[1] path;
+  attr FileBaseType[1] fileBase = "MSPACE";
+}
+
+class Catalog extends File {
+}
+
+enum FileBaseType {
+  MSPACE = 1;
+  ABSOLUTE = 2;
+}
+
+enum FileModelType {
+  XMI = 1;
+  EMF = 2;
+  HUTN = 3;
+}
+

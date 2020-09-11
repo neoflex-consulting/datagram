@@ -1,0 +1,22 @@
+<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+ <title>Pop down menu Icons Copy 5</title>
+
+ <g>
+  <title>background</title>
+  <rect x="-1" y="-1" width="3.25" height="3.25" id="canvas_background" fill="none"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <line fill="none" stroke="#7f7f7f" stroke-width="null" fill-opacity="null" x1="1.15625" y1="5.15625" x2="1.15625" y2="16.225104" id="svg_5" stroke-linejoin="null" stroke-linecap="null"/>
+  <line fill="none" stroke="#7f7f7f" stroke-width="null" fill-opacity="null" x1="1.53125" y1="15.71875" x2="5.922292" y2="15.71875" id="svg_6" stroke-linejoin="null" stroke-linecap="null"/>
+  <line fill="none" stroke="#7f7f7f" stroke-width="null" fill-opacity="null" x1="1.28125" y1="5.65625" x2="6.846909" y2="5.65625" id="svg_7" stroke-linejoin="null" stroke-linecap="null"/>
+  <line fill="none" stroke="#7f7f7f" stroke-width="null" fill-opacity="null" x1="6.53125" y1="5.53125" x2="9.376545" y2="8.376545" id="svg_8" stroke-linejoin="null" stroke-linecap="null"/>
+  <line fill="none" stroke-width="null" fill-opacity="null" x1="9.21875" y1="11.46875" x2="9.21875" y2="8.025156" id="svg_9" stroke-linejoin="null" stroke-linecap="null" stroke="#7f7f7f"/>
+  <line fill="none" stroke="#7f7f7f" stroke-width="null" fill-opacity="null" x1="6.90625" y1="14.40625" x2="10.785784" y2="14.40625" id="svg_12" stroke-linejoin="null" stroke-linecap="null"/>
+  <line fill="none" stroke-width="null" fill-opacity="null" x1="8.84375" y1="12.46875" x2="8.84375" y2="16.346353" id="svg_13" stroke-linejoin="null" stroke-linecap="null" stroke="#7f7f7f"/>
+  <line fill="none" stroke="#7f7f7f" stroke-width="null" fill-opacity="null" x1="14.03125" y1="12.90625" x2="16.75018" y2="15.62518" id="svg_15" stroke-linejoin="null" stroke-linecap="null"/>
+  <line fill="none" stroke-width="null" fill-opacity="null" x1="16.09375" y1="15.65625" x2="18.730916" y2="13.019084" id="svg_16" stroke-linejoin="null" stroke-linecap="null" stroke="#7f7f7f"/>
+  <line stroke="#7f7f7f" stroke-linecap="null" stroke-linejoin="null" id="svg_1" y2="9.188166" x2="6.281261" y1="5.68751" x1="6.281261" fill-opacity="null" stroke-opacity="null" stroke-width="null" fill="none"/>
+  <line stroke="#7f7f7f" stroke-linecap="null" stroke-linejoin="null" id="svg_2" y2="8.687502" x2="9.287941" y1="8.687502" x1="6.093761" fill-opacity="null" stroke-opacity="null" stroke-width="null" fill="none"/>
+ </g>
+</svg>

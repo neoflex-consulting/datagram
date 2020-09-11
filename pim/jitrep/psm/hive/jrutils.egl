@@ -1,0 +1,43 @@
+[%
+operation Dataset hasParameters() {
+    return self.dataFields.exists(f|f.isKindOf(ParameterField));
+}
+
+operation ScalarType getHiveType() {
+  var dataType = self.dataType;
+  if (dataType == DataTypeDomain#STRING){
+    %]STRING[%
+  }   
+  else if (dataType == DataTypeDomain#BOOLEAN){
+    %]BOOLEAN[%
+  }  
+  else if (dataType == DataTypeDomain#DECIMAL){
+    %]DECIMAL(38, 10)[%
+  }
+  else if (dataType == DataTypeDomain#INTEGER){
+    %]INT[%
+  }
+  else if (dataType == DataTypeDomain#LONG){
+    %]BIGINT[%
+  }
+  else if (dataType == DataTypeDomain#BINARY){
+    %]BINARY[%
+  }
+  else if (dataType == DataTypeDomain#DATE){
+    %]DATE[%
+  }
+  else if (dataType == DataTypeDomain#DATETIME){
+    %]TIMESTAMP[%
+  }
+  else if (dataType == DataTypeDomain#TIME){
+    %]TIMESTAMP[%
+  }
+  else {
+    throw new RuntimeException("unknown dataType");
+  }
+}
+
+operation LookupType getHiveType() {
+  return self.lookupField.get("dataType").getHiveType(); 
+}
+%]

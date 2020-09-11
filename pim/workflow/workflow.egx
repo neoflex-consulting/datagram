@@ -1,0 +1,10 @@
+pre {
+    "Launching workflow EGX".println();
+    mspaceRoot.println("mspaceRoot: ");
+}
+
+rule WorkflowDefinition transform workflowApp : WorkflowApp {
+  template : mspaceRoot + "/pim/workflow/workflow.egl"
+  target : mspaceRoot + "/deployments/" + workflowApp.name + "/workflow.xml"   
+}
+

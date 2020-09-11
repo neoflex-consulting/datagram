@@ -1,0 +1,25 @@
+@namespace(uri="http://www.neoflex.ru/meta/auth",  prefix="auth")
+package auth;
+
+class UserInfo {
+  attr String name;
+  attr String login;
+  @mspace.ui(password="true")
+  attr String password;
+  attr String[*] roles;
+}
+
+@mspace.ui(readOnly="true")
+class AuditInfo {
+  attr String changeUser;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate changeDateTime;
+  attr String createUser;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate createDateTime;
+}
+

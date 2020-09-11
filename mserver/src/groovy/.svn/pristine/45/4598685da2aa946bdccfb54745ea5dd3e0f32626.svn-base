@@ -1,0 +1,8 @@
+package MetaServer.sse
+
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+
+class AnalyticWorkspace extends Workspace {
+    private final static Log log = LogFactory.getLog(AnalyticWorkspace.class)
+}

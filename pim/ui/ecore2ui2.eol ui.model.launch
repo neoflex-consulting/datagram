@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.epsilon.eol.eclipse.dt.launching.EolLaunchConfigurationDelegate">
+<booleanAttribute key="fine_grained_profiling" value="false"/>
+<listAttribute key="models">
+<listEntry value="#Tue Oct 18 11:52:06 MSK 2016&#13;&#10;aliases=S&#13;&#10;name=etl&#13;&#10;cached=true&#13;&#10;type=EMF_M2&#13;&#10;metamodelUri=http\://www.neoflex.ru/meta/etl"/>
+<listEntry value="#Thu Oct 13 11:52:58 MSK 2016&#13;&#10;aliases=S&#13;&#10;name=rt&#13;&#10;cached=true&#13;&#10;type=EMF_M2&#13;&#10;metamodelUri=http\://www.neoflex.ru/meta/rt"/>
+<listEntry value="#Thu Oct 13 11:53:02 MSK 2016&#13;&#10;aliases=S&#13;&#10;name=auth&#13;&#10;cached=true&#13;&#10;type=EMF_M2&#13;&#10;metamodelUri=http\://www.neoflex.ru/meta/auth"/>
+<listEntry value="#Thu Oct 13 11:53:06 MSK 2016&#13;&#10;aliases=S&#13;&#10;name=relational&#13;&#10;cached=true&#13;&#10;type=EMF_M2&#13;&#10;metamodelUri=http\://www.neoflex.ru/meta/relational"/>
+<listEntry value="#Thu Oct 13 11:53:10 MSK 2016&#13;&#10;aliases=S&#13;&#10;name=dataset&#13;&#10;cached=true&#13;&#10;type=EMF_M2&#13;&#10;metamodelUri=http\://www.neoflex.ru/meta/dataset"/>
+<listEntry value="#Thu Oct 13 11:53:17 MSK 2016&#13;&#10;aliases=S&#13;&#10;name=dwh&#13;&#10;cached=true&#13;&#10;type=EMF_M2&#13;&#10;metamodelUri=http\://www.neoflex.ru/meta/dwh"/>
+<listEntry value="#Fri Feb 10 11:39:37 MSK 2017&#13;&#10;isMetamodelFileBased=false&#13;&#10;name=T&#13;&#10;readOnLoad=false&#13;&#10;storeOnDisposal=true&#13;&#10;aliases=&#13;&#10;cached=true&#13;&#10;fileBasedMetamodelUri=&#13;&#10;metamodelUri=http\://www.neoflex.ru/meta/ui2&#13;&#10;modelUri=platform\:/resource/parent/psm/ui/angular/ui.model&#13;&#10;reuseUnmodifiedFileBasedMetamodels=true&#13;&#10;type=EMF&#13;&#10;modelFile=/parent/psm/ui/angular/ui.model&#13;&#10;expand=true&#13;&#10;metamodelFile="/>
+</listAttribute>
+<listAttribute key="parameters"/>
+<booleanAttribute key="profile_model_loading" value="false"/>
+<booleanAttribute key="profiling_enabled" value="false"/>
+<booleanAttribute key="reset_profiler" value="false"/>
+<stringAttribute key="source" value="/parent/pim/ui/ecore2ui2.eol"/>
+</launchConfiguration>

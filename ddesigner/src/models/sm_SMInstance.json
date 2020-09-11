@@ -1,0 +1,12 @@
+{
+    "eClasses": {
+      "sm.SMInstance": {
+        "containerName": "ViewContainer",
+        "views": ["StateMachineInstanceView", "FormView"],
+        "icon": "workflow.svg"
+      },
+      "sm.StateMachine": {
+        "icon": "workflow.svg"
+      }
+    }
+  }

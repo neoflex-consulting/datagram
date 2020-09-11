@@ -1,0 +1,79 @@
+{
+  "eClasses": {
+    "etl.DeltaSource": {
+      "ancestors": [
+        "etl.Source"
+      ],
+      "successors": [
+        "etl.DeltaSource"
+      ],
+      "containerName": "ViewContainer",
+      "views": [
+        "FormView"
+      ],
+      "actions": [
+      ],
+      "columns": [
+        {
+          "Header": "etl.OutputPort.attrs.name.caption",
+          "accessor": "outputPort.name",
+          "sortable": true,
+          "show": true
+        },
+        {
+          "Header": "etl.DeltaSource.attrs.name.caption",
+          "accessor": "name",
+          "show": true
+        },
+        {
+          "Header": "etl.DeltaSource.attrs.label.caption",
+          "accessor": "label",
+          "show": true
+        },
+        {
+          "Header": "etl.DeltaSource.attrs.sampleSize.caption",
+          "accessor": "sampleSize",
+          "show": true
+        },
+        {
+          "Header": "etl.DeltaSource.attrs.localFileName.caption",
+          "accessor": "localFileName",
+          "show": false
+        }
+      ],
+      "fields": [
+        {
+          "name": "outputPort",
+          "type": "form",
+          "entityType": "etl.OutputPort"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "label",
+          "type": "string"
+        },
+        {
+          "name": "sampleSize",
+          "type": "number",
+          "defaultValue": "100"
+        },
+        {
+          "name": "description",
+          "type": "text"
+        },
+        {
+          "name": "localFileName",
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "type": "table",
+          "entityType": "etl.SourceOption"
+        }
+      ]
+    }
+  }
+}

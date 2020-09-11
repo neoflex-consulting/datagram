@@ -1,0 +1,202 @@
+
+pre {
+  "Running core2core.etl".println();
+  var sourceMetaPackage = S.classForName("EClass").ePackage;
+  var targetMetaPackage = T.classForName("MClass").ePackage;
+  sourceMetaPackage.println("sourceMetaPackage: ");
+  targetMetaPackage.println("targetMetaPackage: ");
+  var mClassifiers: Map = new Map;
+  var mPackage;
+}
+ 
+operation getMClassifier(eType): T!MClassifier {
+  var nsURI = eType.ePackage.nsURI;
+  var elementId = S.getElementId(eType);
+  var path = nsURI + "#" + elementId; 
+  var mClassifier = mClassifiers.get(path);
+  if (mClassifier.isDefined()) {
+    return mClassifier;
+  } 
+  if (eType.isTypeOf(T!EDataType)) {
+	mClassifier = new T!MDataTypeProxy;
+	mClassifier.copyFromEDataType(eType);
+  }
+  else {
+	mClassifier = new T!MClassifierProxy;
+	mClassifier.copyFromEClassifier(eType);
+  }
+  mClassifiers.put(path, mClassifier);
+  mPackage.mClassifiers.add(mClassifier);
+  mClassifier.println("new external: ");
+  return mClassifier;
+} 
+ 
+operation T!MObject copyFromEObject(s) {
+	if (s.isTypeOf(S!EPackage)) {
+	    self.nsURI = s.nsURI;
+	    self.elementId = S.getElementId(s);
+	}
+	else if (s.isKindOf(S!EClassifier)) {
+    	self.nsURI = s.ePackage.nsURI;
+	    self.elementId = S.getElementId(s);
+	}
+	else if (s.isKindOf(S!EStructuralFeature)) {
+    	self.nsURI = s.eContainingClass.ePackage.nsURI;
+	    self.elementId = S.getElementId(s);
+	}
+	else if (s.isKindOf(S!EAnnotation)) {
+		self.copyFromEObject(s.eModelElement);
+	    self.elementId = S.getElementId(s);
+	}
+	self.reference = self.nsURI + "#" + self.elementId; 
+}
+
+operation T!MNamedElement copyFromENamedElement(s) {
+	self.copyFromEObject(s);
+    self.name = s.name;
+}
+
+operation T!MPackage copyFromEPackage(s) {
+	self.copyFromENamedElement(s);
+    self.nsURI = s.nsURI;
+    self.nsPrefix = s.nsPrefix;
+    var eSuperPackage ::= s.eSuperPackage;
+    if (eSuperPackage.isDefined()) {
+	    eSuperPackage.eSubpackages.add(t);
+    }
+}
+
+rule EPackage2MPackage
+    transform s : S!EPackage
+    to t : T!MPackage  {
+    t.copyFromEPackage(s);
+    mPackage = t;
+}
+
+operation T!MAttribute copyFromEAttribute(s) {
+	self.copyFromEStructuralFeature(s);
+    self.iD = s.iD;
+}
+
+rule EAttribute2MAttribute
+    transform s : S!EAttribute
+    to t : T!MAttribute  {
+    t.copyFromEAttribute(s);
+}
+
+operation T!MAnnotation copyFromEAnnotation(s) {
+	self.copyFromEObject(s);
+    self.source = s.source;
+    self.details.addAll(s.details.equivalent());
+    self.mModelElement ::= s.eModelElement;
+    self.references.addAll(s.references.equivalent());
+}
+
+rule EAnnotation2MAnnotation
+    transform s : S!EAnnotation
+    to t : T!MAnnotation  {
+    t.copyFromEAnnotation(s);
+}
+
+rule EStringToStringMapEntry2MStringToStringMapEntry
+    transform s : S!EStringToStringMapEntry
+    to t : T!MStringToStringMapEntry  {
+    t.key = s.key;
+    t.value = s.value;
+}
+
+operation T!MClassifier copyFromEClassifier(s) {
+	self.copyFromENamedElement(s);
+	self.instanceTypeName = s.instanceTypeName;
+    self.qName = s.ePackage.getQName() + "." + s.name;
+	var mPackage ::= s.ePackage;
+	if (mPackage.isDefined()) {
+		mPackage.mClassifiers.add(self);
+	}
+}
+
+operation S!EPackage getQName(): String {
+	var qName = self.nsPrefix;
+	if (self.eSuperPackage.isDefined()) {
+		qName = self.eSuperPackage.getQName() + "." + qName;
+	}
+	return qName;
+}
+
+rule EClass2MClass
+    transform s : S!EClass
+    to t : T!MClass  {
+    t.copyFromEClassifier(s);
+    t.abstract = s.abstract;
+    t.interface = s.interface;
+    for (st in s.eSuperTypes) {
+    	var newSt = st.equivalent();
+    	if (not newSt.isDefined()) {
+    		newSt = getMClassifier(st);
+    	}
+	    t.mSuperTypes.add(newSt);
+    } 
+}
+
+operation T!MStructuralFeature copyFromEStructuralFeature(s) {
+	self.copyFromETypedElement(s);
+	self.changeable = s.changeable;
+	self.volatile = s.volatile;
+	self.transient = s.transient;
+	self.defaultValueLiteral = s.defaultValueLiteral;
+	self.unsettable = s.unsettable;
+	self.derived = s.derived;
+	var eContainingClass ::= s.eContainingClass;
+	eContainingClass.mStructuralFeatures.add(self);
+}
+
+operation T!MTypedElement copyFromETypedElement(s) {
+	self.copyFromENamedElement(s);
+	self.ordered = s.ordered;
+	self.unique = s.unique;
+	self.lowerBound = s.lowerBound;
+	self.upperBound = s.upperBound;
+	var eType ::= s.eType;
+	if (eType.isDefined()) {
+		self.mType = eType;
+	}
+	else {
+		self.mType = getMClassifier(s.eType);
+	}	 
+}
+
+rule EReference2MReference
+    transform s : S!EReference
+    to t : T!MReference  {
+    t.copyFromEStructuralFeature(s);
+    t.containment = s.containment;
+    t.mOpposite ::= s.eOpposite;
+    t.mKeys.addAll(s.eKeys.equivalent());
+}
+
+operation T!MDataType copyFromEDataType(s) {
+    self.copyFromEClassifier(s);
+    self.serializable = s.serializable;
+}
+
+rule EDataType2MDataType
+    transform s : S!EDataType
+    to t : T!MDataType  {
+    t.copyFromEDataType(s);
+}
+
+rule EEnum2MEnum
+    transform s : S!EEnum
+    to t : T!MEnum  {
+    t.copyFromEDataType(s);
+}
+
+rule EEnumLiteral2MEnumLiteral
+    transform s : S!EEnumLiteral
+    to t : T!MEnumLiteral  {
+    t.copyFromENamedElement(s);
+    t.value = s.value;
+    t.literal = s.literal;
+    var mEnum ::= s.eEnum;
+    mEnum.mLiterals.add(t);
+}

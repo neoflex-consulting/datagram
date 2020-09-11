@@ -1,0 +1,8 @@
+{
+	"eClasses": {
+		"rt.MLFlowServer": {
+			"containerName": "ViewContainer",
+			"views": ["FormView", "MLFlowView"]
+		}
+	}
+}

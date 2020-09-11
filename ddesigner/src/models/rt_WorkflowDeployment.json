@@ -1,0 +1,138 @@
+{
+  "eClasses": {
+    "rt.WorkflowDeployment": {
+      "views": [
+        "FormView", "VCSInfo"
+      ],
+      "fields": [
+      {
+          "type": "line",
+          "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "project",
+          "type": "select",
+          "entityType": "etl.Project",
+          "displayField": "name"
+        }
+        ]
+        },
+        {
+          "name": "start",
+          "type": "select",
+          "entityType": "etl.Workflow",
+          "displayField": "name"
+        },
+        {
+          "name": "oozie",
+          "type": "select",
+          "entityType": "rt.Oozie",
+          "displayField": "name"
+
+        },
+        {
+          "name": "workflows",
+          "type": "multi",
+          "entityType": "etl.Workflow",
+          "displayField": "name"
+
+        },
+        {
+          "name": "deployments",
+          "type": "multi",
+          "entityType": "rt.Deployment",
+          "displayField": "name"
+        },
+        {
+          "name": "debug",
+          "type": "boolean"
+        },
+        {
+          "type": "line",
+          "fields": [
+            {
+          "name": "slideSize",
+          "type": "number"
+        },
+        {
+          "name": "rejectSize",
+          "type": "number"
+        },
+        {
+          "name": "fetchSize",
+          "type": "number"
+        },
+        {
+          "name": "partitionNum",
+          "type": "number"     
+        }
+        ]
+        },
+        {
+          "name": "persistOnDisk",
+          "type": "boolean"
+        },
+        {
+          "type": "line",
+          "fields": [
+        {
+          "name": "master",
+          "type": "string"
+        },
+        {
+          "name": "mode",
+          "type": "string"
+        }
+        ]
+        },        
+        {
+          "type": "line",
+          "fields": [
+        {
+          "name": "numExecutors",
+          "type": "number"
+        },
+        {
+          "name": "executorCores",
+          "type": "number"
+        },
+        {
+          "name": "executorMemory",
+          "type": "string"
+        },
+        {
+          "name": "driverMemory",
+          "type": "string"
+        }       
+        ]
+        },
+        {
+          "name": "parameters",
+          "type": "table",
+          "entityType": "etl.Property"
+        },
+        {
+          "name": "auditInfo",
+          "type": "form",
+          "entityType": "auth.AuditInfo"
+        },
+        {
+          "name": "dynamicAllocation",
+          "type": "boolean"
+        },
+        {
+          "name": "sparkOpts",
+          "type": "table",
+          "entityType": "rt.SparkOption"
+        },       
+        {
+          "name": "jvmOpts",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}

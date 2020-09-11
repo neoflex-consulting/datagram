@@ -1,0 +1,21 @@
+{
+    "eClasses": {
+        "sse.Notebook": {
+            "views": ["NotebookView","FormView"],
+            "displayFieldName": "shortname",
+            "icon": "notebook.svg"
+        },
+        "sse.ModelNotebook": {
+            "views": ["NotebookView","FormView"],
+            "createView": "FormView",
+            "displayFieldName": "shortname",
+            "icon": "mod-notebook.svg"
+        },
+        "sse.LibraryNotebook": {
+            "views": ["NotebookView","FormView"],
+            "createView": "FormView",
+            "displayFieldName": "shortname",
+            "icon": "lib-notebook.svg"
+        }
+    }
+}

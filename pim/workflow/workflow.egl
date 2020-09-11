@@ -1,0 +1,238 @@
+
+[%workflowApp.name.println("workflow.egl: ");%]
+[%=workflowApp.declaration()%]
+[% @template 
+operation WorkflowApp declaration() {%]
+<workflow-app xmlns='uri:oozie:workflow:0.5' xmlns:sla='uri:oozie:sla:0.2' name='[%=self.name%]'>
+    [%if (self.parameters.isDefined() and self.parameters.size() > 0) {%]
+    [%=parametersDeclaration(self.parameters)%]
+    [%}%]
+    [%if (self.global.isDefined()) {%]
+    [%=self.global.declaration()%]
+    [%}%]
+    [%if (self.credentials.isDefined() and self.credentials.size() > 0) {%]
+    <credentials>
+    [%for (credential in self.credentials) {%]
+        [%=credential.declaration()%]
+    [%}%]
+    </credentials>
+    [%}%]    
+    [%=self.start.declaration()%]
+    [%for (node in self.nodes) { if (node.isKindOf(KillNode) or node.isKindOf(DecisionNode) or node.isKindOf(ForkNode) or node.isKindOf(JoinNode) or node.isKindOf(ActionNode)) {%]
+    [%=node.declaration()%]
+    [%}}%]
+    [%=self.end.declaration()%]
+</workflow-app>
+[%}%]
+[% @template 
+operation Global declaration() {%]
+<global>
+    [%if (self.jobTracker.isDefined()) {%]<job-tracker>[%=self.jobTracker%]
+    </job-tracker>
+    [%}%]
+    [%if (self.nameNode.isDefined()) {%]
+    <name-node>[%=self.nameNode%]</name-node>
+    [%}%]
+    [%for (jobXml in self.jobXml) {%]
+    <job-xml>[%=jobXml.value%]</job-xml>
+    [%}%]
+    [%if (self.configuration.isDefined()) {%]
+    [%=configurationDeclaration(self.configuration)%]
+    [%}%]
+</global>
+[%}%]
+[% @template 
+operation Credential declaration() {%]
+<credential name='[%=self.name%]' type='[%=self.type%]'>
+[%for (property in self.property) {%]
+    [%=property.declaration()%]
+[%}%]
+</credential>
+[%}%]
+[% @template 
+operation StartNode declaration() {%]
+<start to='[%=self.to.name%]' />
+[%}%]
+[% @template 
+operation EndNode declaration() {%]
+<end name='[%=self.name%]' />
+[%}%]
+[% @template 
+operation KillNode declaration() {%]
+<kill name='[%=self.name%]'>
+[%if (self.message.isDefined()) {%]
+    <message>[%=self.message%]</message>
+[%}%]
+</kill>
+[%}%]
+[% @template 
+operation DecisionNode declaration() {%]
+<decision name='[%=self.name%]'>
+[%for (theCase in self.cases) {%]
+    <case to='[%=theCase.to.name%]'>[%=theCase.predicate%]</case>
+[%}%]
+    <default to="[%=self.`default`.name%]"/>
+</decision>
+[%}%]
+[% @template 
+operation ForkNode declaration() {%]
+<fork name='[%=self.name%]'>
+[%for (path in self.paths) {%]
+    <path start='[%=path.name%]' />
+[%}%]
+</fork>
+[%}%]
+[% @template 
+operation JoinNode declaration() {%]
+<join name='[%=self.name%]' to='[%=self.to.name%]' />
+[%}%]
+[% @template 
+operation ActionNode declaration() {%]
+<action name='[%=self.name%]'[%if (self.retryMax.isDefined()) {%] retry-max='[%=self.retryMax%]'[%}%][%if (self.retryInterval.isDefined()) {%] retry-interval='[%=self.retryInterval%]'[%}%][%if (self.cred.isDefined()) {%] cred='[%=self.cred%]'[%}%]>
+    [%=self.actionDeclaration()%]
+    <ok to='[%=self.ok.name%]' />
+    <error to='[%=self.error.name%]' />
+</action>
+[%}%]
+[% @template 
+operation FSAction actionDeclaration() {%]
+<fs>
+    [%=commandsDeclaration(self.commands)%]
+</fs>
+[%}%]
+[% @template 
+operation commandsDeclaration(commands) {%]
+[%for (command in commands) {%]
+    [%=command.declaration()%]
+[%}%]
+[%}%]
+[% @template 
+operation FSDelete declaration() {%]
+<delete path='[%=self.path%]'/>
+[%}%]
+[% @template 
+operation FSMkdir declaration() {%]
+<mkdir path='[%=self.path%]'/>
+[%}%]
+[% @template 
+operation FSMove declaration() {%]
+<move source='[%=self.source%]' target='[%=self.target%]'/>
+[%}%]
+[% @template 
+operation FSChmod declaration() {%]
+<chmod path='[%=self.path%]' permissions='[%=self.permissions%]' dir-files='[%=self.dirFiles%]'/>
+[%}%]
+[% @template 
+operation FSTouchz declaration() {%]
+<touchz path='[%=self.path%]'/>
+[%}%]
+[% @template 
+operation FSChgrp declaration() {%]
+<chmod path='[%=self.path%]' group='[%=self.`group`%]' dir-files='[%=self.dirFiles%]'/>
+[%}%]
+[% @template 
+operation SubWorkflowAction actionDeclaration() {%]
+<sub-workflow>
+    <app-path>[%=self.appPath%]</app-path>
+    [%if (self.propagateConfiguration) {%]
+    <propagate-configuration/>
+    [%}%]
+    [%=configurationDeclaration(self.configuration)%]
+</sub-workflow>
+[%}%]
+[% @template 
+operation configurationDeclaration(configuration) {%]
+<configuration>
+[%for (property in configuration) {%]
+    [%=property.declaration()%]
+[%}%]
+</configuration>
+[%}%]
+[% @template 
+operation parametersDeclaration(parameters) {%]
+<parameters>
+[%for (property in parameters) {%]
+    [%=property.declaration()%]
+[%}%]
+</parameters>
+[%}%]
+[% @template 
+operation Property declaration() {%]
+<property>
+    <name>[%=self.name%]</name>
+    <value>[%=self.value%]</value>
+    [%if (self.description.isDefined()) {%]
+    <description>[%=self.description%]</description>
+    [%}%]
+</property>   
+[%}%]
+[% @template 
+operation JavaAction actionDeclaration() {%]
+<java>
+    [%if (self.jobTracker.isDefined()) {%]
+    <job-tracker>[%=self.jobTracker%]</job-tracker>
+    [%}%]
+    [%if (self.nameNode.isDefined()) {%]
+    <name-node>[%=self.nameNode%]</name-node>
+    [%}%]
+    [%if (self.prepare.isDefined() and self.prepare.size() > 0) {%]
+    <prepare>
+        [%=commandsDeclaration(self.prepare)%]
+    </prepare>
+    [%}%]
+    [%for (jobXml in self.jobXml) {%]
+    <job-xml>[%=jobXml.value%]</job-xml>
+    [%}%]
+    <main-class>[%=self.mainClass%]</main-class>
+    [%=configurationDeclaration(self.configuration)%]
+    [%if (self.javaOpts.isDefined()) {%]<java-opts>[%=self.javaOpts%]
+    </java-opts>
+    [%}%]
+    [%for (javaOpt in self.javaOpt) {%]
+    <java-opt>[%=javaOpt.value%]</java-opt>
+    [%}%]
+    [%for (arg in self.arg) {%]
+    <arg>[%=arg.value%]</arg>
+    [%}%]
+    [%for (file in self.file) {%]
+    <file>[%=file.value%]</file>
+    [%}%]
+    [%for (archive in self.archive) {%]
+    <archive>[%=archive.value%]</archive>
+    [%}%]
+    [%if (self.captureOutput == true) {%]
+    <capture-output />
+    [%}%]
+</java>
+[%}%]
+[% @template 
+operation SparkAction actionDeclaration() {%]
+<spark xmlns="uri:oozie:spark-action:0.1">
+    <job-tracker>[%=self.jobTracker%]</job-tracker>
+    <name-node>[%=self.nameNode%]</name-node>
+    [%if (self.prepare.isDefined() and self.prepare.size() > 0) {%]
+    <prepare>
+        [%=commandsDeclaration(self.prepare)%]
+    </prepare>
+    [%}%]
+    [%for (jobXml in self.jobXml) {%]
+    <job-xml>[%=jobXml.value%]</job-xml>
+    [%}%]
+    <master>[%=self.master%]</master>
+    [%=configurationDeclaration(self.configuration)%]
+    [%if (self.mode.isDefined()) {%]
+    <mode>[%=self.mode%]</mode>
+    [%}%]
+    <name>[%=self.name%]</name>
+    [%if (self.class.isDefined()) {%]
+    <class>[%=self.class%]</class>
+    [%}%]
+    <jar>[%=self.jar%]</jar>
+    [%if (self.sparkOpts.isDefined()) {%]
+    <spark-opts>[%=self.sparkOpts%]</spark-opts>
+    [%}%]
+    [%for (arg in self.arg) {%]
+    <arg>[%=arg.value%]</arg>
+    [%}%]
+</spark>
+[%}%]

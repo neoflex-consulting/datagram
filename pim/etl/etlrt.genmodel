@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/sandbox/src/main/java" modelPluginID="mspace"
+    modelName="Etlrt" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0" copyrightFields="false"
+    language="" operationReflection="true" importOrganizing="true">
+  <foreignModel>etlrt.ecore</foreignModel>
+  <genPackages prefix="Etlrt" basePackage="ru.neoflex.meta" disposableProviderFactory="true"
+      loadInitialization="true" ecorePackage="etlrt.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="etlrt.ecore#//ExecutionStatus">
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//ExecutionStatus/FINISHED"/>
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//ExecutionStatus/INPROGRESS"/>
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//ExecutionStatus/STOPED"/>
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//ExecutionStatus/PAUSED"/>
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//ExecutionStatus/FAILED"/>
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//ExecutionStatus/NONE"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="etlrt.ecore#//EventType">
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//EventType/START"/>
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//EventType/FINISH"/>
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//EventType/EXCEPTION"/>
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//EventType/EXEC_UPDATE"/>
+      <genEnumLiterals ecoreEnumLiteral="etlrt.ecore#//EventType/ENV_UPDATE"/>
+    </genEnums>
+    <genClasses ecoreClass="etlrt.ecore#//PhysicalJdbcContext">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//PhysicalJdbcContext/url"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//PhysicalJdbcContext/user"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//PhysicalJdbcContext/password"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//PhysicalJdbcContext/schema"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="etlrt.ecore#//PhysicalContext">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//PhysicalContext/name"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference etlrt.ecore#//PhysicalContext/environment"/>
+    </genClasses>
+    <genClasses ecoreClass="etlrt.ecore#//Environment">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference etlrt.ecore#//Environment/physicalContexts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Environment/name"/>
+    </genClasses>
+    <genClasses ecoreClass="etlrt.ecore#//Execution">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference etlrt.ecore#//Execution/environment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Execution/executionStatus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Execution/transformationName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference etlrt.ecore#//Execution/statistics"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference etlrt.ecore#//Execution/contextMappings"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Execution/applicationName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Execution/master"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Execution/actualDate"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference etlrt.ecore#//Execution/executionParams"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Execution/id"/>
+    </genClasses>
+    <genClasses ecoreClass="etlrt.ecore#//Statistic">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Statistic/rddName"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference etlrt.ecore#//Statistic/execution"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Statistic/message"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Statistic/tuplesProcessed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Statistic/creationTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Statistic/lashChangeTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Statistic/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Statistic/stepName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Statistic/tuplesFailed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Statistic/executionStatus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//Statistic/id"/>
+    </genClasses>
+    <genClasses ecoreClass="etlrt.ecore#//ContextMapping">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference etlrt.ecore#//ContextMapping/execution"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference etlrt.ecore#//ContextMapping/physicalContext"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//ContextMapping/logicalContextName"/>
+    </genClasses>
+    <genClasses ecoreClass="etlrt.ecore#//ExecutionParam">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference etlrt.ecore#//ExecutionParam/execution"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//ExecutionParam/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//ExecutionParam/value"/>
+    </genClasses>
+    <genClasses ecoreClass="etlrt.ecore#//RuntimeEvent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/emitterType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/emitterId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/timestamp"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/previousStatus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/nextStatus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/environmentName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/seqNumber"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/eventType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/transformationName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/applicationName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/stepName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/statisticName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/rddName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute etlrt.ecore#//RuntimeEvent/message"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

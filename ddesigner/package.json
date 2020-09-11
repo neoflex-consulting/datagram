@@ -1,0 +1,58 @@
+{
+  "name": "ddesigner",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": {
+    "/*": {
+      "target": "http://localhost:8080",
+      "ws": true
+    }
+  },
+  "homepage": "/cim/ddesigner/build",
+  "dependencies": {
+    "ag-grid": "17.1.1",
+    "ag-grid-react": "17.1.0",
+    "antd": "3.9.1",
+    "dagre": "^0.8.2",
+    "grommet": "1.11.0",
+    "grommet-css": "1.6.0",
+    "i18next": "^10.6.0",
+    "i18next-browser-languagedetector": "^2.2.2",
+    "immutability-helper": "^2.7.1",
+    "jointjs": "2.0.1",
+    "jquery": "^3.3.1",
+    "json-bignumber": "^1.0.1",
+    "lodash": "^4.17.14",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-ace": "^5.10.0",
+    "react-bootstrap": "0.32.1",
+    "react-digraph": "^4.0.3",
+    "react-dnd": "^2.6.0",
+    "react-dnd-html5-backend": "^2.6.0",
+    "react-dom": "^16.4.1",
+    "react-dom-factories": "^1.0.2",
+    "react-draggable": "^3.0.5",
+    "react-fa": "latest",
+    "react-i18next": "^7.8.1",
+    "react-key-handler": "^1.0.1",
+    "react-measure": "^2.0.2",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.0.17",
+    "react-select": "^1.2.1",
+    "react-split-pane": "^2.0.2",
+    "react-splitter-layout": "^3.0.0",
+    "react-string-replace": "^0.4.1",
+    "react-table": "^6.8.6",
+    "react-vis": "^1.10.4",
+    "sockjs-client": "^1.3.0",
+    "stompjs": "^2.3.3",
+    "url-search-params-polyfill": "^3.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

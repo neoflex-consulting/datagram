@@ -1,0 +1,18 @@
+<svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="50" width="50" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <line stroke="null" stroke-linecap="null" stroke-linejoin="null" id="svg_3" y2="8.937642" x2="23.437503" y1="9.062641" x1="23.437503" fill-opacity="null" stroke-opacity="null" stroke-width="0.1" fill="none"/>
+  <line stroke="#666666" stroke-linecap="null" stroke-linejoin="null" id="svg_7" y2="34.187406" x2="23.687501" y1="6.312666" x1="23.687501" fill-opacity="null" stroke-width="4" fill="none"/>
+  <line transform="rotate(-8.237044334411621 20.062532424926736,13.000103950500504) " stroke="#666666" stroke-linecap="null" stroke-linejoin="null" id="svg_8" y2="18.81255" x2="15.312579" y1="7.187658" x1="24.812491" fill-opacity="null" stroke-opacity="null" stroke-width="4" fill="none"/>
+  <line stroke="#666666" transform="rotate(11.578003883361816 27.749965667724613,13.31260204315185) " stroke-linecap="null" stroke-linejoin="null" id="svg_9" y2="18.812551" x2="32.937415" y1="7.812652" x1="22.562511" fill-opacity="null" stroke-opacity="null" stroke-width="4" fill="none"/>
+  <path id="svg_10" d="m23.021568,8.114837l0.749993,-1.249989l0.749993,1.249989l-1.499985,0z" fill-opacity="null" stroke-opacity="null" stroke-width="4" stroke="#666666" fill="none"/>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_11" y2="40.687347" x2="42.567713" y1="40.687347" x1="6.312663" fill-opacity="null" stroke-opacity="null" stroke-width="4" stroke="#666666" fill="none"/>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_12" y2="42.640848" x2="4.937675" y1="30.562441" x1="4.937675" fill-opacity="null" stroke-opacity="null" stroke-width="4" stroke="#666666" fill="none"/>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_13" y2="42.640848" x2="42.937321" y1="30.562441" x1="42.937321" fill-opacity="null" stroke-opacity="null" stroke-width="4" stroke="#666666" fill="none"/>
+ </g>
+</svg>

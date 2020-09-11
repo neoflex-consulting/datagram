@@ -1,0 +1,49 @@
+{
+  "eClasses": {
+    "etl.Workflow": {
+      "views": [
+        "WorkflowDesignerView", "VCSInfo", "FormView"
+      ],
+      "fields": [
+        {
+          "type": "line",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+          "name": "project",
+          "type": "select",
+          "entityType": "etl.Project",
+          "displayField": "name"
+            }
+            ]
+        },
+        {
+              "name": "label",
+              "type": "string"
+        },
+        {
+          "name": "nodes",
+          "type": "table",
+          "entityType": "etl.WFNode"
+        },
+        {
+          "name": "jsonView",
+          "type": "text"
+        },
+        {
+          "name": "sla",
+          "type": "form",
+          "entityType": "etl.SlaDefinition"
+        },
+        {
+          "name": "auditInfo",
+          "type": "form",
+          "entityType": "auth.AuditInfo"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,288 @@
+
+operation valueToScalaDomain(value, domain) {
+    if (domain = T!DataTypeDomain#STRING) return value + ".asInstanceOf[String]";
+    if (domain = T!DataTypeDomain#DECIMAL) return "DECIMAL(" + value + ".asInstanceOf[String])";
+    if (domain = T!DataTypeDomain#INTEGER) return "INTEGER(" + value + ".asInstanceOf[String])";
+    if (domain = T!DataTypeDomain#LONG) return "java.lang.Long.valueOf(" + value + ".asInstanceOf[String])";
+    if (domain = T!DataTypeDomain#DATE) return "DATE(" + value + ".asInstanceOf[String])";
+    if (domain = T!DataTypeDomain#DATETIME) return "DATETIME(" + value + ".asInstanceOf[String])";
+    if (domain = T!DataTypeDomain#TIME) return "TIME(" + value + ".asInstanceOf[String])";
+    if (domain = T!DataTypeDomain#BOOLEAN) return 'Boolean.box("true".equalsIgnoreCase(' + value + '.asInstanceOf[String]))';
+    throw "domain not supported " + domain;
+}
+
+operation parameterToScalaDomain(field) {
+    return '(if (jobParameters("' + field.name.toLowerCase() + '") == null) { null } else { ' + valueToScalaDomain('jobParameters("' + field.name.toLowerCase() + '")', field.dataType.getDomain()) + '})';
+}
+
+operation S!ParameterConstraint getConstraintDomain() {
+    if (self.`operation` = S!Op#LIKE) return S!DataTypeDomain#STRING;
+    return self.field.dataType.getDomain();
+}
+
+operation S!ParameterConstraint createSQL(dataset) {
+    return "(" + self.field.name.toLowerCase() + " " + self.opSQL() + " " + self.sqlExpr + ")";
+}
+
+operation S!Dataset interpolareParameters(sql: String) {
+    var pattern = Native("java.util.regex.Pattern");
+    var matcher = pattern.compile("[&][a-zA-Z_][a-zA-Z\\d_]*").matcher(sql);
+    var params = Sequence{};
+    while (matcher.find()) {
+        params.add(sql.substring(matcher.start() + 1, matcher.end()));
+    } 
+    for (param in params) {
+        var paramField = self.paramFields().select(p|p.name == param).first();
+        if (not paramField.isDefined()) {
+          throw "parameter " + param + " not found in " + self.name;
+        }
+        sql = sql.replace("&" + param, paramField.getHiveValue().replace("[$]", "\\\\\\$"));        
+    }
+    return sql;
+}
+
+operation S!ParameterConstraint opSQL() {
+    if (self.`operation` = S!Op#AND) return "and";
+    if (self.`operation` = S!Op#AND) return "or";
+    if (self.`operation` = S!Op#AND) return "not";
+    if (self.`operation` = S!Op#EQUAL) return "=";
+    if (self.`operation` = S!Op#NOT_EQUAL) return "<>";
+    if (self.`operation` = S!Op#LESSER) return "<";
+    if (self.`operation` = S!Op#GREATER) return ">";
+    if (self.`operation` = S!Op#LESSER_OR_EQUAL) return "<=";
+    if (self.`operation` = S!Op#GRATER_OR_EQUAL) return ">=";
+    if (self.`operation` = S!Op#LIKE) return "like";
+    if (self.`operation` = S!Op#IN) return "in";
+    if (self.`operation` = S!Op#PLUS) return "+";
+    if (self.`operation` = S!Op#MINUS) return "-";
+    if (self.`operation` = S!Op#MUL) return "*";
+    if (self.`operation` = S!Op#DIV) return "/";
+    throw "unknown operation " + self.`operation`;
+}
+
+operation S!Dataset createSelectFromLoad() {
+    var sql = "SELECT\n";
+    for (field in self.allFields()) {
+        if (field.isKindOf(S!ClassifiedField)) {
+            sql = sql + "  NULL AS " + field.name.toLowerCase() + ",\n";
+            sql = sql + "  NULL AS " + field.name.toLowerCase() + "_rule";
+        }
+        else {
+            sql = sql + "  " + field.name.toLowerCase();
+        }
+        if (hasMore) sql = sql + ",\n";
+    }
+    sql = sql + "\nFROM  " + self.name.toLowerCase() + "_ld";
+    return sql;
+}
+
+operation S!Dataset createSQLFromLoad() {
+    return self.createSelectFromLoad() + self.createWhereWithParams();
+}
+
+operation S!Dataset createWhereWithParams() {
+    var sql = "";
+    if (self.hasParameters()) {
+        sql = sql + "\nWHERE";
+        for (field in self.paramFields()) {
+            sql = sql + "\n  " + field.name.toLowerCase() + " = NVL(" + field.getHiveValue() + ", " + field.name.toLowerCase() +  ")";
+            if (hasMore) sql = sql + " AND";
+        }
+    }
+    return sql;
+}
+
+operation S!Dataset createSQLFromFull() {
+    var sql = "SELECT\n";
+    for (field in self.allFields()) {
+        sql = sql + "  " + field.name.toLowerCase();
+        if (hasMore) sql = sql + ",\n";
+    }
+    sql = sql + "\nFROM " + self.name.toLowerCase() + "";
+    return sql + self.createWhereWithParams();
+}
+
+operation S!DatasetReference createSQL() {
+    var sql = "SELECT\n";
+    for (field in self.dataset.allFields()) {
+        sql = sql + "  " + field.name.toLowerCase();
+        if (hasMore) sql = sql + ",\n";
+    }
+    sql = sql + "\nFROM " + self.dataset.name.toLowerCase() + "";
+    if (self.parameterConstraints.size() > 0) {
+        sql = sql + "\n" + self.createWhere();
+    }
+    return sql;
+}
+
+operation S!DatasetReference createWhere() {
+    var sql = "WHERE";
+    for (parameterConstraint in self.parameterConstraints) {
+        sql = sql + "\n  " + parameterConstraint.createSQL(self.dataset);
+        if (hasMore) sql = sql + " AND";
+    }
+    return sql;
+}
+
+operation S!AbstractDataset tableName() {
+    return deployment.hiveDatabaseName + "." + self.name.toLowerCase() + "";
+}
+
+operation S!AbstractDataset hasParameters() {
+    return not self.paramFields().isEmpty();
+}
+
+operation S!AbstractDataset paramFields() {
+    return self.dataFields.sortBy(f|f.columnIndex).select(f|f.isKindOf(S!ParameterField));
+}
+
+operation S!AbstractDataset specFields() {
+    return self.dataFields.sortBy(f|f.columnIndex).select(f|not f.isKindOf(S!ClassifiedField));
+}
+
+operation S!AbstractDataset clsFields() {
+    return self.dataFields.sortBy(f|f.columnIndex).select(f|f.isKindOf(S!ClassifiedField));
+}
+
+operation S!AbstractDataset allFields() {
+    return self.dataFields.sortBy(f|f.columnIndex);
+}
+operation S!ScalarType getDomain() {
+    return self.dataType;
+}
+operation S!LookupType getDomain() {
+    return self.lookupField.dataType.getDomain();
+}
+operation S!DataType getScalaType() {
+    var domain = self.getDomain();
+    if (domain = T!DataTypeDomain#STRING) return "java.lang.String";
+    if (domain = T!DataTypeDomain#DECIMAL) return "java.math.BigDecimal";
+    if (domain = T!DataTypeDomain#INTEGER) return "java.lang.Integer";
+    if (domain = T!DataTypeDomain#LONG) return "java.lang.Long";
+    if (domain = T!DataTypeDomain#DATE) return "java.sql.Date";
+    if (domain = T!DataTypeDomain#DATETIME) return "java.sql.Timestamp";
+    if (domain = T!DataTypeDomain#TIME) return "java.sql.Timestamp";
+    if (domain = T!DataTypeDomain#BOOLEAN) return 'java.lang.Boolean';
+    if (domain = T!DataTypeDomain#BINARY) return 'Array[Byte]';
+    throw "domain not supported " + domain;
+}
+operation S!DataType asScalaType(expr) {
+    return expr + ".asInstanceOf[" + self.getScalaType() + "]";
+}
+operation S!DataType getHiveType() {
+    var domain = self.getDomain();
+    if (domain = T!DataTypeDomain#STRING) return "STRING";
+    if (domain = T!DataTypeDomain#DECIMAL) return "DECIMAL(38, 10)";
+    if (domain = T!DataTypeDomain#INTEGER) return "INT";
+    if (domain = T!DataTypeDomain#LONG) return "BIGINT";
+    if (domain = T!DataTypeDomain#DATE) return "DATE";
+    if (domain = T!DataTypeDomain#DATETIME) return "TIMESTAMP";
+    if (domain = T!DataTypeDomain#TIME) return "TIMESTAMP";
+    if (domain = T!DataTypeDomain#BOOLEAN) return 'BOOLEAN';
+    if (domain = T!DataTypeDomain#BINARY) return 'BINARY';
+    throw "domain not supported " + domain;
+}
+operation S!ParameterField getHiveValue() {
+    return "CAST('${" + self.getStringValue() + "}' AS " + self.dataType.getHiveType() + ")"; 
+}
+operation S!ParameterField getStringValue() {
+    return 'jobParameters("' + self.name.toLowerCase() + '").asInstanceOf[String]'; 
+}
+operation T!etl::Port addField(field, name, domain) {
+    field.name = name;
+    field.dataTypeDomain = domain;
+    self.fields.add(field);
+    return field;
+}
+operation T!etl::Port copyFields(port) {
+    for (field in port.fields) {
+        self.addField(new T!dataset::Field, field.name, field.dataTypeDomain);
+    }
+    return self;
+}
+operation T!etl::Port copyProjectionFields(port) {
+    return self.copyProjectionFieldsFiltered(port, null);
+}
+operation T!etl::Port copyProjectionFieldsFiltered(port, flist) {
+    for (field in port.fields) {
+        if (flist == null or flist.exists(fn| fn = field.name)) {
+	        var pfield = new T!etl::ProjectionField;
+	        pfield.fieldOperationType = T!etl::FieldOperationType#ADD;
+	        pfield.expression = field.name;
+	        pfield.sourceFields.add(field);
+	        self.addField(pfield, field.name, field.dataTypeDomain);
+        }
+    }
+    return self;
+}
+operation T!etl::Port findField(name) {
+    return self.fields.selectOne(f|f.name = name);
+}
+operation T!Transformation addParameter(name, value, expression) {
+    var property = new T!etl::Property;
+    property.name = name;
+    property.value = value;
+    property.expression = expression;
+    self.parameters.add(property);
+}
+operation T!Transformation createTransition(name, start, finish) {
+    var transition = new T!etl::Transition;
+    transition.name = name;
+    transition.start = start;
+    transition.finish = finish;
+    self.transitions.add(transition);
+    return transition;
+}
+operation T!Transformation createStep(step, name) {
+    self.incrementCount();
+    step.name = name + self.~stepCount;
+    step.label = step.name;
+    self.transformationSteps.add(step);
+    return step;
+}
+operation T!Transformation incrementCount() {
+    if (not self.~stepCount.isDefined()) {
+        self.~stepCount = 0;
+    }
+    self.~stepCount = self.~stepCount + 1;
+}
+operation T!Transformation createSource(step, name) {
+    self.incrementCount();
+    step.name = name + self.~stepCount;
+    step.label = step.name;
+    self.sources.add(step);
+    return step;
+}
+operation T!Transformation createInputPort(step, fromPort) {
+    step.inputPort = new T!etl::Port;
+    step.inputPort.name = step.name + "_Input";
+    self.link(fromPort, step.inputPort);
+    return step.inputPort;
+}
+operation T!Transformation createOutputPort(step) {
+    step.outputPort = new T!etl::OutputPort;
+    step.outputPort.name = step.name + "_Output";
+    return step.outputPort;
+}
+operation T!Transformation createTarget(step, name) {
+    self.incrementCount();
+    step.name = name + self.~stepCount;
+    step.label = step.name;
+    self.targets.add(step);
+    return step;
+}
+operation T!Transformation link(fromPort, toPort) {
+    toPort.copyFields(fromPort);
+    var transition = self.createTransition(fromPort.name + "_to_" + toPort.name, fromPort, toPort);
+    return transition;
+}
+operation T!Target createFieldMappings() {
+    for (field in self.inputPort.fields) {
+        var inputFieldsMapping = new T!TableTargetFeature;
+        inputFieldsMapping.inputFieldName = field.name;
+        inputFieldsMapping.targetColumnName = field.name;
+        inputFieldsMapping.keyField = false;
+        self.inputFieldsMapping.add(inputFieldsMapping);
+    }
+    return self;
+}

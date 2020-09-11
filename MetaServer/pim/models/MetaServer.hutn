@@ -1,0 +1,108 @@
+@Spec {
+	metamodel "http://www.neoflex.ru/meta/mspace" {
+		nsUri: "http://www.neoflex.ru/meta/mspace"
+	}
+}
+
+package  {
+	MetaServer "MetaServer" {
+		name: "MetaServer"
+		persistent: FileModel "mspace", FileModel "dataset", FileModel "relational", FileModel "rt", FileModel "etl", FileModel "dwh", FileModel "sse", FileModel "auth", FileModel "etlrt", FileModel "evs", FileModel "sm"
+		models: FileModel "mspace" {
+			name: "mspace"
+			path: "pim/mspace/mspace.ecore"
+		}, FileModel "dataset" {
+			name: "dataset"
+			path: "pim/dataset/dataset.ecore"
+		}, FileModel "relational" {
+			name: "relational"
+			path: "pim/relational/relational.ecore"
+        }, FileModel "etl" {
+            name: "etl"
+            path: "pim/etl/etl.ecore"
+        }, FileModel "auth" {
+            name: "auth"
+            path: "pim/auth/auth.ecore"
+		}, FileModel "rt" {
+			name: "rt"
+			path: "pim/rt/rt.ecore"
+		}, FileModel "dwh" {
+			name: "dwh"
+			path: "pim/dwh/dwh.ecore"
+		}, FileModel "sse" {
+			name: "sse"
+			path: "pim/dataspace/sse.ecore"
+		}, FileModel "XmiMetaServer" {
+			name: "XmiMetaServer"
+			path: "cim/mspace/pim/mspace/MetaServer.model"
+			mmUris: MetaModelURI "MetaModelURI1" {
+				uri: "http://www.neoflex.ru/meta/mspace"
+			}
+		}, URIModel "TeneoMetaServer" {
+			name: "TeneoMetaServer"
+			uri: "hibernate://?dsname=teneo&query1=from mspace.MetaServer where name='MetaServer'"
+			mmUris: MetaModelURI "MetaModelURI2" {
+				uri: "http://www.neoflex.ru/meta/mspace"
+			}
+		}, FileModel "HutnMetaServer" {
+			name: "HutnMetaServer"
+			fileModelType: HUTN
+			path: "cim/mspace/pim/mspace/MetaServer.hutn"
+		}, URIModel "TeneoUI2Library" {
+			name: "TeneoUI2Library"
+			uri: "hibernate://?dsname=teneo&query1=from ui2.UIPackage"
+			mmUris: MetaModelURI "MetaModelURI5" {
+				uri: "http://www.neoflex.ru/meta/ui2"
+			}
+        }, FileModel "etlrt" {
+            name: "etlrt"
+            path: "pim/etl/etlrt.ecore"
+        }, FileModel "evs" {
+            name: "evs"
+            path: "pim/eventStreaming/evs.ecore"
+        }, FileModel "sm" {
+            name: "sm"
+            path: "pim/sm/sm.ecore"
+        }
+		scripts: GroovyScript "test" {
+			path: "test/test.groovy"
+			name: "test"
+			parameters: StringParameter "param" {
+				name: "param"
+				value: "Hello world!"
+			}
+		}, FlockScript "MetaServerUp" {
+			path: "pim/mspace/copymodel.mig"
+			name: "MetaServerUp"
+			runOnStatrup: false
+			source: EmfModelParameter "MetaServerUpS" {
+				name: "S"
+				read: true
+				emfModel: FileModel "XmiMetaServer"
+			}
+			target: EmfModelParameter "MetaServerUpT" {
+				name: "T"
+				read: true
+				store: true
+				expand: false
+				emfModel: URIModel "TeneoMetaServer"
+			}
+		}, FlockScript "MetaServerDown" {
+			path: "pim/mspace/copymodel.mig"
+			name: "MetaServerDown"
+			runOnStatrup: false
+			source: EmfModelParameter "MetaServerDownS" {
+				name: "S"
+				read: true
+				emfModel: URIModel "TeneoMetaServer"
+			}
+			target: EmfModelParameter "MetaServerDownT" {
+				name: "T"
+				read: true
+				store: true
+				expand: false
+				emfModel: FileModel "XmiMetaServer"
+			}
+		}
+	}
+}

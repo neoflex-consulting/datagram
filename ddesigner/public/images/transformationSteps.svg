@@ -1,0 +1,40 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+ <title>Pop down menu Icons Copy 5</title>
+
+ <g>
+  <title>background</title>
+  <rect x="-1" y="-1" width="10.000008" height="10.000008" id="canvas_background" fill="none"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <line stroke="#666666" fill="none" stroke-width="3" x1="6.4375" y1="6.625" x2="6.4375" y2="57.777355" id="svg_1" stroke-linejoin="undefined" stroke-linecap="undefined"/>
+  <line stroke="#666666" fill="none" stroke-width="3" x1="32.3125" y1="31.250001" x2="32.3125" y2="86.02736" id="svg_3" stroke-linejoin="undefined" stroke-linecap="undefined" transform="rotate(-90 32.31250000000001,58.63867950439453) "/>
+  <ellipse stroke="#666666" ry="7.250004" rx="7.25" id="svg_6" cy="32.125" cx="32.5" fill-opacity="null" stroke-opacity="null" stroke-width="3" fill="none"/>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_7" y2="10.875" x2="29.4375" y1="18.25" x1="27.3125" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-35.35517501831055 35.875,14.562499999999998) " stroke-linecap="null" stroke-linejoin="null" id="svg_8" y2="10.875" x2="36.9375" y1="18.25" x1="34.8125" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line stroke="#666666" stroke-linecap="null" stroke-linejoin="null" id="svg_9" y2="12" x2="35.817305" y1="12" x1="28.0625" fill-opacity="null" stroke-opacity="null" stroke-width="3" fill="none"/>
+  <line transform="rotate(143.85931396484375 28.625,49.9375) " stroke-linecap="null" stroke-linejoin="null" id="svg_10" y2="46.25" x2="29.6875" y1="53.625" x1="27.5625" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-180 36.125,49.9375) " stroke-linecap="null" stroke-linejoin="null" id="svg_11" y2="46.25" x2="37.1875" y1="53.625" x1="35.0625" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line stroke="#666666" stroke-linecap="null" stroke-linejoin="null" id="svg_12" y2="52.5" x2="36.442305" y1="52.5" x1="28.6875" fill-opacity="null" stroke-opacity="null" stroke-width="3" fill="none"/>
+  <line transform="rotate(88.57271575927734 14.875,35.3125) " stroke-linecap="null" stroke-linejoin="null" id="svg_13" y2="31.625" x2="15.9375" y1="39" x1="13.8125" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-121.62814331054688 14.875000000000002,28.0625) " stroke-linecap="null" stroke-linejoin="null" id="svg_14" y2="24.375" x2="15.9375" y1="31.75" x1="13.8125" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-90 12.314903259277346,31.75) " stroke="#666666" stroke-linecap="null" stroke-linejoin="null" id="svg_15" y2="31.75" x2="16.192305" y1="31.75" x1="8.4375" fill-opacity="null" stroke-opacity="null" stroke-width="3" fill="none"/>
+  <line transform="rotate(54.813453674316406 49.87500000000002,35.31249999999999) " stroke-linecap="null" stroke-linejoin="null" id="svg_16" y2="31.625" x2="50.9375" y1="39" x1="48.8125" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-90.85393524169922 49.87500000000001,27.9375) " stroke-linecap="null" stroke-linejoin="null" id="svg_17" y2="24.25" x2="50.9375" y1="31.625" x1="48.8125" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(90 52.43990325927735,31.500000000000004) " stroke="#666666" stroke-linecap="null" stroke-linejoin="null" id="svg_18" y2="31.5" x2="56.317305" y1="31.5" x1="48.5625" fill-opacity="null" stroke-opacity="null" stroke-width="3" fill="none"/>
+  <line transform="rotate(-162.28985595703125 17.625,42.0625) " stroke-linecap="null" stroke-linejoin="null" id="svg_19" y2="38.375" x2="18.6875" y1="45.75" x1="16.5625" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-134.45053100585938 22.125000000000004,46.9375) " stroke-linecap="null" stroke-linejoin="null" id="svg_20" y2="43.25" x2="23.1875" y1="50.625" x1="21.0625" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(45 17.814903259277365,46.24999999999999) " stroke="#666666" stroke-linecap="null" stroke-linejoin="null" id="svg_21" y2="46.25" x2="21.692305" y1="46.25" x1="13.9375" fill-opacity="null" stroke-opacity="null" stroke-width="3" fill="none"/>
+  <line transform="rotate(104.44465637207031 43.12499999999999,47.06250000000001) " stroke-linecap="null" stroke-linejoin="null" id="svg_22" y2="43.375" x2="44.1875" y1="50.75" x1="42.0625" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-49.86079406738281 47.87499999999999,42.3125) " stroke-linecap="null" stroke-linejoin="null" id="svg_23" y2="38.625" x2="48.9375" y1="46" x1="46.8125" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-45 47.31490325927733,46.49999999999998) " stroke="#666666" stroke-linecap="null" stroke-linejoin="null" id="svg_24" y2="46.5" x2="51.192305" y1="46.5" x1="43.4375" fill-opacity="null" stroke-opacity="null" stroke-width="3" fill="none"/>
+  <line transform="rotate(128.55300903320312 17.249999999999996,21.562500000000004) " stroke-linecap="null" stroke-linejoin="null" id="svg_25" y2="17.875" x2="18.3125" y1="25.25" x1="16.1875" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-73.71263885498047 22,17.0625) " stroke-linecap="null" stroke-linejoin="null" id="svg_26" y2="13.375" x2="23.0625" y1="20.75" x1="20.9375" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-45 17.81490325927734,17.5) " stroke="#666666" stroke-linecap="null" stroke-linejoin="null" id="svg_27" y2="17.5" x2="21.692305" y1="17.5" x1="13.9375" fill-opacity="null" stroke-opacity="null" stroke-width="3" fill="none"/>
+  <line transform="rotate(45 46.56490325927735,17.499999999999996) " stroke="#666666" stroke-linecap="null" stroke-linejoin="null" id="svg_28" y2="17.5" x2="50.442305" y1="17.5" x1="42.6875" fill-opacity="null" stroke-opacity="null" stroke-width="3" fill="none"/>
+  <line transform="rotate(-160.43710327148438 47.12499999999999,21.687500000000007) " stroke-linecap="null" stroke-linejoin="null" id="svg_29" y2="18" x2="48.1875" y1="25.375" x1="46.0625" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line transform="rotate(-140.15408325195312 42.5,17.0625) " stroke-linecap="null" stroke-linejoin="null" id="svg_30" y2="13.375" x2="43.5625" y1="20.75" x1="41.4375" fill-opacity="null" stroke-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line stroke="#666666" fill="none" stroke-width="3" x1="58.1875" y1="6.625" x2="58.1875" y2="57.777355" id="svg_31" stroke-linejoin="undefined" stroke-linecap="undefined"/>
+  <line stroke="#666666" fill="none" stroke-width="3" x1="32.312496" y1="-22.124996" x2="32.312496" y2="32.65236" id="svg_32" stroke-linejoin="undefined" stroke-linecap="undefined" transform="rotate(-90 32.31249618530274,5.263679504394529) "/>
+ </g>
+</svg>

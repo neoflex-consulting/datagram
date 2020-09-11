@@ -1,0 +1,62 @@
+@namespace(uri="http://www.neoflex.ru/meta/dwh", prefix="dwh")
+package dwh;
+
+import "http://www.neoflex.ru/meta/etl";
+import "http://www.neoflex.ru/meta/rt";
+import "http://www.neoflex.ru/meta/relational";
+
+@mspace.ui(up="2", down="10", deep="2")
+class StagingArea {	 
+	 @mspace.ui(caption="Сгенерировать Workflow")
+  	 op void genarateWorkflow();
+  	 attr String[1] name;
+  	 
+	 ref rt.Oozie oozie;
+	 ref rt.Deployment[*] deployments;
+	 
+	 ref etl.Project project;
+	 ref etl.Context context;
+	 ref rt.SoftwareSystem softwareSystem;
+	 attr String catalog;
+	 val CsvOptions csvOptions;
+	 val etl.Property[*] parameters;
+	 val DefaultField[*]#stagingArea defaultFields;
+	 val StagingTable[*]#stagingArea tables;
+}
+
+class StagingTable {
+	attr String[1] name;
+ 	@mspace.ui(filter="scheme.name", ds="stagingArea.softwareSystem.scheme.name")
+	ref rel.Table table;
+	attr String fileName;
+	@teneo.jpa(value="@Column(length=10000)")
+	attr String columns;
+	val Mapping[*] mappings;
+	@mspace.ui(filter="auto")
+	ref DefaultField[*] defaultFields;
+	val CsvOptions csvOptions;
+	ref StagingArea[1]#tables stagingArea; 
+}
+
+class DefaultField {
+	attr String[1] name; 
+	attr String field; 
+	@mspace.ui(multiline="true")
+	@teneo.jpa(value="@Column(length=10000)")
+	attr String expression;
+	attr Boolean static;
+	ref StagingArea[1]#defaultFields stagingArea;
+}
+
+class Mapping {
+	attr String from;
+	attr String to;		
+}
+
+class CsvOptions {
+	 attr String delimiter;
+	 attr String dateFormat;
+	 attr String charset;
+	 attr Boolean header = false;	
+	 		
+}

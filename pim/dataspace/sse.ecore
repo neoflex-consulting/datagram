@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sse" nsURI="http://www.neoflex.ru/meta/sse" nsPrefix="sse">
+  <eClassifiers xsi:type="ecore:EClass" name="HadoopCluster">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(unique=true, nullable=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="livyServer" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//LivyServer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hiveConnection" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//JdbcConnection"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hiveMetastoreUri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hiveCatalog" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceConnection" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//JdbcConnection"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Workspace" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(unique=true, nullable=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="owner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="group" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cluster" eType="#//HadoopCluster"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelPipelineWorkspace" eSuperTypes="#//Workspace">
+    <eOperations name="toValidation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValidateModelPipelineWorkspace" eSuperTypes="#//ModelPipelineWorkspace">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ModelPipelineWorkspace"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnalyticWorkspace" eSuperTypes="#//Workspace">
+    <eOperations name="copy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JdbcWorkspace" eSuperTypes="#//Workspace">
+    <eOperations name="importSchema"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//JdbcConnection"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultSchema" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Interpreter">
+    <eLiterals name="SPARK"/>
+    <eLiterals name="PYTHON" value="1"/>
+    <eLiterals name="R" value="2"/>
+    <eLiterals name="SQL" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Permissions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="owner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="group" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="others" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Column">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columnType" eType="#//ColumnType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ColumnType" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isNullable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=4096)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScalarType" eSuperTypes="#//ColumnType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" eType="ecore:EEnum http://www.neoflex.ru/meta/dataset#//DataTypeDomain"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nativeType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructType" eSuperTypes="#//ColumnType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+        eType="#//Column" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//ColumnType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementType" eType="#//ColumnType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractNode" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(unique=true, nullable=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="owner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="group" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workspace" eType="#//Workspace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datasets" upperBound="-1"
+        eType="#//AbstractNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="permissions" eType="#//Permissions"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DatasetType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colour" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractDataset" abstract="true" eSuperTypes="#//AbstractNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+        eType="#//Column" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionByCols" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.columns"/>
+        <details key="displayField" value="columnName"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datasetType" eType="#//DatasetType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Transformation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HiveDataset" eSuperTypes="#//AbstractDataset">
+    <eOperations name="importMetadata"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="db" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="table" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HiveExternalDataset" eSuperTypes="#//HiveDataset">
+    <eOperations name="buildHiveTable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileType" eType="ecore:EEnum http://www.neoflex.ru/meta/etl#//LocalFileFormat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JdbcDataset" abstract="true" eSuperTypes="#//AbstractDataset">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//JdbcConnection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableDataset" eSuperTypes="#//JdbcDataset">
+    <eOperations name="importMetadata"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schema" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryDataset" eSuperTypes="#//JdbcDataset">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkedDataset" eSuperTypes="#//AbstractDataset">
+    <eOperations name="importMetadata"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkTo" eType="#//AbstractDataset">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="workspace.cluster.e_id"/>
+        <details key="ds" value="workspace.cluster.e_id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceDataset" eSuperTypes="#//AbstractDataset">
+    <eOperations name="recreateTable"/>
+    <eOperations name="loadCSV">
+      <eParameters name="skip" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="encoding" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="delimiter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="quote" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="file" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="mspace.ui">
+          <details key="file" value="true"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="primaryKeyCols" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.columns"/>
+        <details key="displayField" value="columnName"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dataset" eSuperTypes="#//AbstractDataset">
+    <eOperations name="scheduleFullRebuild"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interpreter" eType="#//Interpreter"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractNotebook" abstract="true" eSuperTypes="#//AbstractNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paragraphs" upperBound="-1"
+        eType="#//Paragraph" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NotebookType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colour" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Notebook" eSuperTypes="#//AbstractNotebook">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notebookType" eType="#//NotebookType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkableNotebook" abstract="true" eSuperTypes="#//AbstractNotebook"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LibraryNotebook" eSuperTypes="#//LinkableNotebook"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelNotebook" eSuperTypes="#//LinkableNotebook">
+    <eOperations name="deploy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" eType="#//StructType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//StructType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ParagraphInterpreter">
+    <eLiterals name="SPARK"/>
+    <eLiterals name="PYTHON" value="1"/>
+    <eLiterals name="R" value="2"/>
+    <eLiterals name="SQL" value="3"/>
+    <eLiterals name="MARKDOWN" value="4"/>
+    <eLiterals name="HTML" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Paragraph">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//ParagraphBody"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateUpdated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="textVisible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resultVisible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="titleVisible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="paragraphWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumbering" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fontSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//ParagraphStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="result" eType="#//ParagraphResult"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParagraphBody" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CodeBody" eSuperTypes="#//ParagraphBody">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interpreter" eType="#//ParagraphInterpreter"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkBody" eSuperTypes="#//ParagraphBody">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkNotebook" eType="#//LinkableNotebook"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="paragraphName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ParagraphStatus">
+    <eLiterals name="NEW"/>
+    <eLiterals name="PENDING" value="1"/>
+    <eLiterals name="IN_PROGRESS" value="2"/>
+    <eLiterals name="SUCCESS" value="3"/>
+    <eLiterals name="ERROR" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParagraphResult" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TextResult" eSuperTypes="#//ParagraphResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="data" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImageResult" eSuperTypes="#//ParagraphResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mimeType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="base64data" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableResult" eSuperTypes="#//ParagraphResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+        eType="#//Column" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowsData" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputType" eType="#//OutputType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="axisX" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="axisY" upperBound="-1"
+        eType="#//ColumnAgg" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groups" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorResult" eSuperTypes="#//ParagraphResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ename" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="evalue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="traceback" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OutputType">
+    <eLiterals name="TABLE"/>
+    <eLiterals name="LINE" value="1"/>
+    <eLiterals name="BAR" value="2"/>
+    <eLiterals name="PIE" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AggFunc">
+    <eLiterals name="NONE"/>
+    <eLiterals name="FIRST" value="1"/>
+    <eLiterals name="LAST" value="2"/>
+    <eLiterals name="MIN" value="3"/>
+    <eLiterals name="MAX" value="4"/>
+    <eLiterals name="AVG" value="5"/>
+    <eLiterals name="SUM" value="6"/>
+    <eLiterals name="COUNT" value="7"/>
+    <eLiterals name="ONE" value="8"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ColumnAgg">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="func" eType="#//AggFunc"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ModelType">
+    <eLiterals name="R" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eOperations name="upload">
+      <eParameters name="file" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="mspace.ui">
+          <details key="file" value="true"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+    <eOperations name="deploy"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(unique=true, nullable=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelType" lowerBound="1"
+        eType="#//ModelType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="livyServer" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//LivyServer"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="base64body" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sessionId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="applicationId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

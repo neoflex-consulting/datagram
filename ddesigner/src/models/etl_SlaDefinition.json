@@ -1,0 +1,49 @@
+{
+	"eClasses": {
+		"etl.SlaDefinition": {
+			"ancestors": [],
+			"successors": [
+				"etl.SlaDefinition"
+			],
+			"containerName": "ViewContainer",
+			"views": [
+				"FormView"
+			],
+			"actions": [],
+			"fields": [
+		{
+	      "name": "nominalTime",
+	      "type": "string"	      
+        }, 
+		{
+          "type": "line",
+          "fields": [
+        {
+	      "name": "shouldStart",
+	      "type": "string"	      
+        },      
+	    {
+	      "name": "shouldEnd",
+	      "type": "string"	      
+        },      
+	    {
+	      "name": "maxDuration",
+	      "type": "string"	      
+        } 
+        ]
+        }, 
+	    {
+	      "name": "alertEvents",
+	      "type": "string"	      
+        },      
+	    {
+	      "name": "alertContact",
+	      "type": "string"	      
+        }      
+				
+				
+				
+			]
+		}
+	}
+}

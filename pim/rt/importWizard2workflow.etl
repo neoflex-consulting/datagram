@@ -1,0 +1,428 @@
+pre {
+    "Running importWizard2workflow.etl".println();
+}
+
+rule ImportWizard2Workflow
+    transform importWizard : S!ImportWizard   
+    to workflow : T!Workflow, workflowDeployment : T!WorkflowDeployment {
+    guard: (importWizard.wfParallelism <> null and importWizard.wfParallelism > 1)
+        workflow.name = importWizard.name + "_workflow";
+        workflow.project = importWizard.project;
+
+        var start = new T!WFManualStart;
+        start.name = workflow.name + "_start";
+        start.workflow = workflow;
+        var end = new T!WFEnd;
+        end.name = workflow.name + "_end";
+        end.workflow = workflow;
+        var kill = new T!WFKill;
+        kill.name = workflow.name + "_kill";
+        kill.workflow = workflow;
+        var fork;
+        var join;
+        var pcount : Integer = 0;
+        var prevNode = start;
+        var nextNode = end;
+        var prevLog = null;
+        var log = null;
+        var entitiesToImport: List = new List();
+        for(ent in importWizard.entities) {
+            if(ent.active == true) {
+                entitiesToImport.add(ent);    
+            }
+        }
+        
+        if (entitiesToImport.size > 1) {
+            fork = new T!WFFork;
+            fork.name = workflow.name + "_fork" + pcount.toString();
+            fork.workflow = workflow;
+            join = new T!WFJoin;
+            join.name = workflow.name + "_join" + pcount.toString();
+            join.workflow = workflow;
+
+            start.`to` = fork;
+            join.`to` = end;
+        }
+        var parallelizm : Integer = 0;
+        if(importWizard.wfParallelism <> null) {
+            parallelizm = importWizard.wfParallelism;
+        }
+        var pidx : Integer = 0;
+        var isOneOut : Boolean = false;
+        for (t in entitiesToImport) {
+            pidx += 1;
+
+            var node = new T!WFTransformation;
+            
+            if(isOneOut = true) {
+                join.`to` = node;
+                node.ok = end;
+            }
+            
+            node.transformation = importWizard.templateTransformation;
+            
+            node.numExecutors = t.numExecutors;
+            node.executorCores = t.executorCores;
+            node.driverMemory = t.driverMemory;
+            node.executorMemory = t.executorMemory;
+            for (opt in t.sparkOpts) {
+                var newParam = new T!Property;
+                newParam.name = opt.name;
+                newParam.value = opt.value;
+                node.sparkOpts.add(newParam);
+            }
+                                    
+            if(t.templateTransformation <> null){
+                node.transformation = t.templateTransformation;
+            }
+            var tableNameParam = new T!Property;
+            
+            tableNameParam.name = "tableName";
+            tableNameParam.value = t.name;
+            node.parameters.add(tableNameParam);
+            
+            var wfdParam = new T!Property;
+            wfdParam.name = t.name;
+            wfdParam.value = t.name;
+            
+            workflowDeployment.parameters.add(wfdParam);            
+            
+            if(t.whereCondition <> null and t.whereCondition <> "") {       
+                var newParam = new T!Property;     
+                newParam.name = "whereCondition";
+                newParam.value = t.whereCondition;
+                node.parameters.add(newParam);
+            }
+            if(t.partitionField <> null and t.partitionField <> "") {
+                var newParam = new T!Property;
+                newParam.name = "partitionField";
+                newParam.value = t.partitionField;
+                node.parameters.add(newParam);
+            }
+            if(t.partitionExpression <> null and t.partitionExpression <> "") {
+                var newParam = new T!Property;
+                newParam.name = "partitionExpression";
+                newParam.value = t.partitionExpression;
+                node.parameters.add(newParam);
+            }
+            if(t.preStatement <> null and t.preStatement <> "") {
+                var newParam = new T!Property;
+                newParam.name = "preStatement";
+                newParam.value = t.preStatement;
+                node.parameters.add(newParam);
+            }
+            if(t.idField <> null and t.idField <> "") {
+                var newParam = new T!Property;
+                newParam.name = "idField";
+                newParam.value = t.idField;
+                node.parameters.add(newParam);            
+            }
+            if(t.idParallelism <> null) {
+                var newParam = new T!Property;
+                newParam.name = "idParallelism";
+                newParam.value = t.idParallelism;
+                node.parameters.add(newParam);            
+            }
+
+            node.name = t.name + "_tNode";
+            node.label = node.name;
+            node.workflow = workflow;
+            
+            if((importWizard.exitOnFail = null or importWizard.exitOnFail = false) and importWizard.loggingTransformation <> null){
+	            log = new T!WFTransformation;
+	            log.transformation = importWizard.loggingTransformation;
+	            for (opt in t.sparkOpts) {
+	                var newParam = new T!Property;
+	                newParam.name = opt.name;
+	                newParam.value = opt.value;
+	                log.sparkOpts.add(newParam);
+	            }
+	            log.numExecutors = t.numExecutors;
+	            log.executorCores = t.executorCores;
+	            log.driverMemory = t.driverMemory;
+	            log.executorMemory = t.executorMemory;
+	           
+	            //var newParam = new T!Property;
+	            /*newParam.name = "errorCode";
+	            newParam.value = "${wf:errorCode(wf:lastErrorNode())}";
+	            log.parameters.add(newParam);*/
+	            var newParam = new T!Property;
+	            newParam.name = "entityName";
+	            newParam.value = t.name;
+	            log.parameters.add(newParam);
+	            
+	            
+	            log.name = t.name + "_tLog";
+            	log.label = log.name;
+            	log.workflow = workflow;
+            	log.error = kill;
+            	node.error = log;
+	            /*if(prevLog <> null ){
+            		prevLog.ok = join;
+            	}*/
+            	prevLog = log;  
+	            
+            }else{
+            	node.error = kill;
+            }
+            if (entitiesToImport.size > 1 and isOneOut = false) {
+	            if((importWizard.exitOnFail = null or importWizard.exitOnFail = false) and importWizard.loggingTransformation <> null){
+	            	log.ok = join;
+	            }
+	            node.ok = join;
+	            fork.paths.add(node);
+                
+            } 
+            if (entitiesToImport.size == 1) {
+                start.`to` = node;
+                node.ok = end;
+            }
+            
+            if(parallelizm = pidx and hasMore = true) {
+                if((entitiesToImport.size - loopCount) = 1) {
+                    isOneOut = true;
+                }
+                
+                pcount += 1;
+                pidx = 0;
+                var prevFork = fork;
+                var prevJoin = join;
+                
+                if(isOneOut = false) {
+                    fork = new T!WFFork;
+                    fork.name = workflow.name + "_fork" + pcount.toString();
+                    fork.workflow = workflow;
+                
+                    join = new T!WFJoin;
+                    join.name = workflow.name + "_join" + pcount.toString();
+                    join.workflow = workflow;
+        
+                    prevJoin.`to` = fork;
+                    join.`to` = end;
+                }                
+            }
+        }
+
+        workflowDeployment.name = importWizard.name + "_WorkflowDeployment";
+        workflowDeployment.project = importWizard.project;
+        workflowDeployment.oozie = importWizard.oozie;
+        workflowDeployment.start = workflow;
+        workflowDeployment.deployments.add(defaultDeployment);
+        //workflowDeployment.deployments = stagingArea.deployments;
+        for (param in importWizard.workflowParameters) {
+            var newParam = new T!Property;
+            newParam.name = param.name;
+            newParam.value = param.value;
+            newParam.description = param.description;
+            workflowDeployment.parameters.add(newParam);
+        }
+        if(importWizard.hdfsPath <> null and importWizard.hdfsPath <> "") {
+            var newParam = new T!Property;        
+            newParam.name = "hdfsPath";
+            newParam.value = importWizard.hdfsPath;
+            workflowDeployment.parameters.add(newParam);
+        }
+        if(importWizard.registerHiveTable = true) {
+            var newParam = new T!Property;        
+            newParam.name = "registerHiveTable";
+            newParam.value = "false";
+            if(importWizard.registerHiveTable = true) {
+                newParam.value = "true";
+            }
+            workflowDeployment.parameters.add(newParam);
+        }
+        
+        var newParam = new T!Property;
+        newParam.name = "jdbcContext";
+        newParam.value = importWizard.jdbcContext.name;
+        workflowDeployment.parameters.add(newParam);
+    }
+    
+rule ImportWizard2WorkflowSimple
+    transform importWizard : S!ImportWizard   
+    to workflow : T!Workflow, workflowDeployment : T!WorkflowDeployment {
+    guard: (importWizard.wfParallelism == null or importWizard.wfParallelism == 1)
+        workflow.name = importWizard.name + "_workflow";
+        workflow.project = importWizard.project;
+
+        var start = new T!WFManualStart;
+        start.name = workflow.name + "_start";
+        start.workflow = workflow;
+        var end = new T!WFEnd;
+        end.name = workflow.name + "_end";
+        end.workflow = workflow;
+        var kill = new T!WFKill;
+        kill.name = workflow.name + "_kill";
+        kill.workflow = workflow;       
+        
+        var prevNode = null;
+        var prevLog = null;
+        
+        var entitiesToImport: List = new List();
+        for(ent in importWizard.entities) {
+            if(ent.active == true) {
+                entitiesToImport.add(ent);    
+            }
+        }
+
+        for (t in entitiesToImport) {
+            var node = new T!WFTransformation;
+            for (opt in t.sparkOpts) {
+                var newParam = new T!Property;
+                newParam.name = opt.name;
+                newParam.value = opt.value;
+                node.sparkOpts.add(newParam);
+            }
+            node.numExecutors = t.numExecutors;
+            node.executorCores = t.executorCores;
+            node.driverMemory = t.driverMemory;
+            node.executorMemory = t.executorMemory;
+
+            if(start.`to` == null) {
+                start.`to` = node;
+            }
+            
+            if(prevNode <> null) {
+                prevNode.ok = node;
+            }
+            
+            prevNode = node;
+                        
+            node.transformation = importWizard.templateTransformation;
+            if(t.templateTransformation <> null){
+                node.transformation = t.templateTransformation;
+            }
+            var tableNameParam = new T!Property;
+            
+            tableNameParam.name = "tableName";
+            tableNameParam.value = t.name;
+            node.parameters.add(tableNameParam);
+            
+            var wfdParam = new T!Property;
+            wfdParam.name = t.name;
+            wfdParam.value = t.name;
+            
+            workflowDeployment.parameters.add(wfdParam);            
+            
+            if(t.whereCondition <> null and t.whereCondition <> "") {
+                var newParam = new T!Property;            
+                newParam.name = "whereCondition";
+                newParam.value = t.whereCondition;
+                node.parameters.add(newParam);
+            }
+            if(t.partitionField <> null) {
+                var newParam = new T!Property;
+                newParam.name = "partitionField";
+                newParam.value = t.partitionField;
+                node.parameters.add(newParam);
+            }
+            if(t.partitionExpression <> null) {
+                var newParam = new T!Property;
+                newParam.name = "partitionExpression";
+                newParam.value = t.partitionExpression;
+                node.parameters.add(newParam);
+            }
+            if(t.preStatement <> null) {
+                newParam = new T!Property;
+                newParam.name = "preStatement";
+                newParam.value = t.preStatement;
+                node.parameters.add(newParam);
+            }
+            if(t.idField <> null) {
+                var newParam = new T!Property;
+                newParam.name = "idField";
+                newParam.value = t.idField;
+                node.parameters.add(newParam);            
+            }
+            if(t.idParallelism <> null) {
+                var newParam = new T!Property;
+                newParam.name = "idParallelism";
+                newParam.value = t.idParallelism;
+                node.parameters.add(newParam);            
+            }
+            node.name = t.name + "_tNode";
+            node.label = node.name;
+            node.workflow = workflow;
+
+            if((importWizard.exitOnFail = null or importWizard.exitOnFail = false) and importWizard.loggingTransformation <> null){
+	            var log = new T!WFTransformation;
+	            for (opt in t.sparkOpts) {
+	                var newParam = new T!Property;
+	                newParam.name = opt.name;
+	                newParam.value = opt.value;
+	                node.sparkOpts.add(newParam);
+	            }
+	            log.numExecutors = t.numExecutors;
+	            log.executorCores = t.executorCores;
+	            log.driverMemory = t.driverMemory;
+	            log.executorMemory = t.executorMemory;
+	            
+	            //var newParam = new T!Property;
+	            /*newParam.name = "errorCode";
+	            newParam.value = "${wf:errorCode(wf:lastErrorNode())}";
+	            log.parameters.add(newParam);*/
+	            var newParam = new T!Property;
+	            newParam.name = "entityName";
+	            newParam.value = t.name;
+	            log.parameters.add(newParam);
+	            
+	            log.name = t.name + "_tLog";
+            	log.label = log.name;
+            	log.workflow = workflow;
+            	log.error = kill;
+            	log.transformation = importWizard.loggingTransformation;
+	            node.error = log;
+	            if(prevLog <> null ){
+            		prevLog.ok = node;
+            	}
+            	prevLog = log;  
+	            
+            }else{
+            	node.error = kill;
+            }
+            
+            if(not hasMore) {
+                node.ok = end;
+                if(prevLog <> null){
+                
+               		prevLog.ok = end;
+               	}
+            }
+            
+                
+        }
+
+        workflowDeployment.name = importWizard.name + "_WorkflowDeployment";
+        workflowDeployment.project = importWizard.project;
+        workflowDeployment.oozie = importWizard.oozie;
+        workflowDeployment.start = workflow;
+        workflowDeployment.deployments.add(defaultDeployment);
+
+        for (param in importWizard.workflowParameters) {
+            var newParam = new T!Property;
+            newParam.name = param.name;
+            newParam.value = param.value;
+            newParam.description = param.description;
+            workflowDeployment.parameters.add(newParam);
+        }
+        if(importWizard.hdfsPath <> null) {
+            var newParam = new T!Property;        
+            newParam.name = "hdfsPath";
+            newParam.value = importWizard.hdfsPath;
+            workflowDeployment.parameters.add(newParam);
+        }
+        if(importWizard.registerHiveTable <> null) {
+            var newParam = new T!Property;        
+            newParam.name = "registerHiveTable";
+            newParam.value = "false";
+            if(importWizard.registerHiveTable = true) {
+                newParam.value = "true";
+            }
+            workflowDeployment.parameters.add(newParam);
+        }
+        
+        var newParam = new T!Property;
+        newParam.name = "jdbcContext";
+        newParam.value = importWizard.jdbcContext.name;
+        workflowDeployment.parameters.add(newParam);
+    }    

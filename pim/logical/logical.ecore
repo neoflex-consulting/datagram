@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="logical" nsURI="http://www.neoflex.ru/meta/logical" nsPrefix="logical">
+  <eClassifiers xsi:type="ecore:EClass" name="OperationData" eSuperTypes="#//ModelObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationshipData" eSuperTypes="#//ModelObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StaticData" eSuperTypes="#//ModelObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MasterData" eSuperTypes="#//ModelObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StatusData" eSuperTypes="#//ModelObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelObject" abstract="true" eSuperTypes="../dataset/dataset.ecore#//DataSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="logicalModel" lowerBound="1"
+        eType="#//LogicalModel" eOpposite="#//LogicalModel/modelObjects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cluster">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelObjects" upperBound="-1"
+        eType="#//ModelObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="logicalModel" lowerBound="1"
+        eType="#//LogicalModel" eOpposite="#//LogicalModel/clusters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeyTable" eSuperTypes="#//ModelObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicalModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelObjects" upperBound="-1"
+        eType="#//ModelObject" containment="true" eOpposite="#//ModelObject/logicalModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clusters" upperBound="-1"
+        eType="#//Cluster" containment="true" eOpposite="#//Cluster/logicalModel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associations" upperBound="-1"
+        eType="ecore:EClass ../dataset/dataset.ecore#//Association" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

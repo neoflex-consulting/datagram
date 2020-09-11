@@ -1,0 +1,376 @@
+@namespace(uri="http://www.neoflex.ru/meta/sse", prefix="sse")
+package sse;
+
+import "http://www.neoflex.ru/meta/auth";
+import "http://www.neoflex.ru/meta/dataset";
+import "http://www.neoflex.ru/meta/etl";
+import "http://www.neoflex.ru/meta/rt";
+
+// Настройки Hadoop кластера на котором будет работать по умолчанию Workspace
+class HadoopCluster {
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String name;
+  
+  attr String shortName;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String description;
+
+  ref rt.LivyServer livyServer;
+  ref rt.JdbcConnection hiveConnection;
+  attr String hiveMetastoreUri; 
+  attr String hiveCatalog; 
+  ref rt.JdbcConnection referenceConnection;
+  ref etl.Project project;
+  
+  val auth.AuditInfo auditInfo;
+}
+
+abstract class Workspace {
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String name;
+  
+  attr String shortName;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String description;
+  
+  attr String documentation;
+
+  attr String owner; // Владелец
+  attr String group; // Группа владелец    
+  
+  ref HadoopCluster cluster;
+  ref etl.Project project; 
+
+  val etl.Property[*] parameters;
+  
+  // TBD интеграция с VCS (SVN, ...) + импорт экспорт по аналогии с project/jobs?
+  val auth.AuditInfo auditInfo;
+}
+
+class ModelPipelineWorkspace extends Workspace {
+    op void toValidation();
+
+}
+
+class ValidateModelPipelineWorkspace extends ModelPipelineWorkspace {
+    ref ModelPipelineWorkspace parent;
+}
+
+class AnalyticWorkspace extends Workspace {
+    op void copy();
+}
+
+class JdbcWorkspace extends Workspace {
+  ref rt.JdbcConnection connection;
+  attr String defaultSchema;
+  
+  op void importSchema();
+}
+
+enum Interpreter {
+  SPARK = 0;
+  PYTHON = 1;
+  R = 2;
+  SQL = 3;
+}
+
+// Строка вида rwxrwxrwx где 
+//  r - разрешение на чтение, 
+//  w - на модификацию (например, для датасета - изменение структуры или запроса на сборку)
+//  x - на пересчета датасета 
+// соответственно для владельца, группы, и прочих
+class Permissions {
+  attr String owner;
+  attr String group;
+  attr String others;   
+}
+
+class Column {
+  attr String columnName;
+  val ColumnType columnType;  
+}
+
+abstract class ColumnType {
+  attr Boolean isNullable;
+  @teneo.jpa(value="@Column(length=4096)")
+  attr String description;  
+}
+
+class ScalarType extends ColumnType {
+  attr dataset.DataTypeDomain dataType;   
+  attr Integer length;
+  attr Integer precision;
+  attr String nativeType;       
+}
+
+class StructType extends ColumnType {
+  val Column[*] columns;    
+}
+
+class ArrayType extends ColumnType {
+  val ColumnType elementType;   
+}
+
+abstract class AbstractNode {
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String name;
+  attr String shortName;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String description;
+  
+  attr String owner; // Владелец
+  attr String group; // Группа владелец
+    
+  ref Workspace workspace;
+  ref etl.Project project;
+  
+  ref AbstractNode[*] datasets;
+  
+  // на основании Unix-like маски доступа выставляются права на использование датасета
+  val Permissions permissions;
+  val auth.AuditInfo auditInfo;     
+}
+
+class DatasetType {
+    attr String name;
+    attr String colour;
+}
+
+// Набор данных, ссылка на данные или источник данных
+abstract class AbstractDataset extends AbstractNode {
+  val Column[*] columns; 
+  @mspace.ui(listeval="props.entity.columns", displayField="columnName")
+  attr String[*] partitionByCols;
+  ref DatasetType datasetType; 
+  ref etl.Transformation transformation; 
+}
+
+class HiveDataset extends AbstractDataset {
+  attr String db; 
+  attr String table; 
+  
+  op void importMetadata();   
+}
+
+class HiveExternalDataset extends HiveDataset {
+  attr String path;
+  attr etl.LocalFileFormat fileType;
+  
+  op void buildHiveTable();   
+}
+
+abstract class JdbcDataset extends AbstractDataset {
+  // Настройки для показа данных на UI
+  ref rt.JdbcConnection connection;
+}
+
+class TableDataset extends JdbcDataset {
+  attr String schema;
+  attr String tableName;
+  
+  op void importMetadata();      
+}
+
+class QueryDataset extends JdbcDataset {
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String query;            
+}
+
+class LinkedDataset extends AbstractDataset {
+  @mspace.ui(filter="workspace.cluster.e_id", ds="workspace.cluster.e_id")
+  ref AbstractDataset linkTo;
+  
+  op void importMetadata();     
+}
+
+class ReferenceDataset extends AbstractDataset {
+  @mspace.ui(listeval="props.entity.columns", displayField="columnName")
+  attr String[*] primaryKeyCols;
+  
+  op void recreateTable();
+  op void loadCSV(String skip, String encoding, String delimiter, String quote, @mspace.ui(file="true") String file);  
+}
+
+class Dataset extends AbstractDataset { 
+  attr Interpreter interpreter;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String expression;
+  
+  op void scheduleFullRebuild();
+}
+
+// Произвольный код для выполнения
+abstract class AbstractNotebook extends AbstractNode {
+  val Paragraph[*] paragraphs;  
+  val etl.Property[*] params;
+}
+
+class NotebookType {
+    attr String name;
+    attr String colour;
+}
+
+class Notebook extends AbstractNotebook {
+    ref NotebookType notebookType;  
+}
+
+abstract class LinkableNotebook extends AbstractNotebook {
+
+}
+
+class LibraryNotebook extends LinkableNotebook {
+    
+}
+
+class ModelNotebook extends LinkableNotebook {
+  val StructType input;
+  val StructType output;
+  op void deploy();
+}
+
+enum ParagraphInterpreter {
+  SPARK = 0;
+  PYTHON = 1;
+  R = 2;
+  SQL = 3;
+  MARKDOWN = 4;
+  HTML = 5;
+}
+
+class Paragraph {
+  attr String name;
+  attr String title;
+  
+  val ParagraphBody body;
+  
+  attr EDate dateUpdated;
+  attr Boolean textVisible;
+  attr Boolean resultVisible;
+  attr Boolean titleVisible;
+  
+  attr String outputHeight; 
+  attr Integer paragraphWidth; 
+  attr Boolean lineNumbering; 
+  attr Integer fontSize; 
+  
+  attr ParagraphStatus status;
+  val ParagraphResult result;
+} 
+
+abstract class ParagraphBody {
+}
+
+class CodeBody extends ParagraphBody {
+  attr ParagraphInterpreter interpreter;
+  
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String text;     
+}
+
+class LinkBody extends ParagraphBody {
+  ref LinkableNotebook linkNotebook;
+  attr String paragraphName;    
+}
+
+enum ParagraphStatus {
+  NEW = 0;
+  PENDING = 1;
+  IN_PROGRESS = 2;  
+  SUCCESS = 3;
+  ERROR = 4;  
+}
+
+abstract class ParagraphResult {
+}
+
+class TextResult extends ParagraphResult {  
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String data; 
+}
+
+class ImageResult extends ParagraphResult {
+  attr String mimeType;
+    
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String base64data;   
+}
+
+class TableResult extends ParagraphResult { 
+  val Column[*] columns;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String rowsData;     
+
+  attr OutputType outputType;     
+
+  attr String[*] axisX;
+  val ColumnAgg[*] axisY;
+  attr String[*] groups;        
+}
+
+class ErrorResult extends ParagraphResult {
+  attr String ename;
+  
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")    
+  attr String evalue;
+  
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String traceback;            
+} 
+
+enum OutputType {  
+  TABLE = 0;
+  LINE = 1;
+  BAR = 2;
+  PIE = 3;
+}
+
+enum AggFunc {
+  NONE = 0;
+  FIRST = 1;
+  LAST = 2;
+  MIN = 3;
+  MAX = 4;
+  AVG = 5;
+  SUM = 6;
+  COUNT = 7;
+  ONE = 8;
+}
+
+class ColumnAgg {   
+  attr String column;
+  attr AggFunc func;
+}
+
+enum ModelType {
+  R = 1;
+}
+
+class Model {
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  attr ModelType[1] modelType;
+  ref etl.Project project;
+  ref rt.LivyServer livyServer;
+  attr String fileName;
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String base64body;
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String code;
+  attr Integer sessionId;
+  attr String applicationId;
+  val auth.AuditInfo auditInfo;
+  op void upload(@mspace.ui(file="true") String file);  
+  op void deploy();  
+}

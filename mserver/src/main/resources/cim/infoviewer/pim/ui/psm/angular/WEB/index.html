@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+
+    <!-- Meta-Information -->
+    <title translate>Info</title>
+
+    <!-- Vendor: Bootstrap Stylesheets http://getbootstrap.com -->
+    <!-- etc… -->
+
+    <link rel="stylesheet" href="/psm/ui/angular/assets/libs/bootstrap/dist/css/bootstrap.css">
+    <script src="/psm/ui/angular/assets/libs/jquery/dist/jquery.js"></script>
+    <script src="/psm/ui/angular/assets/libs/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/psm/ui/angular/assets/libs/angular/angular.min.js"></script>
+    <script src="/psm/ui/angular/assets/libs/angular-cookies/angular-cookies.min.js"></script>
+    <script src="/psm/ui/angular/assets/libs/angular-translate/dist/angular-translate.min.js"></script>
+    <script src="/psm/ui/angular/assets/libs/angular-translate/dist/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="/psm/ui/angular/assets/libs/angular-translate/dist/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
+    <script src="/psm/ui/angular/assets/libs/angular-translate/dist/angular-translate-storage-local/angular-translate-storage-local.min.js"></script>
+</head>
+<style>
+    table, th, td {
+        border: 1px solid grey;
+        border-collapse: collapse;
+        padding: 5px;
+    }
+
+    table tr:nth-child(odd) {
+        background-color: #f1f1f1;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+</style>
+<body>
+<!--[if lt IE 7]>
+<!-- etc… -->
+<![endif]-->
+
+<div ng-app="infoViewer" ng-controller="infoViewerCtrl">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="#/"><img src="/psm/ui/angular/assets/img/logo.png" translate translate-attr-alt="Info"
+                                  style="width:5em;border:0;"></a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a><form>
+                        <span class="glyphicon glyphicon-globe"></span>
+                        <select ng-model="selectedLanguage"
+                                ng-options="x for x in languages"
+                                ng-change="languageChange()" style="color: black"></select>
+                    </form>
+                    </a></li>
+                    <li><a href="javascript:void(0)" ng-click="refresh()"><span
+                            class="glyphicon glyphicon-refresh"></span>{{'Refresh'|translate}}</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div style="width:10%; float:left;">
+        <p>
+        </p>
+    </div>
+    <div style="float:left;width:80%;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#build" translate="Build"></a></li>
+            <li><a data-toggle="tab" href="#props" translate="Properties"></a></li>
+            <li><a data-toggle="tab" href="#env" translate="Environment"></a></li>
+            <li><a data-toggle="tab" href="#metrics" translate="Metrics"></a></li>
+            <li><a data-toggle="tab" href="#health" translate="Health"></a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="build" class="tab-pane fade in active">
+                <table style="width:100%">
+                    <tbody>
+                    <tr>
+                        <th translate>Customer Code</th>
+                        <td>{{info.cust.code}}</td>
+                    </tr>
+                    <tr>
+                        <th translate>Application Group</th>
+                        <td>{{info.build.group}}</td>
+                    </tr>
+                    <tr>
+                        <th translate>Application Name</th>
+                        <td>{{info.build.name}}</td>
+                    </tr>
+                    <tr>
+                        <th translate>Version</th>
+                        <td>{{info.build.version}}</td>
+                    </tr>
+                    <tr>
+                        <th translate>Build Time</th>
+                        <td>{{info.build.time| date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="props" class="tab-pane fade">
+                <table style="width:100%">
+                    <tbody ng-repeat="(key, value) in notPassword(env.systemProperties)">
+                    <tr>
+                        <td>{{key}}</td>
+                        <td>{{value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="env" class="tab-pane fade">
+                <table style="width:100%">
+                    <tbody ng-repeat="(key, value) in notPassword(env.systemEnvironment)">
+                    <tr>
+                        <td>{{key}}</td>
+                        <td>{{value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="metrics" class="tab-pane fade">
+                <table style="width:100%">
+                    <tbody ng-repeat="(key, value) in metrics">
+                    <tr>
+                        <td>{{key}}</td>
+                        <td>{{value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="health" class="tab-pane fade">
+                <table style="width:100%">
+                    <tbody>
+                    <tr>
+                        <th translate="Status"></th>
+                        <td>{{health.status | translate }}</td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-repeat="(key, subGroup) in notStatus(health)">
+                    <tr>
+                        <th>{{key}}</th>
+                        <td>{{health[key].status}}</td>
+                    </tr>
+                    <tr ng-repeat="(subGroupName, value) in notStatus(subGroup)">
+                        <td>{{subGroupName}}</td>
+                        <td>{{value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+
+<!-- Vendor: Javascripts -->
+<!-- etc… -->
+
+<script>
+    var app = angular.module("infoViewer", ['ngCookies', 'pascalprecht.translate']);
+    app.controller("infoViewerCtrl", function ($scope, $http, $translate) {
+        $scope.notStatus = function (obj) {
+            var result = {};
+            angular.forEach(obj, function (v, k) {
+                if (k != "status") {
+                    result[k] = v;
+                }
+            })
+            return result;
+        }
+        $scope.notPassword = function (obj) {
+            var result = {};
+            angular.forEach(obj, function (v, k) {
+                if (v.toLowerCase().indexOf("password") == -1) {
+                    result[k] = v;
+                }
+            })
+            return result;
+        }
+        $scope.refresh = function () {
+            $scope.info = {};
+            $scope.health = {status: "Wait..."};
+            $scope.metrics = {};
+            $scope.env = {};
+            $http.get('/info')
+                    .then(function (res) {
+                        $scope.info = res.data;
+                        $scope.info.build.date = new Date($scope.info.build.date);
+                    });
+            $http.get('/metrics')
+                    .then(function (res) {
+                        $scope.metrics = res.data;
+                    });
+            $http.get('/env')
+                    .then(function (res) {
+                        $scope.env = res.data;
+                    });
+            $http.get('/health')
+                    .then(function (res) {
+                        $scope.health = res.data;
+                    }, function (res) {
+                        $scope.health = res.data;
+                    });
+        }
+        $scope.languageChange = function () {
+            $translate.use($scope.selectedLanguage)
+        }
+        $scope.languages = ["en", "ru"];
+        $scope.selectedLanguage = $translate.proposedLanguage() || $translate.use();
+        $scope.refresh();
+    });
+    app.config(function ($translateProvider) {
+        $translateProvider.useStaticFilesLoader({prefix: 'locale-', suffix: '.json'});
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.fallbackLanguage(['en']);
+        $translateProvider.useSanitizeValueStrategy('escape');
+        $translateProvider.storagePrefix('MetaServer_');
+        $translateProvider.useLocalStorage();
+    });
+</script>
+
+</body>
+</html>

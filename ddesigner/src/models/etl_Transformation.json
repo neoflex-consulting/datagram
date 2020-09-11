@@ -1,0 +1,89 @@
+{
+  "eClasses": {
+    "etl.TransformationTest": {
+      "views": [
+          "TestCodeEditor", "FormView"
+      ]
+    },
+    "etl.Transformation": {
+      "views": ["TransformationDesignerView", "SourceCodeEditor", "FormView", "VCSInfo"],
+      "fields": [
+        {
+          "type": "line",
+          "fields":[
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "label",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "name": "project",
+          "type": "select",
+          "entityType": "etl.Project"
+        },
+        {
+          "name": "description",
+          "type": "text"
+        },
+         {
+          "name": "buildVersion",
+          "type": "string"
+        },
+        {
+          "name": "sparkVersion",
+          "type": "enum",
+          "options": ["SPARK2", "SPARK3"]
+        },
+        {
+          "name": "jsonView",
+          "type": "text"
+        },
+        {
+          "name": "sources",
+          "type": "table",
+          "entityType": "etl.Source"
+        },
+        {
+          "name": "targets",
+          "type": "table",
+          "entityType": "etl.Target"
+        },
+        {
+          "name": "transformationSteps",
+          "type": "table",
+          "entityType": "etl.TransformationStep"
+        },
+        {
+          "name": "transitions",
+          "type": "table",
+          "entityType": "etl.Transition"
+        },
+        {
+          "name": "userDefinedFunctions",
+          "type": "multi",
+          "entityType": "etl.UserDefinedFunction"
+        },
+        {
+          "name": "mavenDependencies",
+          "type": "multi",
+          "entityType": "etl.MavenDependency"
+        },
+        {
+          "name": "parameters",
+          "type": "table",
+          "entityType": "etl.Property"
+        },
+        {
+          "name": "auditInfo",
+          "type": "form",
+          "entityType": "auth.AuditInfo"
+        }
+      ]
+    }
+  }
+}

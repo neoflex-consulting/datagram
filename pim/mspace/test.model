@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<etl:Transformation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:etl="http://www.neoflex.ru/meta/etl" xmi:id="etl.Transformation|id=10627" name="test">
+  <targets xsi:type="etl:TableTarget" xmi:id="etl.TableTarget|id=10652" context="etl.JdbcContext|id=10629" name="t1" tableName="t1">
+    <inputPort xmi:id="etl.Port|id=10653" name="tp1">
+      <fields xmi:id="dataset.Field|id=10654" name="f1" dataTypeDomain="STRING"/>
+    </inputPort>
+  </targets>
+  <contexts xsi:type="etl:JdbcContext" xmi:id="etl.JdbcContext|id=10629" name="mycontext2"/>
+</etl:Transformation>

@@ -1,0 +1,321 @@
+pre {
+	"Running dwh2workflow.etl".println();
+}	
+		
+rule StagingArea2Workflow
+	transform stagingArea : S!StagingArea
+	to workflow : T!Workflow, workflowDeployment : T!WorkflowDeployment {
+		//"StagingArea2Workflow".println();
+		workflow.name = stagingArea.name + "_workflow";
+		workflow.project = stagingArea.project;
+		
+		var start = new T!WFManualStart;
+		start.name = workflow.name + "_start";
+		start.workflow = workflow;
+		var end = new T!WFEnd;
+		end.name = workflow.name + "_end";
+		end.workflow = workflow;
+		var kill = new T!WFKill;
+		kill.name = workflow.name + "_kill";
+		kill.workflow = workflow;
+		var fork;
+		var join;
+		
+		var transformations ::= stagingArea.tables;
+		if (transformations.size > 1) {		
+			fork = new T!WFFork;
+			fork.name = workflow.name + "_fork";
+			fork.workflow = workflow;
+			join = new T!WFJoin;
+			join.name = workflow.name + "_join";
+			join.workflow = workflow;
+			
+			start.`to` = fork;
+			join.`to` = end;
+		} 
+		for (t in transformations) {
+			var node = new T!WFTransformation;
+			node.transformation = t;
+			node.name = t.name + "_tNode";
+			node.workflow = workflow;
+			node.error = kill;
+			if (transformations.size > 1) {
+				node.ok = join;
+				fork.paths.add(node);
+			} else {
+				start.`to` = node;
+				node.ok = end;
+			}
+		}
+		
+		workflowDeployment.name = stagingArea.name + "_WorkflowDeployment";
+		workflowDeployment.project = stagingArea.project;
+		workflowDeployment.oozie = stagingArea.oozie;
+		workflowDeployment.start = workflow;
+		workflowDeployment.deployments = stagingArea.deployments;
+		for (param in stagingArea.parameters) {
+			var newParam = new T!Property;
+			newParam.name = param.name;
+			newParam.value = param.value;
+			newParam.description = param.description;
+			workflowDeployment.parameters.add(newParam);
+		}
+		var newParam = new T!Property;
+		newParam.name = "catalog";
+		newParam.value = stagingArea.catalog;
+		workflowDeployment.parameters.add(newParam);
+	}
+	
+	@lazy
+	rule StagingTable2Transformation 
+		transform stagingTable : S!StagingTable
+		to t : T!Transformation {
+			//"StagingTable2Transformation".println();
+			t.name = stagingTable.stagingArea.name + "_" + stagingTable.table.name;
+			t.project = stagingTable.stagingArea.project;
+
+			t.parameters.add(createParam("tableName", stagingTable.name.quote())); 
+			t.parameters.add(createParam("context", stagingTable.stagingArea.context.name.quote()));
+			for (f in stagingTable.defaultFields.select(f|f.static)) {
+				t.parameters.add(createParam(f.field, f.expression));
+			}
+			var table = stagingTable.table;
+			table.~stagingTable = stagingTable;
+			
+			var source ::= table;
+			t.sources.add(source);
+			var projection ::= source;
+			t.transformationSteps.add(projection);
+			projection.~stagingTable = stagingTable;
+			
+			var target ::= projection;
+			t.targets.add(target);
+			
+			t.link(source, projection);
+			t.link(projection, target);
+	}
+	
+	@lazy
+	rule Table2Source 
+		transform table : S!Table
+		to source : T!CSVSource {
+			//"Table2Source".println();
+			var stagingTable = table.~stagingTable;
+			var transformation ::= stagingTable;
+			
+			source.name = transformation.name + "_CSVSource";
+			if (stagingTable.csvOptions.isDefined()) source.setOptions(stagingTable.csvOptions);
+			else source.setOptions(stagingTable.stagingArea.csvOptions);
+			source.path = stagingTable.getPath();
+			source.outputPort = new T!OutputPort;
+			source.outputPort.name = source.name + "_OutputPort";
+			for (c in table.columns) c.setNewDataSet(source.outputPort);
+			var fileFields = stagingTable.parseHeader(source.delimiter);
+			
+			for (f in fileFields) {
+				var column = table.columns.selectOne(c|c.name = f);
+				var mappings = stagingTable.mappings.select(m|m.from = f).select(m|table.columns.one(c|c.name = m.`to`));
+				if (mappings.notEmpty()) {
+					//"mappings.notEmpty()".println();
+					var mapTo = table.columns.selectOne(c|c.name = mappings.first().`to`);
+					var field = mapTo.equivalent();
+					field.name.println();
+					field.name = f;
+					field.~mapTo = mappings.collect(m|m.`to`);					
+				} else if (column.isDefined() and not stagingTable.defaultFields.one(fi|fi.field = column.name)) {
+					//"column.isDefined()".println();
+					var field = column.equivalent();
+					field.~mapTo = new Sequence;
+					field.~mapTo.add(field.name);
+				} else {
+					//"else".println();
+					var field = new T!Field;
+					field.name = f;
+					field.dataTypeDomain = DataTypeDomain#STRING;
+					source.outputPort.fields.add(field);
+					field.~mapTo = new Sequence;
+				}
+			}
+			source.~defaultFields = new Set;
+			for (cf in stagingTable.defaultFields) {
+				var column = table.columns.selectOne(f|f.name = cf.field);
+				if (column.isDefined()) {
+				
+					var ncf = new S!DefaultField;
+					ncf.name = cf.name;
+					ncf.field = cf.field;
+					ncf.static = cf.static == true;
+					ncf.~dataTypeDomain = column.dataType.toDataTypeDomain();
+					if (cf.static == true) ncf.expression = "jobParameters(\"" + ncf.field + "\").asInstanceOf[" + column.dataType.toJavaClass() + "]";
+					else ncf.expression = cf.expression;
+
+					source.~defaultFields.add(ncf);
+				}
+			}
+		}
+	
+	@lazy
+	rule Source2Projection 
+		transform source : T!CSVSource
+		to projection : T!Projection {
+			//"Source2Projection".println(); 
+			projection.name = source.transformation.name + "_Projection";
+			projection.inputPort = new T!Port;
+			projection.inputPort.name = projection.name + "_InputPort";
+			
+			for (f in source.outputPort.fields) f.copyTo(projection.inputPort);
+			
+			projection.outputPort = new T!OutputPort;
+			projection.outputPort.name = projection.name + "_OutputPort";
+			for (f in projection.inputPort.fields) f.toProjectionField(projection.outputPort);
+			for (f in source.~defaultFields) {
+				f.setNewDataSet(projection.outputPort); 
+				f.~inputField = projection.inputPort.fields.selectOne(fi|fi.name = f.field);
+			}
+
+			source.~defaultFields.equivalent();//dsaf;
+	}
+	
+	@lazy
+	rule Projection2Target 
+		transform projection : T!Projection
+		to target : T!TableTarget  {
+			//"Projection2Target".println();
+			var stagingTable = projection.~stagingTable;
+			target.name =  projection.transformation.name + "_TableTarget";
+			//target.clear = true;
+			target.targetType = TableTargetType#INSERT;
+			target.inputPort = new T!Port;
+			target.inputPort.name = target.name + "_InputPort";
+			for (f in projection.outputPort.fields) f.copyTo(target.inputPort);
+			target.tableName = stagingTable.table.name;
+			target.context = stagingTable.stagingArea.context;
+
+			for (field in target.inputPort.fields) {
+				var inputFieldMapping = new T!TableTargetFeature;
+				target.inputFieldsMapping.add(inputFieldMapping);
+				inputFieldMapping.inputFieldName = field.name;
+				inputFieldMapping.targetColumnName = field.name;
+			}
+	}
+		
+	@lazy
+	rule Column2Field 
+		transform column : S!Column
+		to field : T!Field  {
+			field.name = column.name;
+			field.dataTypeDomain = column.dataType.toDataTypeDomain();
+			column.~newDataSet.fields.add(field);
+		}
+	
+	@lazy
+	rule DefaultField2ProjectionField
+		transform cField : S!DefaultField
+		to pField : T!ProjectionField  {
+			pField.name = cField.field;
+			pField.dataTypeDomain = cField.~dataTypeDomain;
+			pField.expression = cField.expression;
+			pField.fieldOperationType = FieldOperationType#TRANSFORM;
+			if (cField.~inputField.isDefined() and not cField.static) {
+				pField.sourceFields.add(cField.~inputField);
+			}
+			cField.~newDataSet.fields.add(pField);
+		}
+
+	operation S!SQLSimpleType toDataTypeDomain() {
+		switch (self.type.name) {
+			case "CHAR" 	: return S!DataTypeDomain#STRING;
+			case "VARCHAR" 	: return S!DataTypeDomain#STRING;
+			case "DATETIME" : return S!DataTypeDomain#DATETIME;
+            case "INTEGER"  : return S!DataTypeDomain#INTEGER;
+            case "LONG"     : return S!DataTypeDomain#LONG;
+			case "DECIMAL" 	: return S!DataTypeDomain#DECIMAL;
+			case "DATE" 	: return S!DataTypeDomain#DATE;
+			case "TIME" 	: return S!DataTypeDomain#TIME;
+			case "BLOB" 	: return S!DataTypeDomain#BINARY;
+			case "XML" 		: return S!DataTypeDomain#STRING;
+		}
+	}
+
+	operation S!StagingTable getPath() {
+		var fileName = self.fileName;
+		var catalog = '${jobParameters("catalog")}';//self.stagingArea.catalog;
+		return catalog + "/" + fileName;
+	}
+	
+	operation S!StagingTable parseHeader(delimiter) {
+		return self.columns.split(delimiter);
+	}
+	
+	operation T!Transformation link(start, finish) {
+		var transition = new T!Transition;
+		transition.name = self.name + "_" + start.name + "To" + finish.name + "_transition";
+		transition.start = start.outputPort;
+		transition.finish = finish.inputPort; 
+		self.transitions.add(transition);
+	}
+
+	operation T!Field copyTo(dataSet) {
+		var newField = new T!Field;
+		dataSet.fields.add(newField);
+		
+		newField.name = self.name;
+		newField.dataTypeDomain = self.dataTypeDomain;
+		newField.~mapTo = self.~mapTo;
+	}
+	
+	operation T!Field toProjectionField(dataSet) {
+		for (mapTo in self.~mapTo) {
+			var pField = new T!ProjectionField;
+			dataSet.fields.add(pField);
+			pField.name = mapTo;
+			pField.sourceFields.add(self);
+			pField.dataTypeDomain = self.dataTypeDomain;
+			pField.fieldOperationType = FieldOperationType#ADD;
+		}
+	}
+	
+	operation Any setNewDataSet(dataSet) {
+		self.~newDataSet = dataSet;
+	}
+	
+	operation Sequence contains(object) {
+		return self.one(o|o = object);
+	}
+	
+	operation createParam(name, value) {
+		var param = new T!Property;
+		param.name = name;
+		param.value = value;
+		param.expression = true;
+		return param;
+	}
+	
+	operation String quote() {
+		return "\"" + self + "\"";
+	}
+	
+	operation T!CSVSource setOptions(csvOptions) {
+		self.header = csvOptions.header;//true;
+		self.delimiter = csvOptions.delimiter;//";";
+		self.dateFormat = csvOptions.dateFormat;//"yyyyMMdd";
+		self.nullValue = "";
+		self.charset = csvOptions.charset;//"windows-1251";
+		self.quote = null;
+	}
+	
+	operation S!SQLSimpleType toJavaClass() {
+		switch (self.type.name) {
+			case "CHAR" 	: return "java.lang.String";
+			case "VARCHAR" 	: return "java.lang.String";
+			case "DATETIME" : return "java.sql.Timestamp";
+            case "INTEGER"  : return "java.lang.Integer";
+            case "LONG"     : return "java.lang.Long";
+			case "DECIMAL" 	: return "java.math.BigDecimal";
+			case "DATE" 	: return "java.sql.Timestamp";
+			case "TIME" 	: return "java.sql.Timestamp";
+			case "BLOB" 	: return "Array[Byte]";
+			case "XML" 		: return "java.lang.String";
+			default: return "AnyRef";
+		}
+	}

@@ -1,0 +1,171 @@
+@namespace(uri="http://www.neoflex.ru/meta/relational", prefix="rel")
+package rel;
+
+class Column {
+  attr String[1] name;
+  ref DataSet[1]#columns dataSet;
+  val SQLSimpleType dataType;
+  attr boolean nullable;
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String description;  
+}
+
+class SPColumn extends Column {
+    attr SPColumnType[1] columnType;
+}
+
+enum SPColumnType {
+  UNKNOWN = 0;
+  IN = 1;
+  INOUT = 2;
+  OUT = 4;
+  RETURN = 5;
+  RESULT = 3;
+}
+
+abstract class DataSet {
+  attr String[1] name;
+  val Column[*]#dataSet columns;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String description;  
+}
+
+class Constraint {
+}
+
+class LengthConstraint extends Constraint {
+  attr int[1] size;
+}
+
+class NotNullConstraint extends Constraint {
+}
+
+class PrecisionConstraint extends LengthConstraint {
+  attr int[1] precision;
+}
+
+class CustomConstraint extends Constraint {
+  attr String expression;
+  attr String[1] name;
+}
+
+@mspace.ui(isolated="true", toplevel="true")
+class Scheme {
+  attr String[1] name;
+  val Table[*]#scheme tables;
+  val View[*]#scheme views;
+  val StoredProcedure[*]#scheme storedProcedures;
+}
+
+class Catalog {
+  attr String[1] name;
+  val Scheme[*] schemas;
+  val Domain[*]#catalog domains;
+}
+
+class Table extends DataSet {
+  val Index[*] indexes;
+  ref Scheme[1]#tables scheme;
+  val PrimaryKey#table primaryKey;
+  val ForeignKey[*]#table foreignKeys;
+}
+
+class View extends DataSet {
+  ref Scheme[1]#views scheme;
+}
+
+class KeyFeature {
+  //ref Key#keyFeatures key;
+  @mspace.ui(listeval="props.entity.__parent.__parent.columns")
+  ref Column column;
+}
+
+abstract class Key {
+  attr String[1] name;
+  val KeyFeature[*]#key keyFeatures;
+}
+
+class Index extends Key {
+  attr boolean[1] isUnique;
+}
+
+class PrimaryKey extends Key {
+  //ref Table[1]#primaryKey table;
+}
+
+class ForeignKey extends Key {
+  //ref Table#foreignKeys table;
+  @mspace.ui(listeval="props.entity.__parent.__parent.tables")
+  ref Table[1] target;
+}
+
+abstract class SQLSimpleType {
+  //ref Column#dataType field;
+}
+
+class Domain {
+  ref Catalog[1]#domains catalog;
+  attr String[1] name;
+  ref SQLSimpleType dataType;
+}
+
+class CHAR extends SQLSimpleType {
+  attr int length;
+}
+
+class SQLType extends SQLSimpleType {
+  ref Domain[1] domain;
+}
+
+class VARCHAR extends SQLSimpleType {
+  attr int length;
+}
+
+class DATETIME extends SQLSimpleType {
+}
+
+class INTEGER extends SQLSimpleType {
+}
+
+class LONG extends SQLSimpleType {
+}
+
+class DECIMAL extends SQLSimpleType {
+  attr int length;
+  attr int precision;
+}
+
+class DATE extends SQLSimpleType {
+}
+
+class TIME extends SQLSimpleType {
+}
+
+class BLOB extends SQLSimpleType {
+}
+
+class BOOLEAN extends SQLSimpleType {
+}
+
+class XML extends SQLSimpleType {
+}
+
+class StoredProcedure extends DataSet {
+  ref Scheme[1]#storedProcedures scheme;
+  attr String catalogName;
+  attr SPType[1] spType;
+}
+
+enum SPType {
+  UNKNOWN = 0;
+  NORESULT = 1;
+  RETURNSRESULT = 2;
+}
+
+class FLOAT extends SQLSimpleType {
+}
+
+class DOUBLE extends SQLSimpleType {
+}
+

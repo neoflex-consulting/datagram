@@ -1,0 +1,26 @@
+[%
+    import "jrutils.egl";
+    var dataset = Dataset.all.first();
+    var deployment = DeploymentDescriptor.all.first();
+    var database = deployment.hiveDatabaseName;
+    var tableName = dataset.name.toLowerCase() + suffix;
+    var qTableName = database + "." + tableName; 
+    qTableName.println("Create table:");
+%]
+CREATE EXTERNAL TABLE [%=qTableName%] (
+    [%for (field in dataset.dataFields.sortBy(f|f.columnIndex).select(f|not f.isKindOf(ParameterField))) {%]
+    [%=field.name.toLowerCase()%] [%=field.dataType.getHiveType()%] COMMENT '[%=field.shortName%]'[%if (field.isKindOf(ClassifiedField)) {%],
+    [%=field.name.toLowerCase()%]_rule STRING COMMENT 'Classification rule for [%=field.shortName%]'
+    [%}%][%if (hasMore) {%],[%}%] 
+    [%}%]
+) 
+COMMENT '[%=dataset.businessName%]'
+[%if (dataset.hasParameters()) {%]
+PARTITIONED BY (
+    [%for (field in dataset.dataFields.sortBy(f|f.columnIndex).select(f|f.isKindOf(ParameterField))) {%]
+    [%=field.name.toLowerCase()%] [%=field.dataType.getHiveType()%] COMMENT '[%=field.shortName%]'[%if (hasMore) {%],[%}%] 
+    [%}%]
+)
+[%}%]
+STORED AS PARQUET
+LOCATION '[%=deployment.hdfsBaseDirectory%]/[%=deployment.hdfsUser%]/datasets/[%=tableName%]'

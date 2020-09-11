@@ -1,0 +1,386 @@
+{
+    "transformationSteps":[
+        {
+            "_type_": "etl.LocalSource",
+            "type": "devs.transformation.LocalSource",
+            "label": "Local",
+            "image": "images/transformation/local.svg",
+            "group": "sources",
+            "ports":[{"id": "out", "group": "out", "attribute": "outputPort", "_type_": "etl.OutputPort"}],
+            "actions":[{"id": "view", "label": "View content", "component": "LocalSourceEditor", "icon": "images/icon-core/table-modern.svg"}]
+        },
+        {
+            "_type_": "etl.CSVSource",
+            "type": "devs.transformation.CSVSource",
+            "label": "CSV",
+            "image": "images/transformation/csv.svg",
+            "group": "sources",
+            "ports":[{"id": "out", "group": "out", "attribute": "outputPort", "_type_": "etl.OutputPort"}],
+            "actions":[{"id": "view", "label": "View content", "component": "CSVSourceEditor", "icon": "images/icon-core/table-modern.svg"}]
+        },
+        {
+            "_type_": "etl.XMLSource",
+            "type": "devs.transformation.XMLSource",
+            "label": "XML",
+            "image": "images/transformation/xml.svg",
+            "group": "sources",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}],
+            "actions":[{"id": "view", "label": "View content", "component": "XmlEditor", "icon": "images/icon-core/table-modern.svg"}]
+        },
+        {
+            "_type_": "etl.AVROSource",
+            "type": "devs.transformation.AVROSource",
+            "label": "AVRO",
+            "group": "sources",
+            "image": "images/transformation/avro.svg",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}],
+            "actions":[{"id": "view", "label": "View content", "component": "AvroSourceEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.ExpressionSource",
+            "type": "devs.transformation.ExpressionSource",
+            "label": "Expression",
+            "image": "images/transformation/expression.svg",
+            "group": "sources",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}],
+            "actions": [{"id": "Edit", "label": "Edit code", "component": "ExpressionEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.SQLSource",
+            "type": "devs.transformation.SqlSource",
+            "label": "SQL",
+            "image": "images/transformation/sql.svg",
+            "group": "sources",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}],
+            "actions": [{"id": "SQLEdit", "label": "Edit SQL", "component": "SqlEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.HiveSource",
+            "type": "devs.transformation.HiveSource",
+            "label": "Hive",
+            "image": "images/transformation/hive.svg",
+            "group": "sources",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}],
+            "actions": [{"id": "HiveEdit", "label": "Edit Hive", "component": "HiveSourceEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.HBaseSource",
+            "type": "devs.transformation.HBaseSource",
+            "label": "HBase",
+            "image": "images/transformation/hbase.svg",
+            "group": "sources",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}],
+            "actions": []
+        },
+        {
+            "_type_": "etl.TableSource",
+            "type": "devs.transformation.TableSource",
+            "label": "Table",
+            "image": "images/transformation/table.svg",
+            "group": "sources",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}],
+            "actions":[{"id": "view", "label": "View content", "component": "TableSourceEditor", "icon": "images/icon-core/table-modern.svg"}]
+        },
+        {
+            "_type_": "etl.DeltaSource",
+            "type": "devs.transformation.DeltaSource",
+            "label": "Delta",
+            "image": "images/transformation/delta.svg",
+            "group": "sources",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}],
+            "actions":[{"id": "view", "label": "View content", "component": "DeltaSourceEditor", "icon": "images/icon-core/table-modern.svg"}]
+        },
+        {
+            "_type_": "etl.KafkaSource",
+            "type": "devs.transformation.KafkaSource",
+            "label": "Kafka",
+            "image": "images/transformation/kafka.svg",
+            "group": "sources",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}],
+            "actions": []
+        },
+        {
+            "_type_": "etl.Join",
+            "type": "devs.transformation.Join",
+            "label": "Join",
+            "image": "images/transformation/join.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}, {"id": "join", "group": "in", "attribute": "joineePort", "_type_": "etl.Port"}],
+            "actions": [{"id": "JoinEdit", "label": "Edit Join", "component": "JoinEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.Aggregation",
+            "type": "devs.transformation.Aggregation",
+            "label": "Aggregation",
+            "image": "images/transformation/aggregation.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions": [{"id": "AggregationEdit", "label": "Edit Aggregation", "component": "AggregationEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.Selection",
+            "type": "devs.transformation.Selection",
+            "label": "Selection",
+            "image": "images/transformation/selection.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions": [{"id": "SelectionEdit", "label": "Edit Selection", "component": "SelectionEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.Projection",
+            "type": "devs.transformation.Projection",
+            "label": "Projection",
+            "image": "images/transformation/projection.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions": [{"id": "ProjectionEdit", "label": "Edit Projection", "component": "ProjectionEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.Sequence",
+            "type": "devs.transformation.Sequence",
+            "label": "Sequence",
+            "image": "images/transformation/sequence.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}]
+        },
+        {
+            "_type_": "etl.Sort",
+            "type": "devs.transformation.Sort",
+            "label": "Sort",
+            "image": "images/transformation/sort.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}]
+        },
+        {
+            "_type_": "etl.GroupWithState",
+            "type": "devs.transformation.GroupWithState",
+            "label": "GroupWithState",
+            "image": "images/transformation/groupwith.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions": [{"id": "GroupWithStateEdit", "label": "Edit group with state", "component": "GroupWithStateEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.Union",
+            "type": "devs.transformation.Union",
+            "label": "Union",
+            "image": "images/transformation/union.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}, {"id": "union", "group": "in", "attribute": "unionPort", "_type_": "etl.Port"}],
+            "actions": [{"id": "UnionEdit", "label": "Edit Union", "component": "UnionEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.Drools",
+            "type": "devs.transformation.drools",
+            "label": "Drools",
+            "image": "images/transformation/drools.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}]
+        },
+        {
+            "_type_": "etl.ModelBasedAnalysis",
+            "type": "devs.transformation.ModelBasedAnalysis",
+            "label": "Model Based Analysis",
+            "image": "images/transformation/model_base_analysis.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}]
+        },
+        {
+            "_type_": "etl.SparkSQL",
+            "type": "devs.transformation.SparkSQL",
+            "label": "Spark SQL",
+            "image": "images/transformation/spark.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "sqlin", "group": "in", "attribute": "sqlPorts", "multiple": true, "labelAttribute": "alias", "_type_": "etl.SQLPort"}],
+            "actions": [{"id": "SparkSQLEdit", "label": "Edit Spark SQL", "component": "SparkEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.ExplodeStep",
+            "type": "devs.transformation.Explode",
+            "label": "Explode fields",
+            "image": "images/transformation/explode.svg",
+            "group": "transformationSteps",
+            "ports":[{"id": "out", "_type_": "etl.OutputPort", "attribute": "outputPort", "group": "out"}, {"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}]
+        },
+        {
+            "_type_": "etl.LocalTarget",
+            "type": "devs.transformation.LocalTarget",
+            "label": "Local",
+            "image": "images/transformation/target_local.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions":[{"id": "view", "label": "View content", "component": "LocalTargetEditor", "icon": "images/icon-core/table-modern.svg"}]
+        },
+        {
+            "_type_": "etl.DeltaTarget",
+            "type": "devs.transformation.DeltaTarget",
+            "label": "Delta",
+            "image": "images/transformation/target_delta.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions":[{"id": "view", "label": "View content", "component": "LocalTargetEditor", "icon": "images/icon-core/table-modern.svg"}]
+        },
+        {
+            "_type_": "etl.TableTarget",
+            "type": "devs.transformation.TableTarget",
+            "label": "Table",
+            "image": "images/transformation/target_table.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions":[{"id": "choose", "label": "Choose table", "component": "TableTargetEditor", "icon": "images/icon-core/table-modern.svg"}]
+        },
+        {
+            "_type_": "etl.StoredProcedureTarget",
+            "type": "devs.transformation.ProcedureTarget",
+            "label": "Procedure",
+            "image": "images/transformation/procedure.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions":[{"id": "choose", "label": "Choose procedure", "component": "", "icon": "images/icon-core/table-modern.svg"}]
+        },
+        {
+            "_type_": "etl.CSVTarget",
+            "type": "devs.transformation.CSVTarget",
+            "label": "CSV",
+            "image": "images/transformation/target_csv.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions":[{"id": "view", "label": "View content", "component": "CSVTargetEditor", "icon": "images/icon-core/table-modern.svg"}]
+        },
+        {
+            "_type_": "etl.XMLTarget",
+            "type": "devs.transformation.XMLTarget",
+            "label": "XML",
+            "image": "images/transformation/target_xml.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions":[{"id": "view", "label": "View content", "component": "", "icon": "images/icon-core/open-modern.svg"}]
+        },
+        {
+            "_type_": "etl.StreamTarget",
+            "type": "devs.transformation.StreamTarget",
+            "label": "Streaming",
+            "image": "images/transformation/streaming.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}]
+        },
+        {
+            "_type_": "etl.HiveTarget",
+            "type": "devs.transformation.HiveTarget",
+            "label": "Hive",
+            "image": "images/transformation/target_hive.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions": [{"id": "HiveEdit", "label": "Edit Hive", "component": "HiveTargetEditor", "icon": "images/icon-core/txt-modern.svg"}]
+        },
+        {
+            "_type_": "etl.HBaseTarget",
+            "type": "devs.transformation.HBaseTarget",
+            "label": "HBase",
+            "image": "images/transformation/target_hbase.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions": []
+        },
+        {
+            "_type_": "etl.KafkaTarget",
+            "type": "devs.transformation.KafkaTarget",
+            "label": "Kafka",
+            "image": "images/transformation/target_kafka.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions": []
+        }, {
+            "_type_": "etl.RestTarget",
+            "type": "devs.transformation.RestTarget",
+            "label": "REST WS",
+            "image": "images/icon-core/World.svg",
+            "group": "targets",
+            "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
+            "actions": []
+        }
+    ],
+"workflowNodes":
+    [
+        {
+            "_type_": "etl.WFManualStart",
+            "type": "devs.workflowStart",
+            "label": "Start",
+            "image": "images/workflow/workflow_start_point.png",
+            "group": "nodes",
+            "ports":[{"id": "out", "attribute": "to", "group": "out"}]
+        },
+        {
+            "_type_": "etl.WFEnd",
+            "type": "devs.workflowEnd",
+            "label": "End",
+            "image": "images/workflow/workflow_end_point.png",
+            "group": "nodes",
+            "ports":[{"id": "in", "group": "in"}]
+        },
+        {
+            "_type_": "etl.WFKill",
+            "type": "devs.workflowKill",
+            "label": "Kill",
+            "image": "images/workflow/workflow_killed.png",
+            "group": "nodes",
+            "ports":[{"id": "in", "group": "in"}]
+        },
+        {
+            "_type_": "etl.WFTransformation",
+            "type": "devs.workflowTransformation",
+            "label": "Transformation",
+            "image": "images/workflow/transformation.png",
+            "group": "nodes",
+            "ports":[{"id": "in", "group": "in"}, {"id": "ok", "group": "out", "attribute": "ok"}, {"id": "error", "group": "out", "attribute": "error"}]
+        },
+        {
+            "_type_": "etl.WFSubWorkflow",
+            "type": "devs.subWorkflow",
+            "label": "Workflow",
+            "image": "images/workflow/procedure.png",
+            "group": "nodes",
+            "ports":[{"id": "in", "group": "in"}, {"id": "ok", "group": "out", "attribute": "ok"}, {"id": "error", "group": "out", "attribute": "error"}]
+        },
+        {
+            "_type_": "etl.WFShell",
+            "type": "devs.workflowShell",
+            "label": "Shell",
+            "image": "images/workflow/execute_shell.png",
+            "group": "nodes",
+            "ports":[{"id": "in", "group": "in"}, {"id": "ok", "group": "out", "attribute": "ok"}, {"id": "error", "group": "out", "attribute": "error"}]
+        },
+        {
+            "_type_": "etl.WFJava",
+            "type": "devs.workflowJava",
+            "label": "Java",
+            "image": "images/workflow/execute_java.png",
+            "group": "nodes",
+            "ports":[{"id": "in", "group": "in"}, {"id": "ok", "group": "out", "attribute": "ok"}, {"id": "error", "group": "out", "attribute": "error"}]
+        },
+        {
+            "_type_": "etl.WFFork",
+            "type": "devs.workflowFork",
+            "label": "Fork",
+            "image": "images/workflow/fork.png",
+            "group": "nodes",
+            "ports":[{"id": "in", "group": "in"}, {"id": "paths", "group": "out", "attribute": "paths", "multiple": true, "labelAttribute": "label", "_type_": "etl.WFNode"}]
+        },
+        {
+            "_type_": "etl.WFJoin",
+            "type": "devs.workflowJoin",
+            "label": "Join",
+            "image": "images/workflow/join.png",
+            "group": "nodes",
+            "ports":[{"id": "in", "group": "in", "_type_": "etl.WFNode"}, {"id": "out", "group": "out", "attribute": "to"}]
+        },
+        {
+            "_type_": "etl.WFDecision",
+            "type": "devs.workflowDecision",
+            "label": "Decision",
+            "image": "images/workflow/decision.png",
+            "group": "nodes",
+            "ports":[{"id": "in", "group": "in"}, {"id": "cases", "group": "out", "attribute": "cases", "multiple": true, "labelAttribute": "label", "_type_": "etl.WFCase", "attribute2": "to"}]
+        }
+    ]
+}

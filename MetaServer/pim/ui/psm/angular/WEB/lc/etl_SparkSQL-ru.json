@@ -1,0 +1,21 @@
+{
+    "etl_SparkSQL": {
+        "caption": "SparkSQL", 
+        "caption_plural": "Список SparkSQL", 
+        "att": {
+            "name": "Name",            
+            "label": "Label",            
+            "outputPort": "Output Port",            
+            "errorPort": "Error Port",            
+            "inputPort": "Input Port",            
+            "transformation": "Transformation",            
+            "checkpoint": "Checkpoint",            
+            "statement": "Statement",            
+            "sqlPorts": "Sql Ports",            
+            "sampleSize": "Sample Size",            
+            "explain": "Explain"            
+        },
+        "op": {
+        }
+    }
+}

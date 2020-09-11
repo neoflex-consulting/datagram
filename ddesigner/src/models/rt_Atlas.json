@@ -1,0 +1,8 @@
+{
+	"eClasses": {
+		"rt.Atlas": {
+			"containerName": "ViewContainer",
+			"views": ["FormView", "AtlasView"]
+		}
+	}
+}

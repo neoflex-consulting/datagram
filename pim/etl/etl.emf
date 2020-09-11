@@ -1,0 +1,1390 @@
+@namespace(uri="http://www.neoflex.ru/meta/etl", prefix="etl")
+package etl;
+
+import "http://www.neoflex.ru/meta/auth";
+import "http://www.neoflex.ru/meta/dataset";
+import "http://www.neoflex.ru/meta/etlevs";
+
+abstract class Source {
+  ref Context context;
+  val OutputPort[1] outputPort;
+  ref Transformation#sources transformation;
+  attr String[1] name;
+  attr String label;
+  attr int sampleSize = 100;
+  attr boolean checkpoint;
+  attr boolean schemaOnRead = false;
+  attr boolean contextFromString;
+  attr String contextString;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String description;
+}
+
+abstract class Target {
+  ref Context context;
+  val Port[1] inputPort;
+  ref Transformation[1]#targets transformation;
+  attr String[1] name;
+  val InputFieldMapping[*]#target inputFieldsMapping;
+  attr String label;
+  attr int sampleSize = 100;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String description;
+}
+
+@mspace.ui(designerLink="/cim/transformation/pim/ui/psm/angular/WEB/index.html#/load/")
+class Transformation {
+
+  @mspace.ui(caption="Проверить")
+  op void validate();
+
+  @mspace.ui(caption="Зависимости", deprecated="true")
+  op void dependencies();
+
+  @mspace.ui(caption="Создать представление", deprecated="true")
+  op void setJsonView();
+
+  @mspace.ui(caption="Сгенерировать и скопировать", deprecated="true")
+  op void install();
+
+  @mspace.ui(caption="Импорт")
+  op void importTransformation();
+
+  @mspace.ui(caption="Экспорт")
+  op void exportTransformation(@mspace.ui(multiline="true") String svnCommitMessage);
+  
+  @mspace.ui(caption="Запустить", deprecated="true")
+  op void runit();
+  
+  @mspace.ui(caption="Сгенерировать")
+  op void generate();
+  
+  @mspace.ui(caption="Собрать")
+  op void build();
+  
+  @mspace.ui(caption="Generate test")
+  op void generateTests();
+  
+  @mspace.ui(caption="Проверить тесты")
+  op void validateTests();
+
+  @mspace.ui(caption="Зависимости полей", deprecated="true")
+  op void nodeDependencies();
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  attr String label;
+  @mspace.ui(caption="Spark version")
+  attr SparkVersion sparkVersion;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String description;
+  attr String buildVersion;
+  ref Project project;
+  val Target[*]#transformation targets;
+  val TransformationStep[*]#transformation transformationSteps;
+  val Source[*]#transformation sources;
+  val Transition[*]#transformation transitions;
+  val Property[*] parameters;
+  ref UserDefinedFunction[*] userDefinedFunctions;
+  ref MavenDependency[*] mavenDependencies;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String jsonView;
+  val auth.AuditInfo auditInfo;
+}
+
+
+abstract class Context {
+  attr String[1] name;
+}
+
+abstract class TransformationStep {
+  attr String[1] name;
+  attr String label;
+  val OutputPort[1] outputPort;
+  val Port inputPort;
+  ref Transformation[1]#transformationSteps transformation;
+  attr boolean checkpoint;
+  attr boolean schemaOnRead = false;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String description;  
+}
+
+
+class MockStep {
+  attr String[1] name;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String body;
+}
+
+class MockFunction{
+  @mspace.ui(listeval="props.entity.__parent.transformation.sources.map(s->s.name)")
+  attr String[1] name;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String code;
+}
+
+class TransformationTest {
+    attr String[1] name;
+    attr boolean enabled;
+    val MockStep[*] steps;
+    val MockFunction[*] functions;
+    ref Transformation transformation;
+    val Property[*] parameters;
+    @mspace.ui(caption="Сформивать")
+    op void generate();
+    @mspace.ui(caption="Запустить")
+    op void run();
+    @mspace.ui(caption="Проверить")
+    op void validate();
+}
+
+class Selection extends TransformationStep {
+
+  @mspace.ui(caption="Протестировать")
+  op void test();
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String[1] expression;
+}
+
+class Join extends Projection {
+  attr JoinType joinType = "INNER";
+  val Port[1] joineePort;
+  @mspace.ui(filter="dataSet.e_id", ds="inputPort.e_id", entityType="dataset.Field")
+  attr String[*] keyFields;
+  @mspace.ui(filter="dataSet.e_id", ds="joineePort.e_id", entityType="dataset.Field")
+  attr String[*] joineeKeyFields;
+}
+
+class Projection extends TransformationStep {
+  attr String watermarkField;
+  attr String watermarkThreshold;
+}
+
+class Sort extends TransformationStep {
+  val SortFeature[*] sortFeatures;
+}
+
+class Aggregation extends TransformationStep {
+
+  @mspace.ui(caption="Протестировать выражение")
+  op void testExpression();
+
+  @mspace.ui(caption="Протестировать выражение инициализации")
+  op void testInitExpression();
+
+  @mspace.ui(caption="Протестировать выражение завершения")
+  op void testFinalExpression();
+
+  @mspace.ui(caption="Протестировать выражение слияния")
+  op void testMergeExpression();
+
+  @mspace.ui(listeval="props.entity.inputPort.fields")
+  attr String[*] groupByFieldName;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String expression;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String initExpression;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String finalExpression;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String mergeExpression;
+
+  attr String pivotField;
+  val PivotParameter[*]#aggregation pivotParameters;
+
+  @mspace.ui(caption="Параметры агрегации")
+  val AggregationParameter[*]#aggregation aggregationParameters;
+
+  @mspace.ui(caption="Пользовательская агрегация")
+  attr boolean userDefAgg;
+}
+
+class Union extends TransformationStep {
+  val Port[1] unionPort;
+}
+
+class Port extends dataset.NamedDataSet {
+}
+
+enum SchemeType {
+  AVRO = 0;
+  XML = 1;
+  JSON =2;
+}
+
+class SchemeDataSet {
+  @mspace.ui(caption="Собрать из схемы")
+  op void generateFromString();
+  
+  attr String[1] name;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String schemeString;
+  attr SchemeType schemeType;
+  val dataset.Structure[1] schemeDataset;
+}
+
+class ProjectionField extends dataset.Field {
+
+  @mspace.ui(caption="Протестировать")
+  op void test();
+  
+  @mspace.ui(listeval="props.entity.__parent.__parent.inputPort.fields")
+  ref dataset.Field[*] sourceFields;
+  
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String expression;
+  attr FieldOperationType fieldOperationType;
+}
+
+class UnionField extends dataset.Field {
+  @mspace.ui(listeval="props.entity.__parent.__parent.inputPort.fields")
+  ref dataset.Field inputPortField;
+  @mspace.ui(listeval="props.entity.__parent.__parent.unionPort.fields")
+  ref dataset.Field unionPortField;
+}
+
+class SortFeature {
+  attr String[1] fieldName;
+  attr boolean[1] ascending = true;
+}
+
+class Transition {
+  attr String[1] name;
+  @mspace.ui(listeval="[...props.entity.__parent.sources, ...props.entity.__parent.transformationSteps].map(n=>n.outputPort)")
+  ref Port start;
+  @mspace.ui(listeval="_.flatten([...props.entity.__parent.transformationSteps, ...props.entity.__parent.targets].map(n=>[n.inputPort,n.unionPort,n.joineePort,...(n.sqlPorts||[])])).filter(p=>!!p)")
+  ref Port finish;
+  ref Transformation[1]#transitions transformation;
+  attr String markup;
+}
+
+class JdbcContext extends Context {
+}
+
+class PhysicalJdbcContext {
+  attr String url;
+  attr String user;
+
+  @mspace.ui(password="true")
+  attr String password;
+  attr String schema;
+}
+
+class ExpressionSource extends Source {
+
+  @mspace.ui(caption="Протестировать")
+  op void test();
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String[1] expression = "Array(
+    Map(\"id\" -> new java.math.BigDecimal(1), \"name\" -> \"1\"),
+    Map(\"id\" -> new java.math.BigDecimal(2), \"name\" -> \"2\") 
+)";
+}
+
+enum JoinType {
+  LEFT = 0;
+  RIGHT = 1;
+  FULL = 2;
+  INNER = 3;
+}
+
+
+class DeltaSource extends Source {
+  
+  attr String[1] localFileName;
+  
+  val SourceOption[*]#localSource options;
+  
+}
+
+
+class TableSource extends Source {
+
+  @mspace.ui(caption="Выполнить")
+  op void execute();
+  attr String[1] tableName;
+  attr String boundFieldName;
+}
+
+class SQLSource extends Source {
+  @mspace.ui(caption="Выполнить")
+  op void execute();
+  
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String preSQL;
+  
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String statement;
+  val SQLOption[*]#sqlSource sqlOptions; 
+  attr String[*] rdbmsSources = "";  
+
+  attr boolean isParallel;
+  attr String partitionColumn;
+  attr String numPartitions;
+}
+
+class LocalSource extends Source {
+  attr String[1] localFileName;
+  attr LocalFileFormat[1] localFileFormat = "JSON";
+  attr Boolean streaming;
+  val SourceOption[*]#localSource options;
+}
+
+enum LocalFileFormat {
+  JSON = 1;
+  PARQUET = 2;
+  ORC = 3;
+  JDBC = 4;
+  CSV = 5;
+  KAFKA = 6;
+  HBASE = 7;
+  OTHER = 99;
+}
+
+enum FieldOperationType {
+  ADD = 1;
+  TRANSFORM = 2;
+  SQL = 3;
+  PACK = 4;
+}
+
+enum TableTargetType {
+  INSERT = 0;
+  UPDATE = 1;
+  DELETE = 2;
+  MERGE = 3;
+}
+
+class StoredProcedureTarget extends Target {
+  attr String catalogName;
+  attr String storedProcedure;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String preSQL;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String postSQL;
+}
+
+class DeltaTarget extends Target {
+  attr String[1] path;
+  attr TableTargetType targetType;
+  attr boolean createIfNotExists = false;
+  attr boolean truncate = false;
+  val TargetOption[*]#localTarget options;
+  @mspace.ui(caption="Отобразить содержимое")
+  op void showContent();
+ 
+}
+
+
+class TableTarget extends Target {
+  attr String[1] tableName;
+  attr boolean clear = false;
+  attr boolean checkIfExists = false;
+  attr TableTargetType targetType;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String preSQL;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String postSQL;
+  attr boolean schemaOnRead = false;
+  attr Integer coalesce;
+  attr boolean coalesceFromString;
+  attr String coalesceString;
+  attr Integer repartitionNum;
+  attr boolean repartitionNumFromString;
+  attr String repartitionNumString;
+  attr String repartitionExpression;
+}
+
+class RestTarget extends Target {
+  @mspace.ui(multiline="true", isColumn="true")
+  attr String preText;
+  @mspace.ui(multiline="true", isColumn="true")
+  attr String postText;
+  attr String paramName;
+  attr String serviceUrl;
+  attr boolean secured;
+  attr String authUrl;
+  attr String user;
+  attr String password;
+  val Property[*] requestHeaders;
+  val Property[*] urlParameters; 
+}
+
+class LocalTarget extends Target {
+  attr Integer coalesce;
+  attr boolean coalesceFromString;
+  attr String coalesceString;
+  attr Integer repartitionNum;
+  attr boolean repartitionNumFromString;
+  attr String repartitionNumString;
+  attr String repartitionExpression;
+  attr String localFileName;
+  attr LocalFileFormat[1] localFileFormat = "JSON";
+  attr boolean deleteBeforeSave = false;
+  attr String[*] partitions;
+  attr boolean partitionsFromString;
+  attr String partitionsString;
+  attr SaveMode saveMode;
+  attr boolean registerTable = false;
+  attr String hiveTableName;
+  val TargetOption[*]#localTarget options;
+  @mspace.ui(caption="Отобразить содержимое")
+  op void showContent();
+}
+
+class TableTargetFeature extends InputFieldMapping {
+  attr String[1] targetColumnName;
+  attr boolean keyField;
+}
+
+class StoredProcedureParamFeature extends InputFieldMapping {
+  attr String paramName;
+}
+
+enum AggregationFunction {
+  COUNT = 1;
+  AVG = 2;
+  SUM = 3;
+  MIN = 4;
+  MAX = 5;
+  FIRST = 6;
+  LAST = 7;
+  LIST = 8;
+}
+
+abstract class InputFieldMapping {
+  @mspace.ui(filter="dataSet.e_id", ds="target.inputPort.e_id", entityType="dataset.Field")
+  attr String inputFieldName;
+  ref Target[1]#inputFieldsMapping target;
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String comment;  
+}
+
+enum VCSType {
+  SVN = 1;
+  GIT = 2;
+}
+
+
+class Project {
+
+  @mspace.ui(caption="Загрузить проект")
+  op void importProject();
+
+  @mspace.ui(caption="Выгрузить проект")
+  op void exportProject();
+  
+  @mspace.ui(caption="Загрузить архив")
+  op void uploadArchive(@mspace.ui(file="true") String file);  
+
+  @mspace.ui(caption="Выгрузить архив")
+  @mspace.ui(file="true")
+  op void downloadArchive(Boolean export);  
+
+  @mspace.ui(caption="Загрузить репозиторий")
+  op void importRepo();
+
+  @mspace.ui(caption="Выгрузить репозиторий")
+  op void exportRepo();
+
+  @mspace.ui(caption="Загрузить данные")
+  op void uploadData();
+
+  @mspace.ui(caption="Выгрузить данные")
+  op void downloadData(String path);
+
+  @mspace.ui(caption="Восстановить ссылки")
+  op void importScripts();
+
+  @mspace.ui(caption="Удалить потерянные объекты")
+  op void clearLost();
+
+  @mspace.ui(caption="SVN Checkout")
+  op void svnCheckout();
+
+  @mspace.ui(caption="SVN Update")
+  op void svnUpdate();
+
+  @mspace.ui(caption="SVN Checkout or Update")
+  op void svnCheckoutOrUpdate();
+
+  @mspace.ui(caption="SVN Commit")
+  op void svnCommit();
+
+  @mspace.ui(caption="SVN Cleanup")
+  op void svnCleanup();
+  attr String[1] name;
+  ref Project parentProject;
+  attr Boolean svnEnabled;
+  attr VCSType vcsType = "SVN";
+  attr String svnURL;
+  attr Boolean connectAsLoggedInUser;
+  attr String svnUserName;
+
+  @mspace.ui(password="true")
+  attr String svnPassword;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10000)")
+  attr String svnCommitMessage;
+}
+
+@mspace.ui(up="2", down="10")
+@mspace.ui(designerLink="/cim/workflow/pim/ui/psm/angular/WEB/index.html#/load/")
+class Workflow {
+
+  @mspace.ui(caption="Проверить")
+  op void validate();
+
+  @mspace.ui(caption="Зависимости")
+  op void dependencies();
+
+  @mspace.ui(caption="Создать представление")
+  op void setJsonView();
+
+  @mspace.ui(caption="Сгенерировать и скопировать")
+  op void install();
+
+  @mspace.ui(caption="Запустить")
+  op void runit();
+  
+  @mspace.ui(caption="Импорт")
+  op void importWorkflow();
+
+  @mspace.ui(caption="Экспорт")
+  op void exportWorkflow(@mspace.ui(multiline="true") String svnCommitMessage);
+
+  
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  ref Project project;
+  attr String label;
+  val WFNode[*]#workflow nodes;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String jsonView = "";
+  val SlaDefinition sla;
+  val auth.AuditInfo auditInfo;
+}
+
+abstract class WFNode {
+  attr String[1] name;
+  attr String label;
+  ref Workflow[1]#nodes workflow;
+}
+
+class WFEnd extends WFNode {
+}
+
+class WFKill extends WFNode {
+  attr String message;
+}
+
+class WFCase {
+  attr String label;
+  attr String[1] predicate;
+
+  @mspace.ui(filter="auto")
+  ref WFNode to;
+  ref WFDecision#cases decision;
+}
+
+class WFDecision extends WFNode {
+  val WFCase[*]#decision cases;
+
+  @mspace.ui(filter="workflow.e_id", ds="workflow.e_id")
+  ref WFNode default;
+}
+
+class WFFork extends WFNode {
+
+  @mspace.ui(filter="workflow.e_id", ds="workflow.e_id")
+  ref WFNode[*] paths;
+}
+
+class WFJoin extends WFNode {
+
+  @mspace.ui(filter="workflow.e_id", ds="workflow.e_id")
+  ref WFNode to;
+}
+
+abstract class WFAction extends WFNode {
+
+  @mspace.ui(filter="workflow.e_id", ds="workflow.e_id")
+  ref WFNode ok;
+
+  @mspace.ui(filter="workflow.e_id", ds="workflow.e_id")
+  ref WFNode error;
+  val SlaDefinition sla;
+}
+
+class WFTransformation extends WFAction {
+  ref Transformation transformation;
+  attr String jvmOpts;
+  val Prepare prepare;
+  attr Integer numExecutors;
+  attr Integer executorCores;
+  attr String driverMemory;
+  attr String executorMemory;  
+  val Property[*] parameters;
+  val Property[*] sparkOpts;
+}
+
+class WFSubWorkflow extends WFAction {
+  ref Workflow subWorkflow;
+  attr Boolean propagateConfiguration = "true";
+  val ConfigurationProperty[*] properties;
+}
+
+class WFShell extends WFAction {
+  attr String exec;
+  attr String[*] args;
+  attr String file;
+  attr Boolean captureOutput = "false";
+}
+
+class ConfigurationProperty {
+  attr String name;
+  attr String value;
+}
+
+abstract class FSCommand {
+}
+
+class FSDelete extends FSCommand {
+  attr String[1] path;
+}
+
+class FSMkdir extends FSCommand {
+  attr String[1] path;
+}
+
+class Prepare {
+  val FSDelete[*] deleteDir;
+  val FSMkdir[*] mkDir;
+}
+
+class WFJava extends WFAction {
+  attr String[*] jarFiles;
+  val Prepare prepare;
+  attr String[1] mainclass;
+  attr String[*] args;
+  attr String javaopts;
+  attr Boolean captureOutput = "false";
+  val ConfigurationProperty[*] properties;
+  attr String file;
+  attr String archive;
+}
+
+class OutputPort extends Port {
+  val DebugOutput[*]#outputPort debugList;
+}
+
+class DebugOutput {
+
+  @mspace.ui(caption="Протестировать")
+  op void test();
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10000)")
+  attr String condition;
+  attr String[1] name;
+  attr boolean active;
+  ref OutputPort#debugList outputPort;
+}
+
+class CoJob {
+
+  @mspace.ui(caption="Проверить")
+  op void validate();
+
+  @mspace.ui(caption="Зависимости")
+  op void dependencies();
+
+  @mspace.ui(caption="Сгенерировать и скопировать")
+  op void install();
+
+  @mspace.ui(caption="Запустить")
+  op void runit();
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  ref Project project;
+
+  @mspace.ui(hint="${coord:days(1)}")
+  attr String frequency;
+
+  @mspace.ui(hint="2001-01-01T00:01Z")
+  attr String start;
+
+  @mspace.ui(hint="2022-12-31T23:59Z")
+  attr String end;
+
+  @mspace.ui(hint="Etc/GMT-4")
+  attr String timezone;
+  val CoControls#job controls;
+  val CoDataset[*]#job datasets;
+  val CoInputEvent[*]#job inputEvents;
+  val CoOutputEvent[*]#job outputEvents;
+  val CoAction[1]#job action;
+}
+
+class CoControls {
+  ref CoJob#controls job;
+  attr String timeout;
+  attr String concurrency;
+  attr String execution;
+  attr String throttle;
+}
+
+abstract class CoAction {
+  attr String[1] name;
+  ref CoJob#action job;
+  
+  val SlaDefinition sla;
+}
+
+class Property {
+  attr String[1] name;
+
+  @mspace.ui(multiline="true", isColumn="true")
+  @teneo.jpa(value="@Column(length=10000)")
+  attr String[1] value;
+  attr Boolean expression = "false";
+  attr String description;
+}
+
+class CoWorkflow extends CoAction {
+  ref Workflow workflow;
+  val Property[*] configuration;
+}
+
+class CoDataset {
+  attr String[1] name;
+  ref CoJob#datasets job;
+
+  @mspace.ui(hint="${coord:hours(1)}")
+  attr String frequency;
+
+  @mspace.ui(hint="2001-01-01T00:01Z")
+  attr String initialInstance;
+
+  @mspace.ui(hint="Etc/GMT-4")
+  attr String timezone;
+
+  @mspace.ui(hint="hdfs://cloud:54310/data/${YEAR}/${MONTH}/${DAY}/${HOUR}")
+  attr String uriTemplate;
+  attr String doneFlag;
+}
+
+abstract class CoInputEvent {
+  attr String[1] name;
+  ref CoJob#inputEvents job;
+}
+
+class CoDataIn extends CoInputEvent {
+
+  @mspace.ui(filter="job.e_id", ds="job.e_id")
+  ref CoDataset dataset;
+
+  @mspace.ui(hint="${coord:current(0)}")
+  attr String instance;
+
+  @mspace.ui(hint="${coord:current(-23)}")
+  attr String startInstance;
+
+  @mspace.ui(hint="${coord:current(0)}")
+  attr String endInstance;
+}
+
+abstract class CoOutputEvent {
+  attr String[1] name;
+  ref CoJob#outputEvents job;
+}
+
+class CoDataOut extends CoOutputEvent {
+
+  @mspace.ui(filter="job.e_id", ds="job.e_id")
+  ref CoDataset dataset;
+  attr String instance;
+  attr String startInstance;
+  attr String endInstance;
+}
+
+class Sequence extends TransformationStep {
+  attr SequenceType[1] sequenceType = "ORACLE";
+  ref Context context;
+  attr String[1] fieldName;
+  attr String sequencedName;
+  attr int batchSize;
+}
+
+enum SequenceType {
+  LOCAL = 0;
+  ORACLE = 1;
+}
+
+abstract class WFStart extends WFNode {
+
+  @mspace.ui(filter="workflow.e_id", ds="workflow.e_id")
+  ref WFNode to;
+}
+
+class WFManualStart extends WFStart {
+}
+
+class WFDataInStart extends WFStart {
+}
+
+enum CSVFormat {
+  CSV = 0;
+  EXCEL = 1;
+}
+
+class CSVSource extends Source {
+  attr CSVFormat csvFormat = "CSV";
+  attr boolean hdfs = true;
+  attr String[1] path;
+  attr boolean header = false;
+  // csv specific
+  attr String charset = "UTF-8";
+  attr String delimiter = ",";
+  attr String quote = "\"";
+  attr String escape = '\\';
+  attr String comment = "#";
+  attr String dateFormat;
+  attr String nullValue;
+  // excel specific
+  attr String dataAddress;
+  attr boolean addColorColumns = false;
+  attr boolean treatEmptyValuesAsNulls = false;
+  attr String timestampFormat="mm-dd-yyyy hh:mm:ss";
+  attr Long maxRowsInMemory;
+  @mspace.ui(password="true")
+  attr String workbookPassword;
+}
+
+enum CompressionCodec {
+  default = 0;
+  gzip = 1;
+  lz4 = 2;
+  snappy = 3;
+  bzip2 = 4;
+}
+
+enum QuoteMode {
+  DEFAULT = 0;
+  MINIMAL = 1;
+  NON_NUMERIC = 2;
+  NONE = 3;
+  ALL = 4;
+}
+
+class CSVTarget extends Target {
+  attr CSVFormat csvFormat = "CSV";
+  attr boolean hdfs = true;
+  attr String[1] path;
+  attr boolean header = false;
+  attr String dateFormat = "yyyy-MM-dd";
+  // csv specific
+  attr String charset = "UTF-8";
+  attr String delimiter = ",";
+  attr String quote = "\"";
+  attr String escape = '\\';
+  attr String comment = "#";
+  attr String nullValue;
+  attr CompressionCodec codec;
+  attr QuoteMode quoteMode;
+  // excel specific
+  attr SaveMode saveMode = "OVERWRITE";
+  attr String dataAddress;
+  attr String timestampFormat="yyyy-MM-dd hh:mm:ss";
+  @mspace.ui(caption="Отобразить содержимое")
+  op void showContent();
+}
+
+class Drools extends TransformationStep {
+  val DroolsRulesFile[*] rulesFiles;
+  attr String[1] inputFactTypeName;
+  attr String[1] resultFactTypeName;
+  attr String[1] resultQueryName;
+  attr String[1] resultFactName;
+  val Property[*] globals;
+}
+
+class DroolsRulesFile {
+  attr String fileUrl;
+  attr DroolsFileType fileType;
+  attr boolean hdfs = true;
+}
+
+enum DroolsFileType {
+  DRL = 0;
+  XLS = 1;
+  CSV = 2;
+  PKG = 3;
+  OTHER = 4;
+  JAR = 5;
+}
+
+enum SaveMode {
+  APPEND = 1;
+  OVERWRITE = 2;
+  DISCARD = 3;
+}
+
+class HiveSource extends Source {
+
+  @mspace.ui(caption="Выполнить")
+  op void execute();
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String statement;
+
+  @mspace.ui(caption="Explain")
+  attr boolean explain;
+}
+
+class ModelBasedAnalysis extends TransformationStep {
+  attr String modelFile;
+  attr String labelFieldName;
+  attr String[*] modelFeaturesFields;
+  attr AnalysisMethod[1] methodName;
+}
+
+enum AnalysisMethod {
+  GradientBoostedTrees = 0;
+  RandomForestTrees = 1;
+  SVM = 2;
+  LogisticRegression = 3;
+  LinearRegression = 4;
+  DecisionTree = 5;
+  NaiveBayes = 6;
+  IsotonicRegression = 7;
+}
+
+class SQLPort extends Port {
+  attr String alias;
+}
+
+@mspace.ui(protectAttribute="customSQL")
+class SparkSQL extends TransformationStep {
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String statement;
+  val SQLPort[*] sqlPorts;
+  attr int sampleSize = 100;
+
+  @mspace.ui(caption="Explain")
+  attr boolean explain;
+  @mspace.ui(caption="Custom SQL")
+  attr boolean customSQL = false;
+}
+
+enum HiveTargetType {
+  APPEND = 0;
+  OVERWRITE = 1;
+  IGNORE = 2;
+  ERROR = 3;
+}
+
+enum SparkVersion {
+  SPARK2 = 2;
+  SPARK3 = 3;
+}
+
+class HiveTarget extends Target {
+  attr String[1] tableName;
+  attr boolean clear = false;
+
+  @mspace.ui(caption="Hive target type")
+  attr HiveTargetType hiveTargetType;
+
+  @mspace.ui(caption ="Partitions")
+  attr String[*] partitions;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String preSQL;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String postSQL;
+}
+
+class TargetOption {
+  attr String key;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String value;
+  ref LocalTarget#options localTarget;
+}
+
+class StreamTarget extends LocalTarget {
+
+  @mspace.ui(caption="Checkpoint Location")
+  attr String checkpointLocation;
+
+  @mspace.ui(caption="Trigger")
+  attr Long trigger;
+
+  @mspace.ui(caption="Trigger units")
+  attr TimeUnits triggerUnits;
+
+  @mspace.ui(caption="Timeout")
+  attr Long timeoutMs;
+  
+  @mspace.ui(caption="Refresh timeout")
+  attr Long refreshTimeoutMs;  
+
+  @mspace.ui(caption="Output mode")
+  attr StreamOutputMode outputMode;
+
+  attr String namespace = "default";
+  attr String tableName;
+  attr String rowkey = "";
+  attr Integer newTable;
+  attr String versionColumn;
+}
+
+enum StreamOutputMode {
+  APPEND = 0;
+  COMPLETE = 1;
+  UPDATE = 2;
+}
+
+enum TimeUnits {
+  MILLISECONDS = 0;
+  SECONDS = 1;
+  MINUTES = 2;
+  HOURS = 3;
+  DAYS = 4;
+}
+
+class SourceOption {
+  attr String key;
+  attr String value;
+  ref LocalSource#options localSource;
+}
+
+class ExplodeField {
+  attr String alias;
+  attr String field;
+  ref XMLSource#explodeFields xmlSource;
+}
+
+class AvroExplodeField {
+  attr String alias;
+  attr String field;
+  ref AVROSource#explodeFields avroSource;
+}
+
+enum ValueType {
+  AVRO = 0;
+  XML = 1;
+  JSON =2;
+  AVROFILE = 3; 
+}
+
+class KafkaSource extends Source {
+
+  @mspace.ui(caption="Bootstrap servers")
+  attr String bootstrapServers;
+
+  @mspace.ui(caption="Kafka consume type")
+  attr KafkaConsumeType kafkaConsumeType;
+
+  @mspace.ui(caption="Consume option value")
+  attr String consumeOptionValue;
+
+  @mspace.ui(caption="Options")
+  val KafkaSourceOption[*]#kafkaSource options;
+  
+  attr ValueType valueType;
+  ref SchemeDataSet valueScheme;
+}
+
+enum KafkaConsumeType {
+  ASSIGN = 0;
+  SUBSCRIBE = 1;
+  SUBSCRIBE_PATTERN = 2;
+}
+
+class KafkaSourceOption {
+  attr String key;
+  attr String value;
+  ref KafkaSource[1]#options kafkaSource;
+}
+
+class KafkaTarget extends Target {
+
+  @mspace.ui(caption="Bootstrap servers")
+  attr String bootstrapServers;
+
+  @mspace.ui(caption="Topic")
+  attr String topicName;
+
+  @mspace.ui(caption="Key")
+  attr String[1] messageKey;
+
+  @mspace.ui(caption="Value")
+  attr String[1] messageValue;
+
+  @mspace.ui(caption="Properties")
+  val KafkaTargetProperty[*]#kafkaTarget props;
+  
+  attr ValueType valueType;
+  ref SchemeDataSet valueScheme;  
+}
+
+class KafkaTargetProperty {
+  attr String key;
+  attr String value;
+  ref KafkaTarget[1]#props kafkaTarget;
+}
+
+class SQLOption {
+  attr String key;
+  attr String value;
+  ref SQLSource#sqlOptions sqlSource;
+}
+
+class AggregationParameter {
+  attr String resultFieldName;
+  attr String fieldName;
+  attr AggregationFunction[1] aggregationFunction = "SUM";
+  ref Aggregation[1]#aggregationParameters aggregation;
+}
+
+class XMLSource extends Source {
+
+  @mspace.ui(caption="Развернуть")
+  op void expand();
+
+  attr boolean hdfs = true;
+  attr String[1] path;
+  attr String charset = "UTF-8";
+  attr String[1] rowTag;
+  val ExplodeField[*]#xmlSource explodeFields;
+  attr int samplingRatio = 100;
+  attr boolean excludeAttribute = false;
+  attr boolean treatEmptyValuesAsNulls = false;
+  attr XmlCorruptRecords mode;
+  attr String[1] columnNameOfCorruptRecord = "_corrupt_record";
+  attr String[1] attributePrefix = "_";
+  attr String[1] valueTag = "_VALUE";
+  attr boolean ignoreSurroundingSpaces = false;
+}
+
+class XMLTarget extends Target {
+
+  attr boolean hdfs = true;
+  attr String[1] path;
+  attr String charset = "UTF-8";
+  attr String[1] rowTag;
+  attr String[1] rootTag;
+  attr String[1] nullValue = "null";
+  attr String[1] attributePrefix = "_";
+  attr String[1] valueTag = "_VALUE";
+  attr CompressionCodec compression;
+}
+
+enum XmlCorruptRecords {
+  PERMISSIVE = 0;
+  DROPMALFORMED = 1;
+  FAILFAST = 2;
+}
+
+class XMLSourceField extends dataset.Field {
+  attr String[1] xmlPath;
+}
+
+class JSONSourceField extends dataset.Field {
+  attr String[1] jsonPath;
+}
+
+class AVROSource extends Source {
+
+  @mspace.ui(caption="Развернуть")
+  op void expand();
+
+  attr boolean hdfs = true;
+  attr String[1] path;
+  attr boolean schemaHdfs = false;
+  attr String schemaPath;  
+  attr String charset = "UTF-8";
+  val AvroExplodeField[*]#avroSource explodeFields;
+}
+
+class PivotParameter {
+  attr String resultFieldName;
+  attr String expression;
+  ref Aggregation[1]#pivotParameters aggregation;
+}
+
+class ExplodeStep extends TransformationStep {
+  val ExplodeStepField[*]#explodeStep explodeFields;
+}
+
+class ExplodeStepField {
+  attr String alias;
+  attr String field;
+  attr dataset.DataTypeDomain dataTypeDomain;
+  val dataset.FieldType domainStructure;
+  ref ExplodeStep#explodeFields explodeStep;
+}
+
+class SlaDefinition {
+  attr String nominalTime; 
+  attr String shouldStart;
+  attr String shouldEnd;
+  attr String maxDuration;
+  attr String alertEvents;
+  attr String alertContact;
+}
+
+class UserDefinedFunction {
+  attr String name;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String code;
+  
+  attr String className;
+  attr Boolean withParameters;
+  ref Project project;
+  ref MavenDependency[*] mavenDependencies;
+}
+
+
+class MLFlowRun /*extends UserDefinedFunction*/ {
+	attr String port;
+	attr String pid;
+	op void start();
+	op void stop();
+}
+
+class GroupWithState extends TransformationStep {
+  @mspace.ui(listeval="props.entity.inputPort.fields")
+  attr String[*] groupByKey;
+  
+  val dataset.Structure internalState;
+   
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String[1] flatMapGroupsWithState;
+  
+  ref evs.EventsProcessor eventsProcessor;
+  attr String internalStateTimeout;
+  
+  @mspace.ui(listeval="props.entity.outputPort.fields")
+  attr String watermarkField;
+  
+  @mspace.ui(caption="Output mode")
+  attr StreamOutputMode outputMode;  
+}
+
+class HBaseSource extends Source {
+  attr String namespace = "default";
+  attr String tableName;
+  attr String rowkey;
+  attr String minStamp;
+  attr String maxStamp;
+  attr Boolean mergeToLatest;
+  attr String maxVersions;
+}
+
+class HBaseTarget extends Target {
+  attr String namespace = "default";
+  attr String tableName;
+  attr String rowkey;
+  attr Integer newTable;
+  attr String versionColumn;
+}
+
+class HBaseField extends dataset.Field {
+  attr String family;
+  attr String column;
+} 
+
+class HBaseTargetFeature extends InputFieldMapping {
+  attr String family;
+  attr String column;
+}
+
+class MapPartitions extends TransformationStep {
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String initExpression;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String expression;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String finalExpression;
+}
+
+enum MavenDependencyType {
+  UNDEFINED    = 0;
+  POM          = 1;
+  BUNDLE       = 2;
+  EJB          = 3;
+  EJB_CLIENT   = 4;
+  JAR          = 5;
+  MAVEN_PLUGIN = 6;
+  TEST_JAR     = 7;
+  WAR          = 8;
+}
+
+enum MavenDependencyScope {
+  UNDEFINED    = 0;
+  TEST = 1;
+  COMPILE = 2;
+  IMPORT = 3;
+  PROVIDED = 4;
+  RUNTIME = 5;
+  SYSTEM = 6;
+}
+
+class MavenDependency {
+  attr String[1] name;
+  attr String groupId;
+  attr String artifactId;
+  attr String version;
+  attr MavenDependencyType type;
+  attr MavenDependencyScope scope;
+}
+

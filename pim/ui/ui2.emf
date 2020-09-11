@@ -1,0 +1,396 @@
+@namespace(uri="http://www.neoflex.ru/meta/ui2", prefix="ui2")
+package ui2;
+
+@mspace.ui(caption="Пакет объектов", caption.plural="Пакеты объектов")
+class UIPackage {
+
+  @mspace.ui(caption="Наименование", display="true")
+  attr String[1] name;
+  val UIClass[*]#uiPackage uiClasses;
+}
+
+@mspace.ui(caption="Отображаемый объект", caption.plural="Отображаемые объекты")
+class UIClass {
+
+  @mspace.ui(caption="Наименование")
+  attr String[1] name;
+
+  @mspace.ui(caption="Базовое наименование")
+  attr String[1] baseName;
+
+  @mspace.ui(caption="Заголовок", display="true")
+  attr String[1] caption;
+
+  @mspace.ui(caption="Квалифицированное наименование")
+  attr String[1] qName;
+  ref UIPackage[1]#uiClasses uiPackage;
+  val UIForm[*]#uiClass uiForms;
+
+  @mspace.ui(caption="Шаблон формы редактирования")
+  ref EditForm editForm;
+
+  @mspace.ui(caption="Форма списка")
+  ref MainListForm mainListForm;
+
+  @mspace.ui(caption="Форма редактирования")
+  ref MainEditForm mainEditForm;
+
+  @mspace.ui(caption="Наследники")
+  ref UIClass[*] hiers;
+
+  @mspace.ui(caption="Операции")
+  val UIOperation[*]#uiClass uiOperations;
+
+  @mspace.ui(caption="Родители")
+  ref UIClass[*] uiSuperTypes;
+  
+  @mspace.ui(caption="Дизайнер")
+  attr String designerLink;
+
+  attr boolean readOnly;
+}
+
+class UIOperation {
+  ref UIClass[1]#uiOperations uiClass;
+
+  @mspace.ui(caption="Наименование")
+  attr String[1] name;
+
+  @mspace.ui(caption="Квалифицированное имя типа")
+  attr String[1] typeQName;
+
+  @mspace.ui(caption="Заголовок", display="true")
+  attr String[1] caption;
+}
+
+@mspace.ui(caption="Форма", caption.plural="Формы")
+abstract class UIForm extends Layout {
+  ref UIClass[1]#uiForms uiClass;
+
+  @mspace.ui(caption="Вложенные формы")
+  ref UIForm[*] embeddedForms;
+
+  @mspace.ui(caption="Источники данных")
+  val DataSource[*]#form dataSources;
+}
+
+@mspace.ui(caption="Форма редактирования", caption.plural="Формы редактирования")
+class EditForm extends UIForm {
+
+  @mspace.ui(caption="Источник данных объекта")
+  ref DataSource objectItem;
+}
+
+@mspace.ui(caption="Главная форма списка", caption.plural="Главные формы списков")
+class MainListForm extends UIForm {
+  ref ObjectList[1] objectList;
+  attr boolean entryPoint;
+}
+
+@mspace.ui(caption="Главная форма редактирования", caption.plural="Главные формы редактирования")
+class MainEditForm extends EditForm {
+  ref DataModel[1] itemId;
+}
+
+@mspace.ui(caption="Визуальный элемент", caption.plural="Визуальные элементы")
+abstract class UIElement {
+
+  @mspace.ui(caption="Наименование")
+  attr String name;
+
+  @mspace.ui(caption="Заголовок", display="true")
+  attr String caption;
+
+  @mspace.ui(caption="Подсказка")
+  attr String hint;
+
+  @mspace.ui(caption="Условия невидимости")
+  val OrExpression hideOn;
+
+  @mspace.ui(caption="Условия недоступности")
+  val OrExpression disableOn;
+  attr boolean readOnly;
+}
+
+@mspace.ui(caption="Элемент", caption.plural="Элементы")
+abstract class LayoutElement extends UIElement {
+  ref Layout#elements layout;
+}
+
+@mspace.ui(caption="Контейнер элементов", caption.plural="Контейнеры элементов")
+abstract class Layout extends LayoutElement {
+  val LayoutElement[*]#layout elements;
+}
+
+@mspace.ui(caption="Горизонтальный контейнер", caption.plural="Горизонтальные контейнеры")
+class RowLayout extends Layout {
+}
+
+@mspace.ui(caption="Вертикальный контейнер", caption.plural="Вертикальные контейнеры")
+class ColumnLayout extends Layout {
+}
+
+@mspace.ui(caption="Список групп элементов", caption.plural="Списоки групп элементов")
+class GroupListLayout extends Layout {
+  attr GroupListStyleEnum showStyle = "SHOW_FIRST";
+}
+
+@mspace.ui(caption="Простая форма", caption.plural="Простые формы")
+class FormLayout extends Layout {
+}
+
+@mspace.ui(caption="Элемент ввода данных", caption.plural="Элементы ввода данных")
+abstract class DataControl extends LayoutElement {
+
+  @mspace.ui(caption="Редактируемый объект")
+  ref DataModel[1] dataModel;
+
+  @mspace.ui(caption="Условия обязательности")
+  val OrExpression requiredOn;
+}
+
+@mspace.ui(caption="Элемент выбора данных", caption.plural="Элементы выбора данных")
+class OptionControl extends DataControl {
+
+  @mspace.ui(caption="Список выбора")
+  ref DataModel[1] refModel;
+
+  @mspace.ui(caption="Ключевое поле")
+  attr String key;
+
+  @mspace.ui(caption="Поле для отображения")
+  attr String display;
+
+  @mspace.ui(caption="Максимальное количество выбранных объектов")
+  attr int upperBound;
+}
+
+@mspace.ui(caption="Элемент ввода текста", caption.plural="Элементы ввода текста")
+class TextControl extends DataControl {
+
+  @mspace.ui(caption="Многострочный")
+  attr boolean multiline = false;
+
+  @mspace.ui(caption="Пароль")
+  attr boolean password = false;
+}
+
+@mspace.ui(caption="Элемент ввода списка", caption.plural="Элементы ввода списка")
+class EmbeddedListControl extends DataControl {
+}
+
+@mspace.ui(caption="Элемент ввода числа", caption.plural="Элементы ввода чисел")
+class NumberControl extends DataControl {
+}
+
+@mspace.ui(caption="Элемент ввода даты", caption.plural="Элементы ввода дат")
+class DateControl extends DataControl {
+}
+
+@mspace.ui(caption="Элемент ввода даты и времени", caption.plural="Элементы ввода дат и времени")
+class DateTimeControl extends DataControl {
+}
+
+@mspace.ui(caption="Элемент ввода логического значения", caption.plural="Элементы ввода логического значения")
+class BooleanControl extends DataControl {
+}
+
+abstract class ClassControl extends DataControl {
+  ref UIClass[1] uiClass;
+}
+
+@mspace.ui(caption="Элемент ввода значения объекта", caption.plural="Элементы ввода значений объектов")
+class EditFormControl extends ClassControl {
+}
+
+@mspace.ui(caption="Главная форма редактирования объекта", caption.plural="Главные формы редактирования объектов")
+class MainEditFormControl extends EditFormControl {
+}
+
+@mspace.ui(caption="Таблица", caption.plural="Таблицы")
+abstract class TableControl extends ClassControl {
+  val TableColumn[*]#table columns;
+}
+
+@mspace.ui(caption="Колонка таблицы", caption.plural="Колонки таблицы")
+class TableColumn extends UIElement {
+  ref TableControl[1]#columns table;
+}
+
+@mspace.ui(caption="Таблица с внутренним редактированием", caption.plural="Таблицы с внутренним редактированием")
+class MasterDetail extends TableControl {
+}
+
+@mspace.ui(caption="Таблица с внешним редактированием", caption.plural="Таблицы с внешним редактированием")
+class TableGroupControl extends TableControl {
+}
+
+@mspace.ui(caption="Диаграмма Ганта", caption.plural="Диаграмы Ганта")
+class GraphControl extends ClassControl {
+}
+
+@mspace.ui(caption="Выражение", caption.plural="Выражения")
+abstract class Expression {
+}
+
+@mspace.ui(caption="Логическое выражение", caption.plural="Логические выражения")
+abstract class BooleanExpression extends Expression {
+}
+
+@mspace.ui(caption="Вычисляемое логическое выражение", caption.plural="Вычисляемые логические выражения")
+class EvalBooleanExpression extends BooleanExpression {
+  attr String expr;
+}
+
+@mspace.ui(caption="Выражение сравнения", caption.plural="Выражения сравнения")
+abstract class DataModelComparison extends EvalBooleanExpression {
+  ref DataModel[1] dataModel;
+}
+
+@mspace.ui(caption="Выражение равенства", caption.plural="Выражения равенства")
+class EqEvalExpression extends DataModelComparison {
+}
+
+@mspace.ui(caption="Выражение неравенства", caption.plural="Выражения неравенства")
+class NeEvalExpression extends DataModelComparison {
+}
+
+@mspace.ui(caption="Список логических выражений", caption.plural="Списки логических выражений")
+abstract class ListExpression extends BooleanExpression {
+  val BooleanExpression[*] content;
+}
+
+@mspace.ui(caption="Логическое И", caption.plural="Список логических И")
+class AndExpression extends ListExpression {
+}
+
+@mspace.ui(caption="Логическое ИЛИ", caption.plural="Список логических ИЛИ")
+class OrExpression extends ListExpression {
+}
+
+@mspace.ui(caption="Модель данных", caption.plural="Модели данных")
+abstract class DataModel {
+
+  @mspace.ui(caption="Наименование", display="true")
+  attr String name;
+  val ModelProperty[*]#model properties;
+}
+
+@mspace.ui(caption="Свойство модели данных", caption.plural="Свойства модели данных")
+class ModelProperty extends DataModel {
+  ref DataModel[1]#properties model;
+}
+
+@mspace.ui(caption="Источник данных", caption.plural="Источники данных")
+abstract class DataSource extends DataModel {
+  ref UIForm[1]#dataSources form;
+}
+
+@mspace.ui(caption="Параметр формы", caption.plural="Параметры формы")
+class Parameter extends DataSource {
+}
+
+@mspace.ui(caption="Вычисляемый источник данных", caption.plural="Вычисляемые источники данных")
+class Eval extends DataSource {
+  attr String[1] expr;
+}
+
+@mspace.ui(caption="Внешний источник данных", caption.plural="Внешние источники данных")
+class ExternalSource extends DataSource {
+}
+
+@mspace.ui(caption="Пустой источник данных", caption.plural="Пустые источники данных")
+class Null extends DataSource {
+}
+
+@mspace.ui(caption="Запрос к БД", caption.plural="Запросы к БД")
+abstract class DBSource extends DataSource {
+  attr int up = -2;
+  attr int down = -2;
+  attr int deep = -2;
+}
+
+@mspace.ui(caption="SQL запрос", caption.plural="SQL запросы")
+abstract class QuerySource extends DBSource {
+  attr String query;
+}
+
+@mspace.ui(caption="Запрос объекта", caption.plural="Запросы объектов")
+abstract class ObjectSource extends DBSource {
+  ref UIClass[1] uiClass;
+}
+
+@mspace.ui(caption="Запрос единичного объекта", caption.plural="Запросы единичных объектов")
+class ObjectItem extends ObjectSource {
+  ref DataModel[1] modeModel;
+}
+
+@mspace.ui(caption="Запрос списка объекта", caption.plural="Запросы списков объектов")
+class ObjectList extends ObjectSource {
+
+  @mspace.ui(caption="Фильтр", caption.plural="Фильтры")
+  val AndExpression filter;
+  val JoinedObject[*] joined;
+}
+
+class JoinedObject {
+  attr String[1] fname;
+  attr String[1] falias;
+}
+
+@mspace.ui(caption="Список постоянных объектов", caption.plural="Списки постоянных объектов")
+class ConstObjectList extends DataSource {
+  val ConstObject[*] content;
+}
+
+@mspace.ui(caption="Постоянный объект", caption.plural="Постоянные объекты")
+class ConstObject {
+  val NamedExpression[*] content;
+}
+
+@mspace.ui(caption="Именованное выражение", caption.plural="Именованные выражения")
+class NamedExpression {
+
+  @mspace.ui(caption="Наименование", display="true")
+  attr String name;
+
+  @mspace.ui(caption="Выражение")
+  attr String expr;
+}
+
+@mspace.ui(caption="Приложение", caption.plural="Список приложений")
+class Application {
+
+  @mspace.ui(caption="Наименование")
+  attr String[1] name;
+
+  @mspace.ui(caption="Заголовок", display="true")
+  attr String caption;
+  val Module[*]#application modules;
+}
+
+@mspace.ui(caption="Модуль", caption.plural="Список модулей")
+class Module {
+  ref Application[1]#modules application;
+
+  @mspace.ui(caption="Наименование")
+  attr String name;
+
+  @mspace.ui(caption="Заголовок", display="true")
+  attr String caption;
+
+  @mspace.ui(caption="Объекты модуля")
+  ref UIClass[*] entryClasses;
+}
+@mspace.ui(caption="Внешний Модуль", caption.plural="Список внешних модулей")
+class ExternalModule extends Module {
+  @mspace.ui(caption="Ссылка")
+  attr String link;
+}
+
+enum GroupListStyleEnum {
+  SHOW_ALL = 1;
+  SHOW_FIRST = 2;
+  HIDE_ALL = 3;
+}
+

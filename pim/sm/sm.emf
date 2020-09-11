@@ -1,0 +1,79 @@
+@namespace(uri="http://www.neoflex.ru/meta/sm", prefix="sm")
+package sm;
+
+import "http://www.neoflex.ru/meta/auth";
+import "http://www.neoflex.ru/meta/etl";
+
+class StateMachine {
+  attr String name;
+  attr String InstanceType;
+  val SMState[*]#stateMachine states;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String description;
+
+  @mspace.ui(listeval="props.entity.states")
+  ref SMState start;
+  ref etl.Project project;
+}
+
+class SMState {
+  ref StateMachine#states stateMachine;
+  attr String name;
+  val SMTransition[*]#state transitions;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String description;
+}
+
+class SMTransition {
+  ref SMState#transitions state;
+  attr String name;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String description;
+
+  @mspace.ui(listeval="props.entity.__parent.__parent.states")
+  ref SMState toState;
+  attr String action;
+  attr String[*] userRoles;
+  attr String guardCondition;
+}
+
+class SMTransitionInstance {
+  ref SMTransition transition;
+  ref SMInstance#transitionInstances smInstance;
+  attr String name;
+  attr String user;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate transitionDateTime;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String actionError;
+
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String actionResult;
+  attr Boolean succesfull;
+}
+
+class SMInstance {
+  op SMTransitionInstance go(String transitionName);
+  op String[*] getAvailableTransitions();
+  attr String name;
+  ref StateMachine stateMachine;
+
+  @mspace.ui(listeval="[props.entity.target].filter(e => !!e)")
+  @teneo.jpa(value="@Cascade(value=REFRESH)" )
+  ref EObject target;
+  ref SMState currentState;
+  ref SMTransitionInstance[*]#smInstance transitionInstances;
+  val auth.AuditInfo auditInfo;
+}
+

@@ -1,0 +1,16 @@
+
+context src!WorkflowApp {
+    constraint StartIsDefined {      
+        check {
+            return self.start.isDefined();
+        }  
+        message : "для WorkflowApp '" + self.name + "' не задан стартовый узел"
+    }
+    constraint EndIsDefined {      
+        check {
+            return self.end.isDefined();
+        }  
+        message : "для WorkflowApp '" + self.name + "' не задан финальный узел"
+    }
+}
+

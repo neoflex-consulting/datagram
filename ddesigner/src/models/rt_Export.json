@@ -1,0 +1,7 @@
+{
+    "eClasses": {
+        "rt.ImportWizard": {
+            "views": ["ImportWizardView", "FormView"]
+        }
+    }
+}

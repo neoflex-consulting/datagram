@@ -1,0 +1,41 @@
+context TransformationDeployment {
+    constraint NameIsDefined {      
+        check : self.name.isDefined() and self.name.length() > 0 
+        message : "TransformationDeployment: имя не определено"
+    }
+    constraint TransformationDefined {      
+        check : self.transformation.isDefined() 
+        message : "TransformationDeployment: transformation не определено"
+    }
+    constraint NameIsValid {      
+        guard : self.satisfies("NameIsDefined")      
+        check : nameIsValid(self.name) 
+        message : "не корректное имя TransformationDeployment: для '" + self.name + "'" 
+    }
+    constraint ContextsDefined {      
+        guard : self.satisfies("TransformationDefined")      
+        check { 
+            var failed = self.transformation.getContexts().select(name|not self.deployments.exists(d|d.softwareSystem.name == name));
+            return failed.size() == 0;
+        }
+        message : "TransformationDeployment: для '" + self.name + "' не определены контексты " + failed.concat(", ")
+    }
+}
+
+operation nameIsValid(name): Boolean {
+    if (not Native("java.lang.Character").isJavaIdentifierStart(name.charAt(0))) {
+        return false;
+    }
+    var i = 1;
+    while (i < name.length()) {
+        if (not Native("java.lang.Character").isJavaIdentifierPart(name.charAt(i))) {
+            return false;
+        }
+        i = i + 1;
+    }
+    return true;
+}
+
+operation Transformation getContexts() {
+  return self.sources.includingAll(self.targets).select(x|x.`context`.isDefined()).collect(x|x.`context`.name).asOrderedSet();
+}

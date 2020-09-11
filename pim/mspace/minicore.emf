@@ -1,0 +1,108 @@
+@namespace(uri="http://www.neoflex.ru/meta/minicore", prefix="minicore")
+package minicore;
+
+class MAttribute extends MStructuralFeature {
+  attr boolean iD;
+}
+
+class MAnnotation extends MModelElement {
+  attr String source;
+  val MStringToStringMapEntry[*] details;
+  ref MModelElement#mAnnotations mModelElement;
+  ref MObject[*] references;
+}
+
+class MClass extends MClassifier {
+  attr boolean ~abstract;
+  attr boolean ~interface;
+  ref MClass[*] mSuperTypes;
+  val MOperation[*]#mContainingClass mOperations;
+  val MStructuralFeature[*]#mContainingClass mStructuralFeatures;
+}
+
+abstract class MClassifier extends MNamedElement {
+  attr String[1] qName;
+  attr String instanceTypeName;
+  ref MPackage#mClassifiers mPackage;
+}
+
+class MClassifierProxy extends MClassifier {
+}
+
+class MDataType extends MClassifier {
+  attr boolean serializable = true;
+}
+
+class MDataTypeProxy extends MDataType {
+}
+
+class MEnum extends MDataType {
+  val MEnumLiteral[*]#mEnum mLiterals;
+}
+
+class MEnumLiteral extends MNamedElement {
+  attr int value;
+  attr String literal;
+  ref MEnum#mLiterals mEnum;
+}
+
+abstract class MModelElement extends MObject {
+  val MAnnotation[*]#mModelElement mAnnotations;
+}
+
+abstract class MNamedElement extends MModelElement {
+  attr String name;
+}
+
+class MObject {
+  attr String nsURI;
+  attr String elementId;
+  attr String reference;
+}
+
+class MOperation extends MTypedElement {
+  ref MClass#mOperations mContainingClass;
+  val MParameter[*]#mOperation mParameters;
+  ref MClassifier[*] mExceptions;
+}
+
+class MPackage extends MNamedElement {
+  attr String nsPrefix;
+  val MClassifier[*]#mPackage mClassifiers;
+  val MPackage[*] mSubpackages;
+  ref MPackage eSuperPackage;
+}
+
+class MParameter extends MTypedElement {
+  ref MOperation#mParameters mOperation;
+}
+
+class MReference extends MStructuralFeature {
+  attr boolean containment;
+  ref MReference mOpposite;
+  ref MAttribute[*] mKeys;
+}
+
+abstract class MStructuralFeature extends MTypedElement {
+  attr boolean changeable = true;
+  attr boolean ~volatile;
+  attr boolean ~transient;
+  attr String defaultValueLiteral;
+  attr boolean ~unsettable;
+  attr boolean ~derived;
+  ref MClass#mStructuralFeatures mContainingClass;
+}
+
+abstract class MTypedElement extends MNamedElement {
+  attr boolean ~ordered = true;
+  attr boolean ~unique = true;
+  attr int lowerBound;
+  attr int upperBound = 1;
+  ref MClassifier mType;
+}
+
+class MStringToStringMapEntry : java.util.Map$Entry {
+  attr String key;
+  attr String value;
+}
+

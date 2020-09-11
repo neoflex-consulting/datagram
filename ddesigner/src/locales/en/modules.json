@@ -1,0 +1,202 @@
+{
+    "Datagram": {
+        "caption": "",
+        "name": "Datagram"
+    },
+    "ApplicationInfo": {
+        "caption": "Application Info",
+        "name": "ApplicationInfo"
+    },
+    "ETL": {
+        "caption": "ETL",
+        "name": "ETL"
+    },
+    "Deployment": {
+        "caption": "Deployment",
+        "name": "Deployment"
+    },
+    "Connections": {
+        "caption": "Connections",
+        "name": "Connections"
+    },
+    "Servers": {
+        "caption": "Servers",
+        "name": "Servers"
+    },
+    "Dataspaces": {
+        "caption": "Sandbox",
+        "name": "Dataspaces"
+    },
+    "Streaming": {
+        "caption": "Streaming",
+        "name": "Streaming"
+    },
+    "etl": {
+        "Workflow": {
+            "caption": "Workflow",
+            "name": "Workflow"
+        },
+        "JdbcContext": {
+            "caption": "Jdbc Context",
+            "name": "JdbcContext"
+        },
+        "CoJob": {
+            "caption": "CoJob",
+            "name": "CoJob"
+        },
+        "Transformation": {
+            "caption": "Transformation",
+            "name": "Transformation"
+        },
+        "Project": {
+            "caption": "Project",
+            "name": "Project"
+        },
+        "UserDefinedFunction": {
+            "caption": "User defined function",
+            "name": "UDF"
+        },
+        "MavenDependency": {
+            "caption": "Maven Dependency",
+            "name": "MavenDependency"
+        },
+        "SchemeDataSet": {
+            "caption": "Scheme Data Set",
+            "name": "SchemeDataSet"
+        }
+    },
+    "rt": {
+        "WorkflowDeployment": {
+            "caption": "Workflow Deployment",
+            "name": "WorkflowDeployment"
+        },
+        "CoordinatorDeployment": {
+            "caption": "Coordinator Deployment",
+            "name": "CoordinatorDeployment"
+        },
+        "Oozie": {
+            "caption": "Oozie",
+            "name": "Oozie"
+        },
+        "TransformationDeployment": {
+            "caption": "Transformation Deployment",
+            "name": "TransformationDeployment"
+        },
+        "LivyServer": {
+            "caption": "LivyServer",
+            "name": "LivyServer"
+        },
+        "Zeppelin": {
+            "caption": "Zeppelin",
+            "name": "Zeppelin"
+        },
+        "Environment": {
+            "caption": "Environment",
+            "name": "Environment"
+        },
+        "Deployment": {
+            "caption": "Deployment",
+            "name": "Deployment"
+        },
+        "JdbcConnection": {
+            "caption": "Jdbc Connection",
+            "name": "JdbcConnection"
+        },
+        "SoftwareSystem": {
+            "caption": "Software System",
+            "name": "SoftwareSystem"
+        },
+        "ScheduledTask": {
+            "caption": "Scheduled Task",
+            "name": "ScheduledTask"
+        },
+        "RunTask": {
+            "caption": "Run task",
+            "name": "Run task"
+        },
+        "Airflow": {
+            "caption": "Airflow",
+            "name": "Airflow"
+        },
+        "Atlas": {
+            "caption": "Atlas service",
+            "name": "Atlas"
+        },
+        "AtlasScheme": {
+            "caption": "Schema to Atlas",
+            "name": "Schema"
+        },
+        "ImportWizard": {
+            "caption": "Import Wizard",
+            "name": "Wizard"
+        }
+    },
+    "rel": {
+        "Scheme": {
+            "caption": "Scheme",
+            "name": "Scheme"
+        }
+    },
+    "sse": {
+        "HadoopCluster": {
+            "caption": "Cluster",
+            "name": "Cluster"
+        },
+        "Workspace": {
+            "caption": "Workspace",
+            "name": "Workspace"
+        },
+        "Model": {
+            "caption": "Model",
+            "name": "Model"
+        },
+        "DatasetType": {
+            "caption": "Dataset types",
+            "name": "Dataset types"
+        },
+        "NotebookType": {
+            "caption": "Notebook types",
+            "name": "Notebook types"
+        },
+        "AnalyticWorkspace": {
+            "caption": "Analytic workspace",
+            "name": "Analytic workspace"
+        },
+        "JdbcWorkspace": {
+            "caption": "Jdbc workspace",
+            "name": "Jdbc workspace"
+        },
+        "ModelPipelineWorkspace": {
+            "caption": "Model Pipeline",
+            "name": "Model Pipeline"
+        },
+        "ValidateModelPipelineWorkspace": {
+            "caption": "Model Validation",
+            "name": "Model Pipeline"
+        },
+        "LibraryNotebook": {
+            "caption": "Library notebook",
+            "name": "Library notebook"
+        }
+    },
+    "evs": {
+        "EventFunction": {
+            "caption": "Function",
+            "name": "Function"
+        },
+        "FunctionsLibrary": {
+            "caption": "Functions library",
+            "name": "Functions library"
+        },
+        "EventsProcessor": {
+            "caption": "Events processor",
+            "name": "Events processor"
+        }
+    },
+    "sm": {
+        "StateMachine": {
+            "caption": "Business process",
+            "name": "Business process"
+        }
+    }
+}

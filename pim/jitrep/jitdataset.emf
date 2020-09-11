@@ -1,0 +1,538 @@
+@namespace(uri="http://www.neoflex.ru/meta/jitdataset", prefix="jitdataset")
+package jitdataset;
+
+import "http://www.neoflex.ru/meta/dataset";
+import "http://www.neoflex.ru/meta/etl";
+import "http://www.neoflex.ru/meta/rt";
+import "http://www.neoflex.ru/meta/auth";
+
+// Базовый класс для типов полей
+abstract class DataType {}
+// Скалярный тип - обычный тип данных, строка, дата, ...
+// Используются типы из NF Datagram для обеспечения совместимости
+class ScalarType extends DataType {
+    attr dataset.DataTypeDomain[1] dataType;
+}
+// Ссылочный тип - ссылка на поле в другом dataset
+// По факту это foreign key, ограничивающий набор возможных значений 
+class LookupType extends DataType {
+    ref DsField lookupField; 
+}
+
+// Базовая сущность - поле в dataset
+class DsField {
+    // имя поля - будет использоваться для генерации таблицы в Hive
+    attr String[1] name; 
+    // бизнес осмысленное имя поля
+    attr String shortName;
+    attr String description;
+    // тип поля
+    val DataType[1] dataType;
+    // ссылка на dataset, в рамках которого определено данное поле
+    ref AbstractDataset#dataFields dataset;
+    attr Boolean isVisible;
+    attr Integer columnIndex;
+    attr Integer columnWidth;  
+}
+
+// Поле - параметр, определяет условия отбора при построении сложных dataset для отслеживания зависимостей
+class ParameterField extends DsField {
+    
+}
+
+class ClassifiedField extends DsField {
+	attr RuleExecutionOption ruleOption;	
+}
+
+// Основная сущность - Dataset
+class Dataset extends AbstractDataset {
+    // Спецификация сборки
+    val DsBuildSpec#dataset buildSpec;
+    // Список полей для классификации
+    val ClassificationFieldSpec[*]#dataset classificationFieldSpecs;
+    
+    @mspace.ui(caption="Проверить")
+    op void validate();
+    @mspace.ui(caption="Активировать")
+    op void activate();
+    @mspace.ui(caption="Активировать классификацию")
+    op void activateClassification();    
+    @mspace.ui(caption="Загрузить из файла")
+    op void loadFromFile();
+    // Полная сборка
+    @mspace.ui(caption="Собрать")
+    op void build();     
+    // Только классификация
+    @mspace.ui(caption="Проклассифицировать")
+    op void classify(); 
+    @mspace.ui(caption="Восстановить таблицы")
+    op void repairTables();
+    @mspace.ui(caption="Экспортировать")
+    op void export(); 
+     
+}
+
+class DeploymentDescriptor {
+	attr String[1] name;
+	
+	ref AbstractDataset[*] datasets;
+	
+	ref rt.JdbcConnection hiveConnection;
+    attr String hiveDatabaseName;
+    attr String hdfsNameNode; 
+    attr String hdfsBaseDirectory;
+    attr String hdfsIncomeFilesDirectory;       
+    attr String hdfsUser;
+    attr String webHdfsUtl;
+    ref rt.JobServer sparkJobServer;
+    attr String biServerUrl;
+
+    ref etl.Project project;    
+    @mspace.ui(caption="Активировать")
+    op void activate();
+    	
+    ref rt.Deployment[*] deployments;
+    ref ZeppelinConnection zeppelinConnection;
+}
+
+// Спецификация сборки
+// Для датасетов, которые являются производными от других, содержит описание правил сборки
+// Если представить датасет, как один большой select, то тогда
+// * часть select описана как список полей в самом Dataset#dataFields
+// * секции from, join, where описаны в DsBuildSpec
+// * секция group by вычисляется на основании fieldSpecs по AggregatedField
+// В светлом будущем будет похоже на https://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_10002.htm
+abstract class DsBuildSpec {
+    ref Dataset#buildSpec dataset;
+}
+
+class ASTBuildSpec extends DsBuildSpec {
+	val Subquery subquery;	
+}
+
+class SQLBuildSpec extends DsBuildSpec {
+	@teneo.jpa(value="@Column(length=10485760)")	
+    @mspace.ui(multiline="true")
+	attr String sql;
+	val DatasetReference[*]#buildSpec usedDatasets;
+}
+
+// Поле - результат классификации
+class ClassificationFieldSpec {
+	ref Dataset#classificationFieldSpecs dataset;
+    @mspace.ui(filter="auto")
+	ref ClassifiedField dsField;
+    // Ссылка на правило классификации
+    val ClassificationRule rule;
+    // Если правило выполняется, значение, которое должно принять поле dsField
+	val ConstantExpr resultExpr;     
+}
+
+class JoinClause {
+    ref Subquery#joinClause subquery;
+    val TableReference[1] tableReference;
+    val JoinedReference[*]#joinClause joinedReference;   
+}
+
+class JoinedReference {
+    ref JoinClause#joinedReference joinClause;
+    attr JoinType[1] joinType;
+    val JoinedFields[*] joinExpr;   
+    val TableReference[1] joinedReference;
+}
+
+abstract class TableReference {
+	attr String alias;
+    // Логика получения полей
+    val DsFieldSpec[*]#tableReference fieldSpecs;
+}
+
+class Subquery extends TableReference {
+    // список join выражений, каждое из которых является точно такой же спекой, и может рекурсивно join-нить
+    // ограничение
+    val JoinClause[1]#subquery joinClause;
+    // Фильтр where. Могут участвовать поля из всех задействованных в датасетах выше 
+    val BinaryExpr whereClause;
+    // Список выражения для union
+    val UnionSubquery#subquery unionSubquery;
+}
+
+class DatasetReference {
+	attr String alias;
+	ref SQLBuildSpec#usedDatasets buildSpec;
+    ref AbstractDataset[1] dataset;
+    val ParameterConstraint[*] parameterConstraints;
+}
+
+// Спецификация по сбору полей в датасете
+// Базовый класс
+abstract class DsFieldSpec {
+	attr String alias;
+	val DataType dataType;
+	ref TableReference#fieldSpecs tableReference;
+}
+
+// Ссылка на поле в датасете, из которого (которых) мы собираем
+class DsReferenceFieldSpec extends DsFieldSpec {
+    ref DsField referencedField;
+}
+
+abstract class SubqueryFieldSpec extends DsFieldSpec {
+
+}
+
+class SubqueryReferenceFieldSpec extends DsFieldSpec {
+    ref DsFieldSpec referencedFieldSpec;
+}
+
+// Поле - результат выражения
+class ExpressionRuleSpec extends SubqueryFieldSpec {
+    // Выражение, результат вычисления которого присваивается полю
+    val Expr expr;
+}
+
+// Класс - обертка для пары полей для join'а
+class JoinedFields {    
+    // поле основной таблицы
+    ref DsFieldSpec rootSide;
+    // поле приджойненой таблицы
+    ref DsFieldSpec joinedSide;
+}
+
+// Типы джойнов
+enum JoinType {
+  INNER = 0;
+  LEFT_OUTER = 1;
+  RIGHT_OUTER = 2;
+  FULL_OUTER = 3;
+  CROSS_JOIN = 4;
+}
+
+class UnionSubquery {
+    ref Subquery#unionSubquery subquery;
+}
+
+// Описывает ограничения по ParameterField, накладываемые на DataSet 
+class ParameterConstraint {
+    ref ParameterField field;
+    attr Op operation;
+    // Произвольное выражение в формате Spark SQL. 
+    // Если нужен доступ к полям партицирования собираемого датасета, доступ через jobParameter
+    attr String sqlExpr; 
+}
+
+// Описание DsBuildExecution/DsExecutionLog будут автоматически созадваться на основании описания датасета правилами генерации
+
+// Возможные операции в выражении
+enum Op {
+    // Boolean op
+    AND = 0;
+    OR = 1;
+    NOT = 2;
+
+    // Compare op
+    EQUAL = 3;
+    NOT_EQUAL = 4;
+    LESSER = 5;
+    GREATER = 6;
+    LESSER_OR_EQUAL = 7;
+    GRATER_OR_EQUAL = 8;
+    LIKE = 9;
+    IN = 10;
+  
+    // Math op
+    PLUS = 11;
+    MINUS = 12;
+    MUL = 13;
+    DIV = 14;
+    
+    // Nullability test
+    IS_NULL = 15;
+    IS_NOT_NULL = 16;
+    
+    // Empty/not empty- check for null and empty value for strings
+    IS_EMPTY = 17;
+    IS_NOT_EMPTY = 18;
+}
+
+class DataTypeOps {	
+	attr dataset.DataTypeDomain[1] dataType;
+	attr Op[*] availableOps;
+}
+
+class ParamEntry {
+    ref ParameterField field;
+    attr Object[*] values;
+}
+
+// Абстрактный тип - выражение
+abstract class Expr {
+    // метод - вычислить выражение. Всегда возвращает скалярный тип как результат
+    // На вход - список значений для параметров, если в выражении есть ссылки на параметры
+    op ScalarType eval(ParamEntry[*] parameters);
+}
+
+// Основной вариант выражения - бинарное
+// В случае сложных выражений представляет собой дерево, т.к. и левый и правый операнд также могут представлять собой бинарные выражения
+class BinaryExpr extends NonTerminalExpr {
+    // Левый операнд
+    val Expr[1] left;
+    // Операция
+    attr Op[1] operation;   
+    // Правый операнд
+    val Expr[1] right;
+}
+
+// Далее перечислениы возможные листья дерева выражения
+
+// Унарное выражение
+// в основном служит для выражение negation
+class UnaryExpr extends NonTerminalExpr {
+    val Expr[1] expr;
+    attr Op[1] operation;   
+}
+
+// Терминальные операнды
+abstract class TerminalExpr extends Expr {
+    
+}
+
+// Ссылка на значение поля
+class FieldRefExpr extends TerminalExpr {
+    ref DsField fieldRef;
+}
+
+// Параметр. В этом случае для вычисления выражения необходимо передать соотвествующее значение для параметра
+class ParameterExpr extends TerminalExpr {
+    ref ParameterField field;
+}
+
+// Константное выражения
+class ConstantExpr extends TerminalExpr {   
+    attr String[*] values;
+    attr Boolean requireTypeCast = true;
+}
+
+// Описание правил классификации расчетных полей датасетов
+class ClassificationRule {
+	attr String[1] name;
+    // дата начала действия правила
+    attr EDate effectiveDate;
+    // Набор boolean выражений      
+    val ClassificationExpression[*]#rule classificationExpressions;
+    // принак действия правила true/false
+    attr boolean isEnabled = true;
+    
+    // описание правила
+    attr String description;    
+}
+
+// Описание условий для праивл классификации
+class ClassificationExpression {
+    // Ссылка на правило классификации
+    ref ClassificationRule#classificationExpressions rule;
+    // условие
+    val NonTerminalExpr[*] expression;
+    // принак действия условия true/false
+    attr boolean isEnabled = true;
+}
+
+abstract class ReportDataset {   
+    attr String[1] name;
+    ref ReportForm#datasets reportForm;    
+    ref AbstractDataset dataset;
+    val ParameterConstraint[*] parameterConstraints;
+    val FieldSort[*] sortByFields;
+}
+
+/* should be deleted */
+class KlikoExportDataset extends ExportedDataset {
+    ref DsField klikoField;
+}
+
+class DetalizationDataset extends ReportDataset {
+	
+}
+
+class SummaryDataset extends ReportDataset {
+	
+}
+
+class ReportParameter {
+    attr String[1] name;
+    attr String displayName;
+    attr dataset.DataTypeDomain parameterType;     
+    ref DsField lookupField;
+    ref ReportForm#parameters reportForm; 
+}
+
+class ReportParameterValue {    
+    ref ReportParameter parameter;
+    val ConstantExpr value;
+}
+
+class ReportForm {
+	attr String[1] code;
+    attr String[1] name;
+    val ReportDataset[*]#reportForm datasets;
+    val ReportParameter[*]#reportForm parameters;
+    
+    ref etl.Project project;  
+    
+    val auth.AuditInfo auditInfo; 
+}
+
+enum Status {
+	NOT_STARTED = 0;
+	WORK_IN_PROGRESS = 1;
+	FINISHED = 2;
+}
+
+class AppUser extends auth.UserInfo {
+	attr String userName;
+	attr Boolean isEnabled; 
+}
+
+class Report {
+    attr EDate creationTime;
+    attr EDate deadlineDate;
+    attr EDate signingDate;
+    attr Status status;
+    ref AppUser responsibleUser;
+    ref ReportForm reportForm;
+    val ReportParameterValue[*] parameterValues;
+    attr String comment;
+    
+    val auth.AuditInfo auditInfo;    
+}
+
+// специально расширение - датасет - справочник.
+class LookupDataset extends Dataset {
+	ref DsField lookupField; // ссылка на поле в этом же датасете, по которому осуществляется связывание
+	ref DsField displayField; // ссылка на поле в этом же датасете, которое отображается при поиске значений
+}
+
+class ExportedDataset extends ReportDataset {
+	ref DsField[*] fieldsToExport;
+	val ExportFormat exportFormat;
+}
+
+/* should be deleted */
+class CsvExportedDataset extends ExportedDataset {
+	attr String fieldDelimiter = "|";
+	attr boolean includeHeaders = true;
+}
+
+// Вызов функции
+class FuncallExpr extends TerminalExpr {	
+	attr String fun;
+	val Expr[*] arguments;
+}
+
+enum SortDirection {
+	ASC = 0;
+	DESC = 1;
+}
+
+class FieldSort {
+	ref DsField field;
+	attr SortDirection sortDirection;
+}
+
+/*abstract */class AbstractDataset {
+    // Имя (имя таблицы в Hive)
+    attr String[1] name;
+    // Бизнес значимое имя
+    attr String businessName;
+    // Описание содержимого реестра
+    attr String datasetDescription;
+    // Описание структуры датасета. Содержит список всех полей, включая поля - параметры, они от обычных 
+    // отличаются только типом-оберткой
+    val DsField[*]#dataset dataFields;
+    
+    attr String dataAnalysisLink;
+    val DatasetPublication[*]#dataset publications;
+    
+    ref etl.Project project;	
+    val auth.AuditInfo auditInfo;
+}
+
+class ExternalDataset extends AbstractDataset {
+	@teneo.jpa(value="@Column(length=10485760)")	
+    @mspace.ui(multiline="true")
+	attr String sqlExpr;
+	ref etl.Context context;	 
+
+    @mspace.ui(caption="Обновить схему")
+    op void refreshScheme();
+} 
+
+abstract class ExportFormat {
+	
+}
+
+class CsvFormat extends ExportFormat {	
+	attr String fieldDelimiter = "|";
+	attr String quoteField = "";
+	attr boolean includeHeaders = false;	
+}
+
+class ExcelFormat extends ExportFormat {
+	
+}
+
+class OperationLogEntry {
+	attr EDate startTs;
+	attr EDate finishTs;
+	attr String datasetName;
+	attr String operation;
+	attr String jobId;
+	@teneo.jpa(value="@Column(length=10485760)")
+	attr String parameters;
+	attr String opStatus;
+	@teneo.jpa(value="@Column(length=10485760)")
+	attr String errorText;
+}
+
+class ZeppelinConnection {
+	attr String[1] name;
+	ref etl.Project project;
+	
+	attr String baseUrl;
+}
+
+class DatasetPublication {
+	attr String[1] name;
+	attr String description;
+	ref AbstractDataset#publications dataset;
+}
+
+class KlikoFormat extends ExportFormat {
+		
+}
+
+class DatasetNavigation {
+	attr String[1] name;
+	ref etl.Project project;
+	
+	ref AbstractDataset dataset;
+	val DatasetNavigationItem[*]#parent navigationItems; 	
+}
+
+class DatasetNavigationItem {
+	attr String alias;
+	ref DatasetNavigation#navigationItems parent;
+		
+	ref AbstractDataset toDataset;
+	attr String filterExpression;	
+}
+
+enum RuleExecutionOption {
+	OVERWRITE = 0;
+	CONCATENATE = 1;
+	INSERT_NEW = 2;
+}
+
+abstract class NonTerminalExpr extends Expr {
+	
+}

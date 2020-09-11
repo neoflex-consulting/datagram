@@ -1,0 +1,36 @@
+{
+  "eClasses": {
+    "auth.AuditInfo": {
+      "successors": ["auth.AuditInfo"],
+      "views": [],
+      "fields": [
+        {
+          "type": "line",
+          "fields":[
+            {
+              "name": "createUser",
+              "type": "string"
+            },
+            {
+              "name": "createDateTime",
+              "type": "datetime"
+            }
+          ]
+        },
+        {
+          "type": "line",
+          "fields":[
+            {
+              "name": "changeUser",
+              "type": "string"
+            },
+            {
+              "name": "changeDateTime",
+              "type": "datetime"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

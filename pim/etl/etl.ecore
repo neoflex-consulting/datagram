@@ -1,0 +1,1882 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="etl" nsURI="http://www.neoflex.ru/meta/etl" nsPrefix="etl">
+  <eClassifiers xsi:type="ecore:EClass" name="Source" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//Context"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputPort" lowerBound="1"
+        eType="#//OutputPort" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" eType="#//Transformation"
+        eOpposite="#//Transformation/sources"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sampleSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="100"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkpoint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaOnRead" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contextFromString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contextString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Target" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//Context"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputPort" lowerBound="1"
+        eType="#//Port" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" lowerBound="1"
+        eType="#//Transformation" eOpposite="#//Transformation/targets"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputFieldsMapping" upperBound="-1"
+        eType="#//InputFieldMapping" containment="true" eOpposite="#//InputFieldMapping/target"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sampleSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="100"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transformation">
+    <eAnnotations source="mspace.ui">
+      <details key="designerLink" value="/cim/transformation/pim/ui/psm/angular/WEB/index.html#/load/"/>
+    </eAnnotations>
+    <eOperations name="validate">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕРІРµСЂРёС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="dependencies">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РІРёСЃРёРјРѕСЃС‚Рё"/>
+        <details key="deprecated" value="true"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setJsonView">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РЎРѕР·РґР°С‚СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ"/>
+        <details key="deprecated" value="true"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="install">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ Рё СЃРєРѕРїРёСЂРѕРІР°С‚СЊ"/>
+        <details key="deprecated" value="true"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="importTransformation">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р�РјРїРѕСЂС‚"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="exportTransformation">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р­РєСЃРїРѕСЂС‚"/>
+      </eAnnotations>
+      <eParameters name="svnCommitMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="mspace.ui">
+          <details key="multiline" value="true"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+    <eOperations name="runit">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РїСѓСЃС‚РёС‚СЊ"/>
+        <details key="deprecated" value="true"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="generate">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="build">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РЎРѕР±СЂР°С‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="generateTests">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Generate test"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="validateTests">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕРІРµСЂРёС‚СЊ С‚РµСЃС‚С‹"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="nodeDependencies">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РІРёСЃРёРјРѕСЃС‚Рё РїРѕР»РµР№"/>
+        <details key="deprecated" value="true"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(unique=true, nullable=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sparkVersion" eType="#//SparkVersion">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Spark version"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buildVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targets" upperBound="-1"
+        eType="#//Target" containment="true" eOpposite="#//Target/transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformationSteps" upperBound="-1"
+        eType="#//TransformationStep" containment="true" eOpposite="#//TransformationStep/transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1"
+        eType="#//Source" containment="true" eOpposite="#//Source/transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="userDefinedFunctions" upperBound="-1"
+        eType="#//UserDefinedFunction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mavenDependencies" upperBound="-1"
+        eType="#//MavenDependency"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jsonView" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Context" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransformationStep" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputPort" lowerBound="1"
+        eType="#//OutputPort" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputPort" eType="#//Port"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" lowerBound="1"
+        eType="#//Transformation" eOpposite="#//Transformation/transformationSteps"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkpoint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaOnRead" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MockStep">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MockFunction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.__parent.transformation.sources.map(s->s.name)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransformationTest">
+    <eOperations name="generate">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РЎС„РѕСЂРјРёРІР°С‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="run">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РїСѓСЃС‚РёС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="validate">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕРІРµСЂРёС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="steps" upperBound="-1"
+        eType="#//MockStep" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functions" upperBound="-1"
+        eType="#//MockFunction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" eType="#//Transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Selection" eSuperTypes="#//TransformationStep">
+    <eOperations name="test">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕС‚РµСЃС‚РёСЂРѕРІР°С‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Join" eSuperTypes="#//Projection">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="joinType" eType="#//JoinType"
+        defaultValueLiteral="INNER"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joineePort" lowerBound="1"
+        eType="#//Port" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyFields" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="dataSet.e_id"/>
+        <details key="ds" value="inputPort.e_id"/>
+        <details key="entityType" value="dataset.Field"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="joineeKeyFields" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="dataSet.e_id"/>
+        <details key="ds" value="joineePort.e_id"/>
+        <details key="entityType" value="dataset.Field"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Projection" eSuperTypes="#//TransformationStep">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="watermarkField" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="watermarkThreshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sort" eSuperTypes="#//TransformationStep">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sortFeatures" upperBound="-1"
+        eType="#//SortFeature" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Aggregation" eSuperTypes="#//TransformationStep">
+    <eOperations name="testExpression">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕС‚РµСЃС‚РёСЂРѕРІР°С‚СЊ РІС‹СЂР°Р¶РµРЅРёРµ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="testInitExpression">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕС‚РµСЃС‚РёСЂРѕРІР°С‚СЊ РІС‹СЂР°Р¶РµРЅРёРµ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="testFinalExpression">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕС‚РµСЃС‚РёСЂРѕРІР°С‚СЊ РІС‹СЂР°Р¶РµРЅРёРµ Р·Р°РІРµСЂС€РµРЅРёСЏ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="testMergeExpression">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕС‚РµСЃС‚РёСЂРѕРІР°С‚СЊ РІС‹СЂР°Р¶РµРЅРёРµ СЃР»РёСЏРЅРёСЏ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupByFieldName" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.inputPort.fields"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="finalExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mergeExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pivotField" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pivotParameters" upperBound="-1"
+        eType="#//PivotParameter" containment="true" eOpposite="#//PivotParameter/aggregation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="aggregationParameters"
+        upperBound="-1" eType="#//AggregationParameter" containment="true" eOpposite="#//AggregationParameter/aggregation">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџР°СЂР°РјРµС‚СЂС‹ Р°РіСЂРµРіР°С†РёРё"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userDefAgg" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєР°СЏ Р°РіСЂРµРіР°С†РёСЏ"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Union" eSuperTypes="#//TransformationStep">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unionPort" lowerBound="1"
+        eType="#//Port" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="http://www.neoflex.ru/meta/dataset#//NamedDataSet"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="SchemeType">
+    <eLiterals name="AVRO"/>
+    <eLiterals name="XML" value="1"/>
+    <eLiterals name="JSON" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SchemeDataSet">
+    <eOperations name="generateFromString">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РЎРѕР±СЂР°С‚СЊ РёР· СЃС…РµРјС‹"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemeString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemeType" eType="#//SchemeType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schemeDataset" lowerBound="1"
+        eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Structure" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectionField" eSuperTypes="http://www.neoflex.ru/meta/dataset#//Field">
+    <eOperations name="test">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕС‚РµСЃС‚РёСЂРѕРІР°С‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceFields" upperBound="-1"
+        eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.__parent.__parent.inputPort.fields"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldOperationType" eType="#//FieldOperationType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnionField" eSuperTypes="http://www.neoflex.ru/meta/dataset#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputPortField" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.__parent.__parent.inputPort.fields"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unionPortField" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.__parent.__parent.unionPort.fields"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SortFeature">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ascending" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//Port">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="[...props.entity.__parent.sources, ...props.entity.__parent.transformationSteps].map(n=>n.outputPort)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="finish" eType="#//Port">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="_.flatten([...props.entity.__parent.transformationSteps, ...props.entity.__parent.targets].map(n=>[n.inputPort,n.unionPort,n.joineePort,...(n.sqlPorts||[])])).filter(p=>!!p)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" lowerBound="1"
+        eType="#//Transformation" eOpposite="#//Transformation/transitions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="markup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JdbcContext" eSuperTypes="#//Context"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PhysicalJdbcContext">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="password" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schema" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpressionSource" eSuperTypes="#//Source">
+    <eOperations name="test">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕС‚РµСЃС‚РёСЂРѕРІР°С‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="Array(&#xA;    Map(\&quot;id\&quot; -> new java.math.BigDecimal(1), \&quot;name\&quot; -> \&quot;1\&quot;),&#xA;    Map(\&quot;id\&quot; -> new java.math.BigDecimal(2), \&quot;name\&quot; -> \&quot;2\&quot;) &#xA;)">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JoinType">
+    <eLiterals name="LEFT"/>
+    <eLiterals name="RIGHT" value="1"/>
+    <eLiterals name="FULL" value="2"/>
+    <eLiterals name="INNER" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeltaSource" eSuperTypes="#//Source">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localFileName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
+        eType="#//SourceOption" containment="true" eOpposite="#//SourceOption/localSource"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableSource" eSuperTypes="#//Source">
+    <eOperations name="execute">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р’С‹РїРѕР»РЅРёС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="boundFieldName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SQLSource" eSuperTypes="#//Source">
+    <eOperations name="execute">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р’С‹РїРѕР»РЅРёС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="statement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sqlOptions" upperBound="-1"
+        eType="#//SQLOption" containment="true" eOpposite="#//SQLOption/sqlSource"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rdbmsSources" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isParallel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionColumn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numPartitions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocalSource" eSuperTypes="#//Source">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localFileName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localFileFormat" lowerBound="1"
+        eType="#//LocalFileFormat" defaultValueLiteral="JSON"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="streaming" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
+        eType="#//SourceOption" containment="true" eOpposite="#//SourceOption/localSource"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LocalFileFormat">
+    <eLiterals name="JSON" value="1"/>
+    <eLiterals name="PARQUET" value="2"/>
+    <eLiterals name="ORC" value="3"/>
+    <eLiterals name="JDBC" value="4"/>
+    <eLiterals name="CSV" value="5"/>
+    <eLiterals name="KAFKA" value="6"/>
+    <eLiterals name="HBASE" value="7"/>
+    <eLiterals name="OTHER" value="99"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FieldOperationType">
+    <eLiterals name="ADD" value="1"/>
+    <eLiterals name="TRANSFORM" value="2"/>
+    <eLiterals name="SQL" value="3"/>
+    <eLiterals name="PACK" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TableTargetType">
+    <eLiterals name="INSERT"/>
+    <eLiterals name="UPDATE" value="1"/>
+    <eLiterals name="DELETE" value="2"/>
+    <eLiterals name="MERGE" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StoredProcedureTarget" eSuperTypes="#//Target">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalogName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="storedProcedure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeltaTarget" eSuperTypes="#//Target">
+    <eOperations name="showContent">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РћС‚РѕР±СЂР°Р·РёС‚СЊ СЃРѕРґРµСЂР¶РёРјРѕРµ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetType" eType="#//TableTargetType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="createIfNotExists" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="truncate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
+        eType="#//TargetOption" containment="true" eOpposite="#//TargetOption/localTarget"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableTarget" eSuperTypes="#//Target">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clear" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkIfExists" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetType" eType="#//TableTargetType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaOnRead" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coalesce" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coalesceFromString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coalesceString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repartitionNum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repartitionNumFromString"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repartitionNumString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repartitionExpression"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RestTarget" eSuperTypes="#//Target">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+        <details key="isColumn" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+        <details key="isColumn" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="paramName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="secured" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="authUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requestHeaders" upperBound="-1"
+        eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="urlParameters" upperBound="-1"
+        eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocalTarget" eSuperTypes="#//Target">
+    <eOperations name="showContent">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РћС‚РѕР±СЂР°Р·РёС‚СЊ СЃРѕРґРµСЂР¶РёРјРѕРµ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coalesce" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coalesceFromString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coalesceString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repartitionNum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repartitionNumFromString"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repartitionNumString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repartitionExpression"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localFileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localFileFormat" lowerBound="1"
+        eType="#//LocalFileFormat" defaultValueLiteral="JSON"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleteBeforeSave" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitions" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionsFromString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionsString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="saveMode" eType="#//SaveMode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="registerTable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hiveTableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
+        eType="#//TargetOption" containment="true" eOpposite="#//TargetOption/localTarget"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableTargetFeature" eSuperTypes="#//InputFieldMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetColumnName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyField" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StoredProcedureParamFeature" eSuperTypes="#//InputFieldMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="paramName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AggregationFunction">
+    <eLiterals name="COUNT" value="1"/>
+    <eLiterals name="AVG" value="2"/>
+    <eLiterals name="SUM" value="3"/>
+    <eLiterals name="MIN" value="4"/>
+    <eLiterals name="MAX" value="5"/>
+    <eLiterals name="FIRST" value="6"/>
+    <eLiterals name="LAST" value="7"/>
+    <eLiterals name="LIST" value="8"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputFieldMapping" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inputFieldName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="dataSet.e_id"/>
+        <details key="ds" value="target.inputPort.e_id"/>
+        <details key="entityType" value="dataset.Field"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Target" eOpposite="#//Target/inputFieldsMapping"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VCSType">
+    <eLiterals name="SVN" value="1"/>
+    <eLiterals name="GIT" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project">
+    <eOperations name="importProject">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РіСЂСѓР·РёС‚СЊ РїСЂРѕРµРєС‚"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="exportProject">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р’С‹РіСЂСѓР·РёС‚СЊ РїСЂРѕРµРєС‚"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="uploadArchive">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РіСЂСѓР·РёС‚СЊ Р°СЂС…РёРІ"/>
+      </eAnnotations>
+      <eParameters name="file" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="mspace.ui">
+          <details key="file" value="true"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+    <eOperations name="downloadArchive">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р’С‹РіСЂСѓР·РёС‚СЊ Р°СЂС…РёРІ"/>
+      </eAnnotations>
+      <eAnnotations source="mspace.ui">
+        <details key="file" value="true"/>
+      </eAnnotations>
+      <eParameters name="export" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eOperations>
+    <eOperations name="importRepo">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РіСЂСѓР·РёС‚СЊ СЂРµРїРѕР·РёС‚РѕСЂРёР№"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="exportRepo">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р’С‹РіСЂСѓР·РёС‚СЊ СЂРµРїРѕР·РёС‚РѕСЂРёР№"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="uploadData">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РіСЂСѓР·РёС‚СЊ РґР°РЅРЅС‹Рµ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="downloadData">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р’С‹РіСЂСѓР·РёС‚СЊ РґР°РЅРЅС‹Рµ"/>
+      </eAnnotations>
+      <eParameters name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="importScripts">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ СЃСЃС‹Р»РєРё"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="clearLost">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РЈРґР°Р»РёС‚СЊ РїРѕС‚РµСЂСЏРЅРЅС‹Рµ РѕР±СЉРµРєС‚С‹"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="svnCheckout">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="SVN Checkout"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="svnUpdate">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="SVN Update"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="svnCheckoutOrUpdate">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="SVN Checkout or Update"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="svnCommit">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="SVN Commit"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="svnCleanup">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="SVN Cleanup"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentProject" eType="#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="svnEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vcsType" eType="#//VCSType"
+        defaultValueLiteral="SVN"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="svnURL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectAsLoggedInUser"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="svnUserName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="svnPassword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="password" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="svnCommitMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10000)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Workflow">
+    <eAnnotations source="mspace.ui">
+      <details key="up" value="2"/>
+      <details key="down" value="10"/>
+    </eAnnotations>
+    <eAnnotations source="mspace.ui">
+      <details key="designerLink" value="/cim/workflow/pim/ui/psm/angular/WEB/index.html#/load/"/>
+    </eAnnotations>
+    <eOperations name="validate">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕРІРµСЂРёС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="dependencies">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РІРёСЃРёРјРѕСЃС‚Рё"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setJsonView">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РЎРѕР·РґР°С‚СЊ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="install">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ Рё СЃРєРѕРїРёСЂРѕРІР°С‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="runit">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РїСѓСЃС‚РёС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="importWorkflow">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р�РјРїРѕСЂС‚"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="exportWorkflow">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р­РєСЃРїРѕСЂС‚"/>
+      </eAnnotations>
+      <eParameters name="svnCommitMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="mspace.ui">
+          <details key="multiline" value="true"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(unique=true, nullable=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//WFNode" containment="true" eOpposite="#//WFNode/workflow"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jsonView" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sla" eType="#//SlaDefinition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFNode" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workflow" lowerBound="1"
+        eType="#//Workflow" eOpposite="#//Workflow/nodes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFEnd" eSuperTypes="#//WFNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WFKill" eSuperTypes="#//WFNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFCase">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="predicate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//WFNode">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="auto"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="decision" eType="#//WFDecision"
+        eOpposite="#//WFDecision/cases"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFDecision" eSuperTypes="#//WFNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cases" upperBound="-1"
+        eType="#//WFCase" containment="true" eOpposite="#//WFCase/decision"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="default" eType="#//WFNode">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="workflow.e_id"/>
+        <details key="ds" value="workflow.e_id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFFork" eSuperTypes="#//WFNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paths" upperBound="-1"
+        eType="#//WFNode">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="workflow.e_id"/>
+        <details key="ds" value="workflow.e_id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFJoin" eSuperTypes="#//WFNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//WFNode">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="workflow.e_id"/>
+        <details key="ds" value="workflow.e_id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFAction" abstract="true" eSuperTypes="#//WFNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ok" eType="#//WFNode">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="workflow.e_id"/>
+        <details key="ds" value="workflow.e_id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="error" eType="#//WFNode">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="workflow.e_id"/>
+        <details key="ds" value="workflow.e_id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sla" eType="#//SlaDefinition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFTransformation" eSuperTypes="#//WFAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" eType="#//Transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jvmOpts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prepare" eType="#//Prepare"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sparkOpts" upperBound="-1"
+        eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFSubWorkflow" eSuperTypes="#//WFAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subWorkflow" eType="#//Workflow"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propagateConfiguration"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//ConfigurationProperty" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFShell" eSuperTypes="#//WFAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exec" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="args" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="captureOutput" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurationProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FSCommand" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FSDelete" eSuperTypes="#//FSCommand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FSMkdir" eSuperTypes="#//FSCommand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Prepare">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deleteDir" upperBound="-1"
+        eType="#//FSDelete" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mkDir" upperBound="-1"
+        eType="#//FSMkdir" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFJava" eSuperTypes="#//WFAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jarFiles" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prepare" eType="#//Prepare"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mainclass" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="args" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="javaopts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="captureOutput" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//ConfigurationProperty" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="archive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="debugList" upperBound="-1"
+        eType="#//DebugOutput" containment="true" eOpposite="#//DebugOutput/outputPort"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DebugOutput">
+    <eOperations name="test">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕС‚РµСЃС‚РёСЂРѕРІР°С‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10000)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputPort" eType="#//OutputPort"
+        eOpposite="#//OutputPort/debugList"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoJob">
+    <eOperations name="validate">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РџСЂРѕРІРµСЂРёС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="dependencies">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РІРёСЃРёРјРѕСЃС‚Рё"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="install">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ Рё СЃРєРѕРїРёСЂРѕРІР°С‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="runit">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р—Р°РїСѓСЃС‚РёС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(unique=true, nullable=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="frequency" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="${coord:days(1)}"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="2001-01-01T00:01Z"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="2022-12-31T23:59Z"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timezone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="Etc/GMT-4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controls" eType="#//CoControls"
+        containment="true" eOpposite="#//CoControls/job"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datasets" upperBound="-1"
+        eType="#//CoDataset" containment="true" eOpposite="#//CoDataset/job"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputEvents" upperBound="-1"
+        eType="#//CoInputEvent" containment="true" eOpposite="#//CoInputEvent/job"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputEvents" upperBound="-1"
+        eType="#//CoOutputEvent" containment="true" eOpposite="#//CoOutputEvent/job"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" lowerBound="1"
+        eType="#//CoAction" containment="true" eOpposite="#//CoAction/job"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoControls">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="job" eType="#//CoJob" eOpposite="#//CoJob/controls"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="concurrency" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="execution" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="throttle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoAction" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="job" eType="#//CoJob" eOpposite="#//CoJob/action"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sla" eType="#//SlaDefinition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+        <details key="isColumn" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10000)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoWorkflow" eSuperTypes="#//CoAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workflow" eType="#//Workflow"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" upperBound="-1"
+        eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoDataset">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="job" eType="#//CoJob" eOpposite="#//CoJob/datasets"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="frequency" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="${coord:hours(1)}"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialInstance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="2001-01-01T00:01Z"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timezone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="Etc/GMT-4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uriTemplate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="hdfs://cloud:54310/data/${YEAR}/${MONTH}/${DAY}/${HOUR}"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="doneFlag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoInputEvent" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="job" eType="#//CoJob" eOpposite="#//CoJob/inputEvents"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoDataIn" eSuperTypes="#//CoInputEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="#//CoDataset">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="job.e_id"/>
+        <details key="ds" value="job.e_id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="${coord:current(0)}"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startInstance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="${coord:current(-23)}"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endInstance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="hint" value="${coord:current(0)}"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoOutputEvent" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="job" eType="#//CoJob" eOpposite="#//CoJob/outputEvents"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoDataOut" eSuperTypes="#//CoOutputEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="#//CoDataset">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="job.e_id"/>
+        <details key="ds" value="job.e_id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startInstance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endInstance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="#//TransformationStep">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequenceType" lowerBound="1"
+        eType="#//SequenceType" defaultValueLiteral="ORACLE"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//Context"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequencedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="batchSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SequenceType">
+    <eLiterals name="LOCAL"/>
+    <eLiterals name="ORACLE" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFStart" abstract="true" eSuperTypes="#//WFNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//WFNode">
+      <eAnnotations source="mspace.ui">
+        <details key="filter" value="workflow.e_id"/>
+        <details key="ds" value="workflow.e_id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WFManualStart" eSuperTypes="#//WFStart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WFDataInStart" eSuperTypes="#//WFStart"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="CSVFormat">
+    <eLiterals name="CSV"/>
+    <eLiterals name="EXCEL" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CSVSource" eSuperTypes="#//Source">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="csvFormat" eType="#//CSVFormat"
+        defaultValueLiteral="CSV"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="header" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="UTF-8"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delimiter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=","/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quote" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="\&quot;"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="escape" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="\\"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="#"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataAddress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="addColorColumns" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="treatEmptyValuesAsNulls"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestampFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="mm-dd-yyyy hh:mm:ss"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxRowsInMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="workbookPassword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="password" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CompressionCodec">
+    <eLiterals name="default"/>
+    <eLiterals name="gzip" value="1"/>
+    <eLiterals name="lz4" value="2"/>
+    <eLiterals name="snappy" value="3"/>
+    <eLiterals name="bzip2" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="QuoteMode">
+    <eLiterals name="DEFAULT"/>
+    <eLiterals name="MINIMAL" value="1"/>
+    <eLiterals name="NON_NUMERIC" value="2"/>
+    <eLiterals name="NONE" value="3"/>
+    <eLiterals name="ALL" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CSVTarget" eSuperTypes="#//Target">
+    <eOperations name="showContent">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="РћС‚РѕР±СЂР°Р·РёС‚СЊ СЃРѕРґРµСЂР¶РёРјРѕРµ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="csvFormat" eType="#//CSVFormat"
+        defaultValueLiteral="CSV"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="header" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="yyyy-MM-dd"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="UTF-8"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delimiter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=","/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quote" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="\&quot;"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="escape" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="\\"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="#"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="codec" eType="#//CompressionCodec"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quoteMode" eType="#//QuoteMode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="saveMode" eType="#//SaveMode"
+        defaultValueLiteral="OVERWRITE"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataAddress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestampFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="yyyy-MM-dd hh:mm:ss"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Drools" eSuperTypes="#//TransformationStep">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rulesFiles" upperBound="-1"
+        eType="#//DroolsRulesFile" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inputFactTypeName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resultFactTypeName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resultQueryName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resultFactName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="globals" upperBound="-1"
+        eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DroolsRulesFile">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileType" eType="#//DroolsFileType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DroolsFileType">
+    <eLiterals name="DRL"/>
+    <eLiterals name="XLS" value="1"/>
+    <eLiterals name="CSV" value="2"/>
+    <eLiterals name="PKG" value="3"/>
+    <eLiterals name="OTHER" value="4"/>
+    <eLiterals name="JAR" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SaveMode">
+    <eLiterals name="APPEND" value="1"/>
+    <eLiterals name="OVERWRITE" value="2"/>
+    <eLiterals name="DISCARD" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HiveSource" eSuperTypes="#//Source">
+    <eOperations name="execute">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р’С‹РїРѕР»РЅРёС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="statement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="explain" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Explain"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelBasedAnalysis" eSuperTypes="#//TransformationStep">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelFile" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelFieldName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelFeaturesFields" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="methodName" lowerBound="1"
+        eType="#//AnalysisMethod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AnalysisMethod">
+    <eLiterals name="GradientBoostedTrees"/>
+    <eLiterals name="RandomForestTrees" value="1"/>
+    <eLiterals name="SVM" value="2"/>
+    <eLiterals name="LogisticRegression" value="3"/>
+    <eLiterals name="LinearRegression" value="4"/>
+    <eLiterals name="DecisionTree" value="5"/>
+    <eLiterals name="NaiveBayes" value="6"/>
+    <eLiterals name="IsotonicRegression" value="7"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SQLPort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SparkSQL" eSuperTypes="#//TransformationStep">
+    <eAnnotations source="mspace.ui">
+      <details key="protectAttribute" value="customSQL"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="statement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sqlPorts" upperBound="-1"
+        eType="#//SQLPort" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sampleSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="100"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="explain" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Explain"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="customSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Custom SQL"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="HiveTargetType">
+    <eLiterals name="APPEND"/>
+    <eLiterals name="OVERWRITE" value="1"/>
+    <eLiterals name="IGNORE" value="2"/>
+    <eLiterals name="ERROR" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SparkVersion">
+    <eLiterals name="SPARK2" value="2"/>
+    <eLiterals name="SPARK3" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HiveTarget" eSuperTypes="#//Target">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clear" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hiveTargetType" eType="#//HiveTargetType">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Hive target type"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitions" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Partitions"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TargetOption">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="localTarget" eType="#//LocalTarget"
+        eOpposite="#//LocalTarget/options"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StreamTarget" eSuperTypes="#//LocalTarget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkpointLocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Checkpoint Location"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="trigger" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Trigger"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="triggerUnits" eType="#//TimeUnits">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Trigger units"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeoutMs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Timeout"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="refreshTimeoutMs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Refresh timeout"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputMode" eType="#//StreamOutputMode">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Output mode"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="default"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowkey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newTable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionColumn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="StreamOutputMode">
+    <eLiterals name="APPEND"/>
+    <eLiterals name="COMPLETE" value="1"/>
+    <eLiterals name="UPDATE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TimeUnits">
+    <eLiterals name="MILLISECONDS"/>
+    <eLiterals name="SECONDS" value="1"/>
+    <eLiterals name="MINUTES" value="2"/>
+    <eLiterals name="HOURS" value="3"/>
+    <eLiterals name="DAYS" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceOption">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="localSource" eType="#//LocalSource"
+        eOpposite="#//LocalSource/options"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExplodeField">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xmlSource" eType="#//XMLSource"
+        eOpposite="#//XMLSource/explodeFields"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvroExplodeField">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="avroSource" eType="#//AVROSource"
+        eOpposite="#//AVROSource/explodeFields"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ValueType">
+    <eLiterals name="AVRO"/>
+    <eLiterals name="XML" value="1"/>
+    <eLiterals name="JSON" value="2"/>
+    <eLiterals name="AVROFILE" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KafkaSource" eSuperTypes="#//Source">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bootstrapServers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Bootstrap servers"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kafkaConsumeType" eType="#//KafkaConsumeType">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Kafka consume type"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="consumeOptionValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Consume option value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
+        eType="#//KafkaSourceOption" containment="true" eOpposite="#//KafkaSourceOption/kafkaSource">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Options"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueType" eType="#//ValueType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueScheme" eType="#//SchemeDataSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="KafkaConsumeType">
+    <eLiterals name="ASSIGN"/>
+    <eLiterals name="SUBSCRIBE" value="1"/>
+    <eLiterals name="SUBSCRIBE_PATTERN" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KafkaSourceOption">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="kafkaSource" lowerBound="1"
+        eType="#//KafkaSource" eOpposite="#//KafkaSource/options"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KafkaTarget" eSuperTypes="#//Target">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bootstrapServers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Bootstrap servers"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="topicName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Topic"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messageKey" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Key"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messageValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="props" upperBound="-1"
+        eType="#//KafkaTargetProperty" containment="true" eOpposite="#//KafkaTargetProperty/kafkaTarget">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Properties"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueType" eType="#//ValueType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueScheme" eType="#//SchemeDataSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KafkaTargetProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="kafkaTarget" lowerBound="1"
+        eType="#//KafkaTarget" eOpposite="#//KafkaTarget/props"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SQLOption">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sqlSource" eType="#//SQLSource"
+        eOpposite="#//SQLSource/sqlOptions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AggregationParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resultFieldName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="aggregationFunction" lowerBound="1"
+        eType="#//AggregationFunction" defaultValueLiteral="SUM"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="aggregation" lowerBound="1"
+        eType="#//Aggregation" eOpposite="#//Aggregation/aggregationParameters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XMLSource" eSuperTypes="#//Source">
+    <eOperations name="expand">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р Р°Р·РІРµСЂРЅСѓС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="UTF-8"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowTag" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="explodeFields" upperBound="-1"
+        eType="#//ExplodeField" containment="true" eOpposite="#//ExplodeField/xmlSource"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="samplingRatio" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="100"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="excludeAttribute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="treatEmptyValuesAsNulls"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//XmlCorruptRecords"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnNameOfCorruptRecord"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="_corrupt_record"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributePrefix" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="_"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueTag" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="_VALUE"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ignoreSurroundingSpaces"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XMLTarget" eSuperTypes="#//Target">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="UTF-8"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowTag" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootTag" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="null"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributePrefix" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="_"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueTag" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="_VALUE"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="compression" eType="#//CompressionCodec"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="XmlCorruptRecords">
+    <eLiterals name="PERMISSIVE"/>
+    <eLiterals name="DROPMALFORMED" value="1"/>
+    <eLiterals name="FAILFAST" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XMLSourceField" eSuperTypes="http://www.neoflex.ru/meta/dataset#//Field">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xmlPath" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JSONSourceField" eSuperTypes="http://www.neoflex.ru/meta/dataset#//Field">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jsonPath" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AVROSource" eSuperTypes="#//Source">
+    <eOperations name="expand">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Р Р°Р·РІРµСЂРЅСѓС‚СЊ"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaHdfs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="UTF-8"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="explodeFields" upperBound="-1"
+        eType="#//AvroExplodeField" containment="true" eOpposite="#//AvroExplodeField/avroSource"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PivotParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resultFieldName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="aggregation" lowerBound="1"
+        eType="#//Aggregation" eOpposite="#//Aggregation/pivotParameters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExplodeStep" eSuperTypes="#//TransformationStep">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="explodeFields" upperBound="-1"
+        eType="#//ExplodeStepField" containment="true" eOpposite="#//ExplodeStepField/explodeStep"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExplodeStepField">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataTypeDomain" eType="ecore:EEnum http://www.neoflex.ru/meta/dataset#//DataTypeDomain"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainStructure" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//FieldType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="explodeStep" eType="#//ExplodeStep"
+        eOpposite="#//ExplodeStep/explodeFields"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SlaDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nominalTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shouldStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shouldEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alertEvents" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alertContact" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserDefinedFunction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="withParameters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mavenDependencies" upperBound="-1"
+        eType="#//MavenDependency"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MLFlowRun">
+    <eOperations name="start"/>
+    <eOperations name="stop"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="port" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupWithState" eSuperTypes="#//TransformationStep">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupByKey" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.inputPort.fields"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="internalState" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Structure"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="flatMapGroupsWithState"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventsProcessor" eType="ecore:EClass http://www.neoflex.ru/meta/etlevs#//EventsProcessor"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="internalStateTimeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="watermarkField" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.outputPort.fields"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputMode" eType="#//StreamOutputMode">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Output mode"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HBaseSource" eSuperTypes="#//Source">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="default"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowkey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minStamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxStamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mergeToLatest" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVersions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HBaseTarget" eSuperTypes="#//Target">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="default"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowkey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newTable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionColumn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HBaseField" eSuperTypes="http://www.neoflex.ru/meta/dataset#//Field">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="family" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HBaseTargetFeature" eSuperTypes="#//InputFieldMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="family" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MapPartitions" eSuperTypes="#//TransformationStep">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="finalExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MavenDependencyType">
+    <eLiterals name="UNDEFINED"/>
+    <eLiterals name="POM" value="1"/>
+    <eLiterals name="BUNDLE" value="2"/>
+    <eLiterals name="EJB" value="3"/>
+    <eLiterals name="EJB_CLIENT" value="4"/>
+    <eLiterals name="JAR" value="5"/>
+    <eLiterals name="MAVEN_PLUGIN" value="6"/>
+    <eLiterals name="TEST_JAR" value="7"/>
+    <eLiterals name="WAR" value="8"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MavenDependencyScope">
+    <eLiterals name="UNDEFINED"/>
+    <eLiterals name="TEST" value="1"/>
+    <eLiterals name="COMPILE" value="2"/>
+    <eLiterals name="IMPORT" value="3"/>
+    <eLiterals name="PROVIDED" value="4"/>
+    <eLiterals name="RUNTIME" value="5"/>
+    <eLiterals name="SYSTEM" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MavenDependency">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="artifactId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//MavenDependencyType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scope" eType="#//MavenDependencyScope"/>
+  </eClassifiers>
+</ecore:EPackage>

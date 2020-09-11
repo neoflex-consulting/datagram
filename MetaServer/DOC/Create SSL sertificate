@@ -1,0 +1,40 @@
+Создание собственного подписанного сертификата.
+1. Создаем приватный ключ центра авторизации (скорее всего уже есть):
+openssl genrsa -out rootCA.key 2048
+2. Создает публичный ключ центра авторизации (корневой сертификат, скорее всего уже есть):
+openssl req -x509 -new -key rootCA.key -days 10000 -out rootCA.crt
+3. Создаем ключ домена к которому хотим дать доступ третьей стороне:
+openssl genrsa -out server101.mycloud.key 2048
+4. Создаем запрос на сертификат домена к которому даем доступ третьей стороне:
+openssl req -new -key server101.mycloud.key -out server101.mycloud.csr
+5. Создаем сертификат защищаемого домена, а именно, подписываем ключом центра авторизации запрос на сертификат домена (в ssldomains.txt указан защищаемый домен!!!):
+openssl x509 -req -in server101.mycloud.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out server101.mycloud.crt -days 10000 -extfile ssldomains.txt
+
+На этом этапе у нас есть:
+приватный ключ центра авторизациии - rootCA.key
+корневой сертификат центра авторизации - rootCA.crt
+приватный ключ ресурса к которому даем доступ - server101.mycloud.key
+сертификат ресурса подписанный центром авторизации - server101.mycloud.crt
+
+Это нужно распределить следующим образом:
+1. приватный ключ центра авторизациии - rootCA.key - спрятать
+2. корневой сертификат центра авторизации - rootCA.crt - раздать клиентам которым хотим дать доступ к ресурсу (импортировать в браузер в нужном месте)
+3. приватный ключ ресурса к которому даем доступ - server101.mycloud.key и сертификат ресурса подписанный центром авторизации - server101.mycloud.crt - передать защищаемому ресурсу, а именно, упаковать в виде пары ключ-значение в базу данных ключей и подложить приложению, указав ссылку в файле настроек.
+
+База данных сертификатов создается из пары ключ-сертификат создается так:
+
+# Create PKCS12 keystore from private key and public certificate.
+openssl pkcs12 -export -name myservercert -in server101.mycloud.crt -inkey server101.mycloud.key -out keystore.p12
+
+# Convert PKCS12 keystore into a JKS keystore
+keytool -importkeystore -destkeystore keystore.jks -srckeystore keystore.p12 -srcstoretype pkcs12 -alias myservercert
+
+Поставка:
+1. защищаемому доменту (приложению) keystore.jks созданное из пары ключ-подписанный для этого домена сертификат.
+2. клиентам - публичный ключ центра авторизации
+
+Ссылки на основе которых собрана инструкция:
+https://habr.com/ru/post/192446/
+https://stackoverflow.com/questions/17695297/importing-the-private-key-public-certificate-pair-in-the-java-keystore
+https://habr.com/ru/post/352722/
+

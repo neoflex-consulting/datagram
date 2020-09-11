@@ -1,0 +1,74 @@
+
+context src!Workflow {
+    constraint NameIsValid {      
+        check : nameIsValid(self.name) 
+        message : "Workflow '" + self.name + ".': имя не корректно"
+    }
+    constraint StartIsDefined {      
+        check : self.nodes.select(n|n.isKindOf(src!WFManualStart)).size() == 1 
+        message : "Workflow '" + self.name + "': стартовый узел не определён или неоднозначен"
+    }
+    constraint EndIsDefined {      
+        check : self.nodes.select(n|n.isKindOf(src!WFEnd)).size() == 1 
+        message : "Workflow '" + self.name + "': конечный узел должен присутствовать и быть в единственном экземпляре"
+    }
+}
+
+context src!WFAction {
+    constraint OKIsDefined {      
+        check : self.ok.isDefined() 
+        message : "WSAction '" + self.workflow.name + "." + self.name + "': узел успешного завершения не определён"
+    }
+    constraint ErrorIsDefined {      
+        check : self.error.isDefined() 
+        message : "WSAction '" + self.workflow.name + "." + self.name + "': узел ошибочного завершения не определён"
+    }
+}
+
+context src!WFNode {
+	constraint NameIsDefined {
+		check : self.name.isDefined and self.name.length() > 0 
+		message : "WFNode: имя не определено"
+	}
+    constraint NameIsValid {
+    	guard : self.satisfies("NameIsDefined")      
+        check : nameIsValid(self.name) 
+        message : "WFNode '" + self.workflow.name + "." + self.name + "': имя не корректно"
+    }
+    constraint NameIsUnique {
+    	guard : self.satisfies("NameIsDefined") 
+    	check : self.workflow.nodes.select(n|n.name == self.name).size() == 1
+    	message : "не уникальное имя WFNode: '" + self.name + "'"
+    }
+}
+
+context src!WFTransformation {
+    constraint TransformationDefined {      
+        check : self.transformation.isDefined() 
+        message : "WFTransformation '" + self.workflow.name + "." + self.name + "': поле transformation не определено"
+    }
+}
+
+context src!WFSubWorkflow {
+    constraint SubWorkflowDefined {      
+        check : self.subWorkflow.isDefined() 
+        message : "WFSubWorkflow '" + self.workflow.name + "." + self.name + "': поле subWorkflow не определено"
+    }
+}
+
+operation nameIsValid(name): Boolean {
+    if (not name.isDefined() and name.size() < 1) {
+        return false;
+    }
+    if (not Native("java.lang.Character").isJavaIdentifierStart(name.charAt(0))) {
+        return false;
+    }
+    var i = 1;
+    while (i < name.length()) {
+        if (not Native("java.lang.Character").isJavaIdentifierPart(name.charAt(i))) {
+            return false;
+        }
+        i = i + 1;
+    }
+    return true;
+}

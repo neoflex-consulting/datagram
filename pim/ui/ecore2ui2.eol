@@ -1,0 +1,707 @@
+
+"Runing ecore2ui2.eol".println();
+S!EPackage.all.collect(p|p.name).println();
+main();
+
+operation main () {
+	for (ePackage in allPackages()) {
+		var uiPackage = ePackage.createUIPackage();
+	}
+	for (eClass in allClasses()) {
+		for (hier in eClass.getAllKindOf()) {
+			eClass.~uiClass.hiers.add(hier.~uiClass);
+		}
+		for (super in eClass.eSuperTypes) {
+		  eClass.~uiClass.uiSuperTypes.add(super.~uiClass);
+		}
+	}
+	for (ePackage in allPackages()) {
+	    ePackage.name.println("ePackage: ");
+		ePackage.populateUIPackage(ePackage.~uiPackage);
+	}
+}
+
+operation S!EPackage createUIPackage() {
+	var uiPackage = new T!UIPackage;
+	self.~uiPackage = uiPackage;
+	uiPackage.name = self.nsPrefix;
+	for (eClass: S!EClass in self.eClassifiers) {
+		var uiClass = eClass.createUIClass(uiPackage); 
+		eClass.createMainListForm(uiClass);
+		eClass.createMainEditForm(uiClass);
+	}
+	return uiPackage;
+}
+
+operation S!EPackage populateUIPackage(uiPackage) {
+	for (eClass: S!EClass in self.eClassifiers) {
+	    var uiClassName = uiPackage.name + "_" + eClass.name; 
+        uiClassName.println("--- uiClass: ");
+		var uiClass = uiPackage.uiClasses.select(c|c.name == uiClassName).first();
+		eClass.populateEditForm(uiClass);
+		eClass.populateMainListForm(uiClass);
+		eClass.populateMainEditForm(uiClass);
+	}
+	return uiPackage;
+}
+
+operation S!EClass createUIClass(uiPackage) {
+	var uiClass = new T!UIClass;
+	uiPackage.uiClasses.add(uiClass);
+	self.~uiClass = uiClass;
+    uiClass.name = self.getFullName();
+    uiClass.baseName = self.name;
+	uiClass.caption = self.getCaption();
+	uiClass.qName = self.getQName(); 
+	for (o in self.eOperations) {
+	   var uiOperation = new T!UIOperation;
+	   uiClass.uiOperations.add(uiOperation);
+	   uiOperation.name = o.name;
+	   uiOperation.typeQName = o.eContainingClass.getQName();
+	   uiOperation.caption = o.getCaption();
+	}
+	uiClass.designerLink = self.getAnnotation("mspace.ui", "designerLink", null);
+	uiClass.readOnly = self.getAnnotation("mspace.ui", "readOnly", false).asBoolean();
+	self.createEditForm(uiClass);
+	return uiClass; 
+}
+
+@cached
+operation S!EClass getQName() {
+    return self.ePackage.nsPrefix + '.' + self.name; 
+}
+
+@cached
+operation S!EClass getFullName() {
+    return self.ePackage.nsPrefix + '_' + self.name; 
+}
+
+operation S!EClass createMainListForm(uiClass) {
+	var uiForm = new T!MainListForm;
+	uiForm.entryPoint = true;
+	uiClass.uiForms.add(uiForm);
+	uiClass.mainListForm = uiForm;
+	uiForm.name = uiClass.name + "_MainList"; 
+	uiForm.caption = self.getCaptionPlural();
+	uiForm.objectList = uiForm.addDataSource(new T!ObjectList);
+	uiForm.objectList.name = uiClass.name + "_MainList";
+	uiForm.objectList.uiClass = uiClass;
+    uiForm.objectList.up = 1;
+    uiForm.objectList.down = 0;
+    uiForm.objectList.deep = 1;
+}
+
+operation S!EClass populateMainListForm(uiClass) {
+	var uiForm = uiClass.mainListForm;
+	var groupList = uiForm.add(new T!GroupListLayout, "GroupList");
+	var table = groupList.add(new T!TableGroupControl, "TableGroup");
+	table.caption = self.getCaptionPlural();
+	table.dataModel = uiForm.objectList;
+	table.createColumns(self);
+	table.uiClass = uiClass;
+}
+
+operation S!EClass createMainEditForm(uiClass) {
+	var uiForm = new T!MainEditForm;
+	uiClass.uiForms.add(uiForm);
+	uiClass.mainEditForm = uiForm;
+	uiForm.name = uiClass.name + "_MainEdit"; 
+	uiForm.caption = self.getCaption();
+	uiForm.itemId = uiForm.addDataSource(new T!Parameter);
+	uiForm.itemId.name = uiForm.name + "_id";
+	uiForm.objectItem = uiForm.addDataSource(new T!ObjectItem);
+	uiForm.objectItem.name = uiClass.name + "_MainItem";
+	uiForm.objectItem.uiClass = uiClass;
+	uiForm.objectItem.modeModel = uiForm.addDataSource(new T!Parameter);
+	uiForm.objectItem.modeModel.name = uiForm.name + "_mode";
+    uiForm.objectItem.up = self.getAnnotation("mspace.ui", "up", "-2").asInteger();
+    uiForm.objectItem.down = self.getAnnotation("mspace.ui", "down", "-2").asInteger();
+    uiForm.objectItem.deep = self.getAnnotation("mspace.ui", "deep", "-2").asInteger();
+}
+
+operation S!EClass populateMainEditForm(uiClass) {
+	uiClass.mainEditForm.embeddedForms.add(uiClass.editForm);
+	var groupList = uiClass.mainEditForm.add(new T!GroupListLayout, "GroupList");
+	groupList.showStyle = T!GroupListStyleEnum#SHOW_ALL;
+	
+	var editFormControl = groupList.add(new T!MainEditFormControl, self.name);
+	editFormControl.uiClass = uiClass;
+	editFormControl.caption = self.getCaption();
+	
+	var uiForm = uiClass.mainEditForm;
+	editFormControl.dataModel = uiForm.objectItem;	
+	//TODO: not embedded references	
+    for (ref in self.getBackReferences()) {
+        var feature = ref[0];
+        var eClass = ref[1];
+        var refClass = eClass.~uiClass;
+	    var objectList = uiForm.addDataSource(new T!ObjectList);
+	    objectList.name = refClass.name + "_BackRef";
+        objectList.uiClass = refClass;
+        objectList.up = 0;
+        objectList.down = 0;
+        objectList.deep = 0;
+	    var filter = objectList.addFilter(new T!EqEvalExpression);
+        filter.dataModel = uiForm.itemId;
+	    filter.expr = feature.name + "." + self.getIdName();
+	    if (feature.upperBound <> 1) {
+	       objectList.addJoin(feature.name, feature.name);
+	    }
+	    var table = groupList.add(new T!TableGroupControl, eClass.name + "_" + feature.name + "_BackRef");
+	    table.caption = eClass.getCaptionPlural();
+	    table.dataModel = objectList;
+	    table.createColumns(eClass);
+	    table.uiClass = refClass;
+        var e = table.addHideOn(new T!NeEvalExpression);
+        e.dataModel = uiForm.objectItem.getProperty("_mode_");
+        e.expr = "'view'";
+    }
+}
+
+operation T!ObjectList addJoin(fname, falias) {
+    var j = new T!JoinedObject;
+    self.joined.add(j);
+    j.fname = fname;
+    j.falias = falias;
+}
+
+@cached
+operation S!EClass getBackReferences() {
+    var result = Sequence{};
+    for (eClass in getTopLevels()) {
+        for (r: S!EReference in eClass.getAllFeatures()) {
+            if (r.eReferenceType.isSuperTypeOf(self) /*and r.upperBound == 1*/) {
+                if (r.eOpposite.isDefined() and r.eOpposite.isEmbedded()) continue;
+                result.add(Sequence{r, eClass});
+            }
+        }
+    }
+    return result;
+}
+
+@cached
+operation getTopLevels() {
+    return allClasses().select(c|c.isTopLevel());
+}
+
+@cached
+operation S!EClass isTopLevel() {
+    if (self.abstract == true) return false;
+    if (not self.name.isDefined()) return false;
+    for (r: S!EReference in self.getAllFeatures()) {
+        if (r.eOpposite.isDefined() and r.eOpposite.isContainment()) return false;
+    }
+    return true;
+}
+
+operation S!EClass createEditForm(uiClass) {
+	var uiForm = new T!EditForm;
+	uiClass.uiForms.add(uiForm);
+	uiClass.editForm = uiForm;
+	uiForm.name = uiClass.name + "_Edit"; 
+	uiForm.caption = self.getCaption();
+	uiForm.objectItem = uiForm.addDataSource(new T!ExternalSource);
+	uiForm.objectItem.name = "entity";
+	//uiForm.readOnly = self.getAnnotation("mspace.ui", "readOnly", false).asBoolean();
+}
+
+operation T!UIForm addDataSource(ds) {
+	self.dataSources.add(ds);
+	return ds;
+}
+
+operation S!EClass populateEditForm(uiClass) {
+	var uiForm = uiClass.editForm;
+	var formLayout = uiForm.add(new T!FormLayout, "form");
+   	var row = formLayout.add(new T!RowLayout, "row_1");
+   	var col = row.add(new T!ColumnLayout, "col_1");
+   	for (feature in self.getAllFeatures().select(f|f.isEmbedded())) {
+   		var control = feature.createControl(uiForm, col, uiForm.objectItem.getProperty(feature.name));
+   		control.readOnly = self.getAnnotation("mspace.ui", "readOnly", false).asBoolean();
+		var e = control.addDisableOn(new T!EqEvalExpression);
+		e.dataModel = uiForm.objectItem.getProperty("_mode_");
+		e.expr = "'view'";
+		if (feature.isKindOf(S!EReference) and feature.eOpposite.isDefined() and feature.eOpposite.containment) {
+            var hideOn = control.addHideOn(new T!EvalBooleanExpression);
+            hideOn.expr = "'true'";
+		}
+   	} 
+   	  	   	
+}
+
+operation S!EAttribute isNumber() {
+   	var numberTypes = Sequence{"EShort", "EInt", "ELong", "EFloat", "EDouble", "EDoubleObject", "EFloatObject", 
+   		"ELongObject", "EIntegerObject", "EBigDecimal"};
+   	return numberTypes.contains(self.eType.name);
+}
+
+
+operation S!EAttribute createEnum(form, layout) {
+	var dsName = form.uiClass.uiPackage.name + "_" + form.uiClass.name + "_" + self.name + "_Enum";
+	var ds = form.dataSources.select(ds|ds.name == dsName).first();
+	if (not ds.isDefined()) {
+		ds = new T!ConstObjectList;
+		form.dataSources.add(ds);
+		ds.name = dsName;
+		for (eLiteral in self.eType.eLiterals) {
+			var obj = new T!ConstObject;
+			var key = new T!NamedExpression;
+			key.name = "key";
+			key.expr = "'" + eLiteral.name + "'";
+			obj.content.add(key);
+			var display = new T!NamedExpression;
+			display.name = "display";
+			display.expr = "'" + eLiteral.literal + "'";
+			obj.content.add(display);
+			ds.content.add(obj);
+		}
+	}
+	var control = layout.add(new T!OptionControl, self.name);
+	control.refModel = ds;
+	control.key = "key";
+	control.display = "display";
+	control.upperBound = self.upperBound;
+	return control;
+}
+
+operation S!EAttribute createText(form, layout) {
+    var control = layout.add(new T!TextControl, self.name);
+    control.multiline = self.getAnnotation("mspace.ui", "multiline", "false") == "true";
+    control.password = self.getAnnotation("mspace.ui", "password", "false") == "true";
+    control.hint = self.getAnnotation("mspace.ui", "hint", null);
+    return control;
+}
+
+operation S!EAttribute createEmbeddedList(form, layout) {
+    var control = layout.add(new T!EmbeddedListControl, self.name);
+    control.hint = self.getAnnotation("mspace.ui", "hint", null);
+    return control;
+}
+
+operation S!EAttribute createNumber(form, layout) {
+	return layout.add(new T!NumberControl, self.name);
+}
+
+operation S!EAttribute createDate(form, layout) {
+    return layout.add(new T!DateControl, self.name);
+}
+
+operation S!EAttribute createDateTime(form, layout) {
+    return layout.add(new T!DateTimeControl, self.name);
+}
+
+operation S!EAttribute createBoolean(form, layout) {
+	return layout.add(new T!BooleanControl, self.name);
+}
+
+operation T!Layout add(element, name) {
+	self.elements.add(element);
+	element.name = self.name + "_" + name;
+	return element;
+}
+
+operation S!EAttribute createControl(form, layout, dataModel) {
+   	var control;
+   	if (self.eType.isKindOf(S!EEnum)) {
+   		control = self.createEnum(form, layout);
+   	}
+   	else if (self.eType.name == "EString") {
+   	    if (self.upperBound == -1) {
+   	        control = self.createEmbeddedList(form, layout);
+   	    }
+   	    else {
+            control = self.createText(form, layout);
+   	    }
+   	}
+   	else if (self.isNumber()) {
+   		control = self.createNumber(form, layout);
+   	}
+   	else if (self.eType.name == "EDate") {
+   	    if (self.getAnnotation("mspace.ui", "timestamp", "false") == "true")
+           control = self.createDateTime(form, layout);
+   	    else
+   		   control = self.createDate(form, layout);
+   	}
+   	else if (self.eType.name == "EBoolean" or self.eType.name == "EBooleanObject") {
+   		control = self.createBoolean(form, layout);
+   	}
+   	else {
+   		control = self.createText(form, layout);
+   	}
+	control.caption = self.getCaption();
+	if (self.lowerBound > 0) {
+		var cond = control.addRequiredOn(new T!EvalBooleanExpression);
+		cond.expr = "true";
+	}
+	control.dataModel = dataModel;
+	return control;
+}
+
+operation T!DataModel getProperty(name) {
+	var property = self.properties.select(p|p.name == name).first();
+	if (not property.isDefined()) {
+		property = new T!ModelProperty;
+		self.properties.add(property);
+		property.name = name;
+	}
+	return property;
+}
+
+operation T!DataModel getExtProperty(name) {
+    var dm = self;
+    for (part in name.split("\\.")) {
+        dm = dm.getProperty(part);
+    }
+    return dm;
+}
+
+operation T!ObjectList addFilter(bexpr) {
+    if (not self.filter.isDefined()) {
+        self.filter = new T!AndExpression;
+    }
+    self.filter.content.add(bexpr);
+    return bexpr;
+}
+
+operation S!EClass findParent(path, eClass) {
+  for (r in self.eAllReferences) {
+    if (r.eOpposite.isDefined() and r.eOpposite.isContainment) {
+        if (r.eReferenceType == eClass or r.eReferenceType.findParent(path, eClass)) {
+          path.add(r.name);
+          return true;
+        }
+    }
+  }
+  return false;
+}
+
+operation S!EClass findCommon(myPath, otherPath, otherClass) {
+  if (otherClass.findParent(otherPath, self)) {
+    return true;
+  }
+  for (r in self.eAllReferences) {
+    if (r.eOpposite.isDefined() and r.eOpposite.isContainment) {
+      if (r.eReferenceType.findCommon(myPath, otherPath, otherClass)) {
+        myPath.add(r.name);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+operation S!EReference autoFilter(ds, dataModel) {
+  var from = self.eContainingClass;
+  var fromPath = Sequence{};
+  var to = self.eReferenceType;
+  var toPath = Sequence{};
+  if (from.findCommon(fromPath, toPath, to)) {
+    var eqexpr = ds.addFilter(new T!EqEvalExpression);
+    eqexpr.expr = toPath.invert().concat('.') + '.e_id';
+    eqexpr.dataModel = dataModel.getExtProperty(fromPath.invert().concat('.') + '.e_id');
+    return;
+  }
+}
+
+operation S!EReference createRef(form, layout, dataModel) {
+	var dsName = form.uiClass.name + "_" + self.name + "_Ref";
+	var ds = form.addDataSource(new T!ObjectList);
+	ds.name = dsName;
+	ds.uiClass = self.eReferenceType.~uiClass;
+    ds.up = self.getAnnotation("mspace.ui", "up", "0").asInteger();
+    ds.down = self.getAnnotation("mspace.ui", "down", "0").asInteger();
+    ds.deep = self.getAnnotation("mspace.ui", "deep", "0").asInteger();
+	var filter = self.getAnnotation("mspace.ui", "filter", null);
+	if (filter.isDefined()) {
+       if (filter == "auto") {
+         self.autoFilter(ds, dataModel.`model`);
+       }
+       else {
+         var eqexpr = ds.addFilter(new T!EqEvalExpression);
+         eqexpr.expr = filter;
+         eqexpr.dataModel = dataModel.`model`.getExtProperty(self.getAnnotation("mspace.ui", "ds", null));
+       }
+	}
+	// TODO: if this reference is to parent, filter it by id of parent :DONE
+	if (self.eOpposite <> null and self.eOpposite.containment) {
+       var eqexpr = ds.addFilter(new T!EqEvalExpression);
+       eqexpr.expr = self.eReferenceType.getIdName();
+       eqexpr.dataModel = dataModel.`model`.getExtProperty(self.eReferenceType.getIdName());
+	}
+	var control = layout.add(new T!OptionControl, self.name);
+	control.caption = self.getCaption();
+	control.dataModel = dataModel;
+	control.refModel = ds;
+	control.key = null/*self.eReferenceType.getIdName()*/;
+	control.display = self.eReferenceType.getDisplayName();
+	control.upperBound = self.upperBound;
+	if (self.eOpposite.isDefined() and self.eOpposite.containment) {
+		var e = control.addDisableOn(new T!EvalBooleanExpression);
+		e.expr = "true";
+	}
+	return control;
+}
+
+operation S!EReference createSubform(form, layout, dataModel) {
+	var groupList = form.add(new T!GroupListLayout, "Subform");
+	groupList.showStyle = T!GroupListStyleEnum#HIDE_ALL;
+	var control = groupList.add(new T!EditFormControl, self.name);
+	control.caption = self.getCaption();
+	control.uiClass = self.eReferenceType.~uiClass;
+	control.dataModel = dataModel;
+	for (uiClass in control.uiClass.hiers) {
+		form.addEmbeddedForm(uiClass.editForm);
+	}
+	return groupList;
+}
+
+operation S!EReference createSublist(form, layout, dataModel) {
+	var groupList = form.add(new T!GroupListLayout, "Sublist");
+	groupList.showStyle = T!GroupListStyleEnum#HIDE_ALL;
+	
+   	if(self.getAnnotation("mspace.ui", "graph", "false") == "true"){
+   		/*var grasphGroupList = form.add(new T!GroupListLayout, "Sublist");
+   		var graphControl = grasphGroupList.add(new T!GraphControl, self.name);
+   		graphControl.caption = self.getCaption();*/
+   		var graphControl = form.add(new T!GraphControl, self.name);   		
+   	}   			
+   			
+	var control = groupList.add(new T!MasterDetail, self.name);
+			
+	control.caption = self.getCaption();
+	control.createColumns(self.eReferenceType);
+	control.dataModel = dataModel;
+	control.uiClass = self.eReferenceType.~uiClass;
+	for (uiClass in control.uiClass.hiers) {		
+		form.addEmbeddedForm(uiClass.editForm);
+	}
+	return groupList;
+}
+
+operation S!EReference createControl(form, layout, dataModel) {
+	if (not self.containment) {
+		return self.createRef(form, layout, dataModel);
+	}
+	else if (self.upperBound == 1) {
+		return self.createSubform(form, layout, dataModel);
+	}
+	else {
+		return self.createSublist(form, layout, dataModel);
+	}
+}
+
+operation T!TableControl createColumns(eClass) {
+   	for (feature in eClass.getAllFeatures()) {
+   		if (feature.isKindOf(S!EAttribute)) {
+            if (feature.getAnnotation("mspace.ui", "password", "false") <> "true") {
+	            var column = new T!TableColumn;
+	            self.columns.add(column);
+	            column.caption = feature.getCaption();
+	            column.name = feature.name;
+            }
+   		}
+   		else if (feature.isKindOf(S!EReference) and feature.upperBound == 1 and not feature.containment) {
+	   		var column = new T!TableColumn;
+	   		self.columns.add(column);
+	   		column.caption = feature.getCaption();
+	   		column.name = feature.name + "." + feature.eType.getDisplayName();
+   		}
+   	}
+}
+
+@cached
+operation S!EClass getAllKindOf() {
+	return allClasses().select(e|self.isSuperTypeOf(e) and not e.abstract);
+}
+
+
+operation T!UIForm addEmbeddedForm(uiForm) {
+	if (not self.embeddedForms.contains(uiForm)) {
+		self.embeddedForms.add(uiForm);
+	}
+	return uiForm;
+}
+
+@cached
+operation S!EStructuralFeature isEmbedded() {
+    if (self.isKindOf(S!EAttribute))
+        return true;
+    if (self.containment)
+        return true;
+    if (self.upperBound == 1)
+        return true;
+    if (not self.eOpposite.isDefined() or not self.eOpposite.containment)
+        return true;
+    if (self.getAnnotation("mspace.ui", "embedded", "false") == "true")
+        return true;
+    return false;
+}
+
+@cached
+operation S!EClass getCaptionPlural() {
+    return self.getFullName() + ".caption_plural";
+}
+
+@cached
+operation S!EClass getCaption() {
+	return self.getFullName() + ".caption";
+}
+
+@cached
+operation S!EAttribute getCaption() {
+    return self.eContainingClass.getFullName() + ".att." + self.name;
+}
+
+@cached
+operation S!EReference getCaption() {
+    return self.eContainingClass.getFullName() + ".att." + self.name;
+}
+
+@cached
+operation S!EOperation getCaption() {
+    return self.eContainingClass.getFullName() + ".op." + self.name;
+}
+
+@cached
+operation S!EObject getAnnotation(source, key, dflt) {
+    for (a in self.eAnnotations.select(a|a.source == source)) {
+    	var d = a.details.select(d|d.key == key).first();
+    	if (d.isDefined()) {
+		    return d.value;
+    	}
+    }
+    return dflt;
+}
+
+@cached
+operation S!EObject getAllAnnotations(source, key) {
+	var al = Sequence{};
+    for (a in self.eAnnotations.select(a|a.source == source)) {
+  		al.addAll(a.details.select(d|d.key == key));
+    }
+    return al;
+}
+
+@cached
+operation allClasses() {
+	var l = Sequence{};
+	for (p in allPackages()) {
+		for (c: S!EClass in p.getEClassifiers()) {
+			l.add(c);
+		}
+	}
+	return l;
+}
+
+@cached
+operation allPackages() {
+	var l = Sequence{};
+	for (p in S!EPackage.all) {
+		p.collectEPackages(l);
+	}
+	return l;
+}
+
+operation S!EPackage collectEPackages(l) {
+	if (l.includes(self)) {
+		return;
+	}
+	l.add(self);
+	for (ePackage in self.getESubpackages()) {
+		ePackage.collectEPackages(l);
+	}
+	for (eClass: S!EClass in self.getEClassifiers()) {
+		for (eSuperType in eClass.getEAllSuperTypes()) {
+			eSuperType.getEPackage().collectEPackages(l);
+		}
+		for (eRference in eClass.getEAllReferences()) {
+            if (eRference.getEReferenceType().getEPackage().isDefined()) {
+                eRference.getEReferenceType().getEPackage().collectEPackages(l);
+            }
+		}
+	}
+}
+
+@cached
+operation S!EClass getAllFeatures() {
+	return self.collectAllFeatures(Sequence{});
+}
+
+operation S!EClass collectAllFeatures(allFeatures) {
+    for (super in self.eSuperTypes) {
+        super.collectAllFeatures(allFeatures);
+    }
+    allFeatures.addAll(self.eStructuralFeatures);
+    return allFeatures;
+}
+
+@cached
+operation S!EClass getDisplayFeature() {
+    var allFeatures = self.getAllFeatures();
+    var feature = allFeatures.select(f|f.getAnnotation("mspace.ui", "display", "false") == "true").first();
+    if (feature.isDefined())
+        return feature;
+    feature = allFeatures.select(f|f.isKindOf(S!EAttribute) and f.name = "name").first();
+    if (feature.isDefined())
+        return feature;
+    feature = allFeatures.select(f|f.isKindOf(S!EAttribute) and f.eAttributeType.name = "EString").first();
+    if (feature.isDefined())
+        return feature;
+    feature = allFeatures.select(f|f.isKindOf(S!EAttribute)).first();
+    if (feature.isDefined())
+        return feature;
+    return null;
+}
+
+@cached
+operation S!EClass getDisplayFeatureCaption() {
+    var feature = self.getDisplayFeature();
+    if (feature.isDefined())
+        return feature.getCaption();
+    return self.getCaption();
+}
+
+@cached
+operation S!EClass getDisplayName() {
+    var f = self.getDisplayFeature();
+    if (f.isDefined()) return f.name;
+    return "e_id";
+}
+
+@cached
+operation S!EClassifier getIdName() {
+    var feature = self.getIdFeature();
+    if (feature.isDefined())
+        return feature.name;
+    return "e_id";
+}
+
+@cached
+operation S!EClassifier getIdFeature() {
+    return self.eStructuralFeatures.select(f|f.isKindOf(S!EAttribute) and f.iD).first();
+}
+
+operation T!UIElement addHideOn(bexpr) {
+	if (not self.hideOn.isDefined()) {
+		self.hideOn = new T!OrExpression;
+	}
+	self.hideOn.content.add(bexpr);
+	return bexpr;
+}
+
+operation T!UIElement addDisableOn(bexpr) {
+	if (not self.disableOn.isDefined()) {
+		self.disableOn = new T!OrExpression;
+	}
+	self.disableOn.content.add(bexpr);
+	return bexpr;
+}
+
+operation T!DataControl addRequiredOn(bexpr) {
+	if (not self.requiredOn.isDefined()) {
+		self.requiredOn = new T!OrExpression;
+	}
+	self.requiredOn.content.add(bexpr);
+	return bexpr;
+}
+

@@ -1,0 +1,198 @@
+import "jrutils.etl";
+pre {
+    var dataset = S!jitdataset::Dataset.all.first();
+    var deployment = S!jitdataset::DeploymentDescriptor.all.first();
+    var trName = prefix + dataset.name.toLowerCase();
+    trName.println("Create transformation: ");
+    deployment.name.println("DeploymentDescriptor: ");
+}
+
+@greedy
+rule Dataset2TransformationBuild
+    transform dataset: S!Dataset
+    to transformation: T!Transformation {
+    "Dataset2Transformation".println();
+    transformation.name = trName;
+    transformation.project = dataset.project;
+    transformation.addParameter("path", deployment.hdfsBaseDirectory + "/" + deployment.hdfsUser + "/income/raw/" + dataset.name.toLowerCase() + ".csv", false);
+    transformation.addParameter("task_id", "TID${(System.currentTimeMillis/1000).toInt}", false);
+    for (field in dataset.paramFields()) {
+        transformation.addParameter(field.name.toLowerCase(), "null", true);
+    }
+// CSVSource
+    var csvSource = transformation.createSource(new T!etl::CSVSource, "CSVSource");
+    transformation.createOutputPort(csvSource);
+    for (field in dataset.specFields()) {
+        csvSource.outputPort.addField(new T!dataset::Field, field.name.toLowerCase(), field.dataType.getDomain());        
+    }
+    csvSource.hdfs = true;
+    csvSource.path = '${jobParameters("path")}';
+    csvSource.header = false;
+    csvSource.charset = "UTF-8";
+    csvSource.delimiter = "|";
+    csvSource.quote = '"';
+    csvSource.escape = '\\';
+    csvSource.comment = "#";
+    csvSource.dateFormat = "";
+// Selection
+    var selectionStep = transformation.createStep(new T!etl::Selection, "Selection");
+    transformation.createInputPort(selectionStep, csvSource.outputPort);
+    transformation.createOutputPort(selectionStep).copyFields(selectionStep.inputPort);
+    selectionStep.expression = "true";
+    if (dataset.hasParameters()) {
+        selectionStep.expression = "";
+	    for (field in dataset.paramFields()) {
+	        selectionStep.expression = selectionStep.expression + '(jobParameters("' + field.name.toLowerCase() + '") == null || ' + field.name.toLowerCase() + ' != null && '  + field.name.toLowerCase() +  '.equals(' + parameterToScalaDomain(field) + '))';
+	        if (hasMore) {
+                selectionStep.expression = selectionStep.expression + ' && ';
+	        }
+	    }
+    }
+    selectionStep.checkpoint = true;
+// FullProjection
+    var projectionStep = transformation.createStep(new T!etl::Projection, "FullProjection");
+    transformation.createInputPort(projectionStep, selectionStep.outputPort);
+    transformation.createOutputPort(projectionStep);
+    for (field in dataset.allFields()) {
+        var pfield = new T!etl::ProjectionField;
+        var ifield = projectionStep.inputPort.findField(field.name.toLowerCase()); 
+        if (ifield.isDefined()) {
+            pfield.fieldOperationType = T!etl::FieldOperationType#ADD;
+            pfield.expression = ifield.name;
+            pfield.sourceFields.add(ifield);
+        }
+        else {
+            pfield.fieldOperationType = T!etl::FieldOperationType#TRANSFORM;
+            pfield.expression = "null";
+        }
+        projectionStep.outputPort.addField(pfield, field.name.toLowerCase(), field.dataType.getDomain());
+    }
+// ExpressionSource
+    var expSource = transformation.createSource(new T!etl::ExpressionSource, "ExpressionSource");
+    transformation.createOutputPort(expSource);
+    expSource.outputPort.addField(new T!dataset::Field, "task_id", T!DataTypeDomain#STRING);
+    expSource.outputPort.addField(new T!dataset::Field, "data_version_id", T!DataTypeDomain#INTEGER);
+    expSource.outputPort.addField(new T!dataset::Field, "src_data_version_id", T!DataTypeDomain#INTEGER);
+    expSource.outputPort.addField(new T!dataset::Field, "load_from_csv", T!DataTypeDomain#BOOLEAN);
+    expSource.outputPort.addField(new T!dataset::Field, "load_by_spec", T!DataTypeDomain#BOOLEAN);
+    expSource.outputPort.addField(new T!dataset::Field, "classify", T!DataTypeDomain#BOOLEAN);
+    expSource.outputPort.name = expSource.name + "_Output";
+    expSource.expression = 'Array[Map[String,AnyRef]](\nMap(' +
+    '"task_id" -> jobParameters("task_id").asInstanceOf[String],\n' + 
+    '"data_version_id" -> INTEGER((System.currentTimeMillis/1000).toInt),\n' + 
+    '"src_data_version_id" -> null,\n' +  
+    '"load_from_csv" -> Boolean.box(true),\n' + 
+    '"load_by_spec" -> Boolean.box(false),\n' + 
+    '"classify" -> Boolean.box(false)'; 
+    for (field in dataset.paramFields()) {
+        expSource.expression = expSource.expression + ',\n"' + '_p_' + field.name.toLowerCase() + '" -> ' + parameterToScalaDomain(field);
+        expSource.outputPort.addField(new T!dataset::Field, '_p_' + field.name.toLowerCase(), field.dataType.getDomain());
+    }   
+    expSource.expression = expSource.expression + '\n))';
+// ResultAggregation
+    var aggregationStep = transformation.createStep(new T!etl::Aggregation, "ResultAggregation");
+    transformation.createInputPort(aggregationStep, selectionStep.outputPort);
+    transformation.createOutputPort(aggregationStep).copyFields(aggregationStep.inputPort);
+    aggregationStep.aggregationFunction = T!etl::AggregationFunction#COUNT;
+    aggregationStep.resultFieldName = "_c_" + selectionStep.outputPort.fields[0].name;
+    aggregationStep.outputPort.addField(new T!dataset::Field, aggregationStep.resultFieldName, T!DataTypeDomain#DECIMAL);
+    aggregationStep.fieldName = selectionStep.outputPort.fields[0].name;
+    for (field in dataset.paramFields()) {
+        aggregationStep.groupByFieldName.add(field.name.toLowerCase());
+    }
+// ResultJoin
+    var joinStep = transformation.createStep(new T!etl::Join, "ResultJoin");
+    transformation.createInputPort(joinStep, aggregationStep.outputPort);
+    joinStep.joineePort = new T!etl::Port;
+    joinStep.joineePort.name = joinStep.name + "_Join";
+    transformation.link(expSource.outputPort, joinStep.joineePort);
+    transformation.createOutputPort(joinStep);
+    joinStep.outputPort.copyProjectionFieldsFiltered(joinStep.joineePort, Sequence{'task_id', 'data_version_id', 'src_data_version_id', 'load_from_csv', 'load_by_spec', 'classify'});
+    joinStep.outputPort.copyProjectionFieldsFiltered(joinStep.inputPort, dataset.paramFields().collect(f|f.name.toLowerCase()));
+    for (field in dataset.paramFields()) {
+        var fieldName = field.name.toLowerCase();
+        var ofield = joinStep.outputPort.findField(fieldName); 
+        var jfield = joinStep.joineePort.findField("_p_" + fieldName); 
+        ofield.sourceFields.add(jfield);
+        ofield.fieldOperationType = T!etl::FieldOperationType#TRANSFORM;
+        ofield.expression = field.dataType.asScalaType("NVL(" + fieldName + ", _p_" + fieldName + ")");
+    }
+    joinStep.joinType = T!etl::JoinType#FULL;
+// ResultSelection
+    var resSelectionStep = transformation.createStep(new T!etl::Selection, "ResultSelection");
+    transformation.createInputPort(resSelectionStep, joinStep.outputPort);
+    transformation.createOutputPort(resSelectionStep).copyFields(resSelectionStep.inputPort);
+    resSelectionStep.expression = "true";
+    if (dataset.hasParameters()) {
+        resSelectionStep.expression = "";
+        for (field in dataset.paramFields()) {
+            resSelectionStep.expression = resSelectionStep.expression + 'DEFINED(' + field.name.toLowerCase() + ')';
+            if (hasMore) {
+                resSelectionStep.expression = resSelectionStep.expression + ' && ';
+            }
+        }
+    }
+    resSelectionStep.checkpoint = true;
+// DeleteLoadTarget
+    var loadTarget = transformation.createTarget(new T!etl::LocalTarget, "DeleteLoadTarget");
+    transformation.createInputPort(loadTarget, resSelectionStep.outputPort);
+    loadTarget.localFileName = deployment.hdfsBaseDirectory + "/" + deployment.hdfsUser + "/datasets/" + dataset.name.toLowerCase() + "_ld";
+    loadTarget.localFileFormat = T!etl::LocalFileFormat#PARQUET;
+    loadTarget.deleteBeforeSave = true; 
+    loadTarget.saveMode = T!etl::SaveMode#DISCARD;
+    loadTarget.partitions = dataset.paramFields().collect(f|f.name.toLowerCase());
+    loadTarget.createFieldMappings();
+// DeleteFullTarget
+    var fullTarget = transformation.createTarget(new T!etl::LocalTarget, "DeleteFullTarget");
+    transformation.createInputPort(fullTarget, resSelectionStep.outputPort);
+    fullTarget.localFileName = deployment.hdfsBaseDirectory + "/" + deployment.hdfsUser + "/datasets/" + dataset.name.toLowerCase() + "";
+    fullTarget.localFileFormat = T!etl::LocalFileFormat#PARQUET;
+    fullTarget.deleteBeforeSave = true; 
+    fullTarget.saveMode = T!etl::SaveMode#DISCARD;
+    fullTarget.partitions = dataset.paramFields().collect(f|f.name.toLowerCase());
+    fullTarget.createFieldMappings();
+// LoadTarget
+    var loadTarget = transformation.createTarget(new T!etl::LocalTarget, "LoadTarget");
+    transformation.createInputPort(loadTarget, selectionStep.outputPort);
+    loadTarget.localFileName = deployment.hdfsBaseDirectory + "/" + deployment.hdfsUser + "/datasets/" + dataset.name.toLowerCase() + "_ld";
+    loadTarget.localFileFormat = T!etl::LocalFileFormat#PARQUET;
+    loadTarget.deleteBeforeSave = false; 
+    loadTarget.saveMode = T!etl::SaveMode#APPEND;
+    loadTarget.partitions = dataset.paramFields().collect(f|f.name.toLowerCase());
+    loadTarget.createFieldMappings();
+// FullTarget
+    var fullTarget = transformation.createTarget(new T!etl::LocalTarget, "FullTarget");
+    transformation.createInputPort(fullTarget, projectionStep.outputPort);
+    fullTarget.localFileName = deployment.hdfsBaseDirectory + "/" + deployment.hdfsUser + "/datasets/" + dataset.name.toLowerCase() + "";
+    fullTarget.localFileFormat = T!etl::LocalFileFormat#PARQUET;
+    fullTarget.deleteBeforeSave = false; 
+    fullTarget.saveMode = T!etl::SaveMode#APPEND;
+    fullTarget.partitions = dataset.paramFields().collect(f|f.name.toLowerCase());
+    fullTarget.createFieldMappings();
+// ResultTarget    
+    var resultTarget = transformation.createTarget(new T!etl::LocalTarget, "ResultTarget");
+    transformation.createInputPort(resultTarget, resSelectionStep.outputPort);
+    resultTarget.localFileName = deployment.hdfsBaseDirectory + "/" + deployment.hdfsUser + "/datasets/" + dataset.name.toLowerCase() + "_res";
+    resultTarget.localFileFormat = T!etl::LocalFileFormat#PARQUET;
+    resultTarget.saveMode = T!etl::SaveMode#APPEND;
+    resultTarget.deleteBeforeSave = true; 
+    resultTarget.partitions = dataset.paramFields().collect(f|f.name.toLowerCase());
+    resultTarget.createFieldMappings();
+}
+
+@greedy
+rule Dataset2TransformationDeployment
+    transform dataset: S!Dataset
+    to transformationDeployment: T!TransformationDeployment {
+    transformationDeployment.name = "autogenerated_tr_" + trName;
+    transformationDeployment.project = dataset.project;
+    var transformation: T!Transformation ::= dataset;
+    transformationDeployment.transformation = transformation;
+    transformationDeployment.jobServer = deployment.sparkJobServer;
+    transformationDeployment.debug = false; 
+    transformationDeployment.slideSize = 400;
+    transformationDeployment.rejectSize = 1000;
+    transformationDeployment.fetchSize = 1000;
+    transformationDeployment.partitionNum = 1;
+    transformationDeployment.persistOnDisk = true;
+}

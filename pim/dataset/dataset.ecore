@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dataset" nsURI="http://www.neoflex.ru/meta/dataset" nsPrefix="dataset">
+  <eClassifiers xsi:type="ecore:EClass" name="FieldType" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ScalarType" eSuperTypes="#//FieldType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataTypeDomain" eType="#//DataTypeDomain"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructuredType" abstract="true" eSuperTypes="#//FieldType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//StructuredType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementType" eType="#//FieldType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Structure" eSuperTypes="#//DataSet"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StructType" eSuperTypes="#//StructuredType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="internalStructure" eType="#//Structure"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Field">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataSet" lowerBound="1"
+        eType="#//DataSet" eOpposite="#//DataSet/fields"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataTypeDomain" eType="#//DataTypeDomain"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainStructure" eType="#//FieldType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DataTypeDomain">
+    <eLiterals name="______"/>
+    <eLiterals name="STRING" value="1"/>
+    <eLiterals name="DECIMAL" value="2"/>
+    <eLiterals name="INTEGER" value="3"/>
+    <eLiterals name="DATE" value="4"/>
+    <eLiterals name="DATETIME" value="5"/>
+    <eLiterals name="TIME" value="6"/>
+    <eLiterals name="BINARY" value="7"/>
+    <eLiterals name="BOOLEAN" value="8"/>
+    <eLiterals name="LONG" value="9"/>
+    <eLiterals name="FLOAT" value="10"/>
+    <eLiterals name="DOUBLE" value="11"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataSet" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//Field" containment="true" eOpposite="#//Field/dataSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedDataSet" abstract="true" eSuperTypes="#//DataSet">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Association">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//DataSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//DataSet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//Field"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Composition" eSuperTypes="#//Aggregation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexAssociation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associator" lowerBound="1"
+        eType="#//DataSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Aggregation" eSuperTypes="#//Association"/>
+  <eClassifiers xsi:type="ecore:EClass" name="KeyField" eSuperTypes="#//Field"/>
+</ecore:EPackage>

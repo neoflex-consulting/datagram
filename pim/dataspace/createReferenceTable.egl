@@ -1,0 +1,49 @@
+[%
+var dataset = ReferenceDataset.all.first();
+var tableRef = dataset.name;
+%]
+
+CREATE TABLE [%=tableRef%](
+[%for (column in dataset.columns) {%]
+  [%=column.columnName%] [%=column.columnType.getPhoenixImg()%][%if (column.columnType.isNullable <> true) {%] NOT[%}%] NULL[%if (loopCount < dataset.columns.size() or dataset.primaryKeyCols.size() > 0) {%],[%}%]
+  
+[%}%][%if (dataset.primaryKeyCols.size() > 0) {%]
+  CONSTRAINT [%=dataset.shortName%]_pk PRIMARY KEY ([%=dataset.primaryKeyCols.concat(", ")%])  
+[%}%]
+)
+
+[%
+operation ScalarType getPhoenixImg() {
+	if (self.dataType = DataTypeDomain#STRING) {
+		var typeImg = "VARCHAR";
+		if (self.length.isDefined() and self.length > 0) typeImg = typeImg + "(" + self.length + ")";
+		return typeImg;
+	}
+	if (self.dataType = DataTypeDomain#DECIMAL) {
+		var typeImg = "DECIMAL";
+		if (self.length.isDefined() and self.precision.isDefined()) typeImg = typeImg + "(" + self.length + ", " + self.precision + ")";
+		return typeImg;
+	}
+	if (self.dataType = DataTypeDomain#INTEGER) return "INTEGER";
+	if (self.dataType = DataTypeDomain#DATE) return "DATE";
+	if (self.dataType = DataTypeDomain#DATETIME) return "TIMESTAMP";
+	if (self.dataType = DataTypeDomain#TIME) return "TIME";
+	if (self.dataType = DataTypeDomain#BINARY) {
+		var typeImg = "VARBINARY";
+		if (self.length.isDefined() and self.length > 0) typeImg = "BINARY(" + self.length + ")";
+		return typeImg;
+	}
+	if (self.dataType = DataTypeDomain#BOOLEAN) return "BOOLEAN";
+	if (self.dataType = DataTypeDomain#LONG) return "BIGINT";
+	if (self.dataType = DataTypeDomain#FLOAT) return "FLOAT";
+	if (self.dataType = DataTypeDomain#DOUBLE) return "DOUBLE";
+	throw "dataType is unknown or not defined";
+}    
+operation StructType getPhoenixImg() {
+	throw "StructType not supported";
+}    
+operation ArrayType getPhoenixImg() {
+	if (not self.elementType.isKindOf(ScalarType)) throw "Only arrays of scalar types is supported";
+	return self.elementType.getPhoenixImg() + "ARRAY[]";
+}    
+%]

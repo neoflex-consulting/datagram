@@ -1,0 +1,29 @@
+{
+  "common": {
+    "Log": "Log",
+    "Info": "Info",
+    "NotLogged": "not logged",
+    "Logout": "Logout",
+    "Username": "User Name",
+    "Password": "Password",
+    "Login": "Login",
+    "Create": "Create",
+    "View": "View",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "Execute": "Execute operation",
+    "Designer": "Designer",
+    "SaveAndClose": "Save and close",
+    "Input": "Input",
+    "Links": "Links",
+    "Workflow": "Workflow designer",
+    "Transformation": "Transformation designer",
+    "Type": "Type",
+    "Livy": "Livy console",
+    "HDFS": "HDFS console",
+    "oozie": "Oozie console",
+    "": ""
+  }
+}

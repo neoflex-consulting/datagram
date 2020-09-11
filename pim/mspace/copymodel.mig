@@ -1,0 +1,11 @@
+pre {
+    "Running copymodel.mig".println();
+    for (s in S!mspace::MetaServer) { 
+        for (t in T!mspace::MetaServer) {
+            if (s.name == t.name) {
+                T.deleteElement(t);
+            } 
+        }
+    }
+    T.store();
+}

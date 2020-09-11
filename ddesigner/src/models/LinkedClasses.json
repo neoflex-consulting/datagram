@@ -1,0 +1,461 @@
+{
+  "eClasses": {
+    "ui3.Application": {
+      "linkedClasses": [
+        {
+          "name": "Modules",
+          "_type_": "ui3.Module"
+        }
+      ],
+     "icon": "home.svg"
+    },
+    "ui3.Module": {
+      "linkedClasses": [
+        {
+          "name": "Classes",
+          "_type_": "ecore.EClass",
+          "attribute": "classes"
+        }
+      ],
+      "icon": "etl.svg"
+    },
+    "ecore.EClass": {
+      "linkedClasses": [
+        {
+          "name": "Objects"
+        }
+      ],
+      "icon": "sub-right.svg"
+    },
+    "etl.SchemeDataSet": {
+      "linkedClasses": [
+        {
+          "name": "Transformations",
+          "_type_": "etl.Transformation",
+          "query": "select type(t), t.e_id, t.name from etl.Transformation t inner join t.sources s inner join s.valueScheme v where v.e_id = ${e_id}"
+        }
+      ]
+    },
+    "etl.Project": {
+      "linkedClasses": [
+        {
+          "name": "Projects",
+          "_type_": "etl.Project",
+          "query": "select type(e), e.e_id, e.name from etl.Project e where e.parentProject.e_id = ${e_id} order by e.name"
+        },
+        {
+          "name": "Workflows",
+          "_type_": "etl.Workflow",
+          "query": "select type(e), e.e_id, e.name from etl.Workflow e where e.project.e_id = ${e_id} order by e.name"
+        },
+        {
+          "name": "Transformations",
+          "_type_": "etl.Transformation",
+          "query": "select type(e), e.e_id, e.name from etl.Transformation e where e.project.e_id = ${e_id} order by e.name"
+        }
+      ],
+      "icon": "project.svg"
+    },
+    "etl.Workflow": {
+      "linkedClasses": [
+        {
+          "name": "WorkflowDeployments",
+          "_type_": "rt.WorkflowDeployment",
+          "backReference": "start"
+        },
+        {
+          "name": "SubWorkflows",
+          "_type_": "etl.Workflow",
+          "query": "select type(t), t.e_id, t.name from etl.Workflow e inner join e.nodes n inner join n.subWorkflow t where e.e_id = ${e_id} group by type(t), t.e_id, t.name order by t.name"
+        },
+        {
+          "name": "Transformations",
+          "_type_": "etl.Transformation",
+          "query": "select type(t), t.e_id, t.name from etl.Workflow e inner join e.nodes n inner join n.transformation t where e.e_id = ${e_id} group by type(t), t.e_id, t.name order by t.name"
+        },
+        {
+          "name": "JDBC from WorkflowDeployment",
+          "_type_": "rt.JdbcConnection",
+          "query": "select type(j), j.e_id, j.name from rt.WorkflowDeployment wd inner join wd.workflows w inner join wd.deployments d inner join d.connection j where w.e_id= ${e_id} order by w.name"
+        }
+      ],
+      "icon": "workflow.svg"
+    },
+    "etl.Transformation": {
+      "linkedClasses": [
+        {
+          "name": "TransformationDeployments",
+          "_type_": "rt.TransformationDeployment",
+          "backReference": "transformation"
+        },
+        {
+          "name": "Tests",
+          "_type_": "etl.TransformationTest",
+          "backReference": "transformation"
+        },
+        {
+          "name": "LivyServer",
+          "_type_": "rt.LivyServer",
+          "query": "select type(l), l.e_id, l.name from rt.TransformationDeployment e inner join e.livyServer l inner join e.transformation t where t.e_id = ${e_id} order by l.name"
+        },
+        {
+          "name": "Workflows",
+          "_type_": "etl.Workflow",
+          "query": "select type(w), w.e_id, w.name from etl.Workflow w inner join w.nodes n inner join n.transformation t where t.e_id= ${e_id} group by type(w), w.e_id, w.name order by w.name"
+        },
+        {
+          "name": "JDBC from TransformationDeployment",
+          "_type_": "rt.JdbcConnection",
+          "query": "select type(j), j.e_id, j.name from rt.TransformationDeployment td inner join td.deployments d inner join d.connection j where td.transformation.e_id= ${e_id} order by j.name"
+        }
+      ],
+      "icon": "etl.svg"
+    },
+    "etl.UserDefinedFunction": {
+      "icon": "udf.svg"
+    },
+    "etl.MavenDependency": {
+    },
+    "rt.LivyServer": {
+      "icon": "livy.svg",
+      "views": ["LivyView", "FormView", "HDFSView"]
+    },
+    "rt.Oozie": {
+      "icon": "ozzie.svg",
+      "views": ["OozieView", "FormView"]
+    },
+    "rt.Zeppelin": {
+      "icon": "zeppelin.svg"
+    },
+    "etl.JdbcContext": {"icon": "jdbc.svg"},
+    "etl.CoJob": {"icon": "cojob.svg"},
+    "rt.TransformationDeployment": {
+      "linkedClasses": [
+        {
+          "name": "Deployments",
+          "_type_": "rt.Deployment",
+          "query": "select type(t), t.e_id, t.name from rt.TransformationDeployment e inner join e.deployments t where e.e_id = ${e_id} order by t.name"
+        }
+      ]
+    },
+    "sse.HadoopCluster": {
+      "linkedClasses": [
+        {
+          "name": "Workspaces",
+          "_type_": "sse.Workspace",
+          "query": "select type(e), e.e_id, e.name from sse.Workspace e inner join e.cluster t where t.e_id = ${e_id} order by e.name"
+        }
+      ],
+      "icon": "cluster.svg"
+    },
+    "sse.Workspace": {
+      "linkedClasses": [
+        {
+          "name": "Nodes",
+          "_type_": "sse.AbstractNode",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractNode t where t.workspace.e_id = ${e_id} order by t.name"
+        }
+      ],
+      "icon": "action-modern.svg"
+    },
+    "sse.AnalyticWorkspace": {
+      "linkedClasses": [
+        {
+          "name": "Notebooks",
+          "_type_": "sse.Notebook",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.Notebook t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Library notebooks",
+          "_type_": "sse.LibraryNotebook",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.LibraryNotebook t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Datasets",
+          "_type_": "sse.AbstractDataset",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset t where t.workspace.e_id = ${e_id} order by t.name"
+        }
+      ]
+    },
+    "sse.ModelPipelineWorkspace": {
+      "linkedClasses": [
+        {
+          "name": "Model Validation",
+          "_type_": "sse.ValidateModelPipelineWorkspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.ValidateModelPipelineWorkspace t where t.parent.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Notebooks",
+          "_type_": "sse.Notebook",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.Notebook t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Library notebooks",
+          "_type_": "sse.LibraryNotebook",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.LibraryNotebook t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Model notebooks",
+          "_type_": "sse.ModelNotebook",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.ModelNotebook t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Datasets",
+          "_type_": "sse.AbstractDataset",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Business processes",
+          "_type_": "sm.SMInstance",
+          "backReference": "target",
+          "query": "select type(t), t.e_id, t.stateMachine.name || case t.currentState when null then '' else (': '||t.currentState.name) end as name from sm.SMInstance t, sse.ModelPipelineWorkspace wf where wf.e_id = t.target.id and wf.e_id = ${e_id}"
+        }
+      ]
+    },
+    "sse.ValidateModelPipelineWorkspace": {
+      "linkedClasses": [
+        {
+          "name": "Model pipeline",
+          "_type_": "sse.ModelPipelineWorkspace",
+          "query": "select type(p), p.e_id, p.shortName from sse.ValidateModelPipelineWorkspace t inner join t.parent p where t.e_id = ${e_id} order by p.name"
+        },
+        {
+          "name": "Notebooks",
+          "_type_": "sse.Notebook",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.Notebook t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Library notebooks",
+          "_type_": "sse.LibraryNotebook",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.LibraryNotebook t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Model notebooks",
+          "_type_": "sse.ModelNotebook",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.ModelNotebook t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Datasets",
+          "_type_": "sse.AbstractDataset",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Business processes",
+          "_type_": "sm.SMInstance",
+          "backReference": "target",
+          "query": "select type(t), t.e_id, t.stateMachine.name || case t.currentState when null then '' else (': '||t.currentState.name) end as name from sm.SMInstance t, sse.ModelPipelineWorkspace wf where wf.e_id = t.target.id and wf.e_id = ${e_id}"
+        }
+      ]
+    },
+    "sse.Dataset": {
+      "linkedClasses": [
+        {
+          "name": "Workspace",
+          "_type_": "sse.Workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset e inner join e.workspace t where e.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Sources",
+          "_type_": "sse.AbstractDataset",
+          "query": "select type(t), t.e_id, t.shortName from sse.Dataset e inner join e.datasets t where e.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Targets",
+          "_type_": "sse.Dataset",
+          "query": "select type(e), e.e_id, e.shortName from sse.Dataset e inner join e.datasets t where t.e_id = ${e_id} order by e.name"
+        },
+        {
+          "name": "ScheduledTasks",
+          "_type_": "rt.ScheduledTask",
+          "query": "select type(t), t.e_id, t.name from sse.AbstractDataset e, rt.ScheduledTask t where e.e_id = ${e_id} and t.entityType = 'sse.Dataset' and t.entityName = e.name order by t.name"
+        }
+      ]
+    },
+    "sse.QueryDataset": {
+      "linkedClasses": [
+        {
+          "name": "Workspace",
+          "_type_": "sse.Workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset e inner join e.workspace t where e.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Targets",
+          "_type_": "sse.Dataset",
+          "query": "select type(e), e.e_id, e.shortName from sse.Dataset e inner join e.datasets t where t.e_id = ${e_id} order by e.name"
+        }
+      ]
+    },
+    "sse.TableDataset": {
+      "linkedClasses": [
+        {
+          "name": "Workspace",
+          "_type_": "sse.Workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset e inner join e.workspace t where e.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Targets",
+          "_type_": "sse.Dataset",
+          "query": "select type(e), e.e_id, e.shortName from sse.Dataset e inner join e.datasets t where t.e_id = ${e_id} order by e.name"
+        }
+      ]
+    },
+    "sse.LinkedDataset": {
+      "linkedClasses": [
+        {
+          "name": "Workspace",
+          "_type_": "sse.Workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset e inner join e.workspace t where e.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Reference",
+          "_type_": "sse.AbstractDataset",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset e inner join e.linkTo t where e.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Targets",
+          "_type_": "sse.Dataset",
+          "query": "select type(e), e.e_id, e.shortName from sse.Dataset e inner join e.datasets t where t.e_id = ${e_id} order by e.name"
+        }
+      ]
+    },
+    "sse.HiveDataset": {
+      "linkedClasses": [
+        {
+          "name": "Workspace",
+          "_type_": "sse.Workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset e inner join e.workspace t where e.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Targets",
+          "_type_": "sse.Dataset",
+          "query": "select type(e), e.e_id, e.shortName from sse.Dataset e inner join e.datasets t where t.e_id = ${e_id} order by e.name"
+        }
+      ]
+    },
+    "sse.HiveExternalDataset": {
+      "linkedClasses": [
+        {
+          "name": "Workspace",
+          "_type_": "sse.Workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset e inner join e.workspace t where e.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Targets",
+          "_type_": "sse.Dataset",
+          "query": "select type(e), e.e_id, e.shortName from sse.Dataset e inner join e.datasets t where t.e_id = ${e_id} order by e.name"
+        }
+      ]
+    },
+    "sse.ReferenceDataset": {
+      "linkedClasses": [
+        {
+          "name": "Workspace",
+          "_type_": "sse.Workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset e inner join e.workspace t where e.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Targets",
+          "_type_": "sse.Dataset",
+          "query": "select type(e), e.e_id, e.shortName from sse.Dataset e inner join e.datasets t where t.e_id = ${e_id} order by e.name"
+        }
+      ]
+    },
+    "sse.JdbcWorkspace": {
+      "linkedClasses": [
+        {
+          "name": "Datasets",
+          "_type_": "sse.AbstractDataset",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.AbstractDataset t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Notebooks",
+          "_type_": "sse.Notebook",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.Notebook t where t.workspace.e_id = ${e_id} order by t.name"
+        },
+        {
+          "name": "Library notebooks",
+          "_type_": "sse.LibraryNotebook",
+          "backReference": "workspace",
+          "query": "select type(t), t.e_id, t.shortName from sse.LibraryNotebook t where t.workspace.e_id = ${e_id} order by t.name"
+        }
+      ]
+    },
+    "rt.Atlas": {
+        "linkedClasses": [
+            {"name": "Schemas",
+            "_type_": "rt.AtlasScheme",
+            "backReference": "atlas"},
+            {"name": "Projects",
+            "_type_": "rt.AtlasProject",
+            "backReference": "atlas"}
+        ]
+    },
+    "rt.AtlasProject": {
+        "linkedClasses": [
+            {"name": "TransformationsInProject",
+            "_type_": "etl.Transformation",
+            "query": "select type(e), e.e_id, e.name from rt.WorkflowDeployment wd join wd.start.nodes n join n.transformation e, rt.AtlasProject ap where wd.project.e_id = ap.project.e_id and ap.e_id = ${e_id} order by e.name"}
+        ]
+    },
+    "rt.RunTask": {
+        "linkedClasses": [
+            {"name": "DependedOn",
+            "_type_": "rt.RunTask",
+            "query": "select type(e), e.e_id, e.name from rt.RunTask rt join rt.dependsOn e where rt.e_id = ${e_id} order by e.name"},
+            {"name": "TasksDependedFrom",
+            "_type_": "rt.RunTask",
+            "query": "select type(e), e.e_id, e.name from rt.RunTask e join e.dependsOn d where d.e_id = ${e_id} order by e.name"}
+        ]
+    },
+    "rt.IterationTask": {
+        "linkedClasses": [
+            {"name": "DependedOn",
+            "_type_": "rt.RunTask",
+            "query": "select type(e), e.e_id, e.name from rt.RunTask rt join rt.dependsOn e where rt.e_id = ${e_id} order by e.name"},
+            {"name": "TasksDependedFrom",
+            "_type_": "rt.RunTask",
+            "query": "select type(e), e.e_id, e.name from rt.RunTask e join e.dependsOn d where d.e_id = ${e_id} order by e.name"}
+        ]
+    },
+    "rt.ParametrizedTask": {
+        "linkedClasses": [
+            {"name": "DependedOn",
+            "_type_": "rt.RunTask",
+            "query": "select type(e), e.e_id, e.name from rt.RunTask rt join rt.dependsOn e where rt.e_id = ${e_id} order by e.name"},
+            {"name": "TasksDependedFrom",
+            "_type_": "rt.RunTask",
+            "query": "select type(e), e.e_id, e.name from rt.RunTask e join e.dependsOn d where d.e_id = ${e_id} order by e.name"}
+        ]
+    },
+    "rt.Airflow": {
+        "linkedClasses": [
+            {"name": "Tasks",
+            "_type_": "rt.RunTask",
+            "backReference": "airflow"}
+        ]
+    },
+    "sm.StateMachine": {
+      "linkedClasses": [
+        {
+          "name": "Instances",
+          "_type_": "sm.SMInstance",
+          "query": "select type(t), t.e_id, t.name || case t.currentState when null then '' else (': '||t.currentState.name) end as s_name from sm.SMInstance t where t.stateMachine.e_id = ${e_id}"
+        }
+      ]
+    }
+  }
+}

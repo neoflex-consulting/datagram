@@ -1,0 +1,18 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+ <title>Pop down menu Icons Copy 5</title>
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="10" width="10" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <line stroke="#666666" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_1" y2="59.277258" x2="7.187577" y1="4.75007" x1="7.187577" stroke-width="3" fill="none"/>
+  <line stroke="#666666" transform="rotate(90 32.62501525878907,6.263746261596682) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="30.714914" x2="32.625015" y1="-18.187424" x1="32.625015" stroke-width="3" fill="none"/>
+  <line stroke="#666666" transform="rotate(-90 33.18750000000001,57.76362991333008) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_3" y2="83.402263" x2="33.1875" y1="32.124995" x1="33.1875" stroke-width="3" fill="none"/>
+  <line stroke="#666666" transform="rotate(-180 58.187400817871094,32.01369094848632) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_4" y2="59.277287" x2="58.187402" y1="4.750094" x1="58.187402" stroke-width="3" fill="none"/>
+  <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_5" y2="44.506852" x2="33.3125" y1="16" x1="33.3125" fill-opacity="null" stroke-width="3" stroke="#666666" fill="none"/>
+  <line stroke="#666666" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_6" y2="47.126203" x2="24.686297" y1="37.375" x1="34.4375" fill-opacity="null" stroke-width="3" fill="none" transform="rotate(90 29.561897277832028,42.250602722167976) "/>
+  <line stroke="#666666" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_7" y2="47.10895" x2="42.04645" y1="37.5" x1="32.4375" fill-opacity="null" stroke-width="3" fill="none" transform="rotate(-90 37.24197387695313,42.304473876953125) "/>
+ </g>
+</svg>

@@ -1,0 +1,25 @@
+context src!Dataset {
+    constraint NameIsDefined {      
+        check : self.name.isDefined() and self.name.length() > 0 
+        message : "имя не определено"
+    }
+    constraint NameIsValid {      
+        guard : self.satisfies("NameIsDefined")      
+        check : nameIsValid(self.name) 
+        message : "не корректное имя: '" + self.name + "'"
+    }
+}
+
+operation nameIsValid(name): Boolean {
+    if (not Native("java.lang.Character").isJavaIdentifierStart(name.charAt(0))) {
+        return false;
+    }
+    var i = 1;
+    while (i < name.length()) {
+        if (not Native("java.lang.Character").isJavaIdentifierPart(name.charAt(i))) {
+            return false;
+        }
+        i = i + 1;
+    }
+    return true;
+}

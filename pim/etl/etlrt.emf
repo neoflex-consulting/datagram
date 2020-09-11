@@ -1,0 +1,262 @@
+@namespace(uri="http://www.neoflex.ru/meta/etlrt", prefix="etlrt")
+package etlrt;
+
+class PhysicalJdbcContext extends PhysicalContext {
+  attr String url;
+  attr String user;
+  attr String password;
+  attr String schema;
+}
+
+abstract class PhysicalContext {
+  attr String[1] name;
+  ref Environment[1]#physicalContexts environment;
+}
+
+class Environment {
+  val PhysicalContext[*]#environment physicalContexts;
+  attr String[1] name;
+}
+
+class Execution {
+  ref Environment[1] environment;
+  attr ExecutionStatus[1] executionStatus = "INPROGRESS";
+  attr String[1] name;
+
+  @mspace.ui(graph="true", serverEvents="true")
+  val Statistic[*]#execution statistics;
+  val ContextMapping[*]#execution contextMappings;
+  attr String applicationName;
+  attr String master;
+
+  @teneo.jpa(value="@Temporal(DATE)")
+  @mspace.ui(timestamp="false")
+  attr EDate actualDate;
+  val ExecutionParam[*]#execution executionParams;
+
+  @mspace.ui(display="true")
+  attr String ~id;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate startTime;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate finishTime;
+
+  @mspace.ui(display="true")
+  attr String workflowId;
+  ref WorkflowJob workflowJob;
+}
+
+enum ExecutionStatus {
+  FINISHED = 0;
+  INPROGRESS = 1;
+  STOPED = 2;
+  PAUSED = 3;
+  FAILED = 4;
+  NONE = 5;
+}
+
+class Statistic {
+  attr String rddName;
+  ref Execution#statistics execution;
+
+  @teneo.jpa(value="@Column(length=4000)")
+  attr String message;
+  attr int tuplesProcessed = 0;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate driverTimestamp;
+  attr String stepName;
+  attr int tuplesFailed = 0;
+  attr ExecutionStatus[1] executionStatus = "INPROGRESS";
+  attr String ~id;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate finishTime;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate[1] startTime;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate environmentTimestamp;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate workerTimestamp;
+  attr String[1] name;
+}
+
+class ContextMapping {
+  ref Execution#contextMappings execution;
+  ref PhysicalContext[1] physicalContext;
+  attr String[1] logicalContextName;
+}
+
+class ExecutionParam {
+  ref Execution[1]#executionParams execution;
+  attr String name;
+  attr String value;
+}
+
+class RuntimeEvent {
+  attr EmitterType[1] emitterType = "EXECUTION";
+  attr String[1] emitterId;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate[1] timestamp;
+  attr String[1] ~id;
+  attr String environmentName;
+  attr long seqNumber = "0";
+  attr EventType[1] eventType = "EXEC_UPDATE";
+  attr String[1] transformationName;
+  attr String stepName;
+  attr String statisticName;
+  attr String rddName;
+
+  @teneo.jpa(value="@Column(length=10000000)")
+  attr String message;
+  attr String parentId;
+
+  @teneo.jpa(value="@Temporal(DATE)")
+  @mspace.ui(timestamp="false")
+  attr EDate actualDate;
+  attr String master;
+  attr int tuplesProcessed = 0;
+  attr int tuplesFailed = 0;
+  attr EmitterSubType[1] emitterSubType = "DRIVER";
+
+  @mspace.ui(display="true")
+  attr String workflowId;
+}
+
+enum EventType {
+  START = 0;
+  FINISH = 1;
+  EXCEPTION = 2;
+  EXEC_UPDATE = 3;
+  ENV_UPDATE = 4;
+  RUNNING = 5;
+  SUCCEEDED = 6;
+  KILLED = 7;
+  FAILED = 8;
+}
+
+enum EmitterType {
+  STATISTIC = 0;
+  EXECUTION = 1;
+  WORKFLOW = 2;
+}
+
+enum EmitterSubType {
+  DRIVER = 0;
+  WORKER = 1;
+  ENVIRONMENT = 2;
+}
+
+class Workflow {
+  attr ExecutionStatus[1] executionStatus = "INPROGRESS";
+  attr String ~id;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate finishTime;
+
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate[1] startTime;
+  attr String[1] name;
+}
+
+abstract class Action {
+  attr String[1] ~id;
+  attr EDate createdTime;
+  attr String consoleUrl;
+
+  @teneo.jpa(value="@Column(length=4000)")
+  attr String conf = "";
+  attr String transition;
+  attr String status;  
+}
+
+abstract class Job {
+  attr String[1] ~id;
+  attr String externalId = "";
+  attr String appName = "";
+  attr String appPath;
+  attr String user;
+  attr EDate createdTime;
+  attr EDate startTime;
+  attr EDate endTime;
+  attr String consoleUrl;
+
+  @teneo.jpa(value="@Column(length=4000)")
+  attr String conf = "";
+  attr String transition;
+  attr String[1] status;
+}
+
+class WorkflowAction extends Action {
+  attr String name;
+  attr String[1] type = "";
+  attr EDate startTime;
+  attr EDate endTime;
+  ref WorkflowJob#actions workflowJob;
+  attr String externalId = "";
+  attr String externalStatus;
+  attr String cred;
+  attr int userRetryMax;
+  attr String trackerUri;
+  attr String data;
+  attr String errorCode;
+
+  @teneo.jpa(value="@Column(length=4000)")
+  attr String errorMessage;
+  attr int retries;
+}
+
+class CoordinatorJobAction extends Action {
+  ref CoordinatorJob#actions coordinatorJob;
+  attr String missingDependencies;
+
+  @teneo.jpa(value="@Column(length=4000)")
+  attr String runConf;
+
+  @teneo.jpa(value="@Column(length=4000)")
+  attr String createdConf;
+  attr EDate nominalTime;
+  attr String externalId = "";
+}
+
+class BundleCoordJob extends Action {
+  attr int concurrency;
+  attr String executionPolicy;
+  attr String coordJobName;
+  ref BundleJob#bundleCoordJobs bundleJob;
+  attr EDate endTime;
+}
+
+class WorkflowJob extends Job {
+  attr int run;
+  attr String acl;
+  attr String parentId;
+  attr EDate lastModTime;
+  val WorkflowAction[*]#workflowJob actions;
+}
+
+class CoordinatorJob extends Job {
+  attr String frequency;
+  ref CoordinatorJobAction[*]#coordinatorJob actions;
+}
+
+class BundleJob extends Job {
+  attr String jobType;
+  ref BundleCoordJob[*]#bundleJob bundleCoordJobs;
+}

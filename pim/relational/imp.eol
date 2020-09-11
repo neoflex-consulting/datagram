@@ -1,0 +1,217 @@
+        var drv = new Native("oracle.jdbc.driver.OracleDriver");
+        Native("java.sql.DriverManager").registerDriver(drv);
+        var sourceProperties = new Native("java.util.Properties");
+
+        var url = "jdbc:oracle:thin:@nrvs02:1521/CBRLDV93";
+        var user = "system";
+        var password = "neoxfle9";
+
+//url = UserInput.prompt("JDBC URL", url);
+//user = UserInput.prompt("User", user);
+//password = UserInput.prompt("Password", password);
+
+        sourceProperties.put("url", url);
+        sourceProperties.put("user", user);
+        sourceProperties.put("password", password);
+
+        var schemas = new List;
+
+        var conn = drv.connect(sourceProperties.getProperty("url"), sourceProperties);
+
+        var rs = conn.getMetaData().getSchemas();
+        while (rs.next()) {
+            schemas.add(rs.getString("TABLE_SCHEM"));
+        }
+        rs.close();
+
+        //schemas = UserInput.chooseMany("Select db schemas to import", schemas);
+        schemas = Sequence{"SAC", "SAI", "DDS2"};
+
+        var catalog = new tgt !Catalog;//.all.selectOne(catalog| catalog.name = "Primary");
+        for (schema in schemas) {
+            catalog.importTablesFromSchema(conn, schema);
+        }
+        catalog.importForegnKeys(conn);
+
+
+        operation tgt!Catalog importTablesFromSchema(conn, schemaName) {
+            "Importing schema: ".concat(schemaName).println;
+            var newSchema = new tgt !Schema;
+            newSchema.name = schemaName;
+            self.schemas.add(newSchema);
+            
+            rs = conn.getMetaData().getTables(null, schemaName, null, null);
+            var tables = new Map;
+            while (rs.next()) {
+                tables.put(rs.getString("TABLE_NAME"), rs.getString("TABLE_TYPE"));
+            }
+            rs.close();
+            for (tableName in tables.keySet()){
+                newSchema.importTable(conn, tableName, tables.get(tableName));
+            }
+            
+        }
+        
+        operation tgt!Catalog importForegnKeys(conn) {
+            for (schema in self.schemas){
+                "Importing foreign keys for schema: ".concat(schema.name).println; 
+                rs = conn.getMetaData().getImportedKeys(null, schema.name, null);
+                while (rs.next()) {
+                var sourceTable = schema.tables.selectOne(table| table.name = rs.getString("FKTABLE_NAME"));
+                var targetSchema = self.schemas.selectOne(s| s.name = rs.getString("PKTABLE_SCHEM"));
+                var targetTable;
+                if (targetSchema.isDefined()){
+                   targetTable = targetSchema.tables.selectOne(table| table.name = rs.getString("PKTABLE_NAME"));
+                }
+                
+                if (targetTable.isDefined() and sourceTable.isDefined()){
+                       var fk : tgt!ForeignKey = sourceTable.foreignKeys.selectOne(key| key.name = rs.getString("FK_NAME"));
+                       
+                       if (not fk.isDefined()){
+                          fk = new tgt!ForeignKey;
+                          fk.name = rs.getString("FK_NAME");
+                          sourceTable.foreignKeys.add(fk);
+                          fk.target = targetTable;
+                          "Creating foreign key: ".concat(fk.name).concat(" to table ").concat(targetTable.name).println;
+                       }
+                       
+                       var feature = new tgt!KeyFeature;
+                       fk.keyFeatures.add(feature);
+                       feature.column = sourceTable.columns.selectOne(col| col.name = rs.getString("FKCOLUMN_NAME"));  
+
+/*
+
+    PKTABLE_CAT String => primary key table catalog being imported (may be null)
+    PKTABLE_SCHEM String => primary key table schema being imported (may be null)
+    PKTABLE_NAME String => primary key table name being imported
+    PKCOLUMN_NAME String => primary key column name being imported
+    FKTABLE_CAT String => foreign key table catalog (may be null)
+    FKTABLE_SCHEM String => foreign key table schema (may be null)
+    FKTABLE_NAME String => foreign key table name
+    FKCOLUMN_NAME String => foreign key column name
+    KEY_SEQ short => sequence number within a foreign key( a value of 1 represents the first column of the foreign key, a value of 2 would represent the second column within the foreign key).
+    UPDATE_RULE short => What happens to a foreign key when the primary key is updated:
+        importedNoAction - do not allow update of primary key if it has been imported
+        importedKeyCascade - change imported key to agree with primary key update
+        importedKeySetNull - change imported key to NULL if its primary key has been updated
+        importedKeySetDefault - change imported key to default values if its primary key has been updated
+        importedKeyRestrict - same as importedKeyNoAction (for ODBC 2.x compatibility) 
+    DELETE_RULE short => What happens to the foreign key when primary is deleted.
+        importedKeyNoAction - do not allow delete of primary key if it has been imported
+        importedKeyCascade - delete rows that import a deleted key
+        importedKeySetNull - change imported key to NULL if its primary key has been deleted
+        importedKeyRestrict - same as importedKeyNoAction (for ODBC 2.x compatibility)
+        importedKeySetDefault - change imported key to default if its primary key has been deleted 
+    FK_NAME String => foreign key name (may be null)
+    PK_NAME String => primary key name (may be null)
+    DEFERRABILITY short => can the evaluation of foreign key constraints be deferred until commit
+        importedKeyInitiallyDeferred - see SQL92 for definition
+        importedKeyInitiallyImmediate - see SQL92 for definition
+        importedKeyNotDeferrable - see SQL92 for definition 
+*/                       
+                        
+         				
+                    }
+                 }   
+                    rs.close();
+             }        
+        }
+        operation tgt !Schema importTable(conn, tableName, tableType) {
+            "Importing table: ".concat(tableName).println;
+            var dataSet:tgt !DataSet;
+
+            if (tableType.equals("TABLE")) {
+                dataSet = new tgt !Table;
+                self.tables.add(dataSet);
+            }
+            if (tableType.equals("VIEW")) {
+                dataSet = new tgt !View;
+                self.views.add(dataSet);
+            }
+            dataSet.name = tableName;
+            if (dataSet.isDefined()) {
+                rs = conn.getMetaData().getColumns(null, self.name, tableName, null);
+                while (rs.next()) {
+                    var column = new tgt !Column;
+                    column.name = rs.getString("COLUMN_NAME");
+                    dataSet.columns.add(column);
+                    column.nullable = rs.getInt("NULLABLE") == 1;
+                    switch (rs.getInt("DATA_TYPE").toString()) {
+                        case "3":
+
+                            if (rs.getInt("DECIMAL_DIGITS") == -127) {
+                                column.dataType = new tgt !INTEGER;
+                            } else {
+                                column.dataType = new tgt !DECIMAL;
+                                column.dataType.length = rs.getInt("CHAR_OCTET_LENGTH");
+                                column.dataType.precision = rs.getInt("DECIMAL_DIGITS");
+                            }
+                        case "12":
+                            column.dataType = new tgt !VARCHAR;
+                            column.dataType.length = rs.getInt("CHAR_OCTET_LENGTH");
+                        case "2005":
+                            column.dataType = new tgt !BLOB;
+                            //column.dataType.length = rs.getInt("CHAR_OCTET_LENGTH");
+                        case "1":
+                            column.dataType = new tgt !CHAR;
+                            column.dataType.length = rs.getInt("CHAR_OCTET_LENGTH");
+                        case "-3":
+                            column.dataType = new tgt !BLOB;
+                        case "1111":
+                            column.dataType = new tgt !DATETIME;
+
+                        case "93":
+
+                            if (rs.getString("TYPE_NAME").startsWith("TIMESTA")) {
+                                column.dataType = new tgt !DATETIME;
+                            } else {
+                                if (rs.getString("TYPE_NAME").startsWith("TIME")) {
+                                    column.dataType = new tgt !TIME;
+                                } else {
+                                    if (rs.getString("TYPE_NAME").startsWith("DATE")) {
+                                        column.dataType = new tgt !DATE;
+                                    } else {
+
+                                    }
+                                }
+                            }
+
+                    }
+if (not column.dataType.isDefined()){         
+         "UNDEFINED TYPE ++++".concat(rs.getString("COLUMN_NAME")).concat(":").
+         concat(rs.getString("TYPE_NAME")).concat(":").
+         concat(rs.getInt("DATA_TYPE").asString()).concat(":").
+         concat(rs.getInt("CHAR_OCTET_LENGTH").asString()).concat(":").
+         concat(rs.getInt("DECIMAL_DIGITS").asString()).concat(":").
+         concat(rs.getInt("NULLABLE").asString()).concat(":").
+         println();
+}
+                }
+                rs.close();
+                if (tableType.equals("TABLE")) {
+                    rs = conn.getMetaData().getPrimaryKeys(null, self.name, tableName);
+                    var pkCols = new Map;
+                    while (rs.next()) {
+                        pkCols.put(rs.getInt("KEY_SEQ").asString(), rs.getString("COLUMN_NAME"));
+                        if (not dataSet.primaryKey.isDefined()){
+                            dataSet.primaryKey = new tgt !PrimaryKey;
+                            dataSet.primaryKey.name = rs.getString("PK_NAME");
+                        }
+                    }
+                    if (dataSet.primaryKey.isDefined()) {
+                        var i = 1;
+                        while (i <= pkCols.size()) {
+                            var col = dataSet.columns.selectOne(col | col.name = pkCols.get(i.asString()));
+                            var keyFeature = new tgt !KeyFeature;
+                            keyFeature.column = col;
+                            dataSet.primaryKey.keyFeatures.add(keyFeature);
+                            i = i + 1;
+                        }
+                    }
+                    rs.close();
+                }
+
+            }
+
+
+        }

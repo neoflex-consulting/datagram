@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mart" nsURI="http://www.neoflex.ru/meta/mart" nsPrefix="mart">
+  <eClassifiers xsi:type="ecore:EClass" name="DataMart" abstract="true" eSuperTypes="http://www.neoflex.ru/meta/logical#//ModelObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ArchiveMart" eSuperTypes="#//DataMart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PresentationMart" eSuperTypes="#//DataMart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EnrichmentMart" eSuperTypes="#//DataMart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CalculationMart" eSuperTypes="#//DataMart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CotrrectionMart" eSuperTypes="#//DataMart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PortfolioMart" eSuperTypes="#//DataMart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Cube" eSuperTypes="#//DataMart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DimensionTable" eSuperTypes="#//DataMart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FactTable" eSuperTypes="#//DataMart"/>
+</ecore:EPackage>

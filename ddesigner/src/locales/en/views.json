@@ -1,0 +1,128 @@
+{
+  "FormView": {
+    "caption": "Properties Editor"
+  },
+  "TransformationDesignerView": {
+    "caption": "Transformation Designer"
+  },
+  "WorkflowDesignerView": {
+    "caption": "Workflow Designer"
+  },
+  "OozieView": {
+    "caption": "Oozie Console"
+  },
+  "LivyView": {
+    "caption": "Livy Console"
+  },
+  "HDFSView": {
+    "caption": "HDFS Console"
+  },
+  "ProjectionEditor": {
+    "caption": "Projection Editor"
+  },
+  "JoinEditor": {
+    "caption": "Join Editor"
+  },
+  "UnionEditor": {
+    "caption": "Union Editor"
+  },
+  "SourceCodeEditor": {
+    "caption": "Source Code Editor"
+  },
+  "TestCodeEditor": {
+    "caption": "Test Code Editor"
+  },
+  "GroupWithStateEditor": {
+      "caption": "Editor Groups With State"
+  },
+  "SparkEditor": {
+    "caption": "Spark Editor"
+  },
+  "SqlEditor": {
+    "caption": "SQL Editor"
+  },
+  "LocalSourceEditor": {
+    "caption": "Local Source Editor"
+  },
+  "LocalTargetEditor": {
+    "caption": "Local Target Editor"
+  },
+  "TableSourceEditor": {
+    "caption": "Table Source Editor"
+  },
+  "TableTargetEditor": {
+    "caption": "Table Target Editor"
+  },
+  "ExpressionEditor": {
+    "caption": "Expression editor"
+  },
+  "XmlEditor": {
+    "caption": "XML editor"
+  },
+  "SelectionEditor": {
+    "caption": "Selection editor"
+  },
+  "AggregationEditor": {
+    "caption": "Aggregation editor"
+  },
+  "AvroSourceEditor": {
+    "caption": "Avro Source Editor"
+  },
+  "HiveSourceEditor": {
+    "caption": "Hive Source Editor"
+  },
+  "HiveTargetEditor": {
+    "caption": "Hive Target Editor"
+  },
+  "CSVSourceEditor": {
+    "caption": "CSV Source Editor"
+  },
+  "CSVTargetEditor": {
+    "caption": "CSV Target Editor"
+  },
+  "Metadata": {
+    "caption": "Metadata"
+  },
+  "HiveDsMetadata": {
+    "caption": "Hive Dataset Metadata"
+  },
+  "Constructor": {
+    "caption": "Constructor"
+  },
+  "QueryConstructor": {
+    "caption": "QueryDataset Constructor"
+  },
+  "DatasetView": {
+    "caption": "View"
+  },
+  "WorkspaceView": {
+    "caption": "View"
+  },
+  "WorkspaceGridView": {
+    "caption": "View"
+  },
+  "NotebookView": {
+    "caption": "View"
+  },
+  "EventsProcessorView": {
+    "caption": "Rules Editor"
+  },
+  "JSONView": {
+    "caption": "JSON View"
+  },
+  "ImportWizardView": {
+    "caption": "View"
+  },
+  "AtlasView": {
+    "caption": "JSON View"
+  },
+  "AirflowView": {
+    "caption": "List of Airflow pools"
+  },
+  "VCSInfo": {
+    "caption": "VCS Info"
+  },
+  "StateMachineInstanceView":{
+    "caption": "View"
+  }
+}

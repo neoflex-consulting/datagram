@@ -1,0 +1,14 @@
+<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+ <title>Pop down menu Icons Copy 5</title>
+
+ <g>
+  <title>background</title>
+  <rect x="-1" y="-1" width="22" height="22" id="canvas_background" fill="none"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_1" y2="4.359757" x2="16.53838" y1="4.359757" x1="3.218809" fill-opacity="null" stroke-width="null" stroke="#cccccc" fill="none"/>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_2" y2="9.934834" x2="16.53838" y1="9.934834" x1="3.218809" fill-opacity="null" stroke-width="null" stroke="#cccccc" fill="none"/>
+  <line stroke-linecap="null" stroke-linejoin="null" id="svg_3" y2="15.63469" x2="16.53838" y1="15.63469" x1="3.218809" fill-opacity="null" stroke-width="null" stroke="#cccccc" fill="none"/>
+ </g>
+</svg>

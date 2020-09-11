@@ -1,0 +1,166 @@
+@namespace(uri="http://www.neoflex.ru/meta/minicore", prefix="minicore")
+package minicore;
+
+class EAttribute extends EStructuralFeature {
+  attr boolean iD;
+  ref EDataType[1] eAttributeType;
+}
+
+class EAnnotation extends EModelElement {
+  attr String source;
+  val EStringToStringMapEntry[*] details;
+  ref EModelElement#eAnnotations eModelElement;
+  ref EObject[*] references;
+}
+
+class EClass extends EClassifier {
+  attr boolean ~abstract;
+  attr boolean ~interface;
+
+  ref EClass[*] eSuperTypes;
+  val EOperation[*]#eContainingClass eOperations;
+  val EStructuralFeature[*]#eContainingClass eStructuralFeatures;
+}
+
+abstract class EClassifier extends ENamedElement {
+  attr String instanceTypeName;
+  ref EPackage#eClassifiers ePackage;
+}
+
+class EDataType extends EClassifier {
+  attr boolean serializable = true;
+}
+
+class EEnum extends EDataType {
+  val EEnumLiteral[*]#eEnum eLiterals;
+}
+
+class EEnumLiteral extends ENamedElement {
+  attr int value;
+  attr String literal;
+  ref EEnum#eLiterals eEnum;
+}
+
+abstract class EModelElement extends EObject {
+val EAnnotation[*]#eModelElement eAnnotations;
+}
+
+abstract class ENamedElement extends EModelElement {
+  attr String name;
+}
+
+class EObject {
+}
+
+class EOperation extends ETypedElement {
+  ref EClass#eOperations eContainingClass;
+  val EParameter[*]#eOperation eParameters;
+  ref EClassifier[*] eExceptions;
+}
+
+class EPackage extends ENamedElement {
+  attr String nsURI;
+  attr String nsPrefix;
+  val EClassifier[*]#ePackage eClassifiers;
+  val EPackage[*]#eSuperPackage eSubpackages;
+  ref EPackage#eSubpackages eSuperPackage;
+}
+
+class EParameter extends ETypedElement {
+  ref EOperation#eParameters eOperation;
+}
+
+class EReference extends EStructuralFeature {
+  attr boolean containment;
+  ref EReference eOpposite;
+  ref EAttribute[*] eKeys;
+}
+
+abstract class EStructuralFeature extends ETypedElement {
+  attr boolean changeable = true;
+  attr boolean ~volatile;
+  attr boolean ~transient;
+  attr String defaultValueLiteral;
+  attr boolean ~unsettable;
+  attr boolean ~derived;
+  ref EClass#eStructuralFeatures eContainingClass;
+}
+
+abstract class ETypedElement extends ENamedElement {
+  attr boolean ~ordered = true;
+  attr boolean ~unique = true;
+  attr int lowerBound;
+  attr int upperBound = 1;
+  ref EClassifier eType;
+}
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#decimal")
+datatype EBigDecimal : java.math.BigDecimal;
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#integer")
+datatype EBigInteger : java.math.BigInteger;
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#boolean")
+datatype EBoolean : boolean;
+
+@ExtendedMetaData(baseType="EBoolean", name="EBoolean:Object")
+datatype EBooleanObject : java.lang.Boolean;
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#byte")
+datatype EByte : byte;
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#hexBinary")
+datatype EByteArray : "byte[]";
+
+@ExtendedMetaData(baseType="EByte", name="EByte:Object")
+datatype EByteObject : java.lang.Byte;
+
+datatype EChar : char;
+
+@ExtendedMetaData(baseType="EChar", name="EChar:Object")
+datatype ECharacterObject : java.lang.Character;
+
+datatype EDate : java.util.Date;
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#double")
+datatype EDouble : double;
+
+@ExtendedMetaData(baseType="EDouble", name="EDouble:Object")
+datatype EDoubleObject : java.lang.Double;
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#float")
+datatype EFloat : float;
+
+@ExtendedMetaData(baseType="EFloat", name="EFloat:Object")
+datatype EFloatObject : java.lang.Float;
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#int")
+datatype EInt : int;
+
+@ExtendedMetaData(baseType="EInt", name="EInt:Object")
+datatype EIntegerObject : java.lang.Integer;
+
+datatype EJavaClass : java.lang.Class;
+
+datatype EJavaObject : java.lang.Object;
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#long")
+datatype ELong : long;
+
+@ExtendedMetaData(baseType="ELong", name="ELong:Object")
+datatype ELongObject : java.lang.Long;
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#short")
+datatype EShort : short;
+
+@ExtendedMetaData(baseType="EShort", name="EShort:Object")
+datatype EShortObject : java.lang.Short;
+
+@ExtendedMetaData(baseType="http://www.w3.org/2001/XMLSchema#string")
+datatype EString : java.lang.String;
+
+class EStringToStringMapEntry : java.util.Map$Entry {
+  attr String key;
+  attr String value;
+}
+

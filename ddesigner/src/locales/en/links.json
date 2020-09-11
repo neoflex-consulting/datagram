@@ -1,0 +1,57 @@
+{
+    
+    "info": 
+    {
+        "caption": "Info",    
+        "description": "Application version, environment, external resources accessibility etc."    
+        
+    } ,    
+    "links": 
+    {
+        "caption": "Links",    
+        "description": "Links to attendant applications"    
+        
+    } ,    
+    "log": 
+    {
+        "caption": "Log",    
+        "description": "Viewing and searching in application log"    
+        
+    } ,    
+    "workflow": 
+    {
+        "caption": "Workflow editor",    
+        "description": "Visual editor for control sequences of data transformation steps"    
+        
+    } ,    
+    "transformation": 
+    {
+        "caption": "Transformation editor",    
+        "description": "Visual editor for data flows and data mappings"    
+        
+    } ,    
+    "hdfs": 
+    {
+        "caption": "HDFS Console",    
+        "description": "Browse HDFS file system, download and upload files"    
+        
+    } ,    
+    "livy": 
+    {
+        "caption": "Livy Console",    
+        "description": "Browse tasks on Livy server, view logs, cancel tasks"    
+        
+    } ,    
+    "oozie": 
+    {
+        "caption": "Oosie Console",    
+        "description": "Browse workflow and coordinator jobs on Ozzie, view logs, cancel or restart jobs"    
+        
+    } ,    
+    "explorer": 
+    {
+        "caption": "Object Explorer",    
+        "description": "Explore object tree, find objects"    
+        
+    }     
+}

@@ -1,0 +1,6 @@
+[%
+var dataset = ReferenceDataset.all.first();
+var tableRef = dataset.name;
+%]
+
+DROP TABLE IF EXISTS [%=tableRef%]

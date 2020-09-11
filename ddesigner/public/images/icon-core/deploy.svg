@@ -1,0 +1,14 @@
+<svg width="30" height="30" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="32" width="32" y="-1" x="-1"/>
+  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <image stroke="null" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAADcUlEQVR42u3du28TMRwHcKtSYYGJFWYqGKvuPKRCpXsQ8T8UBalSmRkiOjTnC0gw0kpFgokdxnYqGyNTm5UONPaFCNEhVYONoD3yKsnd+fz4fqWbkjb276P4zo5kE4IgCIIgCIIgCIIgCIIgCIIgpWdpZf9iGPOVIGZfgpifBJS/9yN2k9R6M6iO4tyqfbvkU/ZWgPT6r4Cyd/J1VElRxLdhV1w/hmGcoojX5ftQrQLj11sL4xBGXX6jvYDq5Zj7tHNd3B8+TINxihLxj4vrrTlUM+vwRNlXgdHNgnF2b+Fd+f9Q1akg+EYeCGNwNlDlc3Kj1rvg0eRBkRD9l/w8+bmofjpi3uBT7qmEGIBpcB/zF/nkFLFnYlzfLxPj7MbPml79cM3diV2UrOoAMQiTrDozsby73rkSRLyqI8Tg5LJdle21d3iibEsMT8wEjNQyDBND2RvLljrYS9GxI5MghizFHMl+GA3hxe1FkxFGPpGJfpk4sevaiJGe9Zuy1LFtM8SQe8y2rjfsZZcgBh6VRf+1wXAZov9aouzq/PLnWcBocGl7HwEEYADhMow1M3ZAFLocwk+mbaQLEMoB/4JkbbSNEKV8o/pBbILJqw9agJgMk3ebtQIxDaaINmoJojtMkW3SGkQ3GBVtMAKkbBiVn2kUiGoYE/C1ACkapszh0WiQsucAxi+1FAWSR0F1eZKzCqToTlm3GKkKJO/OWbs6rBokayetX64vC2TSzjrz+0nZIOd12LkftAACEIAABCAAAQhAAAIQgAAEIAABCEAAAhCAAAQgAAEIQAACEKUgYcx+AkQrkKQSUL4HkKH7oOz5cfKQqM78695s+IJdA0jqEvWQdSFlRwxhjxwH2SG6JaCHtwPKdlwCkf316607RPeIxh5bDnJMTEsYsXtWgoh+EZMTUvaqiD0XVYLIPRdlP4hNCWmyJR4JuUkgsr1BbNmupOlU5L69cbtqBEiDP67YvG9vOnLnaDGMfdcR5He7KHtCXIx4VF4Tc5imHiCsKTDc3Pv9n9R6M17E/VJBGh2cjtCfSc8PyQME54f8/8Rys2CQTVR5qnsMOxi1S/akIH/OoDpAVTPGe96ZC4ec0jYpiPw/qGauE0v+dCoQ8XeoXrEwn+RJnmOHOnkSqHgfqqVu/nI5y+sIgiAIgiAIgiAIIb8A27qPFqrN8wMAAAAASUVORK5CYII=" id="svg_1" height="37.50036" width="34.750324" y="-4.500158" x="-2.625103"/>
+ </g>
+</svg>

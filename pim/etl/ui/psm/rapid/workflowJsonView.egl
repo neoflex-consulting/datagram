@@ -1,0 +1,799 @@
+[%
+    var workflow = S.allContents().first();
+    workflow.name.println("Workflow: ");
+    var flows = new Sequence;
+    for (node in workflow.nodes) {
+        if (node.hasProperty("to") and node.to.isDefined()) {
+	        var flow = createFlow(node, "to", node.to);
+	        flows.add(flow);
+        }
+        if (node.hasProperty("ok") and node.ok.isDefined()) {
+	        var flow = createFlow(node, "ok", node.ok);
+	        flows.add(flow);
+        }
+        if (node.hasProperty("error") and node.error.isDefined()) {
+	        var flow = createFlow(node, "err", node.error);
+	        flows.add(flow);
+        }
+        if (node.hasProperty("paths")) {
+        	for (path in node.paths) {
+		        var flow = createFlow(node, "node" + loopCount, path);
+		        flows.add(flow);
+		    }
+        }
+        if (node.hasProperty("default") and node.`default`.isDefined()) {
+	        var flow = createFlow(node, "default", node.`default`);
+	        flows.add(flow);
+        }
+        if (node.hasProperty("cases")) {
+        	for (`case` in node.cases) {
+		        var flow = createFlow(node, "case" + loopCount, `case`.to);
+		        flows.add(flow);
+		    }
+        }
+    }
+%]
+{
+  "cells": [
+    [%for (node in workflow.nodes) {%]
+    [%=node.declaration()%][%if (hasMore) {%],[%}%] 
+    [%}%]
+    [%if (flows.notEmpty()) {%],[%}%]
+    [%for (flow in flows) {%]
+    [%=flowDeclaration(flow)%][%if (hasMore) {%],[%}%] 
+    [%}%]
+  ]
+}
+[%@template
+operation WFStart declaration(){%]
+	{
+      "type": "devs.workflowStart",
+      "outPorts": [
+        "to"
+      ],
+      "size": {
+        "width": 81.25,
+        "height": 65
+      },
+      "inPorts": [],
+      "position": {
+        "x": [%=getX(self.workflow)%],
+        "y": [%=getY(self.workflow)%]
+      },
+      "angle": 0,
+      "id": "[%=self.getId()%]",
+      "name": "[%=self.name%]",
+      "embeds": "",
+      "z": 1,
+      "attrs": {
+        ".label": {
+          "text": "[%=self.name%]"
+        },
+        ".outPorts>.port0>.port-label": {
+          "text": "to"
+        },
+        ".outPorts>.port0>.port-body": {
+          "port": {
+            "id": "to",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.5,
+          "ref-dx": 0
+        }
+      }
+    }
+[%}%]
+[%@template
+operation WFEnd declaration(){%]
+{
+      "type": "devs.workflowEnd",
+      "inPorts": [
+        "end"
+      ],
+      "outPorts": [],
+      "size": {
+        "width": 81.25,
+        "height": 65
+      },
+      "position": {
+        "x": [%=getX(self.workflow)%],
+        "y": [%=getY(self.workflow)%]
+      },
+      "angle": 0,
+      "id": "[%=self.getId()%]",
+      "name": "[%=self.name%]",
+      "embeds": "",
+      "z": 15,
+      "attrs": {
+        ".label": {
+          "text": "[%=self.name%]"
+        },
+        ".inPorts>.port0>.port-label": {
+          "text": "end"
+        },
+        ".inPorts>.port0>.port-body": {
+          "port": {
+            "id": "end",
+            "type": "in"
+          }
+        },
+        ".inPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.5
+        }
+      }
+    }
+[%}%]
+[%@template
+operation WFKill declaration(){%]
+{
+      "type": "devs.workflowKill",
+      "inPorts": [
+        "kill"
+      ],
+      "outPorts": [],
+      "size": {
+        "width": 81.25,
+        "height": 65
+      },
+      "position": {
+        "x": [%=getX(self.workflow)%],
+        "y": [%=getY(self.workflow)%]
+      },
+      "angle": 0,
+      "id": "[%=self.getId()%]",
+      "name": "[%=self.name%]",
+      "embeds": "",
+      "z": 24,
+      "attrs": {
+        ".label": {
+          "text": "[%=self.name%]"
+        },
+        ".inPorts>.port0>.port-label": {
+          "text": "kill"
+        },
+        ".inPorts>.port0>.port-body": {
+          "port": {
+            "id": "kill",
+            "type": "in"
+          }
+        },
+        ".inPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.5
+        }
+      }
+    }
+[%}%]
+[%@template
+operation WFFork declaration(){%]
+{
+      "type": "devs.workflowFork",
+      "inPorts": [
+        "in"
+      ],
+      "outPorts": [
+        [%for (node in self.paths) {%]
+    	"node[%=loopCount%]"[%if (hasMore) {%],[%}%] 
+    	[%}%]
+      ],
+      "size": {
+        "width": 81.25,
+        "height": 65
+      },
+      "position": {
+        "x": [%=getX(self.workflow)%],
+        "y": [%=getY(self.workflow)%]
+      },
+      "angle": 0,
+      "id": "[%=self.getId()%]",
+      "name":"[%=self.name%]",
+      "embeds": "",
+      "z": 3,
+      "attrs": {
+        ".label": {
+          "text": "[%=self.name%]"
+        },
+        ".inPorts>.port0>.port-label": {
+          "text": "in"
+        },
+        ".inPorts>.port0>.port-body": {
+          "port": {
+            "id": "in",
+            "type": "in"
+          }
+        },
+        ".inPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.5
+        }[%if (self.paths.notEmpty()) {%],[%}%]
+        [%for (node in self.paths) {%]
+        ".outPorts>.port[%=loopCount - 1%]>.port-label": {
+          "text": "node[%=loopCount%]"
+        },
+        ".outPorts>.port[%=loopCount - 1%]>.port-body": {
+          "port": {
+            "id": "node[%=loopCount%]",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port[%=loopCount - 1%]": {
+          "ref": ".body",
+          "ref-y": [%=((1.0 / self.paths.size()) / 2) * loopCount%],
+          "ref-dx": 0
+        }[%if (hasMore) {%],[%}%] 
+        [%}%]
+    }
+}
+[%}%]
+[%@template
+operation WFJoin declaration(){%]
+{
+      "type": "devs.workflowJoin",
+      "inPorts": [
+       [%for (i in Sequence{1..self.~joined}) {%]
+       	"node[%=loopCount%]"[%if (hasMore) {%],[%}%] 
+       [%}%]
+      ],
+      "outPorts": [
+        "to"
+      ],
+      "size": {
+        "width": 81.25,
+        "height": 65
+      },
+      "position": {
+        "x": [%=getX(self.workflow)%],
+        "y": [%=getY(self.workflow)%]
+      },
+      "angle": 0,
+      "id": "[%=self.getId()%]",
+      "name":"[%=self.name%]",
+      "embeds": "",
+      "z": 11,
+      "attrs": {
+        ".label": {
+          "text": "[%=self.name%]"
+        },
+        [%for (i in Sequence{1..self.~joined}) {%]
+        ".inPorts>.port[%=loopCount - 1%]>.port-label": {
+          "text": "node[%=loopCount%]"
+        },
+        ".inPorts>.port[%=loopCount - 1%]>.port-body": {
+          "port": {
+            "id": "node[%=loopCount%]",
+            "type": "in"
+          }
+        },
+        ".inPorts>.port[%=loopCount - 1%]": {
+          "ref": ".body",
+          "ref-y": [%=((1.0 / self.~joined) / 2) * loopCount%]
+        },[%}%]
+        ".outPorts>.port0>.port-label": {
+          "text": "to"
+        },
+        ".outPorts>.port0>.port-body": {
+          "port": {
+            "id": "to",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.5,
+          "ref-dx": 0
+        }
+    }
+}
+[%}%]
+[%@template
+operation WFTransformation declaration(){%]
+{
+      "type": "devs.workflowTransformation",
+      "inPorts": [
+        "in"
+      ],
+      "outPorts": [
+        "ok",
+        "err"
+      ],
+      "size": {
+        "width": 81.25,
+        "height": 65
+      },
+      "position": {
+        "x": [%=getX(self.workflow)%],
+        "y": [%=getY(self.workflow)%]
+      },
+      "angle": 0,
+      "id": "[%=self.getId()%]",
+      "name":"[%=self.name%]",
+      "embeds": "",
+      "z": 30,
+      "transformation": "[%if (self.transformation.isDefined()){%][%=self.transformation.get("name")%][%}%]",
+      "attrs": {
+        ".label": {
+          "text": "[%=self.name%]"
+        },
+        ".inPorts>.port0>.port-label": {
+          "text": "in"
+        },
+        ".inPorts>.port0>.port-body": {
+          "port": {
+            "id": "in",
+            "type": "in"
+          }
+        },
+        ".inPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.5
+        },
+        ".outPorts>.port0>.port-label": {
+          "text": "ok"
+        },
+        ".outPorts>.port0>.port-body": {
+          "port": {
+            "id": "ok",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.25,
+          "ref-dx": 0
+        },
+        ".outPorts>.port1>.port-label": {
+          "text": "err"
+        },
+        ".outPorts>.port1>.port-body": {
+          "port": {
+            "id": "err",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port1": {
+          "ref": ".body",
+          "ref-y": 0.75,
+          "ref-dx": 0
+        }
+      }
+    }
+[%}%]
+[%@template
+operation WFSubWorkflow declaration(){%]
+ {
+      "type": "devs.subWorkflow",
+      "inPorts": [
+        "in"
+      ],
+      "outPorts": [
+        "ok",
+        "err"
+      ],
+      "size": {
+        "width": 81.25,
+        "height": 65
+      },
+      "position": {
+        "x": [%=getX(self.workflow)%],
+        "y": [%=getY(self.workflow)%]
+      },
+      "angle": 0,
+      "id": "[%=self.getId()%]",
+      "name":"[%=self.name%]",
+      "embeds": "",
+      "z": 4,
+      "propagateConfiguration": [%=self.propagateConfiguration%],
+      "subWorkflow": "[%if (self.subWorkflow.isDefined()){%][%=self.subWorkflow.get("name")%][%}%]",
+      "attrs": {
+        ".label": {
+          "text": "[%=self.name%]"
+        },
+        ".inPorts>.port0>.port-label": {
+          "text": "in"
+        },
+        ".inPorts>.port0>.port-body": {
+          "port": {
+            "id": "in",
+            "type": "in"
+          }
+        },
+        ".inPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.5
+        },
+        ".outPorts>.port0>.port-label": {
+          "text": "ok"
+        },
+        ".outPorts>.port0>.port-body": {
+          "port": {
+            "id": "ok",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.25,
+          "ref-dx": 0
+        },
+        ".outPorts>.port1>.port-label": {
+          "text": "err"
+        },
+        ".outPorts>.port1>.port-body": {
+          "port": {
+            "id": "err",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port1": {
+          "ref": ".body",
+          "ref-y": 0.75,
+          "ref-dx": 0
+        }
+      }
+    }
+[%}%]
+[%@template
+operation WFDecision declaration(){%]
+ {
+      "type": "devs.workflowDecision",
+      "inPorts": [
+        "in"
+      ],
+      "outPorts": [
+        "default",
+        [%for (`case` in self.cases) {%]
+    	"case[%=loopCount%]"[%if (hasMore) {%],[%}%] 
+    	[%}%]
+      ],
+      "outPortsDef": [
+      [%if (self.cases.notEmpty()) {%]
+      [%for (`case` in self.cases) {%]
+        {
+          "label": "[%=`case`.label%]",
+          "predicate": "[%=`case`.predicate%]"
+        }[%if (hasMore) {%],[%}%] 
+    	[%}%]
+      [%} else {%]{}[%}%]
+      ],
+      "size": {
+        "width": 81.25,
+        "height": 65
+      },
+      "position": {
+        "x": [%=getX(self.workflow)%],
+        "y": [%=getY(self.workflow)%]
+      },
+      "angle": 0,
+      "id": "[%=self.getId()%]",
+      "name":"[%=self.name%]",
+      "embeds": "",
+      "z": 1,
+      "attrs": {
+        ".label": {
+          "text": "[%=self.name%]"
+        },
+        ".inPorts>.port0>.port-label": {
+          "text": "in"
+        },
+        ".inPorts>.port0>.port-body": {
+          "port": {
+            "id": "in",
+            "type": "in"
+          }
+        },
+        ".inPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.5
+        },
+        ".outPorts>.port0>.port-label": {
+          "text": "default"
+        },
+        ".outPorts>.port0>.port-body": {
+          "port": {
+            "id": "default",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port0": {
+          "ref": ".body",
+          "ref-y": [%=((1.0 / self.cases.size()) / 2)%],
+          "ref-dx": 0
+        }[%if (self.cases.notEmpty()) {%],[%}%]
+        [%for (`case` in self.cases) {%]
+        ".outPorts>.port[%=loopCount%]>.port-label": {
+          "text": "case[%=loopCount%]"
+        },
+        ".outPorts>.port[%=loopCount%]>.port-body": {
+          "port": {
+            "id": "case[%=loopCount%]",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port[%=loopCount%]": {
+          "ref": ".body",
+          "ref-y": [%=((1.0 / self.cases.size()) / 2) * loopCount + 1%],
+          "ref-dx": 0
+        }[%if (hasMore) {%],[%}%] 
+    	[%}%]
+      }
+    }
+[%}%]
+[%@template
+operation WFShell declaration(){%]
+ {
+      "type": "devs.workflowShell",
+      "inPorts": [
+        "in"
+      ],
+      "outPorts": [
+        "ok",
+        "err"
+      ],
+      "size": {
+        "width": 81.25,
+        "height": 65
+      },
+      "position": {
+        "x": [%=getX(self.workflow)%],
+        "y": [%=getY(self.workflow)%]
+      },
+      "angle": 0,
+      "id": "[%=self.getId()%]",
+      "name":"[%=self.name%]",
+      "embeds": "",
+      "z": 32,
+      "exec": "[%=escape(self.exec)%]",
+      "file": "[%=escape(self.file)%]",
+      "captureOutput": [%=self.captureOutput%],
+      "args": [
+      [%for (arg in self.args) {%]
+        "[%=escape(arg)%]"[%if (hasMore) {%],[%}%] 
+      [%}%]
+      ],
+      "attrs": {
+        ".label": {
+          "text": "[%=self.name%]"
+        },
+        ".inPorts>.port0>.port-label": {
+          "text": "in"
+        },
+        ".inPorts>.port0>.port-body": {
+          "port": {
+            "id": "in",
+            "type": "in"
+          }
+        },
+        ".inPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.5
+        },
+        ".outPorts>.port0>.port-label": {
+          "text": "ok"
+        },
+        ".outPorts>.port0>.port-body": {
+          "port": {
+            "id": "ok",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.25,
+          "ref-dx": 0
+        },
+        ".outPorts>.port1>.port-label": {
+          "text": "err"
+        },
+        ".outPorts>.port1>.port-body": {
+          "port": {
+            "id": "err",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port1": {
+          "ref": ".body",
+          "ref-y": 0.75,
+          "ref-dx": 0
+        }
+      }
+    }
+[%}%]
+[%@template
+operation WFJava declaration(){%]
+ {
+      "type": "devs.workflowJava",
+      "inPorts": [
+        "in"
+      ],
+      "outPorts": [
+        "ok",
+        "err"
+      ],
+      "size": {
+        "width": 81.25,
+        "height": 65
+      },
+      "position": {
+        "x": [%=getX(self.workflow)%],
+        "y": [%=getY(self.workflow)%]
+      },
+      "angle": 0,
+      "id": "[%=self.getId()%]",
+      "name":"[%=self.name%]",
+      "embeds": "",
+      "z": 32,
+      "mainclass": "[%=escape(self.mainclass)%]",
+      "javaopts": "[%=escape(self.javaopts)%]",
+      "jobxml": "[%=escape(self.jobxml)%]",      
+      "file": "[%=escape(self.file)%]",
+      "archive": "[%=escape(self.archive)%]",      
+      "captureOutput": [%=self.captureOutput%],
+      "args": [
+      [%for (arg in self.args) {%]
+        "[%=escape(arg)%]"[%if (hasMore) {%],[%}%] 
+      [%}%]
+      ],
+      "prepareDeleteHDFSdirs": [
+      [%for (prepareDeletedir in self.prepareDeleteHDFSdirs) {%]
+        "[%=escape(prepareDeletedir)%]"[%if (hasMore) {%],[%}%] 
+      [%}%]
+      ],
+      "prepareCreateHDFSdirs": [
+      [%for (prepareCreatedir in self.prepareCreateHDFSdirs) {%]
+        "[%=escape(prepareCreatedir)%]"[%if (hasMore) {%],[%}%] 
+      [%}%]
+      ],
+	  "options": [
+	    [%for (option in self.options) {%]  
+	    {
+	      "name": "[%=option.name%]",
+	      "value": "[%=option.value%]"
+	    }[%if (hasMore) {%],[%}%]
+	    [%}%]
+	  ],            
+      "attrs": {
+        ".label": {
+          "text": "[%=self.name%]"
+        },
+        ".inPorts>.port0>.port-label": {
+          "text": "in"
+        },
+        ".inPorts>.port0>.port-body": {
+          "port": {
+            "id": "in",
+            "type": "in"
+          }
+        },
+        ".inPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.5
+        },
+        ".outPorts>.port0>.port-label": {
+          "text": "ok"
+        },
+        ".outPorts>.port0>.port-body": {
+          "port": {
+            "id": "ok",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port0": {
+          "ref": ".body",
+          "ref-y": 0.25,
+          "ref-dx": 0
+        },
+        ".outPorts>.port1>.port-label": {
+          "text": "err"
+        },
+        ".outPorts>.port1>.port-body": {
+          "port": {
+            "id": "err",
+            "type": "out"
+          }
+        },
+        ".outPorts>.port1": {
+          "ref": ".body",
+          "ref-y": 0.75,
+          "ref-dx": 0
+        }
+      }
+    }
+[%}%]
+[%@template
+operation flowDeclaration(flow){%]
+{
+  "type": "devs.transformation.Flow",
+  "id": "[%=flow.get("source").getId()%]![%=flow.get("sourcePort")%]->[%=flow.get("target").getId()%]![%=flow.get("targetPort")%]",
+  "embeds": "",
+  "source": {
+    "id": "[%=flow.get("source").getId()%]",
+    "port": "[%=flow.get("sourcePort")%]"
+  },
+  "target": {
+    "id": "[%=flow.get("target").getId()%]",
+    "port": "[%=flow.get("targetPort")%]"
+  },
+  "attrs": {}
+}
+[%}%]
+[%@template
+operation WFNode declaration(){
+	throw "Unknown WFNode: " + self.toString();
+}%]
+[%@template
+operation getId(obj){%][%=obj.get("_type_")%]![%=obj.get("e_id")%]
+[%}%]
+[%
+operation escape(s: String): String {
+    if (s == null)
+        return null;
+    return s.replace("\\\\", "\\\\\\\\").replace("\n", "\\\\n").replace('"', '\\\\"').replace('\t', '\\\\t');
+}
+
+operation WFNode getId(){
+    return getId(self);
+}
+
+operation WFFork getInputPort(){
+    return "in";
+}
+operation WFSubWorkflow getInputPort(){
+    return "in";
+}
+operation WFEnd getInputPort(){
+    return "end";
+}
+operation WFTransformation getInputPort(){
+    return "in";
+}
+operation WFKill getInputPort(){
+    return "kill";
+}
+operation WFDecision getInputPort(){
+    return "in";
+}
+operation WFShell getInputPort(){
+    return "in";
+}
+operation WFJava getInputPort(){
+    return "in";
+}
+operation WFJoin getInputPort(){
+	if (self.~joined.isUndefined()) self.~joined = 0;
+	self.~joined = self.~joined + 1;
+    return "node" + self.~joined;
+}
+operation createFlow(source, port, target){
+	var flow = new Map;
+	flow.put("source", source);
+	flow.put("sourcePort", port);
+	flow.put("target", target);
+	flow.put("targetPort", target.getInputPort());
+	return flow;
+}
+
+operation getX(workflow) {
+    if (not workflow.~X.isDefined()) {
+        workflow.~X = 10;
+    }
+    else {
+        workflow.~X = workflow.~X + 160;
+        if (workflow.~X > 800) workflow.~X = 10;
+    }
+    return workflow.~X;
+}    
+
+operation getY(workflow) {
+    if (not workflow.~Y.isDefined()) {
+        workflow.~Y = 10;
+    }
+    else {
+	    workflow.~Y = workflow.~Y + 25;
+    }
+    return workflow.~Y;
+}  
+%]

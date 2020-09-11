@@ -1,0 +1,8 @@
+{
+	"eClasses": {
+		"rt.Airflow": {
+			"containerName": "ViewContainer",
+			"views": ["FormView", "AirflowView"]
+		}
+	}
+}

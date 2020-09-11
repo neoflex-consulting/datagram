@@ -1,0 +1,3 @@
+maxTotal=25
+maxIdle=10
+minIdle=0

@@ -1,0 +1,154 @@
+@namespace(uri="http://www.neoflex.ru/meta/workflow", prefix="workflow")
+package workflow;
+
+class WorkflowApp {
+  attr String[1] name;
+  val Credential[*] credentials;
+  val Global global;
+  ref StartNode start;
+  ref EndNode end;
+  val Node[*]#workflow nodes;
+  val Property[*] parameters;
+
+  op void generate();
+}
+
+class Credential {
+  attr String[1] name;
+  attr String[1] type;
+  val Property[*] property;
+}
+
+class Global {
+  attr String[1] jobTracker;
+  attr String[1] nameNode;
+  val StringValue[*] jobXml;
+  val Property[*] configuration;
+}
+
+abstract class Node {
+  attr String[1] name;
+  ref WorkflowApp[1]#nodes workflow;
+}
+
+class StartNode extends Node {
+  ref Node to;
+}
+
+class EndNode extends Node {
+}
+
+class KillNode extends Node {
+  attr String message;
+}
+
+class Conditional {
+  attr String[1] predicate;
+  ref Node[1] to;
+}
+
+class DecisionNode extends Node {
+  val Conditional[*] cases;
+  ref Node[1] default;
+}
+
+class ForkNode extends Node {
+  ref Node[*] paths;
+}
+
+class JoinNode extends Node {
+  ref Node[1] to;
+}
+
+abstract class ActionNode extends Node {
+  ref Node[1] ok;
+  ref Node[1] error;
+  attr Integer retryMax;
+  attr Integer retryInterval;
+  attr String cred;
+}
+
+class Property {
+  attr String[1] name;
+  attr String[1] value;
+  attr String description;
+}
+
+abstract class FSCommand {
+}
+
+class FSDelete extends FSCommand {
+  attr String[1] path;
+}
+
+class FSMkdir extends FSCommand {
+  attr String[1] path;
+}
+
+class FSMove extends FSCommand {
+  attr String[1] source;
+  attr String[1] target;
+}
+
+class FSChmod extends FSCommand {
+  attr String[1] path;
+  attr String[1] permission;
+  attr Boolean dirFiles = "true";
+}
+
+class FSTouchz extends FSCommand {
+  attr String[1] path;
+}
+
+class FSChgrp extends FSCommand {
+  attr String[1] path;
+  attr String[1] group;
+  attr Boolean dirFiles = "true";
+}
+
+class FSAction extends ActionNode {
+  val FSCommand[*] commands;
+  attr String nameNode;
+  attr String jobXml;
+  val Property[*] configuration;
+}
+
+class SubWorkflowAction extends ActionNode {
+  attr String[1] appPath;
+  attr Boolean propagateConfiguration = "false";
+  val Property[*] configuration;
+}
+
+class JavaAction extends ActionNode {
+  val FSCommand[*] prepare;
+  attr String[1] mainClass;
+  attr String javaOpts;
+  val StringValue[*] javaOpt;
+  val StringValue[*] arg;
+  val StringValue[*] file;
+  val StringValue[*] archive;
+  attr Boolean captureOutput = "false";
+  attr String jobTracker;
+  attr String nameNode;
+  attr String jobXml;
+  val Property[*] configuration;
+}
+
+class StringValue {
+	attr String[1] value;
+}
+
+class SparkAction extends ActionNode {
+  attr String[1] jobTracker;
+  attr String[1] nameNode;
+  val FSCommand[*] prepare;
+  val StringValue[*] jobXml;
+  val Property[*] configuration;
+  attr String[1] master;
+  attr String mode;
+  attr String[1] ~class;
+  attr String[1] jar;
+  attr String sparkOpts;
+  val StringValue[*] arg;
+}
+

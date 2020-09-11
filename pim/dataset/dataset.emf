@@ -1,0 +1,73 @@
+@namespace(uri="http://www.neoflex.ru/meta/dataset", prefix="dataset")
+package dataset;
+
+abstract class FieldType {}
+
+class ScalarType extends FieldType {
+  attr DataTypeDomain dataTypeDomain;
+}
+
+abstract class StructuredType extends FieldType {
+}
+
+class ArrayType extends StructuredType {
+	val FieldType elementType;
+}
+
+class Structure extends DataSet {
+}
+
+class StructType extends StructuredType {
+	val Structure internalStructure;
+}
+
+class Field {
+  attr String[1] name;
+  ref DataSet[1]#fields dataSet;
+  attr DataTypeDomain dataTypeDomain;
+  val FieldType domainStructure;
+}
+
+enum DataTypeDomain  {
+  ______ = 0;
+  STRING = 1;
+  DECIMAL = 2;
+  INTEGER = 3;
+  DATE = 4;
+  DATETIME = 5;
+  TIME = 6;
+  BINARY = 7;
+  BOOLEAN = 8;
+  LONG = 9;
+  FLOAT = 10;
+  DOUBLE = 11;
+}
+
+abstract class DataSet {
+  val Field[*]#dataSet fields;
+}
+
+abstract class NamedDataSet extends DataSet {
+  attr String[1] name;
+}
+
+class Association {
+  ref DataSet[1] source;
+  ref DataSet[1] target;
+  attr String name;
+  ref Field[*] fields;
+}
+
+class Composition extends Aggregation {
+}
+
+class ComplexAssociation {
+  ref DataSet[1] associator;
+}
+
+class Aggregation extends Association {
+}
+
+class KeyField extends Field {
+}
+

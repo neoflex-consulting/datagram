@@ -1,0 +1,206 @@
+[%
+    var dataset = Dataset.all.first();
+    var deployment = DeploymentDescriptor.all.first();
+    dataset.name.println("Create classify rules for: ");
+%]
+
+package ru.neoflex.meta.rules
+
+declare [%=dataset.name%]
+    [%for (field in dataset.dataFields.sortBy(f|f.columnIndex)) {%]
+    [%=field.name.toLowerCase()%]: [%=field.dataType.getJavaType()%]
+    [%if (field.isKindOf(ClassifiedField)) {%]
+    [%=field.name.toLowerCase()%]_rule: java.lang.String
+    [%}%]
+    [%}%]
+end
+
+[%for (cSpec in dataset.classificationFieldSpecs) {%]
+[%var currentRule = loopCount;%]
+rule "[%=cSpec.dsField.name.toLowerCase()%]_[%=loopCount%]"
+dialect "mvel"
+when
+  $fact: [%=dataset.name%](
+    [%for (exp in cSpec.rule.classificationExpressions.select(e|e.isEnabled).collect(e|e.expression).flatten()) {%]
+    [%=exp.declare(null)%][%if (hasMore) {%],
+    [%}%]
+    [%}%], 
+    [%=cSpec.dsField.name.toLowerCase()%]_rule not matches '.*;[%=loopCount%];.*',
+    [%=cSpec.dsField.name.toLowerCase()%]_rule not matches "#.*"
+  )
+then
+	[%if (cSpec.dsField.ruleOption == RuleExecutionOption#INSERT_NEW) {%]
+	if ($fact.[%=cSpec.dsField.name.toLowerCase()%]_rule == null) {
+	    modify( $fact ) {
+	        [%=cSpec.dsField.name.toLowerCase()%] = [%=cSpec.resultExpr.declare(cSpec.dsField.dataType)%],
+		    [%=cSpec.dsField.name.toLowerCase()%]_rule = ";[%=currentRule%];"
+	    }
+	} else {
+	    [%=dataset.name%] newFact = new [%=dataset.name%](); 
+	    [%for (field in dataset.dataFields.sortBy(f|f.columnIndex)) {%]
+	        [%if (not field.name.equalsIgnoreCase(cSpec.dsField.name)) {%]
+	    newFact.[%=field.name.toLowerCase()%] = $fact.[%=field.name.toLowerCase()%];
+	            [%if (field.isKindOf(ClassifiedField)) {%]
+	    newFact.[%=field.name.toLowerCase()%]_rule = $fact.[%=field.name.toLowerCase()%]_rule;
+	            [%}%]
+	        [%} else {%]
+	    newFact.[%=field.name.toLowerCase()%] = [%=cSpec.resultExpr.declare(cSpec.dsField.dataType)%];
+	            [%if (field.isKindOf(ClassifiedField)) {%]
+	    newFact.[%=field.name.toLowerCase()%]_rule = "#" + $fact.[%=field.name.toLowerCase()%]_rule + ";[%=currentRule%];";
+	            [%}%]
+	        [%}%]
+	    [%}%]
+	    insert(newFact);
+	}
+	[%} else {%]
+    modify( $fact ) {
+        [%if (cSpec.dsField.ruleOption == RuleExecutionOption#CONCATENATE) {%]
+        [%=cSpec.dsField.name.toLowerCase()%] = ($fact.[%=cSpec.dsField.name.toLowerCase()%] == null ? "" : $fact.[%=cSpec.dsField.name.toLowerCase()%]) + ";" + [%=cSpec.resultExpr.declare(cSpec.dsField.dataType)%] + ";",
+        [%} else if (cSpec.dsField.ruleOption == RuleExecutionOption#OVERWRITE) {%]
+        [%=cSpec.dsField.name.toLowerCase()%] = [%=cSpec.resultExpr.declare(cSpec.dsField.dataType)%],
+        [%}%]
+        [%=cSpec.dsField.name.toLowerCase()%]_rule = ($fact.[%=cSpec.dsField.name.toLowerCase()%]_rule == null ? "" : $fact.[%=cSpec.dsField.name.toLowerCase()%]_rule) + ";[%=currentRule%];"
+    };
+	[%}%]
+end
+[%}%] 
+
+query "ResultQuery" 
+    $fact: [%=dataset.name%]()
+end
+[%
+operation declareOperation(op) {
+    if (op = Op#AND) return "&&";
+    if (op = Op#OR) return "||";
+    if (op = Op#EQUAL) return "==";
+    if (op = Op#NOT_EQUAL) return "!=";
+    if (op = Op#LESSER) return "<";
+    if (op = Op#GREATER) return ">";
+    if (op = Op#LESSER_OR_EQUAL) return "<=";
+    if (op = Op#GRATER_OR_EQUAL) return ">=";
+    if (op = Op#LIKE) return "matches";
+    if (op = Op#IN) return "in";
+    if (op = Op#PLUS) return "+";
+    if (op = Op#MINUS) return "-";
+    if (op = Op#MUL) return "*";
+    if (op = Op#DIV) return "/";
+    throw "Binary operation not supported " + op;
+}
+operation ScalarType getDomain() {
+    return self.dataType;
+}
+operation LookupType getDomain() {
+    return self.lookupField.dataType.getDomain();
+}
+operation BinaryExpr getDataType() {
+    var dataType = self.left.getDataType();
+    if (dataType.isDefined()) return dataType;
+    return self.right.getDataType();
+}
+operation BinaryExpr declare(asDataType) {
+    if (not asDataType.isDefined()) {
+        asDataType = self.getDataType(); 
+    }
+    return self.left.declare(asDataType) + " " + declareOperation(self.`operation`) + " " + self.right.declare(asDataType);
+}
+operation UnaryExpr getDataType() {
+    return self.expr.getDataType();
+}
+operation UnaryExpr declare(asDataType) {
+    if (self.`operation` == Op#IS_NULL) {
+        return self.expr.declare(asDataType) + " == null";
+    }
+    else if (self.`operation` == Op#IS_NOT_NULL) {
+        return self.expr.declare(asDataType) + " != null";
+    }
+    if (self.`operation` == Op#IS_EMPTY) {
+        return self.expr.declare(asDataType) + " in (null, '')";
+    }
+    else if (self.`operation` == Op#IS_NOT_EMPTY) {
+        return self.expr.declare(asDataType) + " not in (null, '')";
+    }
+    else if (self.`operation` == Op#NOT) {
+        return "! " + self.expr.declare(asDataType);
+    }
+    throw "Unknown unary operation " + self.`operation`;
+}
+operation FieldRefExpr getDataType() {
+    return self.fieldRef.dataType;
+}
+operation FieldRefExpr declare(asDataType) {
+    return self.fieldRef.name.toLowerCase();
+}
+operation ParameterExpr getDataType() {
+    return self.field.dataType;
+}
+operation ParameterExpr declare(asDataType) {
+    return self.field.name.toLowerCase();
+}
+operation ConstantExpr getDataType() {
+    return null;
+}
+operation ConstantExpr getAsDataType(value, asDataType) {
+    if (not self.requireTypeCast) {
+        return value;
+    }
+    if (asDataType.isDefined()) {
+        var domain = asDataType.getDomain();
+        if (Sequence{DataTypeDomain#DECIMAL, DataTypeDomain#INTEGER, DataTypeDomain#BOOLEAN}.includes(domain)) {
+            return value;
+        } 
+        if (domain == DataTypeDomain#DATE) {
+            return 'new java.sql.Date(new java.text.SimpleDateFormat("yyyy-MM-dd").parse("' + value + '").getTime())';
+        }
+        if (domain == DataTypeDomain#DATETIME) {
+            return 'new java.sql.Timestamp(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse("' + value + '").getTime())';
+        }
+        if (domain == DataTypeDomain#TIME) {
+            return 'new java.sql.Timestamp(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse("1900-01-01 ' + value + '").getTime())';
+        }
+         
+    }
+    return '"' + escapeNonAscii(value) + '"';
+}
+operation ConstantExpr declare(asDataType) {
+    //if (self.values.size() == 1) {
+    //    return self.getAsDataType(self.values[0], asDataType);
+    //}
+    var result = '(';
+    for (value in self.values) {
+        result = result + self.getAsDataType(value, asDataType);
+        if (hasMore) {
+            result = result + ', ';
+        }
+    }
+    result = result + ')';
+    return result;
+}
+operation DataType getJavaType() {
+    var domain = self.getDomain();
+    if (domain = DataTypeDomain#STRING) return "java.lang.String";
+    if (domain = DataTypeDomain#DECIMAL) return "java.math.BigDecimal";
+    if (domain = DataTypeDomain#INTEGER) return "java.lang.Integer";
+    if (domain = DataTypeDomain#DATE) return "java.sql.Date";
+    if (domain = DataTypeDomain#DATETIME) return "java.sql.Timestamp";
+    if (domain = DataTypeDomain#TIME) return "java.sql.Timestamp";
+    if (domain = DataTypeDomain#BOOLEAN) return 'java.lang.Boolean';
+    if (domain = DataTypeDomain#BINARY) return 'byte[]';
+    throw "domain not supported " + domain;
+}
+
+operation escapeNonAscii(s) {
+    return s;
+    var result = "";
+    var i = 0;
+    while (i < s.length()) {
+        var c = Native("java.lang.Character").codePointAt(s, i);
+        if (c >= 128) {
+            result = result + "\\\\u" + Native("java.lang.Integer").toHexString(c).pad(4, "0", false);
+        } else {
+            result = result + s.charAt(i);
+        }
+        i = i + 1;
+    }
+    return result;
+}
+%]

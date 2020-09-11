@@ -1,0 +1,812 @@
+
+context src!Transformation {
+    constraint NameIsDefined {      
+        check : self.name.isDefined() and self.name.length() > 0 
+        message : "Transformation: имя не определено"
+    }
+    constraint NameIsValid {      
+        guard : self.satisfies("NameIsDefined")      
+        check : nameIsValid(self.name) 
+        message : "не корректное имя Transformation: '" + self.name + "'"
+    }
+}
+
+context src!Source {
+    constraint NameIsDefined {      
+        check : self.name.isDefined() and self.name.length() > 0 
+        message : "Source: имя не определено"
+    }
+    constraint NameIsValid {      
+        guard : self.satisfies("NameIsDefined")      
+        check : nameIsValid(self.name) 
+        message : "не корректное имя Source: '" + self.name + "'"
+    }
+    constraint NameIsUnique {      
+        guard : self.satisfies("NameIsDefined")      
+        check : self.transformation.getNames().count(self.name) == 1 
+        message : "не уникальное имя Source: '" + self.name + "'"
+    }
+    constraint JdbcContextName {      
+        check : not self.`context`.isDefined() or (nameIsValid(self.`context`.name) and not self.`context`.name.contains("_")) 
+        message : "не корректное имя JdbcContext: '" + self.`context`.name + "'"
+    }
+}
+
+context src!LocalSource {
+    critique NameIsDefined {      
+        check {
+        	var wrongFields = self.outputPort.fields.select(f|f.name <> getCorrectName(f.name));
+        	return wrongFields.size() == 0;
+        } 
+        message : "Поля [" + wrongFields.collect(f|f.name).concat(",") + "], не являются допустимыми Java идентификаторами. Это может ухудшить производительность."
+    }
+}
+
+context src!LocalTarget {
+    constraint DynamicPartitionsAndPartitionManagament {      
+        guard : self.deleteBeforeSave == true
+        check : self.partitionsFromString <> true 
+        message : "Динамические партиции и управление партициями запрещено. Заполнены оба поля: partitionsFromString и deleteBeforeSave для '" + self.name + "'"
+    }
+}
+
+context src!TableTarget {
+    constraint FieldsNotEmpty {      
+        check : self.inputFieldsMapping.size() > 0 
+        message : "Пустой список полей для TableTarget: '" + self.name + "'"
+    }
+}
+
+context src!StoredProcedureTarget {
+    constraint FieldsNotEmpty {      
+        check : self.inputFieldsMapping.size() > 0 
+        message : "Пустой список полей для TableTarget: '" + self.name + "'"
+    }
+}
+
+context src!Target {
+    constraint NameIsDefined {      
+        check : self.name.isDefined() and self.name.length() > 0 
+        message : "Target: имя не определено"
+    }
+    constraint NameIsValid {      
+        guard : self.satisfies("NameIsDefined")      
+        check : nameIsValid(self.name) 
+        message : "не корректное имя Target: '" + self.name + "'"
+    }
+    constraint NameIsUnique {      
+        guard : self.satisfies("NameIsDefined")      
+        check : self.transformation.getNames().count(self.name) == 1 
+        message : "не уникальное имя Target: '" + self.name + "'"
+    }
+    constraint NotAlong {      
+        check : self.transformation.transitions.exists(t|t.finish == self.inputPort) 
+        message : "нет входящей трансформации для Target: '" + self.transformation.name + ":" + self.name + "'"
+    }
+    constraint JdbcContextName {      
+        check : not self.`context`.isDefined() or (nameIsValid(self.`context`.name) and not self.`context`.name.contains("_")) 
+        message : "не корректное имя JdbcContext: '" + self.`context`.name + "'"
+    }    
+}
+
+context src!TransformationStep {
+    constraint NameIsDefined {      
+        check : self.name.isDefined() and self.name.length() > 0 
+        message : "TransformationStep: name не определено"
+    }
+    constraint NameIsValid {      
+        guard : self.satisfies("NameIsDefined")      
+        check : nameIsValid(self.name) 
+        message : "не корректное имя TransformationStep: '" + self.name + "'"
+    }
+    constraint NameIsUnique {      
+        guard : self.satisfies("NameIsDefined")      
+        check : self.transformation.getNames().count(self.name) == 1 
+        message : "не уникальное имя TransformationStep: '" + self.name + "'"
+    }
+}
+
+context src!Port {
+    constraint FieldsUnique {      
+        check {
+            var wrong = null;
+            for (f in self.fields) {
+                if (self.fields.select(f2|f2.name == f.name).size() > 1) {
+                    wrong = f;
+                    return false;
+                }
+            }
+            return true;
+        } 
+        message : "не уникальные имена полей порта '" + self.name + "': " + wrong.name 
+    }
+    constraint FieldsNotEmptyName {      
+        check {
+            for (f in self.fields) {
+                if (f.name == null or f.name == "") {
+                    return false;
+                }
+            }
+            return true;
+        } 
+        message : "поля с пустым именем в '" + self.name 
+    }
+    
+}
+
+context src!TableTargetFeature {
+    constraint InputFieldExists {      
+        check : self.target.inputPort.fields.select(f|f.name == self.inputFieldName).size() > 0 
+        message : "нет входящего порта для TableTargetFeature '" + self.inputFieldName + "', таблицы '" + self.target.name + "'"
+    }
+}
+
+context src!Projection {
+    constraint OutputFieldIsProjection {      
+        check : self.outputPort.fields.select(f|not f.isKindOf(src!ProjectionField)).size() == 0 
+        message : "не все исходящие порты проекции '" + self.name + "' имеют тип ProjectionField"
+    }
+    constraint ProjectionOutputSourceFieldFromThisStep {      
+        guard : self.isTypeOf(src!Projection)
+        check {
+            for (f in self.outputPort.fields) {
+                for (s in f.sourceFields) {
+                    if (s.dataSet <> self.inputPort)
+                        return false;
+                }
+            }
+            return true;
+        } 
+        message : "не все исходящие поля проекции '" + self.name + "' ссылаются на входное поле"
+    }
+    constraint JoinAddFieldSameType {      
+        guard : self.isTypeOf(src!Projection)
+        check {
+            var failed = Sequence{};
+            for (f: src!ProjectionField in self.outputPort.fields) {
+                if (f.fieldOperationType == FieldOperationType#ADD and (f.sourceFields.size() <> 1 or f.dataTypeDomain <> f.sourceFields.get(0).dataTypeDomain)) {
+                    failed.add(f.name);
+                }
+            }
+            return failed.size() == 0;
+        } 
+        message : "не все исходящие поля трансформации '" + self.name + "' имеют тип входящего поля: " + failed.concat(", ")
+    }
+}
+
+context src!Aggregation {
+	constraint FieldNamesDefined {
+		check {
+			var flag = true;
+			for (ap in self.aggregationParameters) {
+				if (not ap.fieldName.isDefined()) {
+					flag = false;
+				}
+			}
+			return flag;
+		}
+		message : self.name + ": поле аггрегации не определено"
+	}
+	constraint AggregationParametersAreDefined {
+		check : self.groupByFieldName.size() + self.aggregationParameters.size() > 0
+		message  : self.name + ": не определены параметры агрегации"
+	}
+	constraint ResultFieldNamesDefined {
+		check {
+			var flag = true;
+			for (ap in self.aggregationParameters) {
+				if (not ap.resultFieldName.isDefined()) {
+					flag = false;
+				}
+			}
+			return flag;
+		}
+		message : "Название результирующего поля аггрегации " + self.name + " не определено"
+	}
+    constraint GroupByFieldsExists {      
+        check {
+            for (groupByFieldName in self.groupByFieldName) {
+                var groupByField = self.inputPort.fields.select(f|f.name == groupByFieldName).first();
+                if (not groupByField.isDefined()) {
+                    return false;
+                }
+            }
+            return true;
+        } 
+        message : self.name + ": поле группировки не задано"
+    }
+     constraint AggregationFunctuionsAreDefined {      
+        check {
+        	var flag = true;
+        	var messageText = "";
+        	if (self.userDefAgg) {
+        		if ((not self.expression.isDefined()) and (not self.initExpression.isDefined()) and (not self.mergeExpression.isDefined()) and (not self.finalExpression.isDefined())) {
+        			flag = false;
+	            	messageText = "Не задана пользовательская фукнция агреграции";
+        		}
+        	} else {
+	            for (ap in self.aggregationParameters) {
+	            	if (not ap.aggregationFunction.isDefined()) {
+	            		flag = false;
+	            		messageText = "Не задана фукнция агреграции";
+	            	}  
+	            }
+            }
+            return flag;
+        } 
+        message : self.name + ": " + messageText
+    }
+}
+
+context src!Join {
+    constraint JoinAddFieldSameType {      
+        check {
+            var failed = Sequence{};
+            for (f: src!ProjectionField in self.outputPort.fields) {
+                if (f.fieldOperationType == FieldOperationType#ADD and (f.sourceFields.size() <> 1 or f.dataTypeDomain <> f.sourceFields.get(0).dataTypeDomain)) {
+                    failed.add(f.name);
+                }
+            }
+            return failed.size() == 0;
+        } 
+        message : "не все исходящие поля трансформации '" + self.name + "' имеют тип входящего поля: " + failed.concat(", ")
+    }
+    constraint JoinOutputSourceFieldFromThisStep {      
+        check {
+            for (f: src!ProjectionField in self.outputPort.fields) {
+                for (s in f.sourceFields) {
+                    if (s.dataSet <> self.inputPort and s.dataSet <> self.joineePort)
+                        return false;
+                }
+            }
+            return true;
+        } 
+        message : "не все исходящие поля проекции '" + self.name + "' ссылаются на входное или присоединённое поле"
+    }
+    constraint JoinFieldsSameType {      
+        guard : self.satisfies("JoineeFieldExists") and self.satisfies("KeyFieldExists")       
+        check {
+            var keyField = null;
+            var joineeKeyField = null;
+            var i = 0;
+            while (i < self.keyFields.size()) {
+                keyField = self.inputPort.fields.select(f|f.name == self.keyFields[i]).first();
+                joineeKeyField = self.joineePort.fields.select(f|f.name == self.joineeKeyFields[i]).first();
+                if (keyField.dataTypeDomain <> joineeKeyField.dataTypeDomain) {
+                    return false;
+                }
+                i = i + 1;
+            }
+            return true;
+        } 
+        message : "для Join '" + self.name + "' ключевые поля имеют разные типы (" + keyField.name + "[" + keyField.dataTypeDomain + "], " + joineeKeyField.name + "[" + joineeKeyField.dataTypeDomain + "])"  
+    }
+    constraint JoinLengthSizeEquals {      
+        check: self.keyFields.size() == self.joineeKeyFields.size()  
+        message : "для Join '" + self.name + "' разная длина списков ключевых полей "  
+    }
+    constraint JoineeFieldExists {      
+        guard : self.satisfies("JoinLengthSizeEquals")      
+        check {
+            var joineeKeyField = null;
+            var i = 0;
+            while (i < self.keyFields.size()) {
+                joineeKeyField = self.joineePort.fields.select(f|f.name == self.joineeKeyFields[i]).first();
+                if (not joineeKeyField.isDefined()) {
+                    return false;
+                }
+                i = i + 1;
+            }
+            return true;
+        } 
+        message : "для Join '" + self.name + "' присоединённое поле не задано " + self.keyFields[i]  
+    }
+    constraint KeyFieldExists {      
+        check {
+            var keyField = null;
+            var i = 0;
+            while (i < self.keyFields.size()) {
+                keyField = self.inputPort.fields.select(f|f.name == self.keyFields[i]).first();
+                if (not keyField.isDefined()) {
+                    return false;
+                }
+                i = i + 1;
+            }
+            return true;
+        } 
+        message : "для Join '" + self.name + "' ключевое поле не задано " + self.keyFields[i]  
+    }
+}
+
+context src!Union {
+    constraint OutputFieldIsUnionField {      
+        check : self.outputPort.fields.select(f|not f.isKindOf(src!UnionField)).size() == 0 
+        message : "не все исходящие порты объединения '" + self.name + "' имеют тип UnionField"
+    }
+    constraint UnionOutputSourceFieldFromThisStep {      
+        check {
+            for (f: src!UnionField in self.outputPort.fields) {
+                if (f.inputPortField <> null and f.inputPortField.dataSet <> self.inputPort)
+                    return false;
+                if (f.unionPortField <> null and f.unionPortField.dataSet <> self.unionPort)
+                    return false;
+            }
+            return true;
+        } 
+        message : "не все исходящие поля объединения '" + self.name + "' ссылаются на входное или присоединённое поле"
+    }
+    constraint UnionInputPort {      
+        check: self.inputPort <> null
+        message : "входящий порт объединения '" + self.name + "' не заполнен"
+    }
+    constraint UnionUnionPort {      
+        check: self.unionPort <> null
+        message : "присоединённый порт объединения '" + self.name + "' не заполнен"
+    }
+}
+
+context src!Selection {
+    constraint SourceFieldsAreValid {      
+        check {
+            var failed = self.inputPort.fields.select(f|not nameIsValid(f.name)).collect(f|f.name);
+            return failed.size() == 0;
+        }  
+        message : "для трансформации '" + self.name + "' входящие поля не являются правильными идентификаторами: " + failed.concat(", ")
+    }
+}
+
+context src!DebugOutput {
+    constraint SourceFieldsAreValid {      
+        check {
+            if (not self.active or self.condition == null or self.condition == "")
+                return true;
+            var failed = self.outputPort.fields.select(f|not nameIsValid(f.name)).collect(f|f.name);
+            return failed.size() == 0;
+        }  
+        message : "для отладочного вывода '" + self.name + "' входящие поля не являются правильными идентификаторами: " + failed.concat(", ")
+    }
+}
+
+context src!ProjectionField {
+    constraint TransformationForMultiInput {      
+        check : (self.fieldOperationType == FieldOperationType#TRANSFORM or 
+                 self.fieldOperationType == FieldOperationType#SQL or 
+                 self.fieldOperationType == FieldOperationType#PACK) or 
+                 self.sourceFields.size() == 1  
+        message : "для поля '" + self.dataSet.name + "." + self.name + "' не одно входящее поле, тип операции должен быть TRANSFORM или SQL"
+    }
+    constraint TransformExpressionNotEmpty {      
+        check : (self.fieldOperationType <> FieldOperationType#TRANSFORM and self.fieldOperationType <> FieldOperationType#SQL) or self.expression <> null  
+        message : "для поля '" + self.dataSet.name + "." + self.name + "' expression не определён"
+    }
+    constraint SourceFieldsAreValid {      
+        check {
+            var failed = null;
+            if (self.fieldOperationType == FieldOperationType#TRANSFORM) {
+                failed = self.sourceFields.select(f|not nameIsValid(f.name)).collect(f|f.name);
+                return failed.size() == 0;
+            }
+            return true;
+        }  
+        message : "для поля '" + self.dataSet.name + "." + self.name + "' входящие поля не являются правильными идентификаторами: " + failed.concat(", ")
+    }
+}
+
+context src!UnionField {
+    constraint FieldHasOrigin {      
+        check : self.inputPortField <> null or self.unionPortField <> null  
+        message : "для поля '" + self.dataSet.name + "." + self.name + "' происхождение не определено"
+    }
+}
+
+context src!TableTarget {
+    constraint JdbcContextNotEmpty {              
+        check : self.`context`.isDefined() 
+        message : "не определён JdbcContext для '" + self.name + "'"
+    }
+    constraint TableFieldsNotEmpty {      
+        check : self.inputFieldsMapping.size() > 0  
+        message : "для TableTarget '" + self.name + "' пустой массив inputFieldsMapping"
+    }
+    constraint TableNameNotEmpty {      
+        check : self.tableName <> null and self.tableName.length() > 0  
+        message : "для TableTarget '" + self.name + "' не задано tableName"
+    }
+}
+
+context src!TableSource {
+    constraint JdbcContextNotEmpty {              
+        check : self.`context`.isDefined() 
+        message : "не определён JdbcContext для '" + self.name + "'"
+    }
+    constraint TableNameNotEmpty {      
+        check : self.tableName <> null and self.tableName.length() > 0  
+        message : "для TableSource '" + self.name + "' не задано tableName"
+    }
+}
+
+context src!Transition {
+    constraint StartHasEquivalents {      
+        check {
+            var wrong = null;
+            for (field in self.start.fields) {
+                if (self.finish.fields.select(f|f.name == field.name and f.dataTypeDomain == field.dataTypeDomain).size() <> 1) {
+                    wrong = field;
+                    return false;
+                }
+            }
+            return true;
+        }  
+        message : "для начального поля " + wrong.name + "[" + wrong.dataTypeDomain + "] перехода " + self.name + " не найдено поля-приёмника"
+    }
+    constraint FinishHasEquivalents {      
+        check {
+            var wrong = null;
+            for (field in self.finish.fields) {
+                if (self.start.fields.select(f|f.name == field.name and f.dataTypeDomain == field.dataTypeDomain).size() <> 1) {
+                    wrong = field;
+                    return false;
+                }
+            }
+            return true;
+        }  
+        message : "для конечного поля " + wrong.name + "[" + wrong.dataTypeDomain + "] перехода " + self.name + " не найдено поля-источника"
+    }
+}
+
+context src!SQLSource {
+    constraint JdbcContextNotEmpty {              
+        check : ((not self.`contextFromString` == true) and self.`context`.isDefined()) or (self.`contextFromString` == true and self.`contextString`.isDefined())
+        message : "не определён JdbcContext для '" + self.name + "'"
+    }
+    constraint StatementNotEmpty {      
+        check {
+            return self.statement <> null and self.statement.length() > 0;
+        }  
+        message : "для SQLSource '" + self.name + "' не задано statement"
+    }
+}
+
+operation nameIsValid(name): Boolean {
+    if (not Native("java.lang.Character").isJavaIdentifierStart(name.charAt(0))) {
+        return false;
+    }
+    var i = 1;
+    while (i < name.length()) {
+	    if (not Native("java.lang.Character").isJavaIdentifierPart(name.charAt(i))) {
+	        return false;
+	    }
+	    i = i + 1;
+    }
+    return true;
+}
+
+operation src!Transformation getNames() {
+  return self.sources.includingAll(self.targets.includingAll(self.transformationSteps)).collect(x|x.name);
+}
+
+context src!ModelBasedAnalysis {
+    constraint FieldsAreDecimal {      
+        check {
+            var wrong = null;
+            for (f in self.inputPort.fields) {
+                if (self.modelFeaturesFields.contains(f.name) and f.dataTypeDomain <> DataTypeDomain#DECIMAL) {
+                    wrong = f;
+                    return false;
+                }
+            }
+            return true;
+        }
+        message : "поле для анализа не является полем DECIMAL '" + self.name + "': " + wrong.name 
+    }
+}
+context src!GroupWithState{
+	constraint InternalStateCreated {
+		check {
+			return self.internalState <> null and self.internalState.dataSet <> null and self.internalState.dataSet.size > 0;
+		}
+		message : "для GroupWitState '" + self.name + "' не задан InternalState"
+	}
+}
+
+context src!HiveSource {
+	constraint StatementNotEmpty {
+		check {
+            return self.statement <> null and self.statement.length() > 0;
+        }  
+        message : "для HiveSource '" + self.name + "' не задано statement"
+	}
+}
+
+context src!SparkSQL {
+	constraint NameIsDefined {      
+        check : self.name.isDefined() and self.name.length() > 0 
+        message : "SparkSQL: имя не определено"
+    }
+	constraint SqlPortsAreNamed {
+		check {
+			for (sqlPort in self.sqlPorts) {
+				if (sqlPort.`alias`.isDefined()) {
+					return true;
+				}
+			}
+			return false;
+		}
+		message: "Не определены псевдонимы для входящих портов " + self.name
+	}
+	constraint SourcesAreDefined {
+		guard : self.satisfies("SqlPortsAreNamed")  
+		check {
+			var transitionFinishCounter = 0;
+			var sqlPortCounter = 0;			
+			for (sqlPort in self.sqlPorts) {
+				sqlPortCounter = sqlPortCounter + 1;
+				for (transition in self.transformation.transitions) {
+					if (transition.finish == sqlPort) {
+						transitionFinishCounter = transitionFinishCounter + 1;
+					}
+				}
+			}
+			if (transitionFinishCounter == sqlPortCounter) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+        message : "Не для всех входящих портов SparkSQL определены источники данных: '" + self.transformation.name + ":" + self.name + "'"
+	}
+	constraint SourceFieldsAreDefined {
+		guard : self.satisfies("SourcesAreDefined")  
+		check {
+			for (sqlPort in self.sqlPorts) {
+				var fieldCounter = 0;
+				for (field in sqlPort.fields) {
+					fieldCounter = fieldCounter + 1;
+				}
+				if (fieldCounter == 0) {
+					return false;
+				}
+			}
+			return true;
+		}
+        message : "Не у всех источников данных для SparkSQL определены поля выходных данных: '" + self.transformation.name + ":" + self.name + "'"
+	}
+	constraint StatementNotEmpty {      
+        check {
+            return self.statement <> null and self.statement.length() > 0;
+        }  
+        message : "для SparkSQL '" + self.name + "' не задано statement"
+    }
+    constraint SqlPortNamesAreUnique {
+    	check {      
+            var duplicate = null;
+            for (p in self.sqlPorts) {
+                if (self.sqlPorts.select(p2|p2.`alias` == p.`alias`).size() > 1) {
+                    duplicate = p;
+                    return false;
+                }
+            }
+            return true;
+        } 
+        message : "Повторяющиеся имена SQL портов '" + self.name + "': " + duplicate.`alias`  
+    }
+}
+
+context src!HiveTarget {
+    constraint TableNameIsDefined {      
+        check : self.tableName.isDefined() and self.tableName.length() > 0 
+        message : "Target \"" + self.name + "\": не задано имя таблицы"
+    }
+    constraint TableNameIsValid {      
+        guard : self.satisfies("TableNameIsDefined")      
+        check : nameIsValid(self.tableName) 
+        message : "Не корректное имя таблицы Target: \"" + self.name + "\""
+    }
+    constraint PartitionsNamesAreDefined {
+    	check {
+    		for (p in self.partitions) {
+    			if (not p.isDefined()) {
+    				return false;
+    			}
+    		}
+    		return true;
+    	}
+    	message : "Target \"" + self.name + "\": не для всех partitions определны поля"
+    }
+    constraint PartitionsNumberIsValid {
+    	check : self.partitions.size() < self.inputPort.fields.size()
+    	message : "Target \"" + self.name + "\": количество partitions больше или равно количеству полей"
+    }
+}
+
+context src!StreamTarget {
+    constraint PathIsDefined {      
+        check : self.options.select(o|o.key == "path").size() > 0 or self.localFileName.isDefined()
+        message : "Не определена опция path: \"" + self.name + "\""
+    }
+    constraint CheckpointsPathIsDefined {      
+        check : self.options.select(o|o.key == "checkpointLocation").size() > 0 or self.checkpointLocation.isDefined()
+        message : "Не определена опция checkpointLocation: \"" + self.name + "\""
+    }  
+}
+
+context src!KafkaSource {
+	constraint BootstrapServersAreDefined {
+		check : self.bootstrapServers.isDefined()
+		message : "KafkaSource \"" + self.name + "\": не заданы bootstrap servers"
+	}
+	constraint ConsumeOptionValueIsDefined {
+		check : self.consumeOptionValue.isDefined()
+		message : "KafkaSource \"" + self.name + "\": не задано consume option value"
+	}
+	constraint OutPortFieldsNumberIsIncorrect {
+		check : self.outputPort.fields.size() == 7
+		message : "KafkaSource \"" + self.name + "\": некорректное количество исходящих полей: " + self.outputPort.fields.size() + " (требуется 7)"
+	}
+	constraint OutputFieldNamesAreIncorrect {
+		guard : self.satisfies("OutPortFieldsNumberIsIncorrect")
+		check {
+			var failed = Sequence{};
+			for (f in self.outputPort.fields) {
+				if (not ( f.name == "key" or f.name == "value" or f.name == "topic" or f.name == "partition" or f.name == "offset" or f.name == "timestamp" or f.name == "timestampType")) {
+					failed.add(f.name);
+				}
+			}
+			return failed.size() == 0;
+		}
+		message : "KafkaSource \"" + self.name + "\": некорректные имена исходящих полей: " + failed.concat(", ") + ". Требуется: key, value, topic, partition, offset, timestamp, timestampType"
+	}
+	constraint OutputFieldTypesAreIncorrect {
+		guard : self.satisfies("OutputFieldNamesAreIncorrect")
+		check {
+			var failed = Sequence{};
+			for (f in self.outputPort.fields) {
+				switch (f.name) {
+					case "key" : if (f.dataTypeDomain <> DataTypeDomain#BINARY) {failed.add(f.name);}
+					case "value" : if (f.dataTypeDomain <> DataTypeDomain#BINARY) {failed.add(f.name);}
+					case "topic" : if (f.dataTypeDomain <> DataTypeDomain#STRING) {failed.add(f.name);}
+					case "partition" : if (f.dataTypeDomain <> DataTypeDomain#INTEGER) {failed.add(f.name);}
+					case "offset" : if (f.dataTypeDomain <> DataTypeDomain#LONG) {failed.add(f.name);}
+					case "timestamp" : if (f.dataTypeDomain <> DataTypeDomain#TIME) {failed.add(f.name);}
+					case "timestampType" : if (f.dataTypeDomain <> DataTypeDomain#INTEGER) {failed.add(f.name);}
+				}
+			}
+			return failed.size() == 0;
+		}
+		message : "KafkaSource \"" + self.name + "\": некорректные типы исходящих полей: " + failed.concat(", ") + ". Требуется: key - BINARY, value - BINARY, topic - STRING, partition - INTEGER, offset - LONG, timestamp - TIME, timestampType - INTEGER"
+	}
+	constraint OptionsAreDefinedCorrectly {
+		check {
+			var flag = true;
+			for (opt in self.options) {
+				if (not opt.key.isDefined() or not opt.value.isDefined()) {
+					flag = false;
+				}
+			}
+			return flag;
+		}
+		message : "KafkaSource \"" + self.name + "\": заполнены не все значения key/value в разделе Options"
+	}
+}
+
+context src!KafkaTarget {
+	constraint KeyIsDefined {
+		check : self.messageKey.isDefined()
+		message : "KafkaTarget \"" + self.name + "\": не задан message key"
+	}
+	constraint ValueIsDefined {
+		check : self.messageValue.isDefined()
+		message : "KafkaTarget \"" + self.name + "\": не задано message value"
+	}
+	constraint BootstrapServersAreDefined {
+		check : self.bootstrapServers.isDefined()
+		message : "KafkaTarget \"" + self.name + "\": не заданы bootstrap servers"
+	}
+	constraint TopicNameIsDefined {
+		check : self.topicName.isDefined()
+		message : "KafkaTarget \"" + self.name + "\": не задан topic"
+	}
+	constraint PropertiesAreDefinedCorrectly {
+		check {
+			var flag = true;
+			for (p in self.props) {
+				if (not p.key.isDefined() or not p.value.isDefined()) {
+					flag = false;
+				}
+			}
+			return flag;
+		}
+		message : "KafkaTarget \"" + self.name + "\": заполнены не все значения key/value в разделе Properties"
+	}
+}
+
+context src!TransformationTest {
+	constraint testHaveMocks{
+		check { 
+			if(self.enabled == false) {
+			 	return true;
+			}
+			var res = self.steps.size() > 0;
+			return res;
+			 
+		}
+		message : "Тест " + self.name + " не имеет ни одного заполненого шага" 
+	}
+	constraint allMocksHaveBody {
+		check {
+			if(self.enabled == false) {
+			 	return true;
+			}
+			var failed = Sequence{};
+			var flag = true;	
+			for (s in self.steps){
+				if(s.body.length() == 0){
+					bodyErr.add(s.name);
+					flag = false;
+				}
+			}
+			return flag;
+		}
+		message : "Тест " + self.name + ". Для шагов " + bodyErr.concat(",") + " не заполнены значения"
+	}
+	constraint allMockedTargetsHaveMockedSources {
+		check{
+		
+			if(self.enabled == false) {
+			 	return true;
+			}
+			var failed = Sequence{};
+			var transformation = self.transformation;
+			var targetMocked = false;
+			var allSourcesMocked = false;
+			var sourcesCount = transformation.sources.size();
+			var mockedSources = 0;
+			for(m in self.steps){
+					for(t in transformation.targets){
+						if(t.name == m.name ){
+							targetMocked = true;
+						}
+					
+					}
+					for(s in transformation.sources){
+						if(s.name == m.name ){
+							mockedSources = mockedSources + 1;
+						}
+					}
+			}
+			var result = (targetMocked == false) or (sourcesCount == mockedSources);
+			return result;		
+			}
+			message : "Тест " + self.name + ". Не все источники представлены в виде JSON"
+	}
+
+}
+
+operation getCorrectName(s : String):String{
+  var result = s;
+  if (result <> null and result <> ""){
+    result = result.replace("#","_")
+                   .replace("\\$","_")
+                   .replace("@", "_")
+                   .replace(">", "_")
+                   .replace("<", "_")
+                   .replace("%", "_")
+                   .replace("=", "_");
+    if ((result == "abstract") or (result == "case") or (result == "catch") or (result == "class")
+         or (result == "def") or (result == "do") or (result == "else") or (result == "extends")
+         or (result == "false") or (result == "final") or (result == "finally") or (result == "for")
+         or (result == "forSome") or (result == "if") or (result == "implicit") or (result == "import")
+         or (result == "lazy") or (result == "match") or (result == "new") or (result == "null")
+         or (result == "object") or (result == "override") or (result == "package") or (result == "private")
+         or (result == "protected") or (result == "return") or (result == "sealed") or (result == "super")
+         or (result == "this") or (result == "throw") or (result == "trait") or (result == "true")
+         or (result == "try") or (result == "type") or (result == "val") or (result == "var")
+         or (result == "while") or (result == "with") or (result == "yield")) {
+    	result = result + "_";
+    }
+    if (not Native("java.lang.Character").isJavaIdentifierStart(s.charAt(0))) {
+    	result = "_" + result;
+    }
+  }
+  return result;
+}

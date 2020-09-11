@@ -1,0 +1,107 @@
+@namespace(uri="http://www.neoflex.ru/meta/dataspace", prefix="dataspace")
+package dataspace;
+
+import "http://www.neoflex.ru/meta/dataset";
+import "http://www.neoflex.ru/meta/rt";
+
+/* hierarchical container for Table's, Mapping's, Persister*/
+class Dataspace {
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String name;
+  ref Dataspace#subSpaces dataspace;
+  ref Dataspace[*]#dataspace subSpaces;
+  val Table[*]#dataspace tables;
+  val Mapping[*]#dataspace mappings;
+  val Persister persister;
+}
+
+/* can be contained in Dataspace */
+abstract class Table {
+  ref Dataspace#tables dataspace;
+
+  /* read only, contains full path root_dataspace-dataspaceN-tableName */
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String name;
+  /* unique for Dataspace */
+  attr String tableName;
+}
+
+/* source for mapping */
+abstract class WorkTable extends Table {
+}
+
+/* private for Dataspace, contains real data, can be published by PublicTable, created by Mapping or by hands, persisted by Dataspace.persister */
+class PrivateTable extends WorkTable {
+	val dataset.DataSet dataSet;
+}
+
+/* makes PrivateTable visible outside Dataspace */
+class PublicTable extends Table {
+  ref PrivateTable privateInstance;
+}
+
+/* makes PublicTable accessible as Mapping source */
+class ReferenceTable extends WorkTable {
+  ref PublicTable publicInstance;
+}
+
+/* read and write tables data/metadata */
+abstract class Persister {
+}
+
+class JDBCPersister extends Persister {
+	ref rt.JdbcConnection jdbcConnection;
+}
+
+class HivePersister extends Persister {
+}
+
+class LocalPersister extends Persister {
+  attr String path;
+}
+
+/* source for mapping */
+class Alias {
+  attr String name;
+  ref WorkTable table;
+}
+
+/* transforms WorkTable's */
+abstract class Mapping {
+  attr String name;
+  ref Dataspace#mappings dataspace;
+  ref Alias[*] sources;
+}
+
+/* creates PrivateTable as a result of transformation */
+abstract class TableMapping extends Mapping {
+  ref PrivateTable target;
+}
+
+class SparkSQLMapping extends TableMapping {
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String query;
+}
+
+class RMapping extends TableMapping {
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10485760)")
+  attr String code;
+}
+
+class DroolsMapping extends TableMapping {
+	/**/
+}
+
+class ModelLearningMapping extends Mapping {
+	/**/
+}
+
+class ModelAnalisysMapping extends TableMapping {
+	ref ModelLearningMapping modelLearning;
+}
+
+class StatisticsMapping extends Mapping {
+	/**/
+}

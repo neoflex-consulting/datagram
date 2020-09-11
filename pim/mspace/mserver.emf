@@ -1,0 +1,45 @@
+@namespace(uri="http://www.neoflex.ru/meta/mserver", prefix="mserver")
+package mserver;
+
+class MServer {
+  attr String[1] name;
+  val CIArea[*] ciAreas;
+  val PIArea[*] piAreas;
+  val Model[*] models;
+}
+
+class CIArea {
+  attr String[1] name;
+  val CIMM[*] metaModels;
+}
+
+class PIArea {
+  attr String[1] name;
+  val Platform[*]#piArea platforms;
+  val PIMM[*] metaModels;
+}
+
+class Platform {
+  attr String[1] name;
+  ref PIArea[1]#platforms piArea;
+}
+
+class Model {
+  attr String name;
+  attr String[1] path;
+  attr String etl;
+  attr boolean loadOnStartup = false;
+}
+
+abstract class MetaModel {
+  attr String[1] name;
+  attr boolean[1] persistent = true;
+  attr boolean[1] ui = true;
+}
+
+class CIMM extends MetaModel {
+}
+
+class PIMM extends MetaModel {
+}
+

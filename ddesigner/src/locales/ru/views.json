@@ -1,0 +1,128 @@
+{
+  "FormView": {
+    "caption": "Редактор свойств"
+  },
+  "TransformationDesignerView": {
+    "caption": "Редактор трансформаций"
+  },
+  "WorkflowDesignerView": {
+    "caption": "Редактор потока обработки"
+  },
+  "OozieView": {
+    "caption": "Oozie консоль"
+  },
+  "LivyView": {
+    "caption": "Livy консоль"
+  },
+  "HDFSView": {
+    "caption": "HDFS консоль"
+  },
+  "ProjectionEditor": {
+    "caption": "Редактор преобразования"
+  },
+  "JoinEditor": {
+    "caption": "Редактор соединения"
+  },
+  "UnionEditor": {
+    "caption": "Редактор объединения"
+  },
+  "SourceCodeEditor": {
+    "caption": "Редактор исходного кода"
+  },
+  "TestCodeEditor": {
+    "caption": "Редактор тестового кода"
+  },
+  "GroupWithStateEditor": {
+    "caption": "Редактор Groups With State"
+  },
+  "SparkEditor": {
+    "caption": "Spark редактор"
+  },
+  "SqlEditor": {
+    "caption": "SQL редактор"
+  },
+  "LocalSourceEditor": {
+    "caption": "Редактор источника"
+  },
+  "LocalTargetEditor": {
+    "caption": "Редактор приемника"
+  },
+  "TableSourceEditor": {
+    "caption": "Редактор таблиц источника"
+  },
+  "TableTargetEditor": {
+    "caption": "Редактор таблиц приемника"
+  },
+  "ExpressionEditor": {
+    "caption": "Редактор выражений"
+  },
+  "XmlEditor": {
+    "caption": "Редактор XML"
+  },
+  "SelectionEditor": {
+    "caption": "Редактор выборки"
+  },
+  "AggregationEditor": {
+    "caption": "Редактор агрегации"
+  },
+  "AvroSourceEditor": {
+    "caption": "Редактор Avro источника"
+  },
+  "HiveSourceEditor": {
+    "caption": "Редактор Hive источника"
+  },
+  "HiveTargetEditor": {
+    "caption": "Редактор Hive приемника"
+  },
+  "CSVSourceEditor": {
+    "caption": "Редактор CSV источника"
+  },
+  "CSVTargetEditor": {
+    "caption": "Редактор CSV приемника"
+  },
+  "Metadata": {
+    "caption": "Метаданные"
+  },
+  "HiveDsMetadata": {
+    "caption": "Метаданные Hive Dataset"
+  },
+  "Constructor": {
+    "caption": "Конструктор"
+  },
+  "QueryConstructor": {
+    "caption": "Конструктор запросов"
+  },
+  "DatasetView": {
+    "caption": "Обзор"
+  },
+  "WorkspaceView": {
+    "caption": "Обзор"
+  },
+  "WorkspaceGridView": {
+    "caption": "Обзор"
+  },
+  "NotebookView": {
+    "caption": "Обзор"
+  },
+  "EventsProcessorView": {
+      "caption": "Редактор правил"
+  },
+  "JSONView": {
+    "caption": "Просмотр JSON"
+  },
+  "ImportWizardView": {
+    "caption": "Обзор"
+  },
+  "AtlasView": {
+    "caption": "JSON View"
+  },
+  "AirflowView": {
+    "caption": "List of Airflow pools"
+  },
+  "VCSInfo": {
+    "caption": "Система управления версиями"
+  },
+  "StateMachineInstanceView":{
+    "caption": "Обзор"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "eClasses": {
+    "sse.AbstractDataset": {
+      "views": ["SourceCodeEditor", "FormView"],
+      "displayFieldName": "shortname",
+      "icon": "abstract-dataset.svg"
+    },
+    "sse.QueryDataset":{
+      "views": ["QueryConstructor","Metadata", "DatasetView", "FormView"],
+      "displayFieldName": "shortname",
+      "icon": "query.svg"
+    },
+    "sse.TableDataset":{
+      "views": ["DatasetView", "Metadata", "FormView"],
+      "createView": "FormView",
+      "displayFieldName": "shortname",
+      "icon": "table.svg"
+    },
+    "sse.LinkedDataset":{
+      "views": ["DatasetView", "Metadata", "FormView"],
+      "createView": "FormView",
+      "displayFieldName": "shortname",
+      "icon": "linked.svg"
+    },
+    "sse.Dataset":{
+      "views": ["Constructor", "Metadata", "DatasetView", "FormView"],
+      "createView": "Constructor",
+      "displayFieldName": "shortname",
+      "icon": "dataset.svg"
+    },
+    "sse.ReferenceDataset":{
+      "views": ["Metadata", "DatasetView", "FormView"],
+      "createView": "FormView",
+      "displayFieldName": "shortname",
+      "icon": "reference-dataset.svg"
+    },
+    "sse.HiveDataset":{
+      "views": ["Metadata", "DatasetView", "FormView"],
+      "createView": "FormView",
+      "displayFieldName": "shortname",
+      "icon": "hive.svg"
+    },
+    "sse.HiveExternalDataset":{
+      "views": ["Metadata", "DatasetView", "FormView"],
+      "createView": "FormView",
+      "displayFieldName": "shortname",
+      "icon": "hive-external.svg"
+    },
+    "sse.JdbcDataset":
+    {
+      "views": ["DatasetView", "Metadata", "FormView"],
+      "createView": "FormView",
+      "displayFieldName": "shortname",
+      "icon": "jdbc-dataset.svg"
+    }
+  }
+}

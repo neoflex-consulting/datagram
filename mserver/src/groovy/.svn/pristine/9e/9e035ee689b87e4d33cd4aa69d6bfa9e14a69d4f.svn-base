@@ -1,0 +1,72 @@
+package MetaServer.sse
+
+import MetaServer.utils.JDBC
+import com.google.common.base.Strings
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.eclipse.emf.ecore.util.EcoreUtil
+
+import ru.neoflex.meta.model.Database
+import ru.neoflex.meta.utils.Context
+
+import java.sql.DatabaseMetaData
+import java.sql.ResultSet
+import ru.neoflex.meta.utils.ECoreUtils;
+
+class ModelPipelineWorkspace extends Workspace {
+    private final static Log log = LogFactory.getLog(ModelPipelineWorkspace.class)
+
+    public static Map toValidation(Map entity, Map params = null) {
+        def db = Database.new
+        def modelForValidation = db.get(entity)
+        def i = 1
+        def name = "validate" + modelForValidation.name + i        
+        while(true) {
+            if(db.select("from " + modelForValidation._type_ + " where name = " + "'" + name + "'", null).size == 0) {
+                break;
+            } else {
+                i++
+                name = "validate" + modelForValidation.name + i
+            }
+        }
+        
+        def Map copy = ECoreUtils.copyEntityToDerivedClass(modelForValidation, name, "sse.ValidateModelPipelineWorkspace")
+        copy.shortName = name
+        copy.parent = modelForValidation
+        
+        List nodes = db.select("select a from sse.AbstractNode a where a.workspace.e_id = " + modelForValidation.e_id, [:])
+        List nodes2 = []
+        Map oldNew = [:]
+        for(node in nodes){
+            def String nodeName = node.name
+            if(nodeName.contains(modelForValidation.name)) {
+                nodeName = nodeName.replace(modelForValidation.name, copy.name)
+            } else {
+                nodeName = copy.name + "_" + nodeName
+            }
+            
+            def node2 = ECoreUtils.copyEntity(node, nodeName)
+            node2.workspace = copy
+            db.save(node2)
+            nodes2 += node2
+            oldNew.put(node, node2)
+        }
+        
+        for(node in nodes2) {
+            List datasets = []
+            for(dataset in node.datasets) {
+                if(dataset.workspace.e_id == modelForValidation.e_id) {
+                    datasets += oldNew.get(nodes.find{d -> d.e_id == dataset.e_id})
+                } else {
+                    datasets += dataset
+                }
+            }
+            node.datasets = datasets
+            db.save(node)
+        }
+        
+        db.save(copy)
+        
+        return [status: "OK", problems: []]
+    }
+}

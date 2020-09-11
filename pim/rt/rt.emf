@@ -1,0 +1,598 @@
+@namespace(uri="http://www.neoflex.ru/meta/rt", prefix="rt")
+package rt;
+
+import "http://www.neoflex.ru/meta/relational";
+import "http://www.neoflex.ru/meta/etl";
+import "http://www.neoflex.ru/meta/auth";
+
+abstract class Connection {
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  ref etl.Project project;
+}
+
+class SoftwareSystem {
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  ref etl.Project project;
+  ref rel.Scheme scheme;
+  ref Deployment defaultDeployment;
+
+  @mspace.ui(caption="Обновить схему")
+  op void refreshScheme();
+}
+
+class JdbcConnection extends Connection {
+
+  @mspace.ui(caption="Протестировать")
+  op void test();
+  attr String[1] url;
+  attr String schema;
+  attr String catalog;
+  attr Boolean connectAsLoggedUser;
+  attr String user;
+
+  @mspace.ui(password="true")
+  attr String password;
+  attr String[1] driver;  
+}
+
+class Deployment {
+
+  @mspace.ui(caption="Обновить схему")
+  op void refreshScheme();
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  ref etl.Project project;
+  ref Connection connection;
+  ref SoftwareSystem softwareSystem;
+  attr boolean loadStoredProcs;
+}
+
+class Oozie {
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  ref etl.Project project;
+  attr String[1] jobTracker;
+  attr String[1] nameNode;
+  attr String[1] master;
+  attr String mode;
+  attr Integer numExecutors;
+  attr Integer executorCores;
+  attr String driverMemory;
+  attr String executorMemory;
+  attr String queue;
+  attr Integer retryMax;
+  attr Integer retryInterval;
+  attr String cred;
+  attr String[1] sftp;  
+  @mspace.ui(url="true")
+  attr String[1] http;
+  attr String webhdfs;
+  attr String[1] home;
+  attr String[1] user;
+  @mspace.ui(url="true")
+  attr String filesBrowserUtilUrl;
+  @mspace.ui(caption="Аунтентификация Kerberos")
+  attr boolean isKerberosEnabled;
+  @mspace.ui(caption="Путь к keytab")
+  attr String keyTabLocation;
+  @mspace.ui(caption="User Principal")
+  attr String userPrincipal;
+  @mspace.ui(caption="HCAT URI")
+  attr String hcatUri;
+  @mspace.ui(caption="HCAT Principal")
+  attr String hcatPrincipal;
+  attr boolean isDefault;
+  attr boolean spark2;
+
+  @mspace.ui(caption="Скопировать ключ")
+  op void deployKey();
+}
+
+class JobServer {
+  attr String[1] name;
+  ref etl.Project project;
+  attr String[1] http;
+  attr String home;
+  attr String user;
+  attr boolean isDefault;
+  attr String filesBrowserUtilUrl;
+  attr String defaultFS;
+
+  @mspace.ui(caption="Список заданий")
+  op void jobList();
+  @mspace.ui(caption="Детали задания")
+  op void jobDetails();
+  @mspace.ui(caption="Конфигурация задания")
+  op void jobConfig();
+  @mspace.ui(caption="Дождаться окончания")
+  op void jobWait();
+  @mspace.ui(caption="Загрузить файл")
+  op void loadFile();
+  @mspace.ui(caption="Выполнить запрос")
+  op void runQuery();
+}
+
+abstract class JobDeployment {
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  ref etl.Project project;
+  ref Oozie oozie;
+  ref etl.Workflow[*] workflows;
+  ref Deployment[*] deployments;
+  attr Boolean debug;
+  attr Integer slideSize = "500";
+  attr Integer rejectSize = "1000";
+  attr Integer fetchSize = "100000";
+  attr Integer partitionNum = "4";
+  attr Boolean persistOnDisk;
+  attr String master;
+  attr String mode;
+  attr Integer numExecutors;
+  attr Integer executorCores;
+  attr String driverMemory;
+  attr String executorMemory;
+  val etl.Property[*] parameters;
+  val auth.AuditInfo auditInfo;
+  
+  @mspace.ui(caption="Динамическая аллокация")
+  attr boolean dynamicAllocation;
+  
+  @mspace.ui(caption="Spark Options")
+  val SparkOption[*] sparkOpts; 
+}
+
+class WorkflowDeployment extends JobDeployment {
+
+  @mspace.ui(caption="Проверить")
+  op void validate();
+
+  @mspace.ui(caption="Сгенерировать")
+  op void generate();
+
+  @mspace.ui(caption="Собрать")
+  op void build();
+
+  @mspace.ui(caption="Скопировать")
+  op void deploy();
+
+  @mspace.ui(caption="Сгенерировать и скопировать")
+  op void install();
+
+  @mspace.ui(caption="Запустить")
+  op void run();
+
+  @mspace.ui(caption="Сгенерировать и запустить")
+  op void generateAndRun();
+
+  @mspace.ui(caption="Собрать и запустить")
+  op void buildAndRun();
+
+  ref etl.Workflow start;
+  attr String jvmOpts = "-XX:MaxPermSize=1024m -Xmx2048m";
+}
+
+class CoordinatorDeployment extends JobDeployment {
+
+  @mspace.ui(caption="Проверить")
+  op void validate();
+
+  @mspace.ui(caption="Сгенерировать")
+  op void generate();
+
+  @mspace.ui(caption="Собрать")
+  op void build();
+
+  @mspace.ui(caption="Скопировать")
+  op void deploy();
+
+  @mspace.ui(caption="Сгенерировать и скопировать")
+  op void install();
+
+  @mspace.ui(caption="Запустить")
+  op void run();
+
+  @mspace.ui(caption="Сгенерировать и запустить")
+  op void generateAndRun();
+
+  @mspace.ui(caption="Собрать и запустить")
+  op void buildAndRun();
+
+  @mspace.ui(caption="Текущее состояние")
+  op void getStatus();
+  ref etl.CoJob coordinator;
+  attr String jobId;
+  attr String jvmOpts = "-XX:MaxPermSize=1024m -Xmx2048m";
+}
+
+class TransformationDeployment {
+
+  @mspace.ui(caption="Проверить")
+  op void validate();
+
+  @mspace.ui(caption="Сгенерировать")
+  op void generate();
+  
+  @mspace.ui(caption="Собрать")
+  op void build();
+
+  @mspace.ui(caption="Скопировать")
+  op void deploy();
+
+  @mspace.ui(caption="Сгенерировать и скопировать")
+  op void install();
+
+  @mspace.ui(caption="Запустить")
+  op void run();
+  
+  @mspace.ui(caption="Сгенерировать и запустить")
+  op void generateAndRun();
+
+  @mspace.ui(caption="Собрать и запустить")
+  op void buildAndRun();
+  
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  ref etl.Project project;
+  ref LivyServer livyServer;
+  ref etl.Transformation transformation;
+  ref Deployment[*] deployments;
+  attr Boolean debug;
+  attr Integer slideSize = "500";
+  attr Integer rejectSize = "1000";
+  attr Integer fetchSize = "100000";
+  attr Integer partitionNum = "4";
+  attr Boolean persistOnDisk;
+  attr String master;
+  attr String mode;
+  attr Integer numExecutors;
+  attr Integer executorCores;
+  attr String driverMemory;
+  attr String executorMemory;
+  attr Boolean isDefault;
+  val etl.Property[*] parameters;
+  val auth.AuditInfo auditInfo;
+  val etl.Property[*] sparkConf;  
+}
+
+class Airflow {
+  op void testConnection();
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  @mspace.ui(caption="URL", url="true")
+  attr String[1] http;
+  @teneo.jpa(value="@Column(length=10000)")  
+  attr String dagsFolder;
+}
+
+class RunIteration {
+    @teneo.jpa(value="@Column(unique=true, nullable=false)")
+    attr String[1] name;
+    val etl.Property[*] parameters;
+}
+
+class RunTask {
+    op void generate();
+    op void deployAllTransformations();
+    op void deployDagToAirflow();
+    @teneo.jpa(value="@Column(unique=true, nullable=false)")
+    attr String[1] name;
+    attr String pool;
+    ref RunTask[*] dependsOn;
+    ref TransformationDeployment transformationDeployment;
+    ref Airflow airflow;
+}
+
+class IterationTask extends RunTask{
+    val RunIteration[*] iterations;
+    attr boolean branch;
+}
+
+class ParametrizedTask extends RunTask{
+    val etl.Property[*] parameters;    
+    attr Integer count;
+    attr boolean branch;
+}
+
+class Environment {
+  @mspace.ui(caption="Перезаписать параметры")
+  op void rewriteParameters();
+
+  @mspace.ui(caption="Перезаписать параметры текущей среды")
+  op void rewriteCurrent();
+
+  @mspace.ui(caption="Зашифровать строку")
+  op void encryptString(String plainString);
+
+  @mspace.ui(caption="Расшифровать строку")
+  op void decryptString(String encryptedString);
+
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10000)")
+  attr String description;
+  val EnvironmentParameter[*] parameters;
+}
+
+class EnvironmentParameter {
+  attr String[1] name;
+  @mspace.ui(multiline="true")
+  @teneo.jpa(value="@Column(length=10000)")
+  attr String description;
+  attr String[1] objectClass;
+  attr String[1] objectName;
+  attr String attributePath;
+  attr String parameterValue;		
+}
+
+class LivyServer {
+  @mspace.ui(caption="Название")
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  @mspace.ui(caption="Проект")
+  ref etl.Project project;
+  @mspace.ui(caption="URL", url="true")
+  attr String[1] http;
+  @mspace.ui(caption="Каталог")
+  attr String home;
+  @mspace.ui(caption="Пользователь")
+  attr String user;
+  @mspace.ui(caption="WebHDFS")
+  attr String webhdfs;
+  @mspace.ui(caption="Аунтентификация Kerberos")
+  attr boolean isKerberosEnabled;
+  @mspace.ui(caption="Путь к keytab")
+  attr String keyTabLocation;
+  @mspace.ui(caption="User Principal")
+  attr String userPrincipal;
+  attr Integer numExecutors;
+  attr Integer executorCores;
+  attr String driverMemory;
+  attr String executorMemory;
+  @mspace.ui(caption="Использовать по умолчанию")
+  attr boolean isDefault;  
+}
+
+
+class MLFlowServer {
+@mspace.ui(caption="Название")
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  @mspace.ui(caption="Host", url="true")
+  attr String[1] host;
+  @mspace.ui(caption="Port", url="true")
+  attr String[1] port;
+  @mspace.ui(caption="artifactRoot")
+  attr String artifactRoot;
+  @mspace.ui(caption="Использовать по умолчанию")
+  attr boolean isDefault;
+  @mspace.ui(caption="Проверить подключение")
+  op void testConnection();
+  
+}
+
+class SparkOption {
+  attr String[1] name;
+  attr String[1] value;
+}
+
+class AtlasQNameOption {
+  attr String[1] name;
+  attr String[1] pattern;
+}
+
+class Zeppelin {
+  @mspace.ui(caption="Название")
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  @mspace.ui(caption="Проект")
+  ref etl.Project project;
+  @mspace.ui(caption="URL", url="true")
+  attr String http;
+  attr String userName;
+  @mspace.ui(password="true")
+  attr String password;
+}
+
+abstract class BackOffPolicy {
+}
+
+class NoBackOffPolicy extends BackOffPolicy {
+}
+
+class FixedBackOffPolicy extends BackOffPolicy {
+	attr Long backOffPeriod;
+}
+
+class ExponentialBackOffPolicy extends BackOffPolicy {
+	attr Long initialInterval;
+	attr Double multiplier;
+	attr Long maxInterval;
+}
+
+class ExponentialRandomBackOffPolicy extends ExponentialBackOffPolicy {
+}
+
+class UniformRandomBackOffPolicy extends BackOffPolicy {
+	attr Long minBackOffPeriod;
+	attr Long maxBackOffPeriod;
+}
+
+abstract class Scheduler {
+}
+
+class OnceScheduler extends Scheduler {
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate startTime;
+  attr boolean disableAfterRun;
+} 
+
+class CronScheduler extends Scheduler {
+  attr String cronExpression;
+} 
+
+class DelayScheduler extends Scheduler {
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate startTime;
+  attr Long delay;
+} 
+
+class PeriodScheduler extends Scheduler {
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true")
+  attr EDate startTime;
+  attr Long period;
+} 
+
+abstract class RetryPolicy {
+}
+
+class RetryableException {
+	attr String exceptionClass;
+	attr Boolean retryable; 
+}
+
+class SimpleRetryPolicy extends RetryPolicy {
+	attr Integer maxAttempts;
+	val RetryableException[*] retryableExceptions;
+} 
+
+class AlwaysRetryPolicy extends RetryPolicy {
+} 
+
+class NeverRetryPolicy extends RetryPolicy {
+} 
+
+class TimeoutRetryPolicy extends RetryPolicy {
+	attr Long timeout;
+} 
+
+class ScheduledTask {
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  ref etl.Project project;
+  attr boolean enabled;
+  attr String entityType;
+  attr String entityName;
+  attr String methodName;
+  val Scheduler scheduler;
+  val BackOffPolicy backOffPolicy;
+  val RetryPolicy retryPolicy;
+  attr String runAsUser;
+  @mspace.ui(password="true")
+  attr String runAsPassword;
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true", readOnly="true")
+  attr EDate lastScheduleTime;
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true", readOnly="true")
+  attr EDate lastRunTime;
+  @teneo.jpa(value="@Temporal(TIMESTAMP)")
+  @mspace.ui(timestamp="true", readOnly="true")
+  attr EDate lastErrorTime;
+  @mspace.ui(multiline="true", readOnly="true")
+  @teneo.jpa(value="@Column(length=10485760)")  
+  attr String lastError;
+  val auth.AuditInfo auditInfo;
+
+  op void refreshScheduler();
+}
+
+class Atlas {
+  @mspace.ui(caption="Опубликовать схемы")
+  op void publishSchemes();
+  
+  @mspace.ui(caption="Название")
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;
+  @mspace.ui(caption="Проект")
+  ref etl.Project project;
+  @mspace.ui(caption="URL", url="true")
+  attr String http;
+  attr String userName;
+  @mspace.ui(password="true")
+  attr String password;
+  val AtlasQNameOption[*] qnamePatterns;  
+}
+
+class AtlasScheme {
+  @mspace.ui(caption="Опубликовать схему")
+  op void publish();
+
+  @mspace.ui(caption="Название")
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;  
+  ref rel.Scheme scheme;
+  ref Atlas atlas;
+}
+
+class AtlasProject {
+  @mspace.ui(caption="Опубликовать Lineage проекта")
+  op void publish();
+
+  @mspace.ui(caption="Название")
+  @teneo.jpa(value="@Column(unique=true, nullable=false)")
+  attr String[1] name;  
+  ref etl.Project project;
+  ref Atlas atlas;
+}
+
+enum ImportEntityType {
+  TABLE = 1;
+  VIEW =2;
+}
+
+class ImportEntity {
+  attr String name;
+  attr String schema;
+  attr ImportEntityType importEntityType;
+  ref ImportWizard[1]#entities wizard;
+  ref etl.Transformation templateTransformation;
+  attr Boolean active;
+  attr Boolean deleted;
+  attr String partitionField;
+  attr String partitionExpression;
+  attr String preStatement;
+  attr String whereCondition;
+  attr String idField;
+  attr Integer idParallelism;
+  attr Integer numExecutors;
+  attr Integer executorCores;
+  attr String driverMemory;
+  attr String executorMemory;  
+  val SparkOption[*] sparkOpts; 
+}
+
+@mspace.ui(up="2", down="10", deep="2")
+class ImportWizard {
+  
+  attr String name;
+  ref etl.Project project;
+  ref etl.JdbcContext jdbcContext;
+  ref Oozie oozie;
+  ref etl.Transformation templateTransformation;
+  ref etl.Transformation loggingTransformation;
+  attr Integer wfParallelism;
+  attr String hdfsPath;
+  attr Boolean registerHiveTable;
+  attr String database;  
+  attr String tablePrefix;  
+  attr String tableSuffix;  
+  attr String viewPrefix;  
+  attr String viewSuffix;  
+  attr Boolean showTables;
+  attr Boolean showViews;
+  attr Boolean exitOnFail;
+  val etl.Property[*] workflowParameters;
+  val ImportEntity[*]#wizard entities;
+  @mspace.ui(caption="Загрузить метаданные")
+  op void loadMetadata();
+  @mspace.ui(caption="Сгенерировать проект")
+  op void generateWorkflow(); 
+  @mspace.ui(caption="Загрузить спецификацию CSV")
+  op void uploadSpecification(@mspace.ui(file="true") String file);
+}

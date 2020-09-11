@@ -1,0 +1,74 @@
+{
+  "eClasses": {
+      "evs.EventsProcessor":
+      {
+        "ancestors": [],
+        "successors": ["evs.EventsProcessor"],
+        "containerName": "ViewContainer",
+        "views": ["FormView", "EventsProcessorView"],
+        "actions": [
+            {
+                "name": "generateDrl",
+                "parameters": []
+            }],
+        "columns": [
+
+  	    {
+  		  "Header": "evs.EventsProcessor.attrs.name.caption",
+  		  "accessor": "name",
+  		  "show": true
+  		},
+  	    {
+  		  "Header": "evs.EventsProcessor.attrs.project.caption",
+  		  "accessor": "project.name",
+  		  "show": true
+  		}
+        ],
+        "fields": [
+            {
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "name": "description",
+                "type": "text"
+            },
+            {
+                "name": "body",
+                "type": "text"
+            },
+            {
+                "name": "project",
+                "type": "select",
+                "entityType": "etl.Project",
+                "displayField": "name"
+            },
+            {
+                "name": "input",
+                "type": "form",
+                "entityType": "dataset.Structure"
+            },
+            {
+                "name": "state",
+                "type": "form",
+                "entityType": "dataset.Structure"
+            },
+            {
+                "name": "output",
+                "type": "form",
+                "entityType": "dataset.Structure"
+            },
+            {
+                "name": "local",
+                "type": "form",
+                "entityType": "dataset.Structure"
+            },
+            {
+                "name": "rules",
+                "type": "table",
+                "entityType": "evs.Rule"
+            }
+        ]
+      }
+  }
+}

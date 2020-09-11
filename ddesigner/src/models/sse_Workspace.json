@@ -1,0 +1,25 @@
+{
+  "eClasses": {
+    "sse.Workspace": {
+      "views": ["WorkspaceView", "FormView"],
+      "query": "select type(e), e.e_id, e.name from sse.Workspace e where e.parent is null order by e.name"
+    },
+    "sse.JdbcWorkspace": {
+      "views": ["WorkspaceGridView", "FormView"],
+      "icon": "jdbc-workspace.svg"
+    },
+    "sse.AnalyticWorkspace":{
+      "views": ["WorkspaceView", "FormView"],
+      "icon": "analytic.svg"
+    },
+    "sse.ModelPipelineWorkspace":{
+      "views": ["WorkspaceView", "FormView"],
+      "icon": "model.svg"
+    },
+    "sse.ValidateModelPipelineWorkspace":{
+      "views": ["WorkspaceView", "FormView"],
+      "icon": "model.svg",
+      "actions": []
+  }
+  }
+}

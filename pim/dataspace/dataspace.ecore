@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dataspace" nsURI="http://www.neoflex.ru/meta/dataspace" nsPrefix="dataspace">
+  <eClassifiers xsi:type="ecore:EClass" name="Dataspace">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(unique=true, nullable=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataspace" eType="#//Dataspace"
+        eOpposite="#//Dataspace/subSpaces"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subSpaces" upperBound="-1"
+        eType="#//Dataspace" eOpposite="#//Dataspace/dataspace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tables" upperBound="-1"
+        eType="#//Table" containment="true" eOpposite="#//Table/dataspace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1"
+        eType="#//Mapping" containment="true" eOpposite="#//Mapping/dataspace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persister" eType="#//Persister"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Table" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataspace" eType="#//Dataspace"
+        eOpposite="#//Dataspace/tables"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(unique=true, nullable=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkTable" abstract="true" eSuperTypes="#//Table"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PrivateTable" eSuperTypes="#//WorkTable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataSet" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//DataSet"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PublicTable" eSuperTypes="#//Table">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="privateInstance" eType="#//PrivateTable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceTable" eSuperTypes="#//WorkTable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="publicInstance" eType="#//PublicTable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Persister" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JDBCPersister" eSuperTypes="#//Persister">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="jdbcConnection" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//JdbcConnection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HivePersister" eSuperTypes="#//Persister"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LocalPersister" eSuperTypes="#//Persister">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Alias">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//WorkTable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Mapping" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataspace" eType="#//Dataspace"
+        eOpposite="#//Dataspace/mappings"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1"
+        eType="#//Alias"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableMapping" abstract="true" eSuperTypes="#//Mapping">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//PrivateTable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SparkSQLMapping" eSuperTypes="#//TableMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RMapping" eSuperTypes="#//TableMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DroolsMapping" eSuperTypes="#//TableMapping"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelLearningMapping" eSuperTypes="#//Mapping"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelAnalisysMapping" eSuperTypes="#//TableMapping">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelLearning" eType="#//ModelLearningMapping"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StatisticsMapping" eSuperTypes="#//Mapping"/>
+</ecore:EPackage>
