@@ -1,185 +1,1 @@
-version: "3.7"
-services:
-  hivemetastore:
-    image: postgres:11.5
-    restart: always
-    hostname: hivemetastore
-    environment:
-      POSTGRES_PASSWORD: new_password
-    ports:
-      - 5532:5432
-    expose:
-      - 5432
-    volumes:
-      - ./pg-init.sql:/docker-entrypoint-initdb.d/pg-init.sql
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      bd_net:
-        ipv4_address: 172.20.1.4
-
-  master:
-    image: neoflex/bd-base
-    build: ./bd-base
-    hostname: master
-    depends_on:
-      - hivemetastore
-    environment:
-      HADOOP_NODE: namenode
-      HIVE_CONFIGURE: yes, please
-      SPARK_PUBLIC_DNS: localhost
-      SPARK_LOCAL_IP: 172.20.1.1
-      SPARK_MASTER_HOST: 172.20.1.1
-      SPARK_LOCAL_HOSTNAME: master
-    expose:
-      - 1-65535
-    ports:
-      # Spark Master Web UI
-      - 8080:8080
-      # Spark job Web UI: increments for each successive job
-      - 4040:4040
-      - 4041:4041
-      - 4042:4042
-      - 4043:4043
-      # Spark History server
-      - 18080:18080
-      # YARN UI
-      - 8088:8088
-      # Hadoop namenode UI
-      - 9870:9870
-      # Hadoop secondary namenode UI
-      - 9868:9868
-      # Hive JDBC
-      - 10000:10000
-    volumes:
-      - ./data:/data
-    networks:
-      bd_net:
-        ipv4_address: 172.20.1.1
-    extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
-
-  worker1:
-    image: neoflex/bd-base
-    build: ./bd-base
-    hostname: worker1
-    depends_on:
-      - hivemetastore
-    environment:
-      SPARK_MASTER_ADDRESS: spark://master:7077
-      SPARK_WORKER_PORT: 8881
-      SPARK_WORKER_WEBUI_PORT: 8081
-      SPARK_PUBLIC_DNS: localhost
-      SPARK_LOCAL_HOSTNAME: worker1
-      SPARK_LOCAL_IP: 172.20.1.2
-      SPARK_MASTER_HOST: 172.20.1.1
-      HADOOP_NODE: datanode
-    expose:
-      - 1-65535
-    ports:
-      # Hadoop datanode UI
-      - 9864:9864
-      #Spark worker UI
-      - 8081:8081
-    volumes:
-      - ./data:/data
-    networks:
-      bd_net:
-        ipv4_address: 172.20.1.2
-    extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
-
-  worker2:
-    image: neoflex/bd-base
-    build: ./bd-base
-    hostname: worker2
-    depends_on:
-      - hivemetastore
-    environment:
-      SPARK_MASTER_ADDRESS: spark://master:7077
-      SPARK_WORKER_PORT: 8882
-      SPARK_WORKER_WEBUI_PORT: 8082
-      SPARK_PUBLIC_DNS: localhost
-      SPARK_LOCAL_HOSTNAME: worker2
-      SPARK_LOCAL_IP: 172.20.1.3
-      SPARK_MASTER_HOST: 172.20.1.1
-      HADOOP_NODE: datanode
-      HADOOP_DATANODE_UI_PORT: 9865
-    expose:
-      - 1-65535
-    ports:
-      # Hadoop datanode UI
-      - 9865:9865
-      # Spark worker UI
-      - 8082:8082
-    volumes:
-      - ./data:/data
-    networks:
-      bd_net:
-        ipv4_address: 172.20.1.3
-    extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
-
-  livy:
-    image: neoflex/bd-livy
-    build: ./bd-livy
-    hostname: livy
-    depends_on:
-      - master
-      - worker1
-      - worker2
-    volumes:
-      - ./livy_batches:/livy_batches
-      - ./data:/data
-    environment:
-      - SPARK_MASTER=yarn
-      # Intentionally not specified - if it's set here, then we can't override it
-      # via REST API ("conf"={} map)
-      # Can be client or cluster
-      #      - SPARK_DEPLOY_MODE=client
-
-      - LOCAL_DIR_WHITELIST=/data/batches/
-      - ENABLE_HIVE_CONTEXT=false
-      # Defaults are fine for variables below. Uncomment to change them.
-    #      - LIVY_HOST=0.0.0.0
-    #      - LIVY_PORT=8998
-    expose:
-      - 1-65535
-    ports:
-      - 8998:8998
-    networks:
-      bd_net:
-        ipv4_address: 172.20.1.6
-    extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
-
-###
-networks:
-  bd_net:
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.20.0.0/16
-
-volumes:
-  postgres_data:
+version: "3.7"services:  hivemetastore:    image: postgres:11.5    restart: always    hostname: hivemetastore    environment:      POSTGRES_PASSWORD: new_password    ports:      - 5532:5432    expose:      - 5432    volumes:      - ./pg-init.sql:/docker-entrypoint-initdb.d/pg-init.sql      - postgres_data:/var/lib/postgresql/data    healthcheck:      test: ["CMD-SHELL", "pg_isready -U postgres"]      interval: 10s      timeout: 5s      retries: 5    networks:      bd_net:        ipv4_address: 172.20.1.4  master:    image: neoflex/bd-base    build: ./bd-base    hostname: master    depends_on:      - hivemetastore    environment:      HADOOP_NODE: namenode      HIVE_CONFIGURE: yes, please      SPARK_PUBLIC_DNS: localhost      SPARK_LOCAL_IP: 172.20.1.1      SPARK_MASTER_HOST: 172.20.1.1      SPARK_LOCAL_HOSTNAME: master    expose:      - 1-65535    ports:      # Spark Master Web UI      - 8080:8080      # Spark job Web UI: increments for each successive job      - 4040:4040      - 4041:4041      - 4042:4042      - 4043:4043      # Spark History server      - 18080:18080      # YARN UI      - 8088:8088      # Hadoop namenode UI      - 9870:9870      # Hadoop secondary namenode UI      - 9868:9868      # Hive JDBC      - 10000:10000      # webhdfs      - 51070:50070    volumes:      - ./data:/data    networks:      bd_net:        ipv4_address: 172.20.1.1    extra_hosts:      - "master:172.20.1.1"      - "worker1:172.20.1.2"      - "worker2:172.20.1.3"      - "hivemetastore:172.20.1.4"      - "livy:172.20.1.6"  worker1:    image: neoflex/bd-base    build: ./bd-base    hostname: worker1    depends_on:      - hivemetastore    environment:      SPARK_MASTER_ADDRESS: spark://master:7077      SPARK_WORKER_PORT: 8881      SPARK_WORKER_WEBUI_PORT: 8081      SPARK_PUBLIC_DNS: localhost      SPARK_LOCAL_HOSTNAME: worker1      SPARK_LOCAL_IP: 172.20.1.2      SPARK_MASTER_HOST: 172.20.1.1      HADOOP_NODE: datanode    expose:      - 1-65535    ports:      # Hadoop datanode UI      - 9864:9864      #Spark worker UI      - 8081:8081    volumes:      - ./data:/data    networks:      bd_net:        ipv4_address: 172.20.1.2    extra_hosts:      - "master:172.20.1.1"      - "worker1:172.20.1.2"      - "worker2:172.20.1.3"      - "hivemetastore:172.20.1.4"      - "livy:172.20.1.6"  worker2:    image: neoflex/bd-base    build: ./bd-base    hostname: worker2    depends_on:      - hivemetastore    environment:      SPARK_MASTER_ADDRESS: spark://master:7077      SPARK_WORKER_PORT: 8882      SPARK_WORKER_WEBUI_PORT: 8082      SPARK_PUBLIC_DNS: localhost      SPARK_LOCAL_HOSTNAME: worker2      SPARK_LOCAL_IP: 172.20.1.3      SPARK_MASTER_HOST: 172.20.1.1      HADOOP_NODE: datanode      HADOOP_DATANODE_UI_PORT: 9865    expose:      - 1-65535    ports:      # Hadoop datanode UI      - 9865:9865      # Spark worker UI      - 8082:8082    volumes:      - ./data:/data    networks:      bd_net:        ipv4_address: 172.20.1.3    extra_hosts:      - "master:172.20.1.1"      - "worker1:172.20.1.2"      - "worker2:172.20.1.3"      - "hivemetastore:172.20.1.4"      - "livy:172.20.1.6"  livy:    image: neoflex/bd-livy    build: ./bd-livy    hostname: livy    depends_on:      - master      - worker1      - worker2    volumes:      - ./livy_batches:/livy_batches      - ./data:/data    environment:      - SPARK_MASTER=yarn      # Intentionally not specified - if it's set here, then we can't override it      # via REST API ("conf"={} map)      # Can be client or cluster      #      - SPARK_DEPLOY_MODE=client      - LOCAL_DIR_WHITELIST=/data/batches/      - ENABLE_HIVE_CONTEXT=false      # Defaults are fine for variables below. Uncomment to change them.    #      - LIVY_HOST=0.0.0.0    #      - LIVY_PORT=8998    expose:      - 1-65535    ports:      - 8998:8998    networks:      bd_net:        ipv4_address: 172.20.1.6    extra_hosts:      - "master:172.20.1.1"      - "worker1:172.20.1.2"      - "worker2:172.20.1.3"      - "hivemetastore:172.20.1.4"      - "livy:172.20.1.6"###networks:  bd_net:    ipam:      driver: default      config:        - subnet: 172.20.0.0/16volumes:  postgres_data:
