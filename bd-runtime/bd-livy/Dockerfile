@@ -1,5 +1,5 @@
 #FROM bigdata-docker-compose_master:latest
-FROM neoflex/bd-base
+FROM neoflexdatagram/bd-base
 
 ARG LIVY_VERSION=0.8.0-incubating-SNAPSHOT
 ENV LIVY_HOME /usr/livy
