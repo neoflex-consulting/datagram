@@ -10,7 +10,9 @@ __Ports:__ PostgreSQL 5432 (internal) 5532 (external), user/pass see in docker c
 
 Если вы на Windows, убедитесь, что у вас установлен и настроен [Docker Desktop](https://www.docker.com/products/docker-desktop).
 По умолчанию, ему выделяется мало памяти, увеличьте это значение в настройках Docker Desktop.
+На Windows разрешите шарить файлы из каталога, куда устанавливается datagram (Docker Desktop/Settings/Resources/File Sharing).
 На Linux должен быть установлен docker-compose.
+
 Убедитесь, что у вас установлен git, и на Windows лучше отключить трансляцию CRLF-LF командой
 ```
 git config --global core.autocrlf false
@@ -21,6 +23,7 @@ git clone https://github.com/neoflex-ru/datagram.git
 cd datagram
 mvn -f pom3.xml package
 docker-compose -f bd-runtime/docker-compose.yml pull
+docker-compose -f bd-runtime/docker-compose.yml build datagram
 docker-compose -f bd-runtime/docker-compose.yml up -d
 ```
 
