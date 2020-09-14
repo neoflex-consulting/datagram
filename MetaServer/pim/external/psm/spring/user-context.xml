@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:jms="http://www.springframework.org/schema/integration/jms"
+       xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+<!-- 
+    <jms:message-driven-channel-adapter id="etlEventsAdapter"
+                                        connection-factory="connectionFactory"
+                                        destination="etlEventsDestination"
+                                        channel="etlEventsChannel"/>
+    <jms:message-driven-channel-adapter id="oozieEventsAdapter"
+                                        connection-factory="connectionFactory"
+                                        destination="oozieEventsDestination"
+                                        channel="oozieEventsChannel"/>
+
+    <bean name="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+          <property name="brokerURL" value="tcp://cloud:61616" />
+    </bean>
+
+    <int:service-activator  input-channel="etlEventsChannel"
+                            output-channel="nullChannel"
+                            ref="etlEventHandler"
+                            method="onMessage">
+    </int:service-activator>
+
+    <int:service-activator  input-channel="oozieEventsChannel"
+                            output-channel="nullChannel"
+                            ref="etlEventHandler"
+                            method="onMessage">
+    </int:service-activator>
+
+    <bean id="etlEventsDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0">
+            <value>Meta.Notification2</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="oozieEventsDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg index="0">
+            <value>uadmin</value>
+        </constructor-arg>
+    </bean>
+
+    <bean name="etlEventHandler" class="ru.neoflex.meta.integration.JMSEventHandler">
+        <property name="scriptConfig">
+            <map>
+                <entry key="library.Book" value="jms/library_Book.groovy"/>
+                <entry key="etlrt.RuntimeEvent" value="jms/etlrt_RuntimeEvent.groovy"/>
+            </map>
+        </property>
+        <property name="defaultScript" value="jms/default.groovy"/>
+        <property name="parameters">
+            <map>
+                <entry key="oozieBase" value="http://cloud.neoflex.ru:11000/oozie/v1/job/"/>
+		<entry key="oozieBase2" value="http://cloud.neoflex.ru:11000/oozie/v2/job/"/>
+            </map>
+        </property>
+    </bean>
+ -->
+</beans>
+
