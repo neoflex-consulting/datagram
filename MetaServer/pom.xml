@@ -165,71 +165,13 @@
         </dependency>
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>workflow</artifactId>
-            <version>${version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>transformation</artifactId>
-            <version>${version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>codemonitor</artifactId>
-            <version>${version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>livyconsole</artifactId>
-            <version>${version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>hdfsconsole</artifactId>
-            <version>${version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>oozieconsole</artifactId>
-            <version>${version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>explorer</artifactId>
-            <version>${version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>rserver</artifactId>
-            <version>${version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.neoflex.mspace</groupId>
             <artifactId>ddesigner</artifactId>
             <version>${version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>ui</artifactId>
-            <version>${version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.neoflex.mspace</groupId>
             <artifactId>metaserver.pim</artifactId>
-            <version>${version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>metaserver.psm.etl</artifactId>
             <version>${version}</version>
         </dependency>
         <dependency>
