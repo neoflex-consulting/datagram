@@ -158,6 +158,9 @@ services:
     volumes:
       - ./livy_batches:/livy_batches
       - ./data:/data
+#      - ./bd-base/extralib/:/usr/livy/repl_2.12-jars/
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
     environment:
       - SPARK_MASTER=yarn
       # Intentionally not specified - if it's set here, then we can't override it

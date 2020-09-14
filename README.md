@@ -1,8 +1,5 @@
 # Datagram
 
-__bd_runtime__ docker-compose.yml will start generate docker container with preinstalled Livy, HDFS and PostgreSQL
-__Ports:__ PostgreSQL 5432 (internal) 5532 (external), user/pass see in docker compose, Livy at http://localhost:8998
-
 ## Быстрый запуск Datagram
 ### Требования к компьютеру
 Минимальное количество памяти компьютера - 16ГБ, т.к. запускается не только сам datagram, но и его рантайм,
@@ -32,4 +29,11 @@ docker-compose -f bd-runtime/docker-compose.yml up -d
 
 __Логин__/__пароль__: admin/admin
 
+### Ссылки на WEB UI
+Ресурс|URL
+------|---
+Datagram|http://localhost:8089/
+Yarn|http://localhost:8088/
+Livy|http://localhost:8998/
+Spark|http://localhost:8080/
 
