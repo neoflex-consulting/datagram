@@ -225,14 +225,9 @@
                 <directory>pim</directory>
                 <targetPath>cim/MetaServer/pim</targetPath>
             </resource>
-
             <resource>
-                <directory>target/mspace</directory>
-                <includes>
-                    <include>cim/MetaServer/pim/ui/**</include>
-                    <include>psm/etl/spark/**</include>
-                    <include>psm/etl/groovy/**</include>
-                </includes>
+                <directory>psm</directory>
+                <targetPath>psm</targetPath>
             </resource>
         </resources>
     </build>
