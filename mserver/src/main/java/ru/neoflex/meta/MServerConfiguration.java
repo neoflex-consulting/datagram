@@ -104,8 +104,8 @@ public class MServerConfiguration {
     @Value("${logging.file}")
     private String loggingFile;
     
-    @Autowired
-    LicenseService licenseService;
+    //@Autowired
+    //LicenseService licenseService;
     
     @Autowired
     private ApplicationContext appContext;
@@ -126,9 +126,9 @@ public class MServerConfiguration {
             
             @Scheduled(fixedDelay = 1000 * 60 * 60 * 24)
             public void logTime() throws Exception {
-                if(licenseService.getLicenseProperties() != null) {
+                /*if(licenseService.getLicenseProperties() != null) {
                     licenseService.saveSessionLogLine(loggingFile + ".sessions", "TIMER", 0, this.sessionCount.values().stream().reduce(0, (left, right) -> left + right));
-                }
+                }*/
             }
             
             @Override
@@ -139,7 +139,7 @@ public class MServerConfiguration {
                 
                 Integer sum = this.sessionCount.values().stream().reduce(0, (left, right) -> left + right);
                 
-                if(licenseService.isLogRestriction(userSessionsCount, sum)) {
+                /*if(licenseService.isLogRestriction(userSessionsCount, sum)) {
                     try {
                         licenseService.saveSessionLogLine(loggingFile + ".sessions", principal.getUsername(), userSessionsCount, sum);
                     } catch (Exception e) {
@@ -155,7 +155,7 @@ public class MServerConfiguration {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                }
+                }*/
                 
             }
 
@@ -167,14 +167,14 @@ public class MServerConfiguration {
                 
                 Integer sum = this.sessionCount.values().stream().reduce(0, (left, right) -> left + right);
                 
-                if(licenseService.isLogRestriction(userSessionsCount, sum)) {
+                /*if(licenseService.isLogRestriction(userSessionsCount, sum)) {
                     try {
                         licenseService.saveSessionLogLine(loggingFile + ".sessions", principal.getUsername(), userSessionsCount, sum);
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                }
+                }*/
             }
         };
     }

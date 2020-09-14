@@ -42,7 +42,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ru.neoflex.meta.utils.JSONHelper;
 
-@Service
+//@Service
 public class LicenseService {
     {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
