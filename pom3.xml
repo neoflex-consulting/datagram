@@ -12,7 +12,7 @@
         <module>runtime/pom3.xml</module>
         <module>spark2lib/pom3.xml</module>
         <module>pim</module>        
-        <module>livyjobserver</module>
+        <module>livyjobserver/pom3.xml</module>
         <module>jobserver-runner</module>
         <module>MetaServer</module> 
         <module>mserver</module>
