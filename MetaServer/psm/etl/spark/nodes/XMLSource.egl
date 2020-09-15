@@ -1,0 +1,83 @@
+[%
+
+operation src!XMLSource define(){%]
+
+  def get[%=self.name%](spark: SparkSession): Dataset[[%=self.getSchemaName()%]] = {
+  	import spark.implicits._
+   	import scala.reflect.runtime.universe._
+   	import org.apache.spark.sql.types._
+   	[%if (self.schemaOnRead <> true) {%]
+    val schema = newProductEncoder(typeTag[[%=self.getSchemaName()%]]).schema
+    [%}%]
+    val path = {
+      s"""[%=self.path%]"""
+    }
+
+    try {
+      var ds = spark.read
+      [%if (self.~makeDataset <> false) {%]
+      .format("com.databricks.spark.xml")
+      [%} else {%].option("inferSchema", true)[%}%]
+      [%if (self.rowTag.isDefined()) {%]
+      .option("rowTag", """[%=self.rowTag%]""")
+      [%}%] [%if (self.charset.isDefined() and self.charset.trim().length() > 0) {%]
+      .option("charset", """[%=self.charset%]""")
+      [%}%] [%if (self.samplingRatio.isDefined() and self.samplingRatio > 0) {%]
+      .option("samplingRatio", """[%=self.samplingRatio/100.0%]""")
+      [%}%] [%if (self.excludeAttribute.isDefined() ) {%]
+      .option("excludeAttribute", """[%=self.excludeAttribute%]""")
+      [%}%] [%if (self.treatEmptyValuesAsNulls.isDefined() ) {%]
+      .option("treatEmptyValuesAsNulls", """[%=self.treatEmptyValuesAsNulls%]""")
+      [%}%] [%if (self.mode.isDefined() ) {%]
+      .option("mode", """[%=self.mode%]""")
+      [%}%] [%if (self.columnNameOfCorruptRecord.isDefined() and self.columnNameOfCorruptRecord.trim().length() > 0) {%]
+      .option("columnNameOfCorruptRecord", """[%=self.columnNameOfCorruptRecord%]""")
+      [%}%] [%if (self.attributePrefix.isDefined() and self.attributePrefix.trim().length() > 0) {%]
+      .option("attributePrefix", """[%=self.attributePrefix%]""")
+      [%}%] [%if (self.valueTag.isDefined() and self.valueTag.trim().length() > 0) {%]
+      .option("valueTag", """[%=self.valueTag%]""")
+      [%}%] [%if (self.ignoreSurroundingSpaces.isDefined() ) {%]
+      .option("ignoreSurroundingSpaces", """[%=self.ignoreSurroundingSpaces%]""")
+      [%}%]
+      .load(path)
+      [%for (explodeField in self.explodeFields) {%]
+      [%
+        var s = '';
+        var explodeFieldArr = explodeField.field.split('\\.');
+        for (f in explodeFieldArr) {
+            if(loopCount == 1){
+                s = 'ds.schema("' + f + '")';
+            } else {
+                s = s + '.dataType.asInstanceOf[org.apache.spark.sql.types.StructType]("' + f + '")';
+            }
+
+            if(hasMore == false){
+               s = s + '.dataType.typeName == "array"';
+            }
+        }
+
+      %]
+      if([%=s %]) {
+        ds = ds.withColumn("""[%=explodeField.`alias`%]""", explode($"""[%=explodeField.field%]"""))
+      } 
+      [% if (explodeField.`alias` <> explodeField.field) {%]      
+      else {        
+          ds = ds.withColumn("""[%=explodeField.`alias`%]""", $"""[%=explodeField.field%]""")        
+      }
+      [%}%]
+      [%}%]
+      ds[%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%].select(
+        [%for (field in self.outputPort.fields) {%]
+            $"[%=field.xmlPath%]" as "[%=field.name%]" [%if (hasMore){%],[%}%]
+
+        [%}%]
+        ).as[[%=self.getSchemaName()%]][%}%]
+
+	  } catch {
+          case e: UnsupportedOperationException =>  [%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%]spark.emptyDataset[[%=self.getSchemaName()%]][%} else {%]spark.emptyDataFrame[%}%]
+      }
+
+  }
+[%}
+
+%]

@@ -1,0 +1,17 @@
+pre {
+    "Launching coord EGX".println();
+    mspaceRoot.println("mspaceRoot: ");
+    jobDeployment.get("name").println("CoDeployment: ");
+    var MetaResource = new Native("ru.neoflex.meta.utils.MetaResource");
+    MetaResource.println();
+}
+
+rule CoordXml transform coJob: CoJob {
+  parameters {
+    var params : new Map;
+    params.put("jobDeployment", jobDeployment);
+    return params;
+  }
+  template : MetaResource.getURL("/psm/etl/spark/coord.egl").toString()
+  target : mspaceRoot + "/deployments/" + jobDeployment.get("name") + "/job/coordinator.xml"   
+}

@@ -1,0 +1,271 @@
+[%
+import "Utils.egl";
+import "nodes/ExplodeStep.egl";
+import "nodes/ExpressionSource.egl";
+import "nodes/Join.egl";
+import "nodes/Drools.egl";
+import "nodes/Sort.egl";
+import "nodes/GroupWithState.egl";
+import "nodes/Projection.egl";
+import "nodes/Selection.egl";
+import "nodes/Union.egl";
+import "nodes/Sequence.egl";
+import "nodes/ModelBasedAnalysis.egl";
+import "nodes/LocalTarget.egl";
+import "nodes/SparkSQL.egl";
+import "nodes/HiveSource.egl";
+import "nodes/HBaseSource.egl";
+import "nodes/CsvSource.egl";
+import "nodes/XMLSource.egl";
+import "nodes/AVROSource.egl";
+import "nodes/CsvTarget.egl";
+import "nodes/XMLTarget.egl";
+import "nodes/LocalSource.egl";
+import "nodes/HiveTarget.egl";
+import "nodes/HBaseTarget.egl";
+import "nodes/TableSource.egl";
+import "nodes/SQLSource.egl";
+import "nodes/TableTarget.egl";
+import "nodes/ProcedureTarget.egl";
+import "nodes/Aggregation.egl";
+import "nodes/StreamTarget.egl";
+import "nodes/KafkaSource.egl";
+import "nodes/KafkaTarget.egl";
+import "nodes/Source.egl";
+import "nodes/Target.egl";
+import "nodes/TransformationStep.egl";
+%]
+package [%=packagePrefix%]
+
+import org.apache.spark.sql._
+import org.apache.spark.sql.expressions._
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types._
+import org.scalatest.FunSuite
+import ru.neoflex.meta.etl2.ETLJobBase
+
+import scala.collection.mutable
+import scala.reflect.runtime.universe._
+
+[%
+var imports = Sequence{};
+var transformation = transformationTest.transformation;
+for (node in transformation.sources + transformation.targets + transformation.transformationSteps) {
+    for (imp in node.imports()) {
+        imports.add(imp);
+    }
+}
+for (imp in imports.asSet().sortBy(s|s)) {
+%][%=imp%]
+[%}
+
+for (node in transformation.sources + transformation.targets + transformation.transformationSteps) {
+    %][%=node.globals()%][%
+}%]
+
+[%
+"resolving node relations".println;
+for (transition in transformation.transitions){	
+  transition.resolveNodes();  	
+}%]
+
+
+
+object [%=toJavaName(transformation.name+transformationTest.name)%]Runner extends ETLJobBase{
+
+  override def getApplicationName: String = {
+    "[%=transformationTest.name%]"
+  }
+  
+  def run(spark: SparkSession): Any = {
+  
+  }
+
+  def run[%=transformationTest.name%](){
+  
+  [% for (param in transformationTest.parameters) {%]
+	jobParameters.getOrElseUpdate("[%=param.get("name")%]", {
+  		[%if (param.get("expression") == true) {%]
+  		[%=param.get("value")%]
+  		[%} else {%]
+  		s"""[%=param.get("value")%]"""
+  		[%}%]
+  	})
+  [%}%]
+  
+  val spark: SparkSession = {
+      SparkSession
+        .builder()
+        .master("local")
+        .appName("spark session")
+        .config("spark.sql.shuffle.partitions", "1")
+        .getOrCreate()
+    }
+    val sc = spark.sparkContext;
+
+    val sqlContext = spark.sqlContext
+    val sparkSession = sqlContext.sparkSession
+    import sparkSession.implicits._
+ 	[% for (t in transformation.targets) { %]
+ 		[%
+ 		var targetIsMocked = false;
+ 		var mockedTarget = null;
+ 		for(m in transformationTest.steps){
+ 			if(m.name == t.name){
+	 			targetIsMocked = true;
+	 			mockedTarget = m;
+	 			break;
+ 			}
+ 		}
+ 		if(targetIsMocked == false){ 
+ 			continue;
+ 		}
+ 		%]
+	  	[% for (udf in transformation.get("userDefinedFunctions")) { %]
+		    spark.udf.register("[%=udf.name%]", new [%=udf.className%][%if (udf.withParameters == true) {%](jobParameters)[%}%])
+		[%}%]
+	    [%
+	    var targetName = t.name;
+	    var lastStep = null;
+	    var lastInput = getInputNodes(t).get(0);
+	    lastStep = lastInput;
+	    declareNode(lastInput);
+	    %]
+	    var resultDF[%=targetName%] = [%=lastStep.name%].toDF() 
+	    [%
+	    //var step =  transformationTest.steps.get(0);
+	    var schemaName = lastStep.getSchemaName();
+	    var json = mockedTarget.body;
+	    %]
+	    val json[%=targetName%] = """[%=json%]"""
+	    val jsonRDD[%=targetName%]= sc.parallelize(Seq(json[%=targetName%]));
+	    //schemaName = [%=schemaName%]
+	    [% if(schemaName <> "org.apache.spark.sql.Row"){%]
+	    //typed assert 
+	    val schema[%=targetName%] = newProductEncoder(typeTag[[%=schemaName%]]).schema
+	    var jsonDF[%=targetName%] = spark.read.schema(schema[%=targetName%]).json(jsonRDD[%=targetName%]);
+	    val testResultDS[%=targetName%] = jsonDF[%=targetName%].as[[%=schemaName%]];
+	  	[%}else{%]
+	  	//untyped assert
+	    var jsonDF[%=targetName%] = spark.read.json(jsonRDD[%=targetName%]);
+	    val testResultDS[%=targetName%] = jsonDF[%=targetName%];
+	    [%}%]
+	    val testResultDFWithSchema[%=targetName%] = testResultDS[%=targetName%].toDF();
+	    println(testResultDFWithSchema[%=targetName%])
+	    println("testResultDFWithSchema[%=targetName%] "  + testResultDFWithSchema[%=targetName%].show())
+	    println("resultDF[%=targetName%] "  + resultDF[%=targetName%].show())
+	    //assert(testResultDFWithSchema[%=targetName%].toJSON == resultDF[%=targetName%].toJSON);
+	    assert(testResultDFWithSchema[%=targetName%].unionAll(resultDF[%=targetName%]).distinct().count() == testResultDFWithSchema[%=targetName%].intersect(resultDF[%=targetName%]).count())
+	    [%
+	   }
+    %] 
+  }
+	
+	[%for (node in transformation.sources + transformation.transformationSteps) {
+		var mocked = false;
+		var stepForDefine = null;		
+		//(node.name + "__steps").println;
+		for (s in transformationTest.steps){
+			//(s.name + "__STEPS").println;
+			if(node.name == s.name){
+				mocked = true;
+				stepForDefine = s;
+				break;
+			}
+		}
+		if(mocked == false){
+			node.define();
+		}else{
+		%]	
+		 def get[%=node.name%](spark: SparkSession, [%=getInputNodes(node).collect(n|n.name + ": Dataset[" + n.getSchemaName() + "]").concat(", ")%]) = {
+	   		 import spark.implicits._
+	   		 //MOCKED STEP 
+	   		 val sc = spark.sparkContext;
+	   		 val json = """[%=stepForDefine.body%]"""
+	   		 val schema = newProductEncoder(typeTag[[%=node.getSchemaName()%]]).schema
+		     val jsonRDD= sc.parallelize(Seq(json));
+	         var jsonDF = spark.read.schema(schema).json(jsonRDD);
+		     val testResultDS = jsonDF.as[[%=node.getSchemaName()%]];
+		     testResultDS;
+  		 }[%
+		}
+		
+	%][%
+	}
+	%]
+
+[%for (node in transformation.sources + transformation.targets + transformation.transformationSteps) {
+    if (node.hiveSupport()) {
+    %][%=initBuilder()%][%
+        break;
+    }    
+}%] 
+
+
+org.apache.spark.sql.catalyst.encoders.OuterScopes.addOuterScope(this)
+[%
+transformation.~schemas = Set{};
+for (node in transformation.sources + transformation.transformationSteps) {
+	node.outputPort.setParentName(node.name);%]
+[%if(node.get("schemaOnRead") <> true) {%]
+[%=getSchema(node)%]
+[%}%]
+[%if(node.isKindOf(src!GroupWithState)){%]
+[%node.internalState.setParentName(node.getSchemaName() + "_InternalState");%]
+[%=getStructTypeDatasetSchema(node.getSchemaName() + "_InternalState", node.internalState)%]
+
+[%}%]
+[%}
+
+for (node in transformation.targets) {
+    if(node.isKindOf(src!StreamTarget)){
+        var format;
+        for (option in node.options) {
+            if (option.key == "format") {
+                format = option.value.toLowerCase();
+            }
+        }
+        var hbaseFormat = format == "org.apache.spark.sql.execution.datasources.hbase" or node.localFileFormat.toString() == "HBASE";
+        if (hbaseFormat and node.versionColumn.isDefined()) {
+            var inputNode = (node.transformation.transitions.selectOne(t|t.~targetNode == node)).~sourceNode;
+        %]            
+case class [%=inputNode.getSchemaName()%]ToHBaseVersioned (
+    [%for(field in inputNode.outputPort.fields) {%]
+    var [%=field.name%]: [%if(node.rowkey.isDefined() and node.rowkey.split(":").includes(field.name)) {%][%=field.getTypeName()%] [%} else {%]Map[java.lang.Long, [%=field.getTypeName()%]][%}%] [% if (hasMore){%],[%}%]
+    
+    [%}%]    
+) extends Serializable
+    [%}
+    }
+}
+
+%]
+
+}
+
+
+[% for (udf in transformation.get("userDefinedFunctions")) { %]
+	[% var found = false; %]
+	[% for (udfMock in transformationTest.functions) {%]
+	
+	[% if (udfMock.name == udf.name){ %]
+		found = true
+	[%}%]
+	[%}%]
+	[% if (found) {%]
+		[%=udfMock.code%]
+		[%} %]
+		[% else {%]
+		[%=udf.code %]
+		[% }%]
+		
+[%}%]
+
+class [%=toJavaName(transformation.name+transformationTest.name)%]Test extends FunSuite {
+  test("[%=transformationTest.name%]") {
+    [%=toJavaName(transformation.name+transformationTest.name)%]Runner.run[%=transformationTest.name%]();
+
+  }
+}
+
+

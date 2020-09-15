@@ -1,0 +1,27 @@
+pre {
+    "Launching Transformation 2 EGX".println();
+    mspaceRoot.println("mspaceRoot: ");
+    var MetaResource = new Native("ru.neoflex.meta.utils.MetaResource");
+    MetaResource.println();
+}
+
+rule Transformation2Job transform transformation: Transformation {
+  parameters {
+    var params : new Map;
+    params.put("packagePrefix",  "ru.neoflex.meta.etl2.spark");
+    return params;
+  }
+  template : MetaResource.getURL("/psm/etl/spark/Transformation2.egl")
+  target : mspaceRoot + "/" + transformation.name + "/src/main/scala/" + transformation.name + "Job.scala"   
+}
+
+rule Transformation2POM transform transformation: Transformation {
+  parameters {
+    var params : new Map;
+    params.put("packagePrefix",  "ru.neoflex.meta.etl2.spark");
+    return params;
+  }
+  template : MetaResource.getURL("/psm/etl/spark/pom2.egl")
+  target : mspaceRoot + "/" + transformation.name + "/pom.xml"   
+}
+

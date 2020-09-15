@@ -1,0 +1,24 @@
+[%
+operation src!Target hiveSupport(){
+    return false;
+} 
+
+operation src!Target imports(){
+    return Sequence{};
+}     
+
+operation src!LocalTarget getInputNode(){
+	return (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+}
+
+@template
+operation src!Target globals(){
+    %][%
+} 
+    
+@template
+operation src!Target declare(){
+	var transition = self.transformation.transitions.select(t|t.~targetNode == self).first();%]
+	[%=self.name%](spark, [%=transition.~sourceNode.name%])
+[%}
+%]

@@ -1,0 +1,73 @@
+[%
+ 
+operation src!DeltaTarget imports(){
+    return Sequence{
+        "import io.delta.tables._"
+    };
+} 
+operation src!DeltaTarget define(){
+	"DELTA".println;
+	"DELTA2".println;
+	 var delta = "Some delta string";
+     var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+     "1".println;
+     inputNode.println;
+     self.println;	
+     "2".println;
+  %]
+  
+  def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {
+  
+    [% "getting context in Delta".println; %]
+    
+    import spark.implicits._
+    import scala.util.parsing.json.JSONObject
+    
+    val master: String = _master
+    val jobStartTime: Long = spark.sparkContext.startTime
+    
+    notifyStart("[%=self.name%]", "[%=inputNode.name%]", jobStartTime)
+    
+    [%if (self.createIfNotExists <> true) {%]             
+    var deltaTable : DeltaTable = null;
+    val fileName = s"""[%=self.path%]"""
+    try {
+        deltaTable = DeltaTable.forPath(fileName);
+    } 
+    catch { 
+        case ex: Throwable => throw new RuntimeException(s"Failed while checking Table at [%=self.path%]", ex)
+    }
+    [%}%]
+    
+    [% if(self.truncate == true){%]
+    	//truncate data
+    	deltaTable.delete()
+    [%}%]
+	try {
+	var criteria = "[%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]source.[%=feature.inputFieldName%] = target.[%=feature.targetColumnName%] [%if (hasMore){%] and [%}}%]"
+	var updateMap = Map([%for (feature in self.inputFieldsMapping.select(f|f.keyField == false)) { %] "[%=feature.targetColumnName%]" -> "source.[%=feature.inputFieldName%]" [%if (hasMore){%],[%}}%])
+
+	[%if (self.targetType == src!TableTargetType#INSERT) {%]
+		ds.write.format("delta").mode("append").save("[%=self.path%]");
+	[%}%]
+	[%if (self.targetType == src!TableTargetType#UPDATE) {%]
+		deltaTable.as("target").merge(ds.toDF().as("source"), criteria).whenMatched.updateExpr(updateMap).execute();
+	[%}%]
+	[%if (self.targetType == src!TableTargetType#DELETE) {%]
+		deltaTable.as("target").merge(ds.toDF().as("source"), criteria).whenMatched.delete().execute();
+	[%}%]
+	[%if (self.targetType == src!TableTargetType#MERGE) {%]
+		var insertMap = Map([%for (feature in self.inputFieldsMapping) { %] "[%=feature.targetColumnName%]" -> "source.[%=feature.inputFieldName%]" [%if (hasMore){%],[%}}%])
+	    deltaTable.as("target").merge(ds.toDF().as("source"), criteria).whenMatched.updateExpr(updateMap).whenNotMatched.insertExpr(insertMap).execute();      
+	[%}%] 
+	} finally {
+	
+	}
+	
+	 //deltaTable.toDF.show()
+      
+     notifyFinish("[%=self.name%]", "[%=inputNode.name%]", jobStartTime)
+  }
+[%}
+
+%]

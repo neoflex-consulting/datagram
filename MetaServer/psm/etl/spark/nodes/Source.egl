@@ -1,0 +1,31 @@
+[%
+@template
+operation src!Source declare(){%]
+	val [%=self.name%] = get[%=self.name%](spark)
+	[%if (self.checkpoint) {%]
+	[%=self.name%].persist(StorageLevel.[%=storageLevel(self)%])
+	[%}
+}
+
+operation src!Source hiveSupport(){
+    return false;
+} 
+    
+operation src!Source imports(){
+    return Sequence{};
+} 
+  
+@template
+operation src!Source globals(){
+    %][%
+} 
+
+@template
+operation src!Source getSchemaName(){
+    if(self.schemaOnRead = true) {
+        %]org.apache.spark.sql.Row[%
+    } else {
+        %][%=self.name%]Schema[%
+    }
+}
+%]

@@ -1,0 +1,92 @@
+[%
+operation src!Join joinType() {
+    if (self.keyFields.size() == 0) {
+        return "cross";
+    }
+    if (self.joinType == src!JoinType#INNER) {
+        return "inner";
+    }
+    if (self.joinType == src!JoinType#LEFT) {
+        return "left_outer";
+    }
+    if (self.joinType == src!JoinType#RIGHT) {
+        return "right_outer";
+    }
+    if (self.joinType == src!JoinType#FULL) {
+        return "outer";
+    }
+    throw "Unknown join type";
+}%]
+[%
+operation src!Join joinCondition(left, right) {
+    if (self.keyFields.size() == 0) {
+        return "lit(true)";
+    }
+    return Sequence{0..self.keyFields.size() - 1}.collect(i| left + '("' + self.keyFields.at(i) + '") === ' + right + '("' + self.joineeKeyFields.at(i) + '")').concat(" && ");
+}%]
+[%
+operation src!Join portIndex(port) {
+    if (self.inputPort == port) {
+        return 1;
+    }
+    if (self.joineePort == port) {
+        return 2;
+    }
+    throw "Unknown join port";
+}%]
+[%@template
+operation src!Join defineImpl(){
+          var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode; 
+          var joineeNode = (self.transformation.transitions.selectOne(t|t.finish == self.joineePort)).~sourceNode;
+		  var sqlFields = Sequence{};
+		  var transformFields = Sequence{};
+		  for (f in self.outputPort.fields) {
+			if (f.fieldOperationType == src!FieldOperationType#TRANSFORM) {
+				transformFields.add(f);
+			} else {
+				sqlFields.add(f);
+			}
+		  }
+%]
+import org.apache.spark.sql.functions._
+[%=inputNode.name%].joinWith([%=joineeNode.name%], 
+    [%=self.joinCondition(inputNode.name, joineeNode.name)%], 
+    "[%=self.joinType()%]")
+.select(
+[%if(transformFields.size() <> 0){%]
+	[%for (f in inputNode.outputPort.fields) {%]
+		col("_1.[%=f.name%]").alias("_1_[%=f.name%]"),		
+	[%}%]	
+	[%for (f in joineeNode.outputPort.fields) {%]
+		col("_2.[%=f.name%]").alias("_2_[%=f.name%]")[% if (hasMore or sqlFields.size() <> 0){%],[%}%]		
+	[%}%]
+[%}%]
+	[%for (f in sqlFields) {%]
+		[%if (f.fieldOperationType == src!FieldOperationType#ADD) {%]
+		col("_[%=self.portIndex(f.sourceFields[0].dataSet)%].[%=f.sourceFields[0].name%]")[%}
+		else if (f.fieldOperationType == src!FieldOperationType#PACK) {%]
+		struct([%=f.sourceFields.collect(s|'col("_' + self.portIndex(s.dataSet) + "." + s.name + '")').concat(", ")%])[%}
+		else {%] expr(s"""[%=interpolareParameters(f.expression)%]""")[%}%]
+		.alias("[%=f.name%]")[% if (hasMore){%],  [%}%]		
+	[%}%])    
+[%if(transformFields.size() <> 0){%]
+.map{row => [%=self.getSchemaName()%](
+    [%for (f in self.outputPort.fields) {
+        if (f.fieldOperationType == src!FieldOperationType#ADD or f.fieldOperationType == src!FieldOperationType#SQL or f.fieldOperationType == src!FieldOperationType#PACK) {%]
+    [%=f.getJavaName()%] = row.getAs("[%=f.name%]")[% if (hasMore){%],[%}%]
+        [% } 
+        else if (f.fieldOperationType == src!FieldOperationType#TRANSFORM) {%]
+    [%=f.getJavaName()%] = (([%for (i in f.sourceFields) {%][%=i.name%] : [%=i.getFullJavaClassName()%][% if (hasMore){%],  [%}} %]) => {
+        [%=interpolareParameters(f.expression)%]
+    })([%for (i in f.sourceFields) {%]row.getAs("_[%=self.portIndex(i.dataSet)%]_[%=i.name%]")[% if (hasMore){%],  [%}} %])[% if (hasMore){%],[%}%]
+        
+        [%} %]
+        
+    [%}%]
+)}
+[%}%]
+[%if (self.watermarkField.isDefined() and self.watermarkThreshold.isDefined()) {%]
+.withWatermark("[%=self.watermarkField%]", "[%=self.watermarkThreshold%]")
+[%}%]
+.as[[%=self.getSchemaName()%]]
+[%}%]

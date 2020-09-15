@@ -1,0 +1,57 @@
+[%
+  jobDeployment.get("name").println("job.egl: ");
+  var JSONHelper = Native("java.lang.Thread").currentThread().getContextClassLoader().loadClass("ru.neoflex.meta.utils.JSONHelper");
+%]
+nameNode=[%=jobDeployment.get("oozie").get("nameNode")%]
+jobTracker=[%=jobDeployment.get("oozie").get("jobTracker")%]
+master=[%=JSONHelper.escape(deploymentAttribute(jobDeployment, "master"))%]
+mode=[%=deploymentAttribute(jobDeployment, "mode")%]
+numExecutors=[%=deploymentAttribute(jobDeployment, "numExecutors")%]
+driverMemory=[%=deploymentAttribute(jobDeployment, "driverMemory")%]
+executorMemory=[%=deploymentAttribute(jobDeployment, "executorMemory")%]
+executorCores=[%=deploymentAttribute(jobDeployment, "executorCores")%]
+queueName=default
+oozie.use.system.libpath=true
+oozie.wf.validate.ForkJoin=false
+oozie.action.sharelib.for.spark=spark2
+[%if (jobDeployment.isTypeOf(src!WorkflowDeployment)) {%]
+oozie.wf.application.path=[%=jobDeployment.get("oozie").get("nameNode")%][%=jobDeployment.get("oozie").get("home")%]/[%=jobDeployment.get("oozie").get("user")%]/deployments/[%=jobDeployment.get("name")%]/[%=jobDeployment.get("start").get("name")%].xml
+[%} else if (jobDeployment.isTypeOf(src!CoordinatorDeployment)){%] 
+oozie.coord.application.path=[%=jobDeployment.get("oozie").get("nameNode")%][%=jobDeployment.get("oozie").get("home")%]/[%=jobDeployment.get("oozie").get("user")%]/deployments/[%=jobDeployment.get("name")%]/coordinator.xml
+[%}%]
+[%for (deployment in jobDeployment.get("deployments")) {%]    
+JDBC_[%=JSONHelper.escape(deployment.get("softwareSystem").get("name"))%]_URL=[%=JSONHelper.escape(deployment.get("connection").get("url"))%]
+JDBC_[%=JSONHelper.escape(deployment.get("softwareSystem").get("name"))%]_USER=[%=JSONHelper.escape(deployment.get("connection").get("user"))%]
+JDBC_[%=JSONHelper.escape(deployment.get("softwareSystem").get("name"))%]_DRIVER=[%=JSONHelper.escape(deployment.get("connection").get("driver"))%]
+JDBC_[%=JSONHelper.escape(deployment.get("softwareSystem").get("name"))%]_PASSWORD=[%=JSONHelper.escape(getPassword(deployment.get("connection")))%]
+JDBC_[%=JSONHelper.escape(deployment.get("softwareSystem").get("name"))%]_SCHEMA=[%=JSONHelper.escape(deployment.get("connection").get("schema"))%]
+[%}%]    
+NTF_URL=[%=JSONHelper.escape(jobDeployment.get("oozie").get("ntfUrl"))%]
+NTF_DESTINATION=[%=JSONHelper.escape(jobDeployment.get("oozie").get("ntfDestination"))%]
+NTF_USER=[%=JSONHelper.escape(jobDeployment.get("oozie").get("ntfUser"))%]
+NTF_PASSWORD=[%=JSONHelper.escape(jobDeployment.get("oozie").get("ntfPassword"))%]
+SLIDE_SIZE=[%=jobDeployment.get("slideSize")%]
+FETCH_SIZE=[%=jobDeployment.get("fetchSize")%]
+PARTITION_NUM=[%=jobDeployment.get("partitionNum").ifUndefined(3)%]
+FAIL_THRESHOLD=[%=jobDeployment.get("rejectSize")%]
+JARS=[%=jobDeployment.get("oozie").get("nameNode")%][%=jobDeployment.get("oozie").get("home")%]/[%=jobDeployment.get("oozie").get("user")%]/deployments/[%=jobDeployment.get("name")%]/lib
+[%for (parameter in jobDeployment.get("parameters")) {%]    
+[%=JSONHelper.escape(parameter.get("name"))%]=[%=JSONHelper.escape(parameter.get("value"))%]
+[%}%]    
+[%operation deploymentAttribute(wd, name) {
+  if (wd.get(name) == null or wd.get(name) == "" or wd.get(name) == 0) {
+    return wd.get("oozie").get(name);
+  }
+  return wd.get(name);
+}
+
+operation getPassword(entity) {
+    var Common = Native("java.lang.Thread").currentThread().getContextClassLoader().loadClass("ru.neoflex.meta.utils.Common");
+    var SymmetricCipher = Native("java.lang.Thread").currentThread().getContextClassLoader().loadClass("ru.neoflex.meta.utils.SymmetricCipher");
+	var password = entity.password;
+    if (not password.isDefined() or password == "") {
+        password = Common.getPassword("rt.JdbcConnection." + entity.name + ".password");
+    }
+    return SymmetricCipher.encrypt(password);
+}
+%]

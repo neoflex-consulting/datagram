@@ -1,0 +1,25 @@
+[%
+import "Utils.egl";
+%]
+import org.apache.spark
+import org.apache.spark.sql._
+import org.apache.spark.sql.functions._
+
+case class SelectionClass(
+        [%for (field in step.get('inputPort').get('fields')) {%]
+        [%=field.get("name")%]: [%=field.get("javaDomain")%][%if (hasMore){%],[%}%]
+        
+        [%}%]
+)
+
+val df = Seq(SelectionClass(
+        [%for (field in step.get('inputPort').get('fields')) {%]
+        [%=field.get("name")%] = null.asInstanceOf[[%=field.get("javaDomain")%]][%if (hasMore){%],[%}%]
+        
+        [%}%]
+    )).toDF([%for (f in step.get('inputPort').get('fields')) {%]"[%=f.get('name')%]"[%if (hasMore){%],[%}%]
+    [%}%])
+
+val ftype = df.select(expr(s"""[%=interpolareParameters(step.get('expression'))%]""")).schema(0).dataType.typeName
+
+assert(ftype.startsWith("bool"))

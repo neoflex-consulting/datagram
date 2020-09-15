@@ -1,0 +1,41 @@
+[%
+
+operation src!HiveSource define(){%]
+
+def get[%=self.name%](spark: SparkSession): Dataset[[%=self.getSchemaName()%]] = {
+	
+	import spark.implicits._
+	
+	val sqlText = s"""[%=interpolareParameters(self.statement)%]"""
+	val queryResult = spark.sql(s"${sqlText}")
+	
+	logger.logInfo(s"HiveSource [%=self.name%] query: ${sqlText}")
+	[% if (self.explain) {%]
+		
+	val explainText = queryResult.explain(true)
+	if (_debug) {
+		logger.logInfo(s"${explainText}")
+	} 
+	[%}%]
+	
+	queryResult
+	[%if (not self.outputPort.isValidIdentifiers()) {%] 			
+		.map{ row => [%=self.getSchemaName()%](
+		[%for (field in self.outputPort.fields) {%]
+        row.getAs[[%=field.getFullJavaClassName()%]]("[%=field.name%]")[%if (hasMore){%],[%}%]
+     
+	  	[%}%]
+	)}[%} else {%]
+	[%if (self.schemaOnRead <> true) {%]
+	.as[[%=self.getSchemaName()%]]
+	[%}%]
+	[%}%]
+}
+[%}
+
+operation src!HiveSource hiveSupport(){
+    return true;
+} 
+    
+
+%]

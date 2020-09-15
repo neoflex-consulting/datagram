@@ -1,0 +1,1859 @@
+package [%=packagePrefix%]
+
+import java.sql.{CallableStatement, Timestamp}
+import java.util.Date
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.{JdbcRDD, RDD, EmptyRDD}
+import org.apache.spark.sql.{SQLContext, SaveMode}
+import org.apache.spark.sql.hive.HiveContext
+import org.apache.spark.sql.functions._
+import org.apache.spark.storage.StorageLevel
+import org.apache.hadoop.fs.FileSystem
+import org.apache.hadoop.fs.Path
+import org.apache.hadoop.fs.FSDataInputStream
+import org.apache.hadoop.conf.Configuration
+import ru.neoflex.meta.etl.ETLJobConst._
+import ru.neoflex.meta.etl.{JdbcETLContext, ETLJobBase, ActiveMQContext, TableTarget, OracleSequence}
+import scala.collection.{JavaConversions, immutable}
+import scala.collection.immutable.HashMap
+import org.drools.builder.KnowledgeBuilderFactory
+import org.drools.builder.DecisionTableInputType
+import org.drools.io.Resource
+import org.drools.io.ResourceFactory
+import org.drools.logger.KnowledgeRuntimeLoggerFactory
+import org.drools.builder.ResourceType
+import org.drools.builder.DecisionTableConfiguration
+import org.drools.KnowledgeBaseFactory
+import org.drools.definition.`type`.FactType
+import org.drools.definition.`type`.FactField
+import org.drools.runtime.StatefulKnowledgeSession
+import org.drools.runtime.rule.QueryResults
+import org.drools.runtime.rule.QueryResultsRow
+import ru.neoflex.meta.etl.functions._
+import org.apache.spark.sql.functions._
+
+[%
+var allSources = new List;
+
+"resolving node relations".println;
+for (transition in transformationTarget.transitions){
+  transition.processTrans(transformationTarget, allSources);
+}%]
+
+/**
+ * Created by Epsilon EGL
+ */
+class [%=toJavaName(transformationTarget.name)%]Job extends  ru.neoflex.meta.etl.ETLJobBase  with scala.Serializable with TableTarget{
+
+  override def getApplicationName: String = {
+    "[%=transformationTarget.name%]"
+  }
+  
+  
+  def runJob(sc: SparkContext, sqlCtx: SQLContext): Any = {
+ 	[% for (param in transformationTarget.get("parameters")) { %]
+  	jobParameters.getOrElseUpdate("[%=param.get("name")%]", {
+  		[%if (param.get("expression") == true) {%]
+  		[%=param.get("value")%]
+  		[%} else {%]
+  		s"""[%=param.get("value")%]"""
+  		[%}%]
+  	})
+	[%}%]
+    [%
+    var processedNodes = Sequence{};
+    for (target in transformationTarget.targets) {%]
+    [%=transformationTarget.processNode(target, processedNodes, workflowDeployment)%]    
+    [%}%] 
+  }
+
+    [%
+    "Processing table sources".println;
+    for (source in transformationTarget.sources.select(src|src.isKindOf(src!TableSource))) { 
+       source.getTableSourceMethod();   
+    %} %]
+
+    [%
+    "Processing sql sources".println;
+    for (source in transformationTarget.sources.select(src|src.isKindOf(src!SQLSource))) { 
+       source.getSQLSourceMethod();   
+    %} %]
+    
+    [%
+    "Processing hive sources".println;
+    for (source in transformationTarget.sources.select(src|src.isKindOf(src!HiveSource))) { 
+       source.getHiveSourceMethod();   
+    %} %]
+    
+    [%
+    "Processing SparkSQL".println;
+    for (source in transformationTarget.transformationSteps.select(src|src.isKindOf(src!SparkSQL))) { 
+       source.execSparkSQLMethod();   
+    %} %]       
+    
+    [%
+    "Processing local sources".println;
+    for (source in transformationTarget.sources.select(src|src.isKindOf(src!LocalSource))) { 
+       source.getLocalSourceMethod();   
+    %} %]    
+    
+    [%
+    "Processing CSV sources".println;
+    for (source in transformationTarget.sources.select(src|src.isKindOf(src!CSVSource))) { 
+       source.getCSVSourceMethod();   
+    %} %]
+    
+    [%
+    "Processing XML sources".println;
+    for (source in transformationTarget.sources.select(src|src.isKindOf(src!XMLSource))) { 
+       source.getXMLSourceMethod();   
+    %} %]                  
+    
+    [%
+    "Processing expression sources".println;
+    for (source in transformationTarget.sources.select(src|src.isKindOf(src!ExpressionSource))) { 
+       source.getExpressionSourceMethod();   
+    %} %]    
+    
+[%
+    "Processing joins".println;
+    for (step in transformationTarget.transformationSteps.select(step|step.isKindOf(src!Join))) { 
+      step.joinMethod();
+  } %]    
+  
+[%
+    "Processing sequence".println;
+    for (step in transformationTarget.transformationSteps.select(step|step.isKindOf(src!`Sequence`))) { 
+      step.getSequenceMethod();
+  } %]    
+  
+[%
+    "Processing projections".println;
+    for (step in transformationTarget.transformationSteps.select(step|step.isKindOf(src!Projection) and not step.isKindOf(src!Join))) { 
+      step.projectionMethod();
+  } %]
+  
+[%
+    "Processing model based analysis".println;
+    for (step in transformationTarget.transformationSteps.select(step|step.isKindOf(src!ModelBasedAnalysis))) { 
+      step.modelBasedAnalysisMethod();
+  } %]  
+  
+[%
+    "Processing aggregations".println;
+    for (step in transformationTarget.transformationSteps.select(step|step.isKindOf(src!Aggregation))) { 
+      step.aggregationMethod();
+  } %]
+  
+[%
+    "Processing drools".println;
+    for (step in transformationTarget.transformationSteps.select(step|step.isKindOf(src!Drools))) { 
+      step.getDroolsMethod();
+  } %]      
+  
+  [%
+  "Processing TableTarget".println;
+  for (target in transformationTarget.targets.select(tgt| tgt.isKindOf(src!TableTarget))) {
+    target.applyTableTargetMethod();
+   
+} %]
+
+  [%
+  "Processing StoredProcedureTarget".println;
+  for (target in transformationTarget.targets.select(tgt| tgt.isKindOf(src!StoredProcedureTarget))) {
+    target.applyStoredProcedureTargetMethod();
+   
+} %]
+
+  [%
+  "Processing LocalTarget".println;
+  for (target in transformationTarget.targets.select(tgt| tgt.isKindOf(src!LocalTarget))) {
+    target.applyLocalTargetMethod();
+   
+} %]
+
+  [%
+  "Processing CSVTarget".println;
+  for (target in transformationTarget.targets.select(tgt| tgt.isKindOf(src!CSVTarget))) {
+    target.applyCSVTargetMethod();
+   
+} %]
+
+  [%
+  "Processing HiveTarget".println;
+  for (target in transformationTarget.targets.select(tgt| tgt.isKindOf(src!HiveTarget))) {
+    target.applyHiveTargetMethod();
+   
+} %]
+
+    
+}
+
+object [%=toJavaName(transformationTarget.name)%]Job {
+   def main(args: Array[String]): Unit = {
+     new [%=toJavaName(transformationTarget.name)%]Job().sparkMain(args)
+  }
+}
+[%
+operation toJavaName(s : String):String{
+  var result = s;
+  if (result <> null){
+    result = result.replace("#","_");
+  }
+  return result;
+}
+@template
+operation src!Field toBigDecimal(name){
+   if (self.dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      %][%=name%][%
+   }
+   else {
+      %]new BigDecimal([%=name%])[%
+   }
+}
+
+operation src!DataSet getIndex(name) {
+    var i = 0;
+    while (i < self.fields.size()) {
+        if (self.fields.at(i).name == name) return i;
+        i = i + 1;
+    }
+    throw new Exception("index not found " + self.name + "." + name);
+}
+
+operation src!Field getIndex() {
+    return self.dataSet.getIndex(self.name);
+}
+
+@template
+operation src!Field getJavaClassName(){
+   if (self.dataTypeDomain == src!DataTypeDomain#STRING){
+      %]String[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#BOOLEAN){
+      %]Boolean[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      %]BigDecimal[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#INTEGER){
+      %]Int[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#LONG){
+      %]Long[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#FLOAT){
+      %]Float[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DOUBLE){
+      %]Double[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#BINARY){
+      %]Bytes[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DATE){
+      %]Date[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DATETIME){
+      %]Timestamp[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#TIME){
+      %]Timestamp[%
+   }
+}
+
+@template
+operation src!Field getFullSparkClassName(){
+   if (self.dataTypeDomain == src!DataTypeDomain#STRING){
+      %]org.apache.spark.sql.types.StringType[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#BOOLEAN){
+      %]org.apache.spark.sql.types.BooleanType[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      %]org.apache.spark.sql.types.DecimalType(38, 10)[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#INTEGER){
+      %]org.apache.spark.sql.types.IntegerType[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#LONG){
+      %]org.apache.spark.sql.types.LongType[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#FLOAT){
+      %]org.apache.spark.sql.types.FloatType[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DOUBLE){
+      %]org.apache.spark.sql.types.DoubleType[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#BINARY){
+      %]org.apache.spark.sql.types.BinaryType[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DATE){
+      %]org.apache.spark.sql.types.DateType[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DATETIME){
+      %]org.apache.spark.sql.types.TimestampType[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#TIME){
+      %]org.apache.spark.sql.types.TimestampType[%
+   }
+}
+
+@template
+operation src!Field parquetToJava(row, name){
+   if (self.dataTypeDomain == src!DataTypeDomain#STRING){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#BOOLEAN){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#INTEGER){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#LONG){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#FLOAT){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DOUBLE){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#BINARY){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DATETIME){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DATE){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#TIME){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+}
+
+@template
+operation src!Field jsonToJava(row, name){
+   if (self.dataTypeDomain == src!DataTypeDomain#STRING){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#BOOLEAN){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      %]java.math.BigDecimal.valueOf([%=row%].getAs[java.lang.Double]("[%=name%]"))[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#INTEGER){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#LONG){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#FLOAT){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DOUBLE){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#BINARY){
+      %][%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]")[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DATETIME){
+      %]java.sql.Timestamp.valueOf([%=row%].getAs[java.lang.String]("[%=name%]"))[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DATE){
+      %]java.sql.Date.valueOf([%=row%].getAs[[%=self.getFullJavaClassName()%]]("[%=name%]"))[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#TIME){
+      %]java.sql.Timestamp.valueOf([%=row%].getAs[java.lang.String]("[%=name%]"))[%
+   }
+}
+
+@template
+operation src!Field getFullJavaClassName(){
+   if (self.dataTypeDomain == src!DataTypeDomain#STRING){
+      %]java.lang.String[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#BOOLEAN){
+      %]java.lang.Boolean[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      %]java.math.BigDecimal[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#INTEGER){
+      %]java.lang.Integer[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#LONG){
+      %]java.lang.Long[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#FLOAT){
+      %]java.lang.Float[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DOUBLE){
+      %]java.lang.Double[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#BINARY){
+      %]Array[Byte][%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DATE){
+      %]java.sql.Date[%
+   }
+   
+   if (self.dataTypeDomain == src!DataTypeDomain#DATETIME or self.dataTypeDomain == src!DataTypeDomain#TIME){
+      %]java.sql.Timestamp[%
+   }
+}
+
+// Relation between steps and transition is not bidirectional in ecore, so we should find source and target steps on both sides of transition
+operation src!Transition processTrans(transformationTarget: src!Transformation, allSources :List){
+    for (source in transformationTarget.sources){
+      if (source.outputPort == self.start){
+         self.~sourceNode = source;
+         allSources.add(source);
+      }
+    }
+  
+    for (step in transformationTarget.transformationSteps){
+      if (step.outputPort == self.start){
+         self.~sourceNode = step;
+      }
+    
+      if (step.inputPort == self.finish){
+         self.~targetNode = step;
+      }
+      
+      if (step.isKindOf(src!Join)){
+         if (step.joineePort == self.finish){
+            self.~targetNode = step;
+         }
+      }
+      
+      if (step.isKindOf(src!Union)){
+         if (step.unionPort == self.finish){
+            self.~targetNode = step;
+         }
+      }
+      
+      if (step.isKindOf(src!SparkSQL)) {
+      	for (port in step.sqlPorts){
+      		if (port == self.finish) {
+      			self.~targetNode = step;
+      		}
+      	}
+      }
+    }
+  for (tgt in transformationTarget.targets){
+    if (tgt.inputPort == self.finish){
+       self.~targetNode = tgt;
+    }
+  }
+      
+  if (self.~targetNode == null or self.~sourceNode == null) throw "Source or target is undefined for ".concat(self.name);
+  "Found transition: ".concat(self.name).concat("(").concat(self.~sourceNode.name.concat(" ==> ").concat(self.~targetNode.name)).concat(")").println;
+  
+}
+
+operation src!SQLSource getSQLSourceMethod(){
+    %]
+  def get[%=self.name%]Source(sc: SparkContext, sqlCtx: SQLContext): RDD[Array[AnyRef]] = {
+    val sqlText = s"""[%=self.statement%]"""
+    logger.logInfo(s"SQLSource [%=self.name%] query: ${sqlText}")    
+    val context: JdbcETLContext = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
+    val [%=self.name%]_RDD = sqlCtx.read.format("jdbc").options(Map(
+      "url" -> context._url,
+      "dbtable" -> ("(" + sqlText + ") t"),
+      "driver" -> context._driverClassName,
+      "user" -> context._user,
+      "password" -> context._password,
+      "fetchSize" -> _fetchSize.toString
+    )).load().map(row => {
+      Array[AnyRef](
+      [%for (field in self.outputPort.fields) {%]
+      /*[%=field.name%]=*/ row.getAs[[%=field.getFullJavaClassName()%]]("[%=field.name%]")[%if (hasMore){%],[%}%]
+      
+      [%}%]
+      )
+    })
+    [%=self.name%]_RDD
+  }
+    [%
+}
+
+operation src!HiveSource getHiveSourceMethod(){
+	%]
+	def get[%=self.name%]Source(sc: SparkContext, sqlCtx: SQLContext): RDD[Array[AnyRef]] = {
+	val sqlText = s"""[%=self.statement%]"""
+	logger.logInfo(s"HiveSource [%=self.name%] query: ${sqlText}")
+	[% if (self.explain) {%]	
+	val explainText = getHiveContext(sc).sql(s"${sqlText}").explain(true)
+	if (_debug) {
+		logger.logInfo(s"explainText")
+	} 
+	[%}%]
+	val [%=self.name%]_RDD = getHiveContext(sc).sql(s"${sqlText}").map(row => {
+		Array[AnyRef](
+		[%for (field in self.outputPort.fields) {%]
+      	/*[%=field.name%]=*/ row.getAs[[%=field.getFullJavaClassName()%]]("[%=field.name%]")[%if (hasMore){%],[%}%]
+      
+      	[%}%]
+      	)
+      })
+      [%=self.name%]_RDD
+  }
+	[%
+}
+
+operation src!LocalSource getLocalSourceMethod(){
+    %]
+  def get[%=self.name%]Source(sc: SparkContext, sqlCtx: SQLContext): RDD[Array[AnyRef]] = {
+    val fileName = s"""${_defaultFS}[%=self.localFileName%]"""
+    val parquetFile = sqlCtx.read.[%=self.localFileFormat.toString().toLowerCase()%](fileName)
+    parquetFile.registerTempTable("[%=self.name%]")   
+    val [%=self.name%]_RDD = sqlCtx.sql("SELECT * FROM [%=self.name%]").map(row => {
+      Array[AnyRef](
+      [%for (field in self.outputPort.fields) {%]
+      [%if (self.localFileFormat.toString().toLowerCase() == 'json') {%]
+      /*[%=field.name%]=*/ [%=field.jsonToJava("row", field.name)%][%if (hasMore){%],[%}%]
+      [%} else {%]
+      /*[%=field.name%]=*/ [%=field.parquetToJava("row", field.name)%][%if (hasMore){%],[%}%]
+      [%}%]
+      
+      [%}%]
+      )
+    })
+    [%=self.name%]_RDD
+  }
+    [%
+}
+
+operation src!CSVSource getCSVSourceMethod(){
+    %]
+  def get[%=self.name%]Source(sc: SparkContext, sqlCtx: SQLContext): RDD[Array[AnyRef]] = {
+    val schema = org.apache.spark.sql.types.StructType(Array(
+    [%for (inputField in self.outputPort.fields) {%]
+      org.apache.spark.sql.types.StructField("[%=inputField.name%]", [%=inputField.getFullSparkClassName()%], nullable = true)[%if (hasMore){%],[%}%]
+      
+    [%}%]
+    ))
+    val path = {
+      val fs = if ([%=self.hdfs%]) s"${_defaultFS}" else "file://"
+      s"""${fs}[%=self.path%]"""
+    }
+    val [%=self.name%]_RDD = try {
+      sqlCtx.read
+      .format("com.databricks.spark.csv")
+      .schema(schema)
+      [%if (self.header.isDefined()) {%]
+      .option("header", """[%=self.header%]""") 
+      [%}%] [%if (self.charset.isDefined() and self.charset.trim().length() > 0) {%]
+      .option("charset", """[%=self.charset%]""")
+      [%}%] [%if (self.delimiter.isDefined() and self.delimiter.trim().length() > 0) {%]
+      .option("delimiter", """[%=self.delimiter%]""") 
+      [%}%] [%if (self.quote.isDefined() and self.quote.trim().length() > 0) {%]
+      .option("quote", """[%=self.quote%]""") 
+      [%} else {%] 
+      .option("quote", null) 
+      [%}%] [%if (self.escape.isDefined() and self.escape.trim().length() > 0) {%]
+      .option("escape", """[%=self.escape%]""")
+      [%}%] [%if (self.comment.isDefined() and self.comment.trim().length() > 0) {%] 
+      .option("comment", """[%=self.comment%]""") 
+      [%}%] [%if (self.dateFormat.isDefined() and self.dateFormat.trim().length() > 0) {%]
+      .option("dateFormat", """[%=self.dateFormat%]""")
+      [%}%] [%if (self.nullValue.isDefined() and self.nullValue.trim().length() > 0) {%]
+      .option("nullValue", """[%=self.nullValue%]""") 
+      [%}%]  
+      .load(path)
+      .map(row => {
+	      Array[AnyRef](
+	      [%for (field in self.outputPort.fields) {%]
+	      /*[%=field.name%]=*/ [%=field.parquetToJava("row", field.name)%][%if (hasMore){%],[%}%]
+	      
+	      [%}%]
+	      )
+	    })
+	  } catch {
+          case e: UnsupportedOperationException => sc.emptyRDD[Array[AnyRef]]
+      }
+    
+    [%=self.name%]_RDD
+  }
+    [%
+}
+
+operation src!XMLSource getXMLSourceMethod(){
+    %]
+  def get[%=self.name%]Source(sc: SparkContext, sqlCtx: SQLContext): RDD[Array[AnyRef]] = {
+    val schema = org.apache.spark.sql.types.StructType(Array(
+    [%for (inputField in self.outputPort.fields) {%]
+      org.apache.spark.sql.types.StructField("[%=inputField.name%]", [%=inputField.getFullSparkClassName()%], nullable = true)[%if (hasMore){%],[%}%]
+      
+    [%}%]
+    ))
+    val path = {
+      val fs = if ([%=self.hdfs%]) s"${_defaultFS}" else "file://"
+      s"""${fs}[%=self.path%]"""
+    }
+    val [%=self.name%]_RDD = try {
+      sqlCtx.read
+      .format("com.databricks.spark.xml")
+      .schema(schema)
+      [%if (self.rowTag.isDefined()) {%]
+      .option("rowTag", """[%=self.rowTag%]""") 
+      [%}%] [%if (self.charset.isDefined() and self.charset.trim().length() > 0) {%]
+      .option("charset", """[%=self.charset%]""")
+      [%}%] [%if (self.samplingRatio.isDefined() and self.samplingRatio > 0) {%]
+      .option("samplingRatio", """[%=self.samplingRatio / 100 %]""") 
+      [%}%] [%if (self.excludeAttribute.isDefined() ) {%]
+      .option("excludeAttribute", """[%=self.excludeAttribute%]""") 
+      [%}%] [%if (self.treatEmptyValuesAsNulls.isDefined() ) {%]
+      .option("treatEmptyValuesAsNulls", """[%=self.treatEmptyValuesAsNulls%]""")
+      [%}%] [%if (self.mode.isDefined() ) {%] 
+      .option("mode", """[%=self.mode%]""") 
+      [%}%] [%if (self.columnNameOfCorruptRecord.isDefined() and self.columnNameOfCorruptRecord.trim().length() > 0) {%]
+      .option("columnNameOfCorruptRecord", """[%=self.columnNameOfCorruptRecord%]""")
+      [%}%] [%if (self.attributePrefix.isDefined() and self.attributePrefix.trim().length() > 0) {%]
+      .option("attributePrefix", """[%=self.attributePrefix%]""") 
+      [%}%] [%if (self.valueTag.isDefined() and self.valueTag.trim().length() > 0) {%]
+      .option("valueTag", """[%=self.valueTag%]""") 
+      [%}%] [%if (self.ignoreSurroundingSpaces.isDefined() ) {%]
+      .option("ignoreSurroundingSpaces", """[%=self.ignoreSurroundingSpaces%]""") 
+      [%}%]            
+      .load(path)
+      [%for (explodeField in self.explodeFields) {%]
+      .withColumn("""[%=explodeField.`alias`%]""",  explode($"""[%=explodeField.field%]"""))
+      [%}%]            
+      .map(row => {
+          Array[AnyRef](
+          [%for (field in self.outputPort.fields) {%]
+          /*[%=field.name%]=*/ [%=field.parquetToJava("row", field.name)%][%if (hasMore){%],[%}%]
+          
+          [%}%]
+          )
+        })
+      } catch {
+          case e: UnsupportedOperationException => sc.emptyRDD[Array[AnyRef]]
+      }
+    
+    [%=self.name%]_RDD
+  }
+    [%
+}
+
+operation src!ExpressionSource getExpressionSourceMethod(){
+    %]
+  def get[%=self.name%]Source(sc: SparkContext, sqlCtx: SQLContext): RDD[Array[AnyRef]] = {
+    val f = () => {
+        [%=self.expression%]
+    }: Seq[Predef.Map[String, AnyRef]]
+    sc.parallelize(f().map(row => {
+      Array[AnyRef](
+      [%for (field in self.outputPort.fields) {%]
+      /*[%=field.name%]=*/ row.getOrElse("[%=field.name%]", null)[%if (hasMore){%],[%}%]
+      
+      [%}%]
+      )
+    }))
+  }
+    [%
+}
+
+operation src!TableSource getTableSourceMethod(){
+    %]
+  def get[%=self.name%]Source(sc: SparkContext, sqlCtx: SQLContext): RDD[Array[AnyRef]] = {
+    val context: JdbcETLContext = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
+    val sqlText = s"""SELECT [%for (field in self.outputPort.fields) { %]"[%=field.name%]" as "[%=field.name.toUpperCase()%]" [%if (hasMore){%], [%}}%] FROM """ + context._schema + s"""."[%=self.tableName%]" """
+    logger.logInfo(s"TableSource [%=self.name%] query: ${sqlText}")    
+    val [%=self.name%]_RDD = sqlCtx.read.format("jdbc").options(Map(
+      "url" -> context._url,
+      "dbtable" -> ("(" + sqlText + ") t"),
+      "driver" -> context._driverClassName,
+      "user" -> context._user,
+      "password" -> context._password,
+      "fetchSize" -> _fetchSize.toString
+    )).load().map(row => {
+      Array[AnyRef](
+      [%for (field in self.outputPort.fields) {%]
+      /*[%=field.name%]=*/ row.getAs[[%=field.getFullJavaClassName()%]]("[%=field.name.toUpperCase()%]")[%if (hasMore){%],[%}%]
+      
+      [%}%]
+      )
+    })
+    [%=self.name%]_RDD
+  }
+    [%
+}
+
+operation src!Join portName(f){
+    if (f.dataSet == self.inputPort) {
+        return "inputPort";
+    }
+    else {
+        return "joineePort";
+    }
+}
+
+operation src!Join joinMethod(){
+       var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode; 
+       var joineeNode = (self.transformation.transitions.selectOne(t|t.finish == self.joineePort)).~sourceNode;
+    %]
+    
+  def join[%=joineeNode.name%]to[%=inputNode.name%](inputPort: Array[AnyRef], joineePort: Array[AnyRef]): Array[AnyRef] = {
+    Array[AnyRef](    
+    [%for (f in self.outputPort.fields) {
+        if (f.fieldOperationType == src!FieldOperationType#ADD) {%]
+    /*[%=f.name%]=*/ [%=self.portName(f.sourceFields[0])%](/*[%=f.sourceFields[0].name%]*/[%=f.sourceFields[0].getIndex()%])[% if (hasMore){%],[%}%]
+    
+        [%} 
+        else if (f.fieldOperationType == src!FieldOperationType#TRANSFORM) {%]
+    /*[%=f.name%]=*/ (([%for (i in f.sourceFields) {%][%=i.name%] : [%=i.getFullJavaClassName()%][% if (hasMore){%],  [%}} %]) => {
+        [%=f.expression%]
+    }: [%=f.getFullJavaClassName()%])([%for (i in f.sourceFields) {%][%=self.portName(i)%](/*[%=i.name%]*/[%=i.getIndex()%]).asInstanceOf[[%=i.getFullJavaClassName()%]][% if (hasMore){%],  [%}} %])[% if (hasMore){%],[%}%]
+    
+        [%} %]
+    [%} %]    
+    )
+  }
+    
+    [%
+}
+
+operation src!Projection projectionMethod(){
+       var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode; 
+    %]
+    
+  def projection[%=inputNode.name%](inputPort: Array[AnyRef]): Array[AnyRef] = {
+    Array[AnyRef](      
+    [%for (f in self.outputPort.fields) {
+        if (f.fieldOperationType == src!FieldOperationType#ADD) {
+        if (f.sourceFields[0].isDefined()) {%]
+    /*[%=f.name%]=*/ inputPort(/*[%=f.sourceFields[0].name%]*/[%=f.sourceFields[0].getIndex()%])[% if (hasMore){%],[%}%]
+    
+        [% } else {%]
+    /*[%=f.name%]=*/ null[% if (hasMore){%],[%}%]
+        [%}} 
+        else if (f.fieldOperationType == src!FieldOperationType#TRANSFORM) {%]
+    /*[%=f.name%]=*/ (([%for (i in f.sourceFields) {%][%=i.name%] : [%=i.getFullJavaClassName()%][% if (hasMore){%],  [%}} %]) => {
+        [%=f.expression%]
+    }: [%=f.getFullJavaClassName()%])([%for (i in f.sourceFields) {%]inputPort(/*[%=i.name%]*/[%=i.getIndex()%]).asInstanceOf[[%=i.getFullJavaClassName()%]][% if (hasMore){%],  [%}} %])[% if (hasMore){%],[%}%]
+    
+        [%} %]
+    [%} %]    
+    )
+  }
+    
+    [%
+}
+
+operation src!`Sequence` getSequenceMethod(){
+       var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode; 
+    %]
+    
+  def get[%=self.name%]Sequence(sc: SparkContext, sqlCtx: SQLContext, [%=inputNode.name%]_RDD: RDD[Array[AnyRef]]): RDD[Array[AnyRef]] = {
+    [%if (self.sequenceType == src!SequenceType#LOCAL){%]
+    val [%=self.name%]_RDD = [%=inputNode.name%]_RDD.zipWithIndex().map {
+      case (row, index) =>
+        Array[AnyRef](
+        [%for (f in self.outputPort.fields) {if (f.name <> self.fieldName) {%]
+        /*[%=f.name%]=*/ row(/*[%=f.name%]*/[%=f.getIndex()%]),        
+        [%}}%]
+        /*[%=self.fieldName%]=*/ new java.math.BigDecimal(index)
+        )
+    }
+    [%}%]
+    [%if (self.sequenceType == src!SequenceType#ORACLE){%]
+    val context = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
+    val [%=self.name%]_Sequence = new ru.neoflex.meta.etl.OracleSequence(context, "[%=self.sequencedName%]", [%=self.batchSize%])
+    val [%=self.name%]_RDD = [%=inputNode.name%]_RDD.map(row => {
+        Array[AnyRef](        
+        [%for (f in self.outputPort.fields) {if (f.name <> self.fieldName) {%]
+        /*[%=f.name%]=*/ row(/*[%=f.name%]*/[%=f.getIndex()%]),
+        
+        [%}}%]
+        /*[%=self.fieldName%]=*/ [%=self.name%]_Sequence.nextValue()
+        )
+    })
+    [%}%]
+	[%=self.name%]_RDD
+  }
+    
+    [%
+}
+
+operation src!TableTarget applyTableTargetMethod(){
+        var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+  %]
+  def apply[%=self.name%](sc: SparkContext, sqlCtx: SQLContext, [%=source.name%]_RDD: RDD[Array[AnyRef]]): Any = {
+    import sqlCtx.implicits._
+    val master: String = _master
+    val jobStartTime: Long = sc.startTime
+	val context = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
+	
+    notifyStart("[%=self.name%]", "[%=source.name%]_RDD", jobStartTime )
+    [%if (self.clear) {%]
+    executeUpdate(context, s"""delete from ${context._schema}."[%=self.tableName%]"""")
+    [%}%]
+    
+    [%if (self.preSQL.isDefined() and self.preSQL.trim().length() > 0) {%]
+    executeUpdate(context, s"""[%=self.preSQL.trim()%]""")
+    [%}%]
+    
+    [%=source.name%]_RDD.repartition(_partitionNum).mapPartitions(partition => {
+      val rejects = new java.util.ArrayList[(Array[AnyRef], String)]()
+	  val cn = context.getConnection
+	  try {
+	      cn.setAutoCommit(false)
+	      [%if (self.targetType == src!TableTargetType#INSERT) {%]
+          val sqlText = "insert into " + context._schema +
+	      """."[%=self.tableName%]"([%for (feature in self.inputFieldsMapping) { %]"[%=feature.targetColumnName%]"[%if (hasMore){%], [%}}%]) 
+	      values([%for (feature in self.inputFieldsMapping) { %] ?[%if (hasMore){%], [%}}%])"""
+	      [%}%]
+	      [%if (self.targetType == src!TableTargetType#UPDATE) {%]
+          val sqlText = "update " + context._schema +
+	      s"""."[%=self.tableName%]" set [%for (feature in self.inputFieldsMapping.select(f|f.keyField <> true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%], [%}%][%}%] """ +
+	      s"""where [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%], [%}}%]"""
+	      [%}%]
+	      [%if (self.targetType == src!TableTargetType#DELETE) {%]
+          val sqlText = "delete from " + context._schema + ".\"[%=self.tableName%]\"" +
+	      s"""where [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%] and [%}}%]"""
+	      [%}%]
+	      [%if (self.targetType == src!TableTargetType#MERGE) {%]
+          val sqlText = "merge into " + context._schema +
+	      s"""."[%=self.tableName%]" dst using(select [%for (feature in self.inputFieldsMapping) { %] ? as "[%=feature.targetColumnName%]"[%if (hasMore){%],[%}}%] from dual) src """ +
+	      s"""on([%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]dst."[%=feature.targetColumnName%]" = src."[%=feature.targetColumnName%]"[%if (hasMore){%], [%}%}%]) """ +
+	      s"""when matched then update set [%for (feature in self.inputFieldsMapping.select(f|f.keyField <> true)) { %]dst.[%=feature.targetColumnName%] = src."[%=feature.targetColumnName%]"[%if (hasMore){%], [%}}%] """ + 
+	      s"""when not matched then insert ([%for (feature in self.inputFieldsMapping) { %]"[%=feature.targetColumnName%]"[%if (hasMore){%], [%}}%]) values ([%for (feature in self.inputFieldsMapping) { %]src."[%=feature.targetColumnName%]"[%if (hasMore){%], [%}}%])"""
+	      [%}%]	
+          logger.logInfo(s"TableTarget [%=self.name%] query: ${sqlText}")    
+          val stmt = cn.prepareCall(sqlText)
+	      try {
+	        partition.sliding(_slideSize, _slideSize).foreach(slide => {
+	          processSlice(cn,stmt,slide.toList,(row:Array[AnyRef],stmt: CallableStatement) =>{
+	          [%if (self.targetType == src!TableTargetType#INSERT or self.targetType == src!TableTargetType#MERGE) {%]
+	            [%for (feature in self.inputFieldsMapping) { 
+	               var inputField = self.inputPort.fields.selectOne(fld|fld.name=feature.inputFieldName);
+	               %]
+	            stmt.set[%=inputField.getJavaClassName()%]([%=loopCount%],row(/*[%=toJavaName(inputField.name)%]*/[%=inputField.getIndex()%]).asInstanceOf[[%=inputField.getFullJavaClassName()%]])
+	            [%}%]
+	          [%}%]
+	          [%var alreadyCounted = 0;%]
+	          [%if (self.targetType == src!TableTargetType#UPDATE) {%]
+	            [%for (feature in self.inputFieldsMapping.select(f|f.keyField == false)) { 
+	               var inputField = self.inputPort.fields.selectOne(fld|fld.name=feature.inputFieldName);
+	               alreadyCounted = alreadyCounted + 1;
+	               %]
+	            stmt.set[%=inputField.getJavaClassName()%]([%=loopCount%],row(/*[%=toJavaName(inputField.name)%]*/[%=inputField.getIndex()%]).asInstanceOf[[%=inputField.getFullJavaClassName()%]])
+	            [%}%]
+	          [%}%]
+	          [%if (self.targetType == src!TableTargetType#UPDATE or self.targetType == src!TableTargetType#DELETE) {%]
+	            [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { 
+	               var inputField = self.inputPort.fields.selectOne(fld|fld.name=feature.inputFieldName);
+	               %]
+	            stmt.set[%=inputField.getJavaClassName()%]([%=loopCount + alreadyCounted%],row(/*[%=toJavaName(inputField.name)%]*/[%=inputField.getIndex()%]).asInstanceOf[[%=inputField.getFullJavaClassName()%]])
+	            [%}%]
+	          [%}%]
+	          },(successRowCount:Int) =>{
+	            notifyExecUpdate("[%=self.name%]", "[%=source.name%]_RDD", jobStartTime ,successRowCount)
+	          },(errorMessage:String, failedRow:Array[AnyRef]) =>{
+                if (rejects.size >= _rejectSize) {
+                  throw new RuntimeException(s"Max Rejects Limit (${_rejectSize}) Was Reached for [%=self.name%]")
+                }
+	            notifyException("[%=self.name%]", "[%=source.name%]_RDD", jobStartTime ,errorMessage, failedRow)
+                rejects.add((failedRow, errorMessage))
+	          })
+	        })
+	      } finally {
+	        stmt.close()
+	      }
+	  } finally {
+	      cn.close()
+	  }
+      JavaConversions.asScalaBuffer(rejects).toIterator
+	})
+	.map { reject =>
+        (_workflowId, _applicationId, getApplicationName, "[%=self.name%]", reject._1.toString, reject._2, System.currentTimeMillis)
+    }
+    .toDF("workflowid", "appid", "classname", "methodname", "object", "exception", "ts")
+    .coalesce(1).write.mode(SaveMode.Append).format("json").save(s"${_defaultFS}${_applicationHome}/rejects.json")
+
+    [%if (self.postSQL.isDefined() and self.postSQL.trim().length() > 0) {%]
+    executeUpdate(context, s"""[%=self.postSQL.trim()%]""")
+    [%}%]
+    notifyFinish("[%=self.name%]", "[%=source.name%]_RDD", jobStartTime )
+  }
+[%}
+
+operation src!HiveTarget applyHiveTargetMethod(){
+        var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+  %]
+  def apply[%=self.name%](sc: SparkContext, sqlCtx: SQLContext, [%=source.name%]_RDD: RDD[Array[AnyRef]]): Any = {
+		
+		val hiveContext = getHiveContext(sc)
+		import hiveContext.implicits._
+		
+		
+		[%if (self.preSQL.isDefined() and self.preSQL.trim().length() > 0) {%]
+    	hiveContext.sql(s"""[%=self.preSQL.trim()%]""")
+    	[%}%]
+		
+		val [%=source.name%]_DF = hiveContext.createDataFrame([%=source.name%]_RDD.map(row=>{org.apache.spark.sql.Row.fromSeq(row)}), org.apache.spark.sql.types.StructType(Array(
+		[% for (field in source.outputPort.fields) {%]
+ org.apache.spark.sql.types.StructField("[%=field.name%]", [%=field.getFullSparkClassName()%], nullable = true)[%if (hasMore){%],[%}%]
+	[%}%]
+)))	
+		[%
+		var writeMode;
+		switch (self.hiveTargetType) {
+			case src!HiveTargetType#APPEND : writeMode = "append";
+			case src!HiveTargetType#OVERWRITE : writeMode = "overwrite";
+			case src!HiveTargetType#IGNORE : writeMode = "ignore";
+			case src!HiveTargetType#ERROR : writeMode = "error";
+			default : writeMode = "append";
+		}
+		
+		if (self.partitions.size > 0) {%]
+			[%=source.name%]_DF.write.partitionBy([% for (part in self.partitions) {%]"[%=part%]"[%if (hasMore){%], [%}%] [%} %]).mode("[%=writeMode%]").saveAsTable("[%=self.tableName%]")
+		[%}
+		else {%]
+			[%=source.name%]_DF.write.mode("[%=writeMode%]").saveAsTable("[%=self.tableName%]")
+		[%}			
+		%]
+		
+		
+		[%if (self.postSQL.isDefined() and self.postSQL.trim().length() > 0) {%]
+    	hiveContext.sql(s"""[%=self.preSQL.trim()%]""")
+    	[%}%]
+	  
+  }
+[%}
+
+operation src!Drools getDroolsMethod(){
+        var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+  %]
+  def get[%=self.name%](sc: SparkContext, sqlCtx: SQLContext, [%=source.name%]_RDD: RDD[Array[AnyRef]]): RDD[(Array[AnyRef])] = {
+    import sqlCtx.implicits._
+    val master: String = _master
+    val jobStartTime: Long = sc.startTime			
+    val rdd = [%=source.name%]_RDD.repartition(_partitionNum).mapPartitions(partition => {
+	var kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder(); 
+	var dtconf:DecisionTableConfiguration = null;
+ 	var rtype:ResourceType = null;
+  	var fileUrl:String = null;
+  	var ins:FSDataInputStream = null;
+  	var res:Resource = null;
+			  	   
+	[%for (ruleFile in self.rulesFiles) {%]
+	dtconf = KnowledgeBuilderFactory.newDecisionTableConfiguration();			
+		[%if (ruleFile.fileType.toString() == "XLS") {%]
+	rtype = ResourceType.DTABLE;
+	dtconf.setInputType(DecisionTableInputType.XLS)
+	    [%} else {%]
+	    	[%if (ruleFile.fileType.toString() == "CSV") {%]
+	rtype = ResourceType.DTABLE;
+	dtconf.setInputType(DecisionTableInputType.CSV)
+	        [%} else {%]
+		    	[%if (ruleFile.fileType.toString() == "PKG") {%]
+	rtype = ResourceType.PKG;
+		        [%} else {%]
+		    		[%if (ruleFile.fileType.toString() == "DRL") {%]
+	rtype = ResourceType.DRL;
+		        	[%} else {%]		        	        
+	rtype = ResourceType.getResourceType("[%=ruleFile.fileType.toString()%]");
+					[%} %]
+				[%} %]                
+	    	[%} %]
+	    [%} %]
+	[%if (ruleFile.hdfs == false) {%]
+	res = ResourceFactory.newUrlResource("file://[%=ruleFile.fileUrl%]");
+	[%} %]
+	[%if (ruleFile.hdfs == true) {%]
+	fileUrl = s"""${_defaultFS}[%=ruleFile.fileUrl%]""";      
+    ins = _fs.open(new Path(fileUrl));
+	res = ResourceFactory.newInputStreamResource(ins, "UTF-8")
+	[%} %]
+	kbuilder.add(res, rtype, dtconf);	
+		[%if (ruleFile.hdfs == true) {%]
+	ins.close();
+		[%} %]
+	[%} %]
+	
+	if (kbuilder.hasErrors()) {
+	    throw new RuntimeException("Build Errors:\n" + kbuilder.getErrors());
+	}
+	    
+	var kpkgs = kbuilder.getKnowledgePackages();
+	var kbase = KnowledgeBaseFactory.newKnowledgeBase();
+	kbase.addKnowledgePackages(kpkgs);
+  	val results = new java.util.ArrayList[(Array[AnyRef])]()    
+    partition.sliding(_slideSize, _slideSize).foreach(slide => {
+      var rowList: List[Array[AnyRef]] = slide.toList;
+      
+      var session:StatefulKnowledgeSession = kbase.newStatefulKnowledgeSession();
+      if (_debug) {
+          KnowledgeRuntimeLoggerFactory.newConsoleLogger(session);
+      }
+      [%
+      var inputFactTypeNames = self.inputFactTypeName.split('[.]');
+      var inputFactTypeClassName = inputFactTypeNames.last();
+      if (inputFactTypeClassName.size() > 0) {
+          inputFactTypeNames.removeAt(inputFactTypeNames.size() - 1);
+      }
+      %]
+      var factType:FactType = kbase.getFactType("[%=inputFactTypeNames.concat('.')%]", "[%=inputFactTypeClassName%]");	      
+      for(row <- rowList){
+        var obj = factType.newInstance();
+        [%for (field in self.inputPort.fields) { %]    
+        factType.set(obj, "[%=field.name%]", row([%=field.getIndex()%]))
+        [%}%]
+      	session.insert(obj);
+      }
+	  session.fireAllRules();  
+      [%
+      var resultFactTypeNames = self.resultFactTypeName.split('[.]');
+      var resultFactTypeClassName = resultFactTypeNames.last();
+      if (resultFactTypeNames.size() > 0) {
+          resultFactTypeNames.removeAt(resultFactTypeNames.size() - 1);
+      }
+      %]
+      var resultFactType:FactType = kbase.getFactType("[%=resultFactTypeNames.concat('.')%]", "[%=resultFactTypeClassName%]");	  
+	  var resultsQuery:QueryResults = session.getQueryResults("[%=self.resultQueryName%]");
+      var resultIterator:java.util.Iterator[QueryResultsRow] = resultsQuery.iterator();
+      while(resultIterator.hasNext()){
+		var r:QueryResultsRow = resultIterator.next();
+  		var resultObject = r.get("[%=self.resultFactName%]");
+		results.add(Array(
+        [%for (field in self.outputPort.fields) { %]    
+            resultFactType.get(resultObject, "[%=field.name%]")[%if (hasMore){%],[%}%]
+        [%}%]
+		))
+	  }
+	  session.dispose();	      
+    })		 
+      JavaConversions.asScalaBuffer(results).toIterator      
+	}).coalesce(1)
+	
+	rdd
+  }
+[%}
+
+
+operation src!ModelBasedAnalysis modelBasedAnalysisMethod(){
+        var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+  %]
+  def modelBasedAnalysis[%=self.name%](sc: SparkContext, [%=source.name%]_RDD: RDD[Array[AnyRef]]): RDD[(Array[AnyRef])] = {
+    val master: String = _master
+    val jobStartTime: Long = sc.startTime			
+		[%if (self.methodName == AnalysisMethod#GradientBoostedTrees) {%]
+		val analysisModel = org.apache.spark.mllib.tree.model.GradientBoostedTreesModel.load(sc, "[%=self.modelFile%]")
+		[%}%]
+		[%if (self.methodName == AnalysisMethod#RandomForestTrees) {%]
+		val analysisModel = org.apache.spark.mllib.tree.model.RandomForestModel.load(sc, "[%=self.modelFile%]")
+		[%}%]
+		[%if (self.methodName == AnalysisMethod#SVM) {%]
+		val analysisModel = org.apache.spark.mllib.classification.SVMModel.load(sc, "[%=self.modelFile%]")
+		[%}%]
+		[%if (self.methodName == AnalysisMethod#LogisticRegression) {%]
+		val analysisModel = org.apache.spark.mllib.classification.LogisticRegressionModel.load(sc, "[%=self.modelFile%]")
+		[%}%]
+        [%if (self.methodName == AnalysisMethod#LinearRegression) {%]
+        val analysisModel = org.apache.spark.mllib.regression.LinearRegressionModel.load(sc, "[%=self.modelFile%]")
+        [%}%]
+        [%if (self.methodName == AnalysisMethod#DecisionTree) {%]
+        val analysisModel = org.apache.spark.mllib.tree.model.DecisionTreeModel.load(sc, "[%=self.modelFile%]")
+        [%}%]
+        [%if (self.methodName == AnalysisMethod#NaiveBayes) {%]
+        val analysisModel = org.apache.spark.mllib.classification.NaiveBayesModel.load(sc, "[%=self.modelFile%]")
+        [%}%]
+        [%if (self.methodName == AnalysisMethod#IsotonicRegression) {%]
+        val analysisModel = org.apache.spark.mllib.regression.IsotonicRegressionModel.load(sc, "[%=self.modelFile%]")
+        [%}%]                
+        
+    [%=source.name%]_RDD.map(_row => {			  	   		    
+    	val features = org.apache.spark.mllib.linalg.Vectors.dense(
+    	[%for (field in self.inputPort.fields) {%][%for (featureField in self.modelFeaturesFields) {%][%if(featureField == field.name) {%]
+        	_row(/*[%=field.name%]*/[%=field.getIndex()%]).asInstanceOf[java.math.BigDecimal].doubleValue()[%if (hasMore){%],[%}%]
+        	
+        [%}%][%}%][%}%])
+        val prediction = analysisModel.predict(features)
+	    Array(
+        	[%for (field in self.inputPort.fields) {%]
+        	_row(/*[%=field.name%]*/[%=field.getIndex()%]),
+        	[%}%]
+        	if (java.lang.Double.isNaN(prediction)) { null } else {
+        	java.math.BigDecimal.valueOf(prediction).round(new java.math.MathContext(8, java.math.RoundingMode.HALF_UP));}
+	    ).asInstanceOf[Array[AnyRef]]
+	})		
+  }
+[%}
+
+@template
+operation saveRDD(rddName, fields, fileName, fileType) {%]
+	sqlCtx.createDataFrame([%=rddName%].map(row=>{
+	  org.apache.spark.sql.Row.fromSeq(row)
+	}), org.apache.spark.sql.types.StructType(Array(
+	
+	  [%for (field in fields) {%]
+	  org.apache.spark.sql.types.StructField("[%=field.name%]", [%=field.getFullSparkClassName()%], nullable = true)[%if (hasMore){%],[%}%]
+	          
+	  [%}%]
+	))).write.[%=fileType%]([%=fileName%])
+[%}
+
+operation src!StoredProcedureTarget applyStoredProcedureTargetMethod(){
+        var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+  %]
+  def apply[%=self.name%](sc: SparkContext, sqlCtx: SQLContext, [%=source.name%]_RDD: RDD[Array[AnyRef]]): Any = {
+    import sqlCtx.implicits._
+    val master: String = _master
+    val jobStartTime: Long = sc.startTime
+    val context = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
+    
+    notifyStart("[%=self.name%]", "[%=source.name%]_RDD", jobStartTime )
+    [%if (self.preSQL.isDefined() and self.preSQL.trim().length() > 0) {%]
+    executeUpdate(context, s"""[%=self.preSQL.trim()%]""")
+    [%}%]
+
+    val sqlText = "{call " + context._schema + ".[%=self.storedProcedure%]([%for (i in Sequence{0 .. self.inputFieldsMapping.size()-1}) { %]?[%if (i < self.inputFieldsMapping.size()-1){%],[%}%][%}%])}"
+    logger.logInfo(s"StoredProcedureTarget [%=self.name%] query: ${sqlText}")    
+
+    notifyStart("[%=self.name%]", "[%=source.name%]_RDD", jobStartTime )
+	[%=source.name%]_RDD.repartition(_partitionNum).mapPartitions(partition => {
+      val rejects = new java.util.ArrayList[(java.util.Map[String,AnyRef], String)]()
+      val cn = context.getConnection
+      try {
+        cn.setAutoCommit(false)
+        val stmt = cn.prepareCall(sqlText)
+        try {
+          partition.sliding(_slideSize, _slideSize).foreach(slide => {
+            processSlice(cn,stmt,slide.toList,(row:java.util.Map[String, AnyRef],stmt: CallableStatement) =>{
+              [%for (i in Sequence{0 .. self.inputFieldsMapping.size()-1}) { 
+                 var inputField = self.inputPort.fields.selectOne(fld|fld.name=self.inputFieldsMapping.at(i).inputFieldName);
+                 if (inputField.isDefined()) {
+                 %]
+              stmt.set[%=inputField.getJavaClassName()%]([%=i + 1%],row(/*[%=toJavaName(inputField.name)%]*/[%=inputField.getIndex()%]).asInstanceOf[[%=inputField.getFullJavaClassName()%]])
+              [%}%]
+              [%}%]
+        
+            },(successRowCount:Int) =>{
+              notifyExecUpdate("[%=self.name%]", "[%=source.name%]_RDD", jobStartTime ,successRowCount)
+            },(errorMessage:String, failedRow:java.util.Map[String, AnyRef]) =>{
+              if (rejects.size >= _rejectSize) {
+                throw new RuntimeException(s"Max Rejects Limit (${_rejectSize}) Was Reached for [%=self.name%]")
+              }
+              notifyException("[%=self.name%]", "[%=source.name%]_RDD", jobStartTime ,errorMessage, failedRow)
+              rejects.add((failedRow, errorMessage))
+            })
+          })
+        } finally {
+          stmt.close()
+        }
+      } finally {
+        cn.close()
+      }
+      JavaConversions.asScalaBuffer(rejects).toIterator
+    })
+    .map { reject =>
+        (_workflowId, _applicationId, getApplicationName, "[%=self.name%]", reject._1.toString, reject._2, System.currentTimeMillis)
+    }
+    .toDF("workflowid", "appid", "classname", "methodname", "object", "exception", "ts")
+    .coalesce(1).write.mode(SaveMode.Append).format("json").save(s"${_defaultfsFS}${_applicationHome}/rejects.json")
+
+    [%if (self.postSQL.isDefined() and self.postSQL.trim().length() > 0) {%]
+    executeUpdate(context, s"""[%=self.postSQL.trim()%]""")
+    [%}%]
+    notifyFinish("[%=self.name%]", "[%=source.name%]_RDD", jobStartTime )
+  }
+[%
+}
+
+@template
+operation src!LocalTarget getPartitionValue(i, expr) {
+  var fieldName = self.partitions.at(i);
+  var field = self.inputPort.fields.selectOne(f|f.name == fieldName);
+   if (field.dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].asInstanceOf[java.math.BigDecimal].setScale(10).toPlainString}[%
+   }
+   if (field.dataTypeDomain == src!DataTypeDomain#STRING){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#BOOLEAN){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   } 
+   if (field.dataTypeDomain == src!DataTypeDomain#INTEGER){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#LONG){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#FLOAT){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#DOUBLE){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#BINARY){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#DATE){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {dateFormat.format([%=expr%].asInstanceOf[java.sql.Date])}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#DATETIME){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {timestampFormat.format([%=expr%].asInstanceOf[java.sql.Timestamp])}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#TIME){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {timeFormat.format([%=expr%].asInstanceOf[java.sql.Timestamp])}[%
+   }
+}
+
+operation src!LocalTarget applyLocalTargetMethod(){
+        var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+        if (self.localFileFormat == LocalFileFormat#JDBC or self.localFileFormat == LocalFileFormat#CSV) {
+        	throw  "Target \"" + self.name + "\": Форматы CSV и JDBC не поддерживаются в spark 1.6 для local target";
+        }
+  %]
+  def apply[%=self.name%](sc: SparkContext, sqlCtx: SQLContext, [%=source.name%]_RDD: RDD[Array[AnyRef]]): Any = {
+    val fileName = s"""${_defaultFS}[%=self.localFileName%]"""
+    logger.logInfo(s"LocalTarget [%=self.name%] fileName: ${fileName}")   
+    [%if (self.deleteBeforeSave == true) {%] 
+    val fs = org.apache.hadoop.fs.FileSystem.get(sc.hadoopConfiguration)
+    [%if (self.partitions.size() == 0) {%] 
+    logger.logInfo(s"Delete: ${fileName}")   
+    if (fs.exists(new org.apache.hadoop.fs.Path(fileName))) {
+      fs.delete(new org.apache.hadoop.fs.Path(fileName), true)
+    }
+    [%} else {%] 
+    [%=source.name%]_RDD.groupBy(_row => Tuple[%=self.partitions.size()%]([%for (p in self.partitions) {%]_row(/*[%=p%]*/[%=self.inputPort.getIndex(p)%])[%if (hasMore){%],  [%}%][%}%])).map(_._1).collect.foreach(t => {
+      var toDelete = s"""${fileName}[%for (i in Sequence{1..self.partitions.size()}) {%]/[%=self.partitions.at(i-1)%]=${[%=self.getPartitionValue(i-1, "t._"+i)%]}[%}%]"""
+      logger.logInfo(s"Delete: ${toDelete}")   
+      if (fs.exists(new org.apache.hadoop.fs.Path(toDelete))) {
+        fs.delete(new org.apache.hadoop.fs.Path(toDelete), true)
+      }
+    })    
+    [%}%] 
+    [%}%] 
+    [%if (self.saveMode <> SaveMode#DISCARD) {%] 
+    val schema = org.apache.spark.sql.types.StructType(Array(
+    [%for (feature in self.inputFieldsMapping) { 
+      var inputField = self.inputPort.fields.selectOne(fld|fld.name=feature.inputFieldName);%]
+      org.apache.spark.sql.types.StructField("[%=feature.targetColumnName%]", [%=inputField.getFullSparkClassName()%], nullable = true)[%if (hasMore){%],[%}%]
+      
+    [%}%]
+    ))
+    val [%=self.name%]_RDD = [%=source.name%]_RDD.map(row => {
+      org.apache.spark.sql.Row.fromSeq(Array[AnyRef](
+      [%for (feature in self.inputFieldsMapping) {
+        var inputField = self.inputPort.fields.selectOne(fld|fld.name=feature.inputFieldName);%]
+        /*[%=feature.targetColumnName%]=*/ row(/*[%=feature.inputFieldName%]*/[%=inputField.getIndex() %])[%if (hasMore){%],[%}%]
+        
+      [%}%]
+      ))
+    })
+    sqlCtx.createDataFrame([%=self.name%]_RDD, schema).write.[%if (self.partitions.size() > 0) {%]partitionBy([%for (p in self.partitions) {%]"[%=p%]"[% if (hasMore){%],  [%}}%]).[%}%]mode(SaveMode.[%if (self.saveMode==SaveMode#APPEND) {%]Append[%}else{%]Overwrite[%}%]).[%=self.localFileFormat.toString().toLowerCase()%](fileName)
+    [%}%] 
+  }
+[%
+}
+
+operation src!CSVTarget applyCSVTargetMethod(){
+        var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+  %]
+  def apply[%=self.name%](sc: SparkContext, sqlCtx: SQLContext, [%=source.name%]_RDD: RDD[Array[AnyRef]]): Any = {
+    val schema = org.apache.spark.sql.types.StructType(Array(
+    [%
+    for (feature in self.inputFieldsMapping) { 
+      var inputField = self.inputPort.fields.selectOne(fld|fld.name=feature.inputFieldName);%]
+      org.apache.spark.sql.types.StructField("[%=feature.targetColumnName%]", [%=inputField.getFullSparkClassName()%], nullable = true)[%if (hasMore){%],[%}%]
+      
+    [%}%]
+    ))
+    val [%=self.name%]_RDD = [%=source.name%]_RDD.map(row => {
+      org.apache.spark.sql.Row.fromSeq(row)
+    })
+    
+    val path = {
+      val fs = if ([%=self.hdfs%]) s"${_defaultFS}" else "file://"
+      s"${fs}[%=self.path%]"
+    }
+    logger.logInfo(s"CSVTarget [%=self.name%] path: ${path}")    
+    val fs = org.apache.hadoop.fs.FileSystem.get(sc.hadoopConfiguration)
+    if ([%=self.hdfs%] && fs.exists(new org.apache.hadoop.fs.Path(path))) {
+      fs.delete(new org.apache.hadoop.fs.Path(path), true)
+    }
+    sqlCtx.createDataFrame([%=self.name%]_RDD, schema).write
+      .format("com.databricks.spark.csv")
+      [%if (self.header.isDefined()) {%]
+      .option("header", """[%=self.header%]""")
+      [%}%] [%if (self.charset.isDefined() and self.charset.trim().length() > 0) {%] 
+      .option("charset", """[%=self.charset%]""") 
+      [%}%] [%if (self.delimiter.isDefined() and self.delimiter.trim().length() > 0) {%]
+      .option("delimiter", """[%=self.delimiter%]""") 
+      [%}%] [%if (self.quote.isDefined() and self.quote.trim().length() > 0) {%]
+      .option("quote", """[%=self.quote%]""") 
+      [%}%] [%if (self.escape.isDefined() and self.escape.trim().length() > 0) {%]
+      .option("escape", """[%=self.escape%]""") 
+      [%}%] [%if (self.comment.isDefined() and self.comment.trim().length() > 0) {%]
+      .option("comment", """[%=self.comment%]""") 
+      [%}%] [%if (self.dateFormat.isDefined() and self.dateFormat.trim().length() > 0) {%]
+      .option("dateFormat", """[%=self.dateFormat%]""")
+      [%}%] [%if (self.nullValue.isDefined() and self.nullValue.trim().length() > 0) {%]
+      .option("nullValue", """[%=self.nullValue%]""") 
+      [%}%] [%if (self.codec.isDefined() and self.codec <> CompressionCodec#`default`) {%]
+      .option("codec", """[%=self.codec%]""") 
+      [%}%] [%if (self.quoteMode.isDefined() and self.quoteMode <> QuoteMode#DEFAULT) {%]
+      .option("quoteMode", """[%=self.quoteMode%]""") 
+      [%}%] 
+      .save(path)
+  }
+[%
+}
+
+operation getSources(node) {
+    return node.transformation.transitions.select(t|t.~targetNode == node).collect(t|t.~sourceNode);
+}
+
+@template
+operation src!Transformation processNode(node, processedNodes, workflowDeployment){
+if (processedNodes.includes(node)) {
+    return;
+}
+for (sourceNode in getSources(node)) {%]
+[%=self.processNode(sourceNode, processedNodes, workflowDeployment)%]
+[%}%]
+[%=node.process(workflowDeployment)%]
+[%if (node.isKindOf(src!Source) or node.isKindOf(src!TransformationStep)) {%]
+[%=node.outputPort.processDebug(node.name)%]
+[%}%]
+[%processedNodes.add(node);
+}
+
+@template
+operation src!Source process(workflowDeployment){%]
+val [%=self.name%]_RDD = get[%=self.name%]Source(sc, sqlCtx)
+[%=self.name%]_RDD.setName("Source: [%=self.name%]")
+[%if (self.checkpoint) {%]
+[%=self.name%]_RDD.persist(StorageLevel.[%=storageLevel(workflowDeployment)%]).checkpoint()
+[%}%]
+[%}
+
+@template
+operation src!Target process(workflowDeployment){
+var transition = self.transformation.transitions.select(t|t.~targetNode == self).first();%]
+apply[%=self.name%](sc, sqlCtx, [%=transition.~sourceNode.name%]_RDD)
+[%}
+
+
+@template
+operation src!Selection process(workflowDeployment){
+var transition = self.transformation.transitions.select(t|t.~targetNode == self).first();
+%]
+val [%=self.name%]_RDD = [%=transition.~sourceNode.name%]_RDD.filter(
+    (_row: Array[AnyRef]) => {
+        [%for (field in self.inputPort.fields) {%]
+        val [%=field.name%] : [%=field.getFullJavaClassName()%] = _row(/*[%=field.name%]*/[%=field.getIndex()%]).asInstanceOf[[%=field.getFullJavaClassName()%]]
+        [%}%]
+        [%=self.expression%]
+    }: Boolean
+)
+[%=self.name%]_RDD.setName("Selection step: [%=self.name%]")
+[%
+if (self.checkpoint) {%]
+[%=self.name%]_RDD.persist(StorageLevel.[%=storageLevel(workflowDeployment)%]).checkpoint()
+[%}
+}
+
+
+@template
+operation src!ModelBasedAnalysis process(workflowDeployment){
+          var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode; 
+       %]
+val [%=self.name%]_RDD = modelBasedAnalysis[%=self.name%](sc, [%=inputNode.name%]_RDD)
+
+[%=self.name%]_RDD.setName("Model based analysis: [%=self.name%]")
+
+
+[%
+if (self.checkpoint) {%]
+[%=self.name%]_RDD.persist(StorageLevel.[%=storageLevel(workflowDeployment)%]).checkpoint()
+[%}
+}
+
+@template
+operation src!Sort process(workflowDeployment){
+var transition = self.transformation.transitions.select(t|t.~targetNode == self).first();
+%]
+val [%=self.name%]_RDD = [%=transition.~sourceNode.name%]_RDD[%
+for(sortFeature in self.sortFeatures){
+   var fld :src!Field = self.inputPort.fields.selectOne(f|f.name.equals(sortFeature.fieldName));
+%].
+sortBy(row => Option[[%=fld.getFullJavaClassName()%]](row(/*[%=fld.name%]*/[%=fld.getIndex()%]).asInstanceOf[[%=fld.getFullJavaClassName()%]]).getOrElse(DEFAULT_[%=fld.getJavaClassName().toUpperCase()%]), ascending = [%=sortFeature.ascending%])[%}%]
+       [%
+%]
+
+[%=self.name%]_RDD.setName("Sort step: [%=self.name%]")
+[%
+if (self.checkpoint) {%]
+[%=self.name%]_RDD.persist(StorageLevel.[%=storageLevel(workflowDeployment)%]).checkpoint()
+[%}
+}
+
+operation src!Join joinFunction() {
+    if (self.joinType == src!JoinType#INNER) {
+        return "join";
+    }
+    if (self.joinType == src!JoinType#LEFT) {
+        return "leftOuterJoin";
+    }
+    if (self.joinType == src!JoinType#RIGHT) {
+        return "rightOuterJoin";
+    }
+    if (self.joinType == src!JoinType#FULL) {
+        return "fullOuterJoin";
+    }
+    throw "Unknown join type";
+}
+
+@template
+operation src!Join process(workflowDeployment){
+          var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode; 
+          var joineeNode = (self.transformation.transitions.selectOne(t|t.finish == self.joineePort)).~sourceNode;
+       %]
+val [%=self.name%]_RDD = [%=inputNode.name%]_RDD.keyBy(row => ([%
+var i = 0; 
+while(i < self.keyFields.size()){
+var fld :src!Field = self.inputPort.fields.selectOne(f|f.name.equals(self.keyFields.at(i)));%]
+
+  Option[[%=fld.getFullJavaClassName()%]](row(/*[%=fld.name%]*/[%=fld.getIndex()%]).asInstanceOf[[%=fld.getFullJavaClassName()%]]).getOrElse(DEFAULT_[%=fld.getJavaClassName().toUpperCase()%])[%
+   i = i+1;
+   if (i < self.keyFields.size()){%],[%}       
+}%])).
+  [%=self.joinFunction()%]([%=joineeNode.name%]_RDD.keyBy(row => (
+  [%
+var i = 0; 
+while(i < self.joineeKeyFields.size()){
+var fld :src!Field = self.joineePort.fields.selectOne(f|f.name.equals(self.joineeKeyFields.at(i)));%]
+  Option[[%=fld.getFullJavaClassName()%]](row(/*[%=fld.name%]*/[%=fld.getIndex()%]).asInstanceOf[[%=fld.getFullJavaClassName()%]]).getOrElse(DEFAULT_[%=fld.getJavaClassName().toUpperCase()%])[%
+   i = i+1;
+   if (i < self.joineeKeyFields.size()){%],
+   [%}       
+}%]))).
+values.map(row => join[%=joineeNode.name%]to[%=inputNode.name%](row._1[%if (self.joinType == src!JoinType#RIGHT or self.joinType == src!JoinType#FULL) {%].getOrElse(Array[AnyRef]([%for (field in inputNode.outputPort.fields) {%]null[%if (hasMore){%],[%}%][%}%]))[%}%], row._2[%if (self.joinType == src!JoinType#LEFT or self.joinType == src!JoinType#FULL) {%].getOrElse(Array[AnyRef]([%for (field in joineeNode.outputPort.fields) {%]null[%if (hasMore){%],[%}%][%}%]))[%}%]))
+  
+[%=self.name%]_RDD.setName("Join step: [%=self.name%]")
+
+       [%
+if (self.checkpoint) {%]
+[%=self.name%]_RDD.persist(StorageLevel.[%=storageLevel(workflowDeployment)%]).checkpoint()
+[%}
+}
+
+@template
+operation src!Union process(workflowDeployment){
+          var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode; 
+          var unionNode = (self.transformation.transitions.selectOne(t|t.finish == self.unionPort)).~sourceNode;
+       %]
+val [%=self.name%]_RDD = [%=inputNode.name%]_RDD.map(row => {
+    Array[AnyRef](
+[%for (field:src!UnionField in self.outputPort.fields) { if (field.inputPortField.isDefined()) {%]    
+    /*[%=field.name%] = */row(/*[%=field.inputPortField.name%]*/[%=field.inputPortField.getIndex()%])[%if (hasMore){%],[%}%]    
+[%
+} else {%]    
+    /*[%=field.name%] = */null[%if (hasMore){%],[%}%]    
+[%}}%]
+    )
+  }).union([%=unionNode.name%]_RDD.map(row => {
+    Array[AnyRef](
+[%for (field:src!UnionField in self.outputPort.fields) { if (field.unionPortField.isDefined()) {%]    
+    /*[%=field.name%] = */row(/*[%=field.unionPortField.name%]*/[%=field.unionPortField.getIndex()%])[%if (hasMore){%],[%}%]    
+[%} else {%]    
+    /*[%=field.name%] = */null[%if (hasMore){%],[%}%]    
+[%}}%]
+    )
+  }))
+  
+[%=self.name%]_RDD.setName("Union step: [%=self.name%]")
+
+       [%
+if (self.checkpoint) {%]
+[%=self.name%]_RDD.persist(StorageLevel.[%=storageLevel(workflowDeployment)%]).checkpoint()
+[%}
+}
+
+@template
+operation src!Projection process(workflowDeployment){
+          var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode; 
+       %]
+val [%=self.name%]_RDD = [%=inputNode.name%]_RDD.map(row => projection[%=inputNode.name%](row))
+
+[%=self.name%]_RDD.setName("Projection step: [%=self.name%]")
+
+
+[%
+if (self.checkpoint) {%]
+[%=self.name%]_RDD.persist(StorageLevel.[%=storageLevel(workflowDeployment)%]).checkpoint()
+[%}
+}
+
+@template
+operation src!Drools process(workflowDeployment){
+var transition = self.transformation.transitions.select(t|t.~targetNode == self).first();%]
+val [%=self.name%]_RDD = get[%=self.name%](sc, sqlCtx, [%=transition.~sourceNode.name%]_RDD)
+[%}
+
+@template
+operation src!SparkSQL process(workflowDeployment){
+var inputSourcesCount = 0;
+for (sqlPort in self.sqlPorts) {
+	inputSourcesCount = inputSourcesCount + 1;
+}%]
+
+val [%=self.name%]_RDD = execSparkSql_[%=self.name%](sc, sqlCtx[% if (inputSourcesCount > 0) { %], [% for (sqlPort in self.sqlPorts) { var inputNode = (self.transformation.transitions.selectOne(t|t.finish == sqlPort)).~sourceNode;%][%=inputNode.name%]_RDD[%if (hasMore){%], [%} else { %])[% }  } } else {  %])[%} %]
+
+[%=self.name%]_RDD.setName("SparkSQL step: [%=self.name%]")
+[%
+if (self.checkpoint) {%]
+[%=self.name%]_RDD.persist(StorageLevel.[%=storageLevel(workflowDeployment)%]).checkpoint()
+[%}	
+}
+
+
+operation src!SparkSQL execSparkSQLMethod(){
+	var inputSourcesCount = 0;
+	for (sqlPort in self.sqlPorts) {
+		inputSourcesCount = inputSourcesCount + 1;
+	}
+	%]
+	def execSparkSql_[%=self.name%](sc: SparkContext, sqlCtx: SQLContext[% if (inputSourcesCount > 0) { %], [% for (sqlPort in self.sqlPorts) { var inputNode = (self.transformation.transitions.selectOne(t|t.finish == sqlPort)).~sourceNode; %][%=inputNode.name%]_RDD: RDD[Array[AnyRef]][%if (hasMore){%], [%} else { %])[% }  } } else {  %])[%} %]: RDD[Array[AnyRef]] = {
+	
+	[% for (sqlPort in self.sqlPorts) {
+		var inputNode = (self.transformation.transitions.selectOne(t|t.finish == sqlPort)).~sourceNode;%]
+		
+		val [%=inputNode.name%]_DF = sqlCtx.createDataFrame([%=inputNode.name%]_RDD.map(row=>{org.apache.spark.sql.Row.fromSeq(row)}), org.apache.spark.sql.types.StructType(Array(
+		[% for (field in inputNode.outputPort.fields) {%]
+ org.apache.spark.sql.types.StructField("[%=field.name%]", [%=field.getFullSparkClassName()%], nullable = true)[%if (hasMore){%],[%}%]
+	[%}%]
+)))
+	[%=inputNode.name%]_DF.registerTempTable("[%=sqlPort.`alias`%]")
+	[%}
+	%]
+		
+	val sqlText = s"""[%=self.statement%]"""
+	[% if (self.explain) {%]	
+	val explainText = getHiveContext(sc).sql(s"${sqlText}").explain(true)
+	if (_debug) {
+		logger.logInfo(s"explainText")
+	} 
+	[%}%]	
+	val [%=self.name%]_RDD = getHiveContext(sc).sql(s"${sqlText}").map(row => {
+		Array[AnyRef](
+		[%for (field in self.outputPort.fields) {%]
+      	/*[%=field.name%]=*/ row.getAs[[%=field.getFullJavaClassName()%]]("[%=field.name%]")[%if (hasMore){%],[%}%]
+      
+      	[%}%]
+      	)
+      })
+      
+      [%=self.name%]_RDD
+      
+}
+	[%
+}
+
+
+@template
+operation storageLevel(workflowDeployment){
+	if (workflowDeployment.get("persistOnDisk") == true) {
+	   %]DISK_ONLY[%
+	} else {
+	   %]MEMORY_ONLY[%
+	}
+}
+
+@template
+operation src!Field greater(v1, v2){
+    if (Sequence{src!DataTypeDomain#DECIMAL, src!DataTypeDomain#INTEGER, src!DataTypeDomain#LONG, src!DataTypeDomain#FLOAT, src!DataTypeDomain#DOUBLE, src!DataTypeDomain#BOOLEAN}.contains(self.dataTypeDomain)) {
+       %][%=v1%].compareTo([%=v2%]) > 0[%
+    } else if (Sequence{src!DataTypeDomain#DATE, src!DataTypeDomain#DATETIME, src!DataTypeDomain#TIME}.contains(self.dataTypeDomain)) {
+       %][%=v1%].after([%=v2%])[%
+    } else if (Sequence{src!DataTypeDomain#STRING}.contains(self.dataTypeDomain)) {
+       %][%=v1%].compareTo([%=v2%]) > 0[%
+    } else {
+       throw "Uncomparable types";
+    }
+}
+
+operation src!Aggregation aggregationMethod(){
+    var field = self.inputPort.fields.select(f|f.name == self.aggregationParameters[0].fieldName).first();
+    var resultField = self.outputPort.fields.select(f|f.name == self.aggregationParameters[0].resultFieldName).first();
+    var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode; 
+%]
+def get[%=self.name%]Aggregation(sc: SparkContext, sqlCtx: SQLContext, [%=inputNode.name%]_RDD: RDD[Array[AnyRef]]): RDD[Array[AnyRef]] = {
+  def putRow(row: Array[AnyRef], accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    [%for (field in self.inputPort.fields) {%]
+    accum.put("[%=field.name%]", row([%=field.getIndex()%]))
+    [%}%]
+    accum
+  }
+  def getRow(accum: java.util.Map[String, AnyRef]): Array[AnyRef] = {
+    Array[AnyRef](
+    [%for (field in self.outputPort.fields) {%]
+        accum.get("[%=field.name%]")[%if (hasMore){%],[%}%]
+        
+    [%}%]
+    )
+  }
+  [%if (self.aggregationParameters[0].aggregationFunction == src!AggregationFunction#AVG and not self.userDefAgg){%]
+  def f_init(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum.put("[%=resultField.name%]##count", java.math.BigDecimal.ZERO)
+    accum.put("[%=resultField.name%]##sum", java.math.BigDecimal.ZERO)
+    accum
+  }
+  def f_fini(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum.put("[%=resultField.name%]", accum.get("[%=resultField.name%]##sum").asInstanceOf[java.math.BigDecimal].divide(accum.get("[%=resultField.name%]##count").asInstanceOf[java.math.BigDecimal]))
+    accum.remove("[%=resultField.name%]##count")
+    accum.remove("[%=resultField.name%]##sum")
+    accum
+  }
+  def f_row(accum: java.util.Map[String, AnyRef], row: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    def inValue = row.get("[%=field.name%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+    if (inValue != null) {
+      accum.putAll(row)
+      accum.put("[%=resultField.name%]##count", accum.get("[%=resultField.name%]##count").asInstanceOf[java.math.BigDecimal].add(java.math.BigDecimal.ONE))
+      accum.put("[%=resultField.name%]##sum", accum.get("[%=resultField.name%]##sum").asInstanceOf[java.math.BigDecimal].add([%=field.toBigDecimal("inValue")%]))
+    }
+    accum
+  }
+  [%}%]
+  [%if (self.aggregationParameters[0].aggregationFunction == src!AggregationFunction#SUM and not self.userDefAgg){%]
+  def f_init(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum.put("[%=resultField.name%]", java.math.BigDecimal.ZERO)
+    accum
+  }
+  def f_fini(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum
+  }
+  def f_row(accum: java.util.Map[String, AnyRef], row: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    def inValue = row.get("[%=field.name%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+    if (inValue != null) {
+      accum.putAll(row)
+      accum.put("[%=resultField.name%]", accum.get("[%=resultField.name%]").asInstanceOf[java.math.BigDecimal].add([%=field.toBigDecimal("inValue")%]))
+    }
+    accum
+  }
+  [%}%]
+  [%if (self.aggregationParameters[0].aggregationFunction == src!AggregationFunction#COUNT and not self.userDefAgg){%]
+  def f_init(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum.put("[%=resultField.name%]", java.math.BigDecimal.ZERO)
+    accum
+  }
+  def f_fini(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum
+  }
+  def f_row(accum: java.util.Map[String, AnyRef], row: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    def inValue = row.get("[%=field.name%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+    if (inValue != null) {
+      accum.putAll(row)
+      accum.put("[%=resultField.name%]", accum.get("[%=resultField.name%]").asInstanceOf[java.math.BigDecimal].add(java.math.BigDecimal.ONE))
+    }
+    accum
+  }
+  [%}%]
+  [%if (self.aggregationParameters[0].aggregationFunction == src!AggregationFunction#MIN and not self.userDefAgg){%]
+  def f_init(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum.put("[%=resultField.name%]", null)
+    accum
+  }
+  def f_fini(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum
+  }
+  def f_row(accum: java.util.Map[String, AnyRef], row: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    def inValue = row.get("[%=field.name%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+    if (inValue != null) {
+      def outValue = accum.get("[%=resultField.name%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+      if (outValue == null || [%=resultField.greater("outValue", "inValue")%]) {
+        accum.putAll(row)
+        accum.put("[%=resultField.name%]", inValue)
+      }
+    }  
+    accum
+  }
+  [%}%]
+  [%if (self.aggregationParameters[0].aggregationFunction == src!AggregationFunction#MAX and not self.userDefAgg){%]
+  def f_init(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum.put("[%=resultField.name%]", null)
+    accum
+  }
+  def f_fini(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum
+  }
+  def f_row(accum: java.util.Map[String, AnyRef], row: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    def inValue = row.get("[%=field.name%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+    if (inValue != null) {
+      def outValue = accum.get("[%=resultField.name%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+      if (outValue == null || [%=resultField.greater("inValue", "outValue")%]) {
+        accum.putAll(row)
+        accum.put("[%=resultField.name%]", inValue)
+      }
+    }  
+    accum
+  }
+  [%}%]
+[%if (self.aggregationParameters[0].aggregationFunction == src!AggregationFunction#FIRST and not self.userDefAgg){%]
+  def f_init(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum.put("[%=resultField.name%]", null)
+    accum
+  }
+  def f_fini(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum
+  }
+  def f_row(accum: java.util.Map[String, AnyRef], row: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    def outValue = accum.get("[%=resultField.name%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+    if (outValue == null) {
+      def inValue = row.get("[%=field.name%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+      if (inValue != null) {
+          accum.putAll(row)
+          accum.put("[%=resultField.name%]", inValue)
+      }  
+    }
+    accum
+  }
+[%}%]
+[%if (self.aggregationParameters[0].aggregationFunction == src!AggregationFunction#LAST and not self.userDefAgg){%]
+  def f_init(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum.put("[%=resultField.name%]", null)
+    accum
+  }
+  def f_fini(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    accum
+  }
+  def f_row(accum: java.util.Map[String, AnyRef], row: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    def inValue = row.get("[%=field.name%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+    if (inValue != null) {
+        accum.putAll(row)
+        accum.put("[%=resultField.name%]", inValue)
+    }  
+    accum
+  }
+[%}%]
+[%if (self.userDefAgg){%]
+  def f_init(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    (()=>{[%=self.initExpression%]})()
+    accum
+  }
+  def f_fini(accum: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    (()=>{[%=self.finalExpression%]})()
+    accum
+  }
+  def f_row(accum: java.util.Map[String, AnyRef], row: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
+    (([%for (i in self.inputPort.fields) {%][%=i.name%] : [%=i.getFullJavaClassName()%][% if (hasMore){%], [%}} %])=>{[%=self.expression%]})([%for (i in self.inputPort.fields) {%]row.get("[%=i.name%]").asInstanceOf[[%=i.getFullJavaClassName()%]][% if (hasMore){%], [%}} %])
+    accum
+  }
+[%}%]
+  val [%=self.name%]_RDD = [%=inputNode.name%]_RDD.keyBy(row => (
+  [%
+  var i = 0; 
+  while(i < self.groupByFieldName.size()){
+  var fld :src!Field = self.inputPort.fields.selectOne(f|f.name.equals(self.groupByFieldName.at(i)));
+  %]
+  Option[[%=fld.getFullJavaClassName()%]](row(/*[%=fld.name%]*/[%=fld.getIndex()%]).asInstanceOf[[%=fld.getFullJavaClassName()%]]).getOrElse(DEFAULT_[%=fld.getJavaClassName().toUpperCase()%])[%
+  i = i+1;
+  if (i < self.groupByFieldName.size()){%],[%}%]
+  [%}%])).map {case (k, v) => (k, putRow(v, new java.util.HashMap[String,AnyRef]()))}
+  .foldByKey(f_init(new java.util.HashMap[String,AnyRef]()))(f_row).values.map(f_fini).map(getRow)
+
+  [%=self.name%]_RDD
+}  
+[%}
+
+@template
+operation src!`Sequence` process(workflowDeployment){
+    var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode;%]
+val [%=self.name%]_RDD = get[%=self.name%]Sequence(sc, sqlCtx, [%=inputNode.name%]_RDD)
+[%=self.name%]_RDD.setName("Sequence step: [%=self.name%]")
+[%if (self.checkpoint) {%]
+[%=self.name%]_RDD.persist(StorageLevel.[%=storageLevel(workflowDeployment)%]).checkpoint()
+[%}
+}
+
+@template
+operation src!Aggregation process(workflowDeployment){
+    var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode;%]
+val [%=self.name%]_RDD = get[%=self.name%]Aggregation(sc, sqlCtx, [%=inputNode.name%]_RDD)
+[%=self.name%]_RDD.setName("Aggregation step: [%=self.name%]")
+[%if (self.checkpoint) {%]
+[%=self.name%]_RDD.persist(StorageLevel.[%=storageLevel(workflowDeployment)%]).checkpoint()
+[%}
+}
+
+@template
+operation src!OutputPort processDebug(nodeName){
+if (not self.debugList.selectOne(d|d.active).isDefined()) return;%]
+if (_debug) {
+[%for (debug in self.debugList) { if (debug.active) {%]
+  {
+    val fileName = s"${_defaultFS}${_applicationHome}/debug/[%=nodeName%]_[%=debug.name%].json"
+	[%if (debug.condition.isDefined() and debug.condition.trim() <> "") {%]
+	  val debug_RDD = [%=nodeName%]_RDD.filter(
+	    (outputPort: Array[AnyRef]) => {(
+	    (([%for (i in self.fields) {%][%=i.name%] : [%=i.getFullJavaClassName()%][% if (hasMore){%],  [%}} %]) => {
+	        [%=debug.condition%]
+	    }: Boolean)([%for (i in self.fields) {%]outputPort(/*[%=i.name%]*/[%=i.getIndex()%]).asInstanceOf[[%=i.getFullJavaClassName()%]][% if (hasMore){%], [%}} %]))
+    })
+	[%} else {%]
+    val debug_RDD = [%=nodeName%]_RDD
+	[%}%]
+	  [%=saveRDD("debug_RDD", self.fields, "fileName", "json")%]
+  } 
+[%}}%]
+}
+[%}%]

@@ -1,0 +1,27 @@
+[%
+
+operation src!HBaseTargetFeature getFamily() {
+    if (self.family.isDefined() and self.family.length > 0) {
+        return self.family; 	
+    }
+    return "0";
+}
+
+operation src!HBaseTarget define(){
+     var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+%]
+
+def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {
+
+	def catalog = [%=getHBaseTargetCatalog(self)%]
+	ds
+		.write
+		.options(
+			Map("catalog" -> catalog[% if (self.newTable.isDefined() and self.newTable > 0){%], "newtable" -> "[%=self.newTable%]"[%}%])
+		)
+		.format("org.apache.spark.sql.execution.datasources.hbase")
+  		.save()
+  }
+[%}
+
+%]

@@ -1,0 +1,161 @@
+[%
+operation src!Drools imports(){
+    return Sequence{
+        "import org.kie.api.KieBase",
+        "import org.kie.api.KieServices",
+        "import org.kie.api.builder.Message.Level",
+        "import org.kie.api.io.ResourceType",
+        "import org.kie.api.io.ResourceConfiguration",
+        "import org.drools.compiler.compiler.io.memory.MemoryFileSystem",
+        "import org.kie.internal.builder.KnowledgeBuilderFactory",
+        "import org.kie.internal.builder.DecisionTableConfiguration",
+        "import org.kie.internal.builder.DecisionTableInputType"
+    };
+} 
+
+@template
+operation loadResource(ruleFile){%]
+[%if (ruleFile.fileType.toString() == "JAR" or (ruleFile.fileType.toString() == "OTHER" and ruleFile.fileUrl.endsWith(".jar"))) {%]
+val mfs = MemoryFileSystem.readFromJar(res.getInputStream())
+val fnit = mfs.getFileNames().iterator()
+while (fnit.hasNext()) {
+    val fn = fnit.next()
+    val resType2 = ResourceType.determineResourceType(fn)
+    if (resType2 != null || fn.endsWith(".class")) {
+        val bytes = mfs.getMap().get(fn)
+        val res2 = kieServices.getResources().newByteArrayResource(bytes)
+        res2.setSourcePath(fn)
+        res2.setResourceType(resType2)
+        kfs.write(res2)
+    }
+}
+[%} else {%]
+[%if (ruleFile.fileType.toString() == "XLS") {%]
+res.setResourceType(ResourceType.DTABLE)
+;{
+    val resourceConfiguration = KnowledgeBuilderFactory.newDecisionTableConfiguration()
+    resourceConfiguration.setInputType(DecisionTableInputType.XLS)
+    res.setConfiguration(resourceConfiguration)
+}
+[%} else if (ruleFile.fileType.toString() == "CSV") {%]
+res.setResourceType(ResourceType.DTABLE)
+;{
+    val resourceConfiguration = KnowledgeBuilderFactory.newDecisionTableConfiguration()
+    resourceConfiguration.setInputType(DecisionTableInputType.CSV)
+    res.setConfiguration(resourceConfiguration)
+}
+[%} else if (ruleFile.fileType.toString() == "PKG") {%]
+res.setResourceType(ResourceType.PKG)
+[%} else if (ruleFile.fileType.toString() == "DRL") {%]
+res.setResourceType(ResourceType.DRL)
+[%} else {%]
+;{
+    val resType = ResourceType.determineResourceType(s"""[%=ruleFile.fileUrl%]""")
+    res.setResourceType(resType)
+}
+[%}%]
+res.setSourcePath(s"""[%=ruleFile.fileUrl%]""")
+kfs.write(res)
+[%}%]
+[%}
+
+@template
+operation src!Drools globals(){
+%]
+
+object Global[%=self.name%] {
+    var kbase: KieBase = null
+}[%
+
+}
+
+@template
+operation src!Drools defineImpl(){
+    var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;%]
+[%=source.name%].mapPartitions(partition => {
+    if(Global[%=self.name%].kbase == null) {
+        val fs = org.apache.hadoop.fs.FileSystem.get(new Configuration())
+        val kieServices = KieServices.Factory.get()
+        val kfs = kieServices.newKieFileSystem()
+        val kieRepository = kieServices.getRepository()
+    
+        [%for (ruleFile in self.rulesFiles) {%]
+        {
+            [%if (ruleFile.hdfs == true) {%]
+            val fileUrl = s"""[%=ruleFile.fileUrl%]"""      
+            val ins = fs.open(new Path(fileUrl))
+            val res = kieServices.getResources().newInputStreamResource(ins)
+            [%=loadResource(ruleFile)%]
+            ins.close()
+            [%} else {%]
+            val res = kieServices.getResources().newUrlResource(new java.net.URL("file://[%=ruleFile.fileUrl%]"))
+            [%=loadResource(ruleFile)%]
+            [%} %]
+        }
+        [%}%]
+        val kieBuilder = kieServices.newKieBuilder(kfs)
+        kieBuilder.buildAll()
+        if (kieBuilder.getResults().hasMessages(Level.ERROR)) {
+            throw new RuntimeException("Build Errors:\n" + kieBuilder.getResults().toString())
+        }
+        val module = kieBuilder.getKieModule()
+        val kieContainer = kieServices.newKieContainer(module.getReleaseId())
+        val kieBaseName = kieContainer.getKieBaseNames().iterator().next()
+        Global[%=self.name%].kbase = kieContainer.getKieBase(kieBaseName)
+    }
+    val results = new java.util.ArrayList[[%=self.getSchemaName()%]]()  
+    partition.sliding(_slideSize, _slideSize).foreach(slide => {
+        val session = Global[%=self.name%].kbase.newKieSession()
+        
+	[%for (global in self.globals) {%]
+   		[%if (global.expression == false) {%]
+   		session.setGlobal("[%=global.name%]", s"""[%=global.value%]""" )
+   	 	[%} else {%]
+   	 	session.setGlobal("[%=global.name%]", [%=global.value%] )
+   	 	[%} %]
+   	 [%}%]
+        
+        if (_debug) {
+            KieServices.Factory.get().getLoggers().newConsoleLogger(session)
+        }
+        [%
+        var inputFactTypeNames = self.inputFactTypeName.split('[.]');
+        var inputFactTypeClassName = inputFactTypeNames.last();
+        if (inputFactTypeClassName.size() > 0) {
+            inputFactTypeNames.removeAt(inputFactTypeNames.size() - 1);
+        }
+        %]
+        val factType = Global[%=self.name%].kbase.getFactType("[%=inputFactTypeNames.concat('.')%]", "[%=inputFactTypeClassName%]");        
+        for(row <- slide){
+            val obj = factType.newInstance()
+            [%for (field in self.inputPort.fields) { %]
+            factType.set(obj, "[%=field.getJavaName()%]", row.[%=field.getJavaName()%])
+            [%}%]
+            session.insert(obj)
+        }
+        session.fireAllRules()  
+        [%
+        var resultFactTypeNames = self.resultFactTypeName.split('[.]');
+        var resultFactTypeClassName = resultFactTypeNames.last();
+        if (resultFactTypeNames.size() > 0) {
+            resultFactTypeNames.removeAt(resultFactTypeNames.size() - 1);
+        }
+        %]
+        val resultFactType = Global[%=self.name%].kbase.getFactType("[%=resultFactTypeNames.concat('.')%]", "[%=resultFactTypeClassName%]")    
+        val resultsQuery = session.getQueryResults("[%=self.resultQueryName%]")
+        val resultIterator = resultsQuery.iterator()
+        while(resultIterator.hasNext()){
+            val r = resultIterator.next()
+            val resultObject = r.get("[%=self.resultFactName%]")
+            results.add([%=self.getSchemaName()%]([%
+            for (field in self.outputPort.fields) {%]    
+                [%=field.getJavaName()%] = resultFactType.get(resultObject, "[%=field.getJavaName()%]").asInstanceOf[[%=field.getFullJavaClassName()%]][%if (hasMore){%],[%}%]
+            [%}%]
+            
+            ))
+        }
+        session.dispose()          
+    })       
+    JavaConversions.asScalaBuffer(results).toIterator      
+})
+[%}%]

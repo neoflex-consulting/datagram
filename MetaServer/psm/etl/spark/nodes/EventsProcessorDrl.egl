@@ -1,0 +1,102 @@
+[%
+import "../Utils.egl";
+import "./Rules.egl";
+import "./EventsProcessor.egl";
+
+var entity = EventsProcessor.all.first();
+var stateDeclared = false;
+var localDeclared = false;%]
+package ru.neoflex.meta.etl2.spark
+[%=entity.defineFunctionsDRL()%]
+dialect "mvel"
+[%if(entity.input <> null){
+    entity.input.~name = "input";%]
+[%=entity.defineType("InputType", entity.input)%]
+[%}
+if(entity.state <> null){
+    entity.state.~name = "state";
+    stateDeclared = true;%]
+[%=entity.defineType("StateType", entity.state)%]
+[%}
+if(entity.local <> null){
+    entity.local.~name = "local";
+    localDeclared = true;%]
+[%=entity.defineType("LocalType", entity.local)%]
+[%}
+if(entity.output <> null){
+    entity.output.~name = "output";%]
+[%=entity.defineType("OutputType", entity.output)%]
+[%}%]
+declare Fact
+    input: InputType
+    [%if(stateDeclared = true) {%]
+    state: StateType
+    [%}%]
+    [%if(localDeclared = true) {%]
+    local: LocalType
+    [%}%]
+    output: OutputType
+    initialized: java.lang.Boolean
+    removeState: java.lang.Boolean
+    timeout: java.lang.String
+end 
+
+query "getOutput"
+    result: OutputType()
+end
+
+[%for(rule in entity.rules) {%]
+
+rule "[%=rule.name%]"
+when
+[%
+if(rule.condition <> null){%]
+    $fact: Fact($input: input, $output: output, [%if(stateDeclared = true){%]$state: state, [%}%][%if(localDeclared = true) {%]$local: local, [%}%][%for(condition in rule.condition.conditions) {%]
+[%=condition.defineImpl()%][%if(hasMore == true){%] && [%}%][%}%])
+[%}%]
+then   
+[%
+var i = 0;
+for(action in rule.actions) {
+    action.~output = entity.output;
+    action.~index = i;
+    action.~rule = rule;
+    i = i + 1; 
+}%]
+[%for(action in rule.actions) {%]
+[%if(action.isKindOf(src!FunctionAction)) {%]
+[%=action.definePreImpl()%]
+[%}%]
+[%}%]
+[%
+var factActions = rule.actions.select(a|a.modifyFactAction() == true);
+var nonFactActions = rule.actions.select(a|a.modifyFactAction() == false);
+if(factActions.size > 0) {
+    if(rule.modifyFact = true) {%]
+    modify ($fact) {[%}%]
+[%
+for(action in factActions) {%]
+    [%=action.defineImpl()%][%if (hasMore){%],[%}%]
+    
+[%}if(rule.modifyFact = true) {%]
+    }[%}%]
+[%}%]    
+[%for(action in nonFactActions) {%]
+[%=action.defineImpl()%]    
+[%}%]    
+end
+[%}%]
+
+[%
+
+@template
+operation src!EventsProcessor defineType(typename, dataset){%]
+
+declare [%=typename%]
+[%for(field in dataset.fields){%]
+    [%=field.name%]: [%=field.getFullJavaClassName()%]
+[%}%]
+end
+[%}
+
+%]

@@ -1,0 +1,130 @@
+object SourceStructureExpand extends Serializable {
+	import org.apache.spark.sql._
+	import org.apache.spark.sql.types._
+	import org.apache.spark.sql.Dataset
+	import org.apache.spark.sql.Row
+	import org.apache.spark.sql.DataFrame
+	import org.apache.spark.SparkContext
+
+	import org.json4s.jackson.Serialization
+	implicit val formats = org.json4s.DefaultFormats
+
+
+	def run(spark: SparkSession): Any = {
+        val sc: SparkContext = spark.sparkContext
+		val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+
+		val df = sqlContext.read.format("com.databricks.spark.[%=format%]").option("rowTag", "[%=rowTag%]").load("[%=fileName%]")
+
+
+		val tree = scala.collection.mutable.Map[String, AnyRef]()
+
+		type M = Option[scala.collection.mutable.Map[String, AnyRef]]
+		def findInTree(node: M, displayName: String): M = {
+		  node match {
+		    case Some(node) if node.isEmpty => None
+		    case Some(node) =>
+		      node.get(displayName) match {
+		        case None =>
+		            node.values
+		            .map(m => m.asInstanceOf[scala.collection.mutable.Map[String, AnyRef]].get("children").asInstanceOf[M])
+		            .flatMap(c => findInTree(c, displayName))
+		            .headOption
+		        case n: M => n
+		      }
+		    case _ => None
+		  }
+		}
+
+		def firstField(ff: Array[StructField], typeName: String): StructField = {
+		  for(f <- ff){
+		    if(f.dataType.typeName == typeName)
+		      return f
+		  }
+		  null
+		}
+
+		def openFields(d1: Dataset[Row], field: StructField): Dataset[Row] = {
+		  var dd: Dataset[Row] = d1;
+		  var fieldNode = findInTree(Some(tree), field.name)
+
+		  if(fieldNode == None) {
+		      val fieldNodeMap = scala.collection.mutable.Map[String, AnyRef]()
+		      fieldNodeMap += ("children" -> scala.collection.mutable.Map[String, AnyRef]())
+		      fieldNodeMap += ("fieldName" -> field.name)
+		      tree += (field.name -> fieldNodeMap)
+		      fieldNode = findInTree(Some(tree), field.name)
+		  }
+
+		  val children = fieldNode.get.get("children").get.asInstanceOf[scala.collection.mutable.Map[String, AnyRef]]
+
+		  for(f <- field.dataType.asInstanceOf[StructType].fields){
+
+		      val renameOps = scala.collection.mutable.Map[String, Object]()
+		      val newName = field.name + "->" + f.name
+		      val fieldPath = field.name + "." + f.name
+
+		      renameOps += ("type" -> "rename")
+		      renameOps += ("newname" -> newName)
+		      renameOps += ("fieldName" -> f.name)
+		      renameOps += ("parent" -> field.name)
+		      renameOps += ("xmlPath" -> fieldPath)
+		      renameOps += ("children" -> scala.collection.mutable.Map[String, AnyRef]())
+
+		      children += (newName -> renameOps)
+		      dd = dd.withColumn(newName , dd.col(fieldPath));
+		  }
+		  dd.drop(dd.col(field.name))
+		}
+
+		def expandField(d1: Dataset[Row], field: StructField): Dataset[Row] = {
+		    var explodeOps = scala.collection.mutable.Map[String, AnyRef]()
+		    explodeOps += ("children" -> scala.collection.mutable.Map[String, AnyRef]())
+
+		    var fieldNode = findInTree(Some(tree), field.name)
+		    var fname = field.name
+		    var newName = field.name
+
+		    if(fieldNode != None) {
+		        newName = field.name
+		        fname = fieldNode.get.get("fieldName").get.toString
+		        explodeOps = fieldNode.get.asInstanceOf[scala.collection.mutable.Map[String, AnyRef]]
+		    } else {
+		        tree += (newName -> explodeOps)
+		    }
+		    explodeOps += ("type" -> "explode")
+		    explodeOps += ("fieldName" -> fname)
+		    explodeOps += ("newname" -> newName)
+
+		    d1.withColumn(newName + "_temp", explode(d1.col(field.name))).drop(field.name).withColumnRenamed(newName + "_temp", newName)
+		}
+
+		var d2 = df;
+
+		var a: Boolean = true != [%=dontExplode%];
+		while(a){
+		    val fsf = firstField(d2.schema.fields, "struct");
+		    if(fsf != null){
+		        d2 = openFields(d2, fsf);
+		    }
+
+		    val faf = firstField(d2.schema.fields, "array");
+		    if(faf != null){
+		        d2 = expandField(d2, faf);
+		    }
+
+		    if((fsf == null) && (faf == null)) {
+		        a = false;
+		    }
+		}
+
+		val schema = d2.schema.json
+		val data = d2.toJSON.[%if (sampleSize.isDefined() == false or sampleSize == "") {%]collect[%} else {%]take([%=sampleSize%])[%}%].mkString("[", ",", "]")
+        val xmlSchema = Serialization.write(tree)
+
+        val ll = s"""{"schema":$schema, "data":$data, "xmlSchema": $xmlSchema}"""
+        println(ll)
+	}
+}
+
+SourceStructureExpand.run(spark)

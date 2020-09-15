@@ -1,0 +1,151 @@
+[%
+operation src!etl::Aggregation imports(){
+    return Sequence{
+        "import org.apache.spark.sql.functions._",
+        "import org.apache.spark.sql.types._",
+        "import org.apache.spark.sql.expressions.{MutableAggregationBuffer, UserDefinedAggregateFunction}",
+        "import scala.reflect.runtime.universe._",
+        "import scala.collection.mutable"
+    };
+}
+
+@template
+operation src!etl::Aggregation defineImpl(){
+    
+       
+    var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode;
+    var hasPivot = self.pivotParameters.size() > 0;
+    var userDefs = false;
+    
+        for (ap in self.aggregationParameters) {
+            var field = self.inputPort.fields.select(f|f.name == ap.fieldName).first();
+            var resultField = self.outputPort.fields.select(f|f.name == ap.resultFieldName).first();
+            if (self.userDefAgg and not userDefs) {%]
+            [%=defineUdaf("user_def", self.initExpression, self.expression, self.mergeExpression, self.finalExpression, field, resultField, inputNode, self)%]
+           [% userDefs = true;}
+        }%]
+    [%=inputNode.name%]
+    [%if (self.groupByFieldName.notEmpty) {%]         .groupBy([%for (f in self.groupByFieldName) {%]"[%=f%]"[%if (hasMore){%],  [%}%][%}%])[%}
+         if (not self.userDefAgg) {
+         %]
+         [%if (hasPivot) {%].pivot("[%=self.pivotField%]", Seq([%for(p in self.pivotParameters) {%][%=p.expression%][%if (hasMore) {%], [%}%][%}%]))[%}%]
+		 [%if (self.aggregationParameters.size() == 0) {%].agg([%for (f in self.groupByFieldName) {%]$"[%=f%]"[%if (hasMore){%],  [%}%][%}%])
+         [%} else {%].agg([%for (ap in self.aggregationParameters) {
+             switch (ap.aggregationFunction) {
+                 case src!AggregationFunction#AVG : 
+                     %]avg('[%=ap.fieldName%]) cast DecimalType(38, 18) as '[%=ap.resultFieldName%][%if (hasMore){%], [%} else {%])[%}%][%
+                 case src!AggregationFunction#SUM : 
+                     %]sum('[%=ap.fieldName%]) cast DecimalType(38, 18) as '[%=ap.resultFieldName%][%if (hasMore){%], [%} else {%])[%}%][%
+                 case src!AggregationFunction#FIRST:
+                     %]first('[%=ap.fieldName%]) as '[%=ap.resultFieldName%][%if (hasMore){%], [%} else {%])[%}%][%
+                 case src!AggregationFunction#LAST :
+                     %]last('[%=ap.fieldName%]) as '[%=ap.resultFieldName%][%if (hasMore){%], [%} else {%])[%}%][%
+                 case src!AggregationFunction#COUNT:
+                     %]count('[%=ap.fieldName%]) as '[%=ap.resultFieldName%][%if (hasMore){%], [%} else {%])[%}%][%
+                 case src!AggregationFunction#MAX :
+                     %]max('[%=ap.fieldName%]) as '[%=ap.resultFieldName%][%if (hasMore){%], [%} else {%])[%}%][%
+                 case src!AggregationFunction#MIN : 
+                     %]min('[%=ap.fieldName%]) as '[%=ap.resultFieldName%][%if (hasMore){%], [%} else {%])[%}%][%
+                 case src!AggregationFunction#LIST : 
+                     %]collect_list('[%=ap.fieldName%]) as '[%=ap.resultFieldName%][%if (hasMore){%], [%} else {%])[%}%][%
+
+              }
+            }}
+          } else {
+               %].agg(user_def([%for (f in inputNode.outputPort.fields.collect(f|f.name)) {%]'[%=f%][%if (hasMore){%], [%}%][%}%]) as 'res).select("res.*")[% 
+          } %][%if (hasPivot) {%].toDF([%for(f in self.outputPort.fields) {%]"[%=f.getJavaName()%]"[%if (hasMore) {%], [%}%][%}%])[%}%].as[[%=self.getSchemaName()%]]  
+[%
+        
+    }
+
+  @template
+  operation defineUdaf(udafName, initExpr, updateExpr, mergeExpr, evalExpr, field, resultField, inputNode, agg){%]
+  def toByteArray(map: java.util.Map[String, AnyRef]): Array[Byte] = {
+        val ba = new java.io.ByteArrayOutputStream()
+        val out = new java.io.ObjectOutputStream(ba)
+        out.writeObject(map);
+        out.flush();
+        val bytes = ba.toByteArray();
+        ba.close
+        bytes
+    }
+    def fromByteArray(bytes: Array[Byte]): java.util.Map[String, AnyRef] = {
+        val bis = new java.io.ByteArrayInputStream(bytes);
+        val in = new java.io.ObjectInputStream(bis);
+        val map = in.readObject().asInstanceOf[java.util.Map[String, AnyRef]];
+        in.close()
+        map
+    }
+  
+    val [%=udafName%] = new UserDefinedAggregateFunction {
+      def inputSchema = newProductEncoder(typeTag[[%=inputNode.getSchemaName()%]]).schema
+      def bufferSchema = inputSchema.add("bytes", ArrayType(ByteType))
+      def dataType = newProductEncoder(typeTag[[%=agg.getSchemaName()%]]).schema
+      def deterministic = true
+      def initialize(buffer: MutableAggregationBuffer) = {
+        val accum = new java.util.HashMap[String, AnyRef]
+        //----
+    [%=initExpr%]
+        //----
+        buffer.update([%=inputNode.outputPort.fields.size%], toByteArray(accum))
+      }
+      def update(buffer: MutableAggregationBuffer, input: Row) = {
+        val accum = fromByteArray(buffer.getAs[mutable.WrappedArray[Byte]]([%=inputNode.outputPort.fields.size%]).toArray)
+        val row = new java.util.HashMap[String, AnyRef]()
+        [%for (f in inputNode.outputPort.fields) {%]
+        row.put("[%=f.name%]", input.get([%=loopCount - 1%]).asInstanceOf[[%=f.getFullJavaClassName()%]])
+        [%}%]
+        [%for (f in inputNode.outputPort.fields) {%]
+        val [%=f.name%] = row.get("[%=f.name%]").asInstanceOf[[%=f.getFullJavaClassName()%]]
+        [%}%]
+        //---
+    [%=updateExpr%]
+        ///------
+        [%for (f in inputNode.outputPort.fields) {%]
+        buffer.update([%=loopCount - 1%], accum.get("[%=f.name%]"))
+        [%}%]
+        buffer.update([%=inputNode.outputPort.fields.size%], toByteArray(accum))
+      }
+      def merge(buffer1: MutableAggregationBuffer, buffer2: Row) = {
+        val accum1 = fromByteArray(buffer1.getAs[mutable.WrappedArray[Byte]]([%=inputNode.outputPort.fields.size%]).toArray)
+        val accum2 = fromByteArray(buffer2.getAs[mutable.WrappedArray[Byte]]([%=inputNode.outputPort.fields.size%]).toArray)
+        ///----
+    [%=mergeExpr%]
+        ///------
+        [%for (f in inputNode.outputPort.fields) {%]
+        buffer1.update([%=loopCount - 1%], accum1.get("[%=f.name%]"))
+        [%}%]
+        buffer1.update([%=inputNode.outputPort.fields.size%], toByteArray(accum1))
+
+      }
+      def evaluate(buffer: Row) = {
+        val accum = fromByteArray(buffer.getAs[mutable.WrappedArray[Byte]]([%=inputNode.outputPort.fields.size%]).toArray)
+        //----
+        [%=evalExpr%]
+        //---
+        Row([%for (f in agg.outputPort.fields) {%]accum.get("[%=f.name%]")[%if (hasMore){%],  [%}%][%}%])
+        
+      }
+    }
+    [%}
+@template
+operation customInit(resultField){%]
+        accum.put("[%=resultField.name%]", null)
+[%}
+
+@template
+operation customUpdate(func, field, resultField){%]
+    val [%=resultField.name%] = accum.get("[%=resultField.name%]").asInstanceOf[[%=resultField.getFullJavaClassName()%]]
+  if ([%=resultField.name%] == null || [%=field.name%].compareTo([%=resultField.name%]) == [%if (func == "max") {%]1[%} else {%]-1[%}%]) {
+    accum.putAll(row)
+    accum.put("[%=resultField.name%]", [%=field.name%])
+  }
+[%}
+@template
+operation customMerge(func, resultField){%]
+    val [%=resultField.name%]1 = accum1.get("[%=resultField.name%]").asInstanceOf[[%=resultField.getFullJavaClassName()%]]
+    val [%=resultField.name%]2 = accum2.get("[%=resultField.name%]").asInstanceOf[[%=resultField.getFullJavaClassName()%]]
+    if ([%=resultField.name%]1 == null || [%=resultField.name%]2.compareTo([%=resultField.name%]1) == [%if (func == "max") {%]1[%} else {%]-1[%}%]) {
+      accum1.putAll(accum2)
+    }
+[%}%]

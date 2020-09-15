@@ -1,0 +1,17 @@
+pre {
+    "Launching EventsProcessor EGX".println();
+    mspaceRoot.println("mspaceRoot: ");
+    jobDeployment.get("name").println("Deployment: ");
+    var MetaResource = new Native("ru.neoflex.meta.utils.MetaResource");
+    MetaResource.println();
+}
+
+rule EventsProcessorDrl transform processor: EventsProcessor {
+  parameters {
+    var params : new Map;
+    params.put("eventsProcessorDeployment", jobDeployment);
+    return params;
+  }
+  template : MetaResource.getURL("/psm/etl/spark/nodes/EventsProcessorDrl.egl").toString()
+  target : mspaceRoot + "/deployments/" + jobDeployment.get("name") + "/" + jobDeployment.get("name") + "/src/main/resources/" + processor.name +".drl"   
+}

@@ -1,0 +1,27 @@
+[%@template
+operation src!MapPartitions defineImpl(){
+    var inputNode = getInputNodes(self).first();%]   
+[%=inputNode.name%].mapPartitions((iterator: Iterator[[%=inputNode.getSchemaName()%]])=>{
+	[%if (self.initExpression.isDefined()) {%][%=self.initExpression%][%}%]
+	try {
+		iterator.map((input) => {
+			val output = [%=self.getSchemaName()%](
+				[%for (field in self.outputPort.fields) {%]
+		        [%if (inputNode.outputPort.fields.exists(f|f.name == field.name)) {%]input.[%=field.name%][%} else {%]null[%}%][%if (hasMore){%],[%}%]
+		     
+			  	[%}%]
+			)
+			val userExpression = (input: [%=inputNode.getSchemaName()%], output: [%=self.getSchemaName()%]) => {
+				[%if (self.expression.isDefined()) {%][%=self.expression%][%}%]
+			}
+			userExpression(input, output)
+			output
+		})
+	}
+	finally {
+		[%if (self.finalExpression.isDefined()) {%][%=self.finalExpression%][%}%]
+	}
+})
+filter(s"""[%=interpolareParameters(self.expression)%]""")
+[%}
+%]

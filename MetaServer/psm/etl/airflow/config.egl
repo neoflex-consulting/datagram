@@ -1,0 +1,37 @@
+[%
+	var transformationDeployment = TransformationDeployment.all().first();
+	transformationDeployment.println("transformationDeployment: ");
+	batchParams.println("batchParams: ");
+%]{
+    "master": "[%=transformationDeployment.master%]",
+    "mode": "[%=transformationDeployment.mode%]",
+    [%if (batchParams.get('executorCores').isDefined()) {%]
+    "executorCores": [%=batchParams.get('executorCores')%],
+    [%}%]
+    [%if (batchParams.get('executorMemory').isDefined()) {%]
+    "executorMemory": "[%=batchParams.get('executorMemory')%]",
+    [%}%]
+    [%if (batchParams.get('numExecutors').isDefined()) {%]
+    "numExecutors": [%=batchParams.get('numExecutors')%],
+    [%}%]
+    [%if (batchParams.get('driverMemory').isDefined()) {%]
+    "driverMemory": "[%=batchParams.get('driverMemory')%]",
+    [%}%]
+    "application": "[%=batchParams.get('file')%]",
+    "java_class": "[%=batchParams.get('className')%]",
+    "application_args": {
+    [%for (arg in batchParams.get('args')) { 
+    	var seq = arg.split("=");
+    	var key = seq.removeAt(0);
+    	var value = seq.concat("=");
+    	%]
+        "[%=key%]": "[%=value%]"[%if (hasMore) {%],[%}%]
+    
+    [%}%]
+    }[%if (batchParams.get('conf').isDefined()) {%],
+    "conf": {
+    [%for (opt in batchParams.get('conf')) {%]
+        [%=opt.toString().replace("\\{","\"").replace("\\}","\"").replace("=","\": \"").replace(", ","\", \"")%]    
+    [%}%]    
+    }[%}%]    
+}

@@ -1,0 +1,69 @@
+[%
+
+operation src!AVROSource define(){%]
+
+  def get[%=self.name%](spark: SparkSession): Dataset[[%=self.getSchemaName()%]] = {
+  	import spark.implicits._
+   	import scala.reflect.runtime.universe._
+   	import org.apache.spark.sql.types._
+    val schema = newProductEncoder(typeTag[[%=self.getSchemaName()%]]).schema
+    val path = {
+      s"""[%=self.path%]"""
+    }
+    [%if (self.schemaPath.isDefined()) {%]
+    val schemaPath = {
+      s"""[%=self.schemaPath%]"""
+    }
+    [%}%]
+
+    try {
+      var ds = spark.read
+      [%if (self.~makeDataset <> false) {%]
+      .format("com.databricks.spark.avro")
+      [%} else {%].option("inferSchema", true)[%}%]
+      [%if (self.schemaPath.isDefined()) {%]
+      .option("avroSchema", schemaPath)
+      [%}%]
+      .load(path)
+      [%for (explodeField in self.explodeFields) {%]
+      [%
+        var s = '';
+        var explodeFieldArr = explodeField.field.split('\\.');
+        for (f in explodeFieldArr) {
+            if(loopCount == 1){
+                s = 'ds.schema("' + f + '")';
+            } else {
+                s = s + '.dataType.asInstanceOf[org.apache.spark.sql.types.StructType]("' + f + '")';
+            }
+
+            if(hasMore == false){
+               s = s + '.dataType.typeName == "array"';
+            }
+        }
+
+      %]
+      if([%=s %]) {
+        ds = ds.withColumn("""[%=explodeField.`alias`%]""", explode($"""[%=explodeField.field%]"""))
+      } 
+      [% if (explodeField.`alias` <> explodeField.field) {%]      
+      else {        
+          ds = ds.withColumn("""[%=explodeField.`alias`%]""", $"""[%=explodeField.field%]""")        
+      }
+      [%}%]
+      [%}%]
+      ds.select(
+        [%for (field in self.outputPort.fields) {%]
+            $"[%=field.jsonPath%]" as "[%=field.name%]" [%if (hasMore){%],[%}%]
+
+        [%}%]
+        )
+       [%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%].as[[%=self.getSchemaName()%]][%}%]
+
+	  } catch {
+          case e: UnsupportedOperationException =>  [%if (self.~makeDataset <> false) {%]spark.emptyDataset[[%=self.getSchemaName()%]][%} else {%]spark.emptyDataFrame[%}%]
+      }
+
+  }
+[%}
+
+%]

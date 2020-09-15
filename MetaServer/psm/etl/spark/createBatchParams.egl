@@ -1,0 +1,36 @@
+[%
+@template
+operation genParams(transformationDeployment, batchParams){%]
+{
+    "file": "[%=batchParams.get('file')%]",
+    "className": "[%=batchParams.get('className')%]",
+    "proxyUser": "[%=batchParams.get('proxyUser')%]",
+    [%if (batchParams.get('executorCores').isDefined()) {%]
+    "executorCores": [%=batchParams.get('executorCores')%],
+    [%}%]
+    [%if (batchParams.get('executorMemory').isDefined()) {%]
+    "executorMemory": "[%=batchParams.get('executorMemory')%]",
+    [%}%]
+    [%if (batchParams.get('numExecutors').isDefined()) {%]
+    "numExecutors": [%=batchParams.get('numExecutors')%],
+    [%}%]
+    [%if (batchParams.get('driverMemory').isDefined()) {%]
+    "driverMemory": "[%=batchParams.get('driverMemory')%]",
+    [%}%]
+    "args": [
+    [%for (arg in batchParams.get('args')) {%]
+        "[%=arg%]"[%if (hasMore) {%],[%}%]
+   
+    [%}%]
+    ][%if (batchParams.get('conf').isDefined()) {%],
+    "conf": {
+    [%for (opt in batchParams.get('conf')) {%]
+        [%=opt.toString().replace("\\{","\"").replace("\\}","\"").replace("=","\": \"").replace(", ","\", \"")%]    
+    [%}%]    
+    }[%}%]    
+}
+[%}%]
+[%
+@template
+operation genIterationParams(batchParams, name){%]
+{"name": '[%=name%]', "args": [[%for (arg in batchParams) {%]"[%=arg.get("name")%]=[%=arg.get("value")%]"[%if (hasMore) {%],[%}%][%}%]]}[%}%]

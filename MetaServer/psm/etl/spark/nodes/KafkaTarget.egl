@@ -1,0 +1,121 @@
+[%
+operation src!KafkaTarget imports(){
+    return Sequence{
+        "import org.apache.kafka.clients.producer._",
+        "import java.util.Properties"
+    };
+} 
+
+operation src!KafkaTarget define(){
+    var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+    var keyField = self.inputPort.fields.selectOne(f|f.name == self.messageKey);
+    var valueField = self.inputPort.fields.selectOne(f|f.name == self.messageValue);
+    %]
+  def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {
+  
+    import spark.implicits._
+    import org.apache.avro.Schema
+    import org.apache.avro.io.{DecoderFactory, EncoderFactory}
+    import org.apache.avro.generic.{GenericData, GenericDatumReader, GenericDatumWriter, GenericRecord}
+    import java.io.ByteArrayOutputStream
+
+    val props = new Properties()
+    val TOPIC=s"""[%=self.topicName%]"""
+ 
+    props.put("bootstrap.servers", s"""[%=self.bootstrapServers%]""")
+    
+    [%switch (keyField.dataTypeDomain) {
+        case src!DataTypeDomain#BINARY : %]
+    props.put("key.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer")
+        [% 
+        default : %]    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+        [%}
+        %]
+    [%if(self.valueScheme <> null) {%]
+    props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer")
+    [%} else {%]
+    [%switch (valueField.dataTypeDomain) {
+        case src!DataTypeDomain#BINARY : 
+        %]
+    props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer")
+        [%
+        default : %]    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+        [%}
+        }%]
+    
+    [%for (prop in self.props) {%]
+    props.put("[%=prop.key%]", s"""[%=prop.value%]""")
+    [%}%]
+    
+    val kafkaSender = ds.mapPartitions( partitions => {
+
+        val res = new java.util.ArrayList[([%=inputNode.getSchemaName()%], String)]()
+        val producer = new KafkaProducer[[% if (keyField.dataTypeDomain == src!DataTypeDomain#BINARY) {%]Array[Byte][%} else {%]String[%}%], [% if (self.valueScheme <> null or (valueField <> null and valueField.dataTypeDomain == src!DataTypeDomain#BINARY)) {%]Array[Byte][%} else {%]String[%}%]](props)
+        [%if(self.valueScheme <> null and self.valueScheme.schemeType = SchemeType#AVRO and self.valueType = ValueType#AVRO) {%]
+        val schema = new Schema.Parser().parse(s"""[%=self.valueScheme.schemeString%]""")   
+        val writer = new GenericDatumWriter[GenericRecord](schema)
+        
+        def serialize(row: [%=inputNode.getSchemaName()%]): Array[Byte] = {
+            val out = new ByteArrayOutputStream()
+            val encoder = EncoderFactory.get.binaryEncoder(out, null)
+
+            val avroRecord = new GenericData.Record(schema)
+            [%for(f in self.valueScheme.schemeDataset.fields) {%]
+            avroRecord.put("[%=f.get("name")%]", row.[%=f.get("name")%])
+            [%}%] 
+            writer.write(avroRecord, encoder)
+            encoder.flush
+            out.close
+            out.toByteArray    
+        }
+                             
+        [%}%]
+        try {          
+          partitions.foreach { message => {
+            [%switch (keyField.dataTypeDomain) {
+                case src!DataTypeDomain#STRING : %]
+                val messageKey = message.[%=keyField.name%].asInstanceOf[[%=keyField.getFullJavaClassName()%]]
+                [%case src!DataTypeDomain#BINARY : %]      
+                val messageKey = message.[%=keyField.name%].asInstanceOf[[%=keyField.getFullJavaClassName()%]]
+                [%case src!DataTypeDomain#BOOLEAN : %]     
+                val messageKey = new [%=keyField.getFullJavaClassName()%].toString(message.[%=keyField.name%].asInstanceOf[[%=keyField.getFullJavaClassName()%]])
+                [%default : %]     
+                val messageKey = message.[%=keyField.name%].asInstanceOf[[%=keyField.getFullJavaClassName()%]].toString()
+                [%}
+                %]
+                [%if(self.valueScheme = null) {%]
+                [%switch (valueField.dataTypeDomain) {
+                    case src!DataTypeDomain#STRING : %]                 
+                val messageValue  = message.[%=valueField.name%].asInstanceOf[[%=valueField.getFullJavaClassName()%]]
+                    [%case src!DataTypeDomain#BINARY : %]                   
+                val messageValue = message.[%=valueField.name%].asInstanceOf[[%=valueField.getFullJavaClassName()%]]
+                    [%case src!DataTypeDomain#BOOLEAN : %]                  
+                val messageValue = new [%=valueField.getFullJavaClassName()%].toString(message.[%=valueField.name%].asInstanceOf[[%=keyField.getFullJavaClassName()%]])
+                    [%default : %]                	
+                val messageValue = message.[%=valueField.name%].asInstanceOf[[%=valueField.getFullJavaClassName()%]].toString()
+                    [%}
+                    %]
+                [%}%]
+                [%if(self.valueScheme <> null and self.valueScheme.schemeType = SchemeType#AVRO and self.valueType = ValueType#AVRO) {%]
+                val messageValue = serialize(message) 
+                [%}%]
+                producer.send(new ProducerRecord(TOPIC, messageKey, messageValue))
+                res.add((message, "sent"))
+              }
+            }
+        }
+        finally {
+            producer.close()
+        }
+
+          JavaConversions.asScalaBuffer(res).toIterator
+        })
+        
+        if (kafkaSender.collect.length == 0) {
+          logger.logInfo("Kafka sending error")
+        }
+
+  }
+    [%
+}
+%]

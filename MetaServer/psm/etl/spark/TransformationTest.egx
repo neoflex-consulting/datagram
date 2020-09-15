@@ -1,0 +1,17 @@
+pre {
+    "Launching Transformation Test 2 EGX".println();
+    mspaceRoot.println("mspaceRoot: ");
+    var MetaResource = new Native("ru.neoflex.meta.utils.MetaResource");
+    MetaResource.println();
+}
+
+rule TransformationTest transform transformationTest: TransformationTest {
+  parameters {
+    var params : new Map;
+    params.put("packagePrefix",  "ru.neoflex.meta.etl2.spark");
+    return params;
+  }
+  template : MetaResource.getURL("/psm/etl/spark/TransformationTest.egl")
+  target : mspaceRoot + "/" + transformationTest.transformation.name + "/src/test/scala/" + transformationTest.transformation.name + transformationTest.name + "Test.scala"   
+}
+

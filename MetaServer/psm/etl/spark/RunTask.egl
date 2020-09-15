@@ -1,0 +1,163 @@
+[%
+import "Utils.egl";
+import "createBatchParams.egl";
+
+var tasks = entity.get("dependsOn").clone();
+
+collectTasks(entity, tasks);
+
+tasks.add(entity);
+%]
+from datetime import timedelta
+from airflow.utils import timezone
+
+import airflow
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.operators.dummy_operator import DummyOperator
+# from airflow.operators.python_operator import BranchPythonOperator
+import json, pprint, requests, textwrap
+import time
+import socket
+import copy
+import random
+from jinja2 import Template
+
+# These args will get passed on to each operator
+# You can override them on a per-task basis during operator initialization
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': True,
+    'start_date': timezone.utcnow(),
+    'email': ['airflow@example.com'],
+    'email_on_failure': False,
+    'email_on_retry': False,
+    'retries': 0,
+    'retry_delay': timedelta(minutes=5),
+    # 'queue': 'bash_queue',[%if(entity.get("pool") <> null and entity.get("pool") <> "") {%]
+    
+    'pool': '[%=entity.get("pool")%]',
+    [%}%]
+    # 'priority_weight': 10,
+    # 'end_date': datetime(2016, 1, 1),
+    # 'wait_for_downstream': False,
+    # 'dag': dag,
+    # 'sla': timedelta(hours=2),
+    # 'execution_timeout': timedelta(seconds=300),
+    # 'on_failure_callback': some_function,
+    # 'on_success_callback': some_other_function,
+    # 'on_retry_callback': another_function,
+    # 'trigger_rule': u'all_success'
+}
+
+def updateProps(source, dictionary, propname) :
+    result = copy.deepcopy(source)
+    for index, item in enumerate(source[propname]):
+        for y in dictionary[propname] :
+            if (y.index("=") > 0) :
+                paramName = y[0:y.index("=")]
+                if(item.startswith(paramName)) :
+                    result[propname][index] = y
+
+    result[propname] = list(dict.fromkeys(dictionary[propname] + result[propname]))
+    
+    return result
+
+def runAndWait(livyUrl, params):
+    data = params
+    headers = {'Content-Type': 'application/json', 'X-Requested-By': socket.gethostbyname(socket.gethostname())}
+    r = requests.post(livyUrl + '/batches', data=json.dumps(data), headers=headers)
+    print(r)
+    res = r.json()
+    print(res)
+    while 1 : 
+        gr = requests.get(livyUrl + '/batches/' + str(res['id']), headers=headers)
+        waitresult = gr.json()
+        if(waitresult['state'] <> "starting" or waitresult['state'] <> "running") : 
+            break
+        if(waitresult['state'] == "failed" or waitresult['state'] == "error" or waitresult['state'] == "killed" or waitresult['state'] == "dead") :
+            print(livyUrl + '/batches/' + str(res['id']))            
+            print(waitresult['log'])
+            raise Exception('Task failed!')
+        time.sleep(10)
+
+dag = DAG(
+    dag_id='[%=entity.get("name")%]',
+    default_args=default_args,
+    description='Load [%=entity.get("name")%] DAG',
+    schedule_interval='@once',
+)
+
+[%for(task in tasks) {
+    var td = task.get("transformationDeployment");
+    var tr = td.get("transformation");
+    var params = tasksparams.get(task.get("name"));    
+    %]
+    
+[%=task.get("name")%]batchParams = [%=genParams(td, params)%]
+[%if(task.isKindOf(src!IterationTask) == false and task.isKindOf(src!ParametrizedTask) == false){%]
+[%=task.get("name")%] = PythonOperator(
+    task_id='[%=task.get("name")%]',
+    python_callable=runAndWait,
+    op_kwargs = {"livyUrl": "[%=td.get("livyServer").get("http")%]", "params": [%=task.get("name")%]batchParams},
+    dag=dag
+)
+[%} else {
+var s = task.get("name");
+%]
+[%=task.get("name")%] = DummyOperator(
+        task_id='[%=task.get("name")%]',
+        dag=dag
+    )
+[%=task.get("name")%]finish = DummyOperator(
+        task_id='[%=task.get("name")%]finish',
+        dag=dag
+    )
+[%if(task.isKindOf(src!IterationTask)){%]
+argsArray = [
+    [%for(iteration in task.get("iterations")) {%][%=genIterationParams(iteration.get("parameters"), iteration.get("name"))%][%if(hasMore == true){%], [%}%][%}%]
+]
+[%}%]
+
+[%if(task.isKindOf(src!ParametrizedTask)){%]
+argsArray = []
+
+p = [%=genIterationParams(task.get("parameters"), task.get("name"))%]
+[% var iterationCount = task.get("count");
+if(iterationCount == null or iterationCount == 0) {
+    iterationCount = 1;
+}%]
+for i in range([%=iterationCount%]) :
+    pt = copy.deepcopy(p)
+    pt["name"] = "[%=task.get("name")%]" + str(i)    
+    pt["args"] = map(lambda x: Template(x).render(index=i), pt["args"]) 
+    argsArray.append(pt)
+[%}%]
+
+prevTask = [%=task.get("name")%]
+
+for index, item in enumerate(argsArray):
+    iterationTask = PythonOperator(
+        task_id = item["name"],
+        python_callable=runAndWait,
+        op_kwargs = {"livyUrl": "[%=td.get("livyServer").get("http")%]", "params": updateProps([%=task.get("name")%]batchParams, item, "args")},
+        dag=dag        
+    )
+    prevTask >> iterationTask
+    [%if(task.get("branch") == true){%]
+    iterationTask >> [%=task.get("name")%]finish
+    [%} else {%]
+    prevTask = iterationTask
+    [%}%]
+[%if(task.get("branch") == false){%]
+prevTask >> [%=task.get("name")%]finish 
+[%}%]
+    
+[%}%]
+[%}%]
+
+[%for(task in tasks) {
+if(task.get("dependsOn").size > 0) {%]
+[%=task.get("name")%] << [[%for(t in task.get("dependsOn")) {%][%=t.get("name")%][%if(t.isKindOf(src!IterationTask) or t.isKindOf(src!ParametrizedTask)){%]finish[%}%][%if(hasMore == true){%], [%}%][%}%]]
+[%}%]
+[%}%]

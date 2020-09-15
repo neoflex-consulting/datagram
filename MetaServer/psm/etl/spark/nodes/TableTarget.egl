@@ -1,0 +1,174 @@
+[%
+
+@template
+operation src!TableTarget repartition() {
+var repartitionNum = self.repartitionNum;
+if(self.repartitionNumFromString == true) {
+    repartitionNum = self.repartitionNumString;
+    if(repartitionNum == "") {
+        repartitionNum = null;
+    }
+}
+var repartitionExpr = self.repartitionExpression;
+if(repartitionExpr == "") {
+    repartitionExpr = null;
+}
+var ifRep = (self.repartitionNum <> null or (self.repartitionNumFromString == true and self.repartitionExpression <> null));
+if (ifRep = true) {%].repartition([%if(repartitionNum <> null){%]numPartitions=[%=repartitionNum%][%}%][%if(repartitionExpr <> null){%][%if(repartitionNum <> null){%], [%}%]partitionExprs=[%=repartitionExpr%][%}%])[%}%]
+[%}
+
+@template
+operation src!TableTarget coalesce() {
+%]
+[%if (self.coalesce <> null or (self.coalesceFromString == true)) {%].coalesce([%if(self.coalesceFromString == false) {%][%=self.coalesce%][%} else {%]s"""[%=self.coalesceString%]""".toInt[%}%])[%}%]
+[%
+}
+
+operation src!TableTarget define(){
+     var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+  %]
+  
+  def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {
+  
+    import spark.implicits._
+    import scala.util.parsing.json.JSONObject
+    
+    val master: String = _master
+    val jobStartTime: Long = spark.sparkContext.startTime
+    val context = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
+    
+    notifyStart("[%=self.name%]", "[%=inputNode.name%]", jobStartTime)
+    [%if (self.clear) {%]
+    executeUpdate(context, s"""delete from ${context._schema}."[%=self.tableName%]"""")
+    [%}%]
+    
+    [%if (self.preSQL.isDefined() and self.preSQL.trim().length() > 0) {%]
+    executeUpdate(context, s"""[%=self.preSQL.trim()%]""")
+    [%}%]
+    
+    [%if (self.checkIfExists == true) {%]             
+    val checkTableExistsSql = s"""SELECT [%for (field in self.inputFieldsMapping) { %] "[%=field.targetColumnName%]" [%if (hasMore){%], [%}}%] FROM """ + context._schema + s"""."[%=self.tableName%]" where 1 = 0 """
+      
+    try {
+        spark.read.format("jdbc").options(Map(
+           "url" -> context._url,
+           "dbtable" -> ("(" + checkTableExistsSql + ") t"),
+           "driver" -> context._driverClassName,
+           "user" -> context._user,
+           "password" -> context._password,
+           "fetchSize" -> _fetchSize.toString
+        )).load()
+    } 
+    catch { 
+        case ex: Throwable => throw new RuntimeException(s"Failed while check [%=self.tableName%] table", ex)
+    }
+    
+    
+    [%}%]    
+    [%if (self.schemaOnRead == true) {%]
+      ds[%=self.repartition()%][%=self.coalesce()%]
+        .write
+        .mode(SaveMode.[%if (self.targetType == src!TableTargetType#INSERT) {%]Append[%}else{%]Overwrite[%}%])
+        .format("jdbc")
+        .option("driver", context._driverClassName)
+        .option("url", context._url)
+        .option("user", context._user)
+        .option("password", context._password)
+        .option("dbtable", context._schema + s"""."[%=self.tableName%]"""")
+        .save()    
+    [%} else {%]
+      ds[%=self.repartition()%][%=self.coalesce()%].mapPartitions(partition => {
+      val rejects = new java.util.ArrayList[([%=inputNode.getSchemaName()%], String)]()
+      val cn = context.getConnection
+      
+      try {
+          cn.setAutoCommit(false)
+          [%if (self.targetType == src!TableTargetType#INSERT) {%]
+          val sqlText = "insert into " + context._schema + s"""."[%=getCorrectName(self.tableName)%]"([%for (feature in self.inputFieldsMapping) { %]"[%=feature.targetColumnName%]"[%if (hasMore){%], [%}}%]) 
+          values([%for (feature in self.inputFieldsMapping) { %] ?[%if (hasMore){%], [%}}%])"""
+          [%}%]
+          [%if (self.targetType == src!TableTargetType#UPDATE) {%]
+          val sqlText = "update " + context._schema + s"""."[%=getCorrectName(self.tableName)%]" set [%for (feature in self.inputFieldsMapping.select(f|f.keyField <> true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%], [%}%][%}%] """ +
+          s"""where [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%], [%}}%]"""
+          [%}%]
+          [%if (self.targetType == src!TableTargetType#DELETE) {%]
+          val sqlText = "delete from " + context._schema + s"""."[%=getCorrectName(self.tableName)%]" """ +
+          s"""where [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%] and [%}}%]"""
+          [%}%]
+          [%if (self.targetType == src!TableTargetType#MERGE) {%]
+          val sqlText = "merge into " + context._schema +
+          s"""."[%=getCorrectName(self.tableName)%]" dst using(select [%for (feature in self.inputFieldsMapping) { %] ? as "[%=feature.targetColumnName%]"[%if (hasMore){%],[%}}%] from dual) src """ +
+          s"""on([%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]dst."[%=feature.targetColumnName%]" = src."[%=feature.targetColumnName%]"[%if (hasMore){%] and [%}%}%]) """ +
+          s"""when matched then update set [%for (feature in self.inputFieldsMapping.select(f|f.keyField <> true)) { %]dst.[%=feature.targetColumnName%] = src."[%=feature.targetColumnName%]"[%if (hasMore){%], [%}}%] """ + 
+          s"""when not matched then insert ([%for (feature in self.inputFieldsMapping) { %]"[%=feature.targetColumnName%]"[%if (hasMore){%], [%}}%]) values ([%for (feature in self.inputFieldsMapping) { %]src."[%=feature.targetColumnName%]"[%if (hasMore){%], [%}}%])"""
+          [%}%] 
+          
+          logger.logInfo(s"TableTarget [%=self.name%] query: ${sqlText}")
+          
+          val stmt = cn.prepareCall(sqlText)
+          
+          try {
+            partition.sliding(_slideSize, _slideSize).foreach(slide => {
+              processSlice(cn, stmt, slide.toList, (row: [%=inputNode.getSchemaName()%], stmt: CallableStatement) =>{
+              [%if (self.targetType == src!TableTargetType#INSERT or self.targetType == src!TableTargetType#MERGE) {%]
+                [%for (feature in self.inputFieldsMapping) { 
+                   var inputField = self.inputPort.fields.selectOne(fld|fld.name=feature.inputFieldName);
+                   %]
+                stmt.set[%=inputField.getJavaClassName()%]([%=loopCount%], row.[%=toJavaName(inputField.name)%].asInstanceOf[[%=inputField.getFullJavaClassName()%]])
+                [%}%]
+              [%}%]
+              [%var alreadyCounted = 0;%]
+              [%if (self.targetType == src!TableTargetType#UPDATE) {%]
+                [%for (feature in self.inputFieldsMapping.select(f|f.keyField == false)) { 
+                   var inputField = self.inputPort.fields.selectOne(fld|fld.name=feature.inputFieldName);
+                   alreadyCounted = alreadyCounted + 1;
+                   %]
+                stmt.set[%=inputField.getJavaClassName()%]([%=loopCount%], row.[%=toJavaName(inputField.name)%].asInstanceOf[[%=inputField.getFullJavaClassName()%]])
+                [%}%]
+              [%}%]
+              [%if (self.targetType == src!TableTargetType#UPDATE or self.targetType == src!TableTargetType#DELETE) {%]
+                [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { 
+                   var inputField = self.inputPort.fields.selectOne(fld|fld.name=feature.inputFieldName);
+                   %]
+                stmt.set[%=inputField.getJavaClassName()%]([%=loopCount%], row.[%=toJavaName(inputField.name)%].asInstanceOf[[%=inputField.getFullJavaClassName()%]])
+                [%}%]
+              [%}%]
+              },(successRowCount:Int) =>{
+                notifyExecUpdate("[%=self.name%]", "[%=inputNode.name%]", jobStartTime, successRowCount)
+              },(errorMessage: String, failedRow: [%=inputNode.getSchemaName()%]) =>{
+                if (rejects.size >= _rejectSize) {
+                  notifyException("[%=self.name%]", "[%=inputNode.name%]", jobStartTime, errorMessage, failedRow)
+                  throw new RuntimeException(s"Max Rejects Limit (${_rejectSize}) Was Reached for [%=self.name%]" + errorMessage)
+                }
+                notifyException("[%=self.name%]", "[%=inputNode.name%]", jobStartTime, errorMessage, failedRow)
+                rejects.add((failedRow, errorMessage))
+              })
+            })
+          } finally {
+            stmt.close()
+          }
+      } finally {
+          cn.close()
+      }
+      JavaConversions.asScalaBuffer(rejects).toIterator
+    })
+    .map { reject =>{
+            val row = reject._1
+            val rowMap = row.getClass.getDeclaredFields.map( _.getName ).zip( row.productIterator.to.map(v=>v match {case null=> "<null>" case _=> v}) ).toMap    
+                        
+            val rejectJson = JSONObject(rowMap).toString()
+            (_workflowId, _applicationId, getApplicationName, "[%=self.name%]", rejectJson, reject._2, System.currentTimeMillis)
+        }
+    }
+    .toDF("workflowid", "appid", "classname", "methodname", "object", "exception", "ts")
+    .coalesce(1).write.mode(SaveMode.Append).format("json").save(s"${_applicationHome}/rejects.json")
+    [%}%]
+
+    [%if (self.postSQL.isDefined() and self.postSQL.trim().length() > 0) {%]
+    executeUpdate(context, s"""[%=self.postSQL.trim()%]""")
+    [%}%]
+    notifyFinish("[%=self.name%]", "[%=inputNode.name%]", jobStartTime)
+  }
+[%}
+
+%]

@@ -1,0 +1,214 @@
+[%
+import "Utils.egl";
+import "nodes/ExplodeStep.egl";
+import "nodes/ExpressionSource.egl";
+import "nodes/Join.egl";
+import "nodes/Drools.egl";
+import "nodes/Sort.egl";
+import "nodes/GroupWithState.egl";
+import "nodes/Projection.egl";
+import "nodes/Selection.egl";
+import "nodes/Union.egl";
+import "nodes/Sequence.egl";
+import "nodes/ModelBasedAnalysis.egl";
+import "nodes/LocalTarget.egl";
+import "nodes/SparkSQL.egl";
+import "nodes/HiveSource.egl";
+import "nodes/HBaseSource.egl";
+import "nodes/CsvSource.egl";
+import "nodes/XMLSource.egl";
+import "nodes/AVROSource.egl";
+import "nodes/CsvTarget.egl";
+import "nodes/XMLTarget.egl";
+import "nodes/LocalSource.egl";
+import "nodes/HiveTarget.egl";
+import "nodes/HBaseTarget.egl";
+import "nodes/TableSource.egl";
+import "nodes/SQLSource.egl";
+import "nodes/TableTarget.egl";
+import "nodes/ProcedureTarget.egl";
+import "nodes/Aggregation.egl";
+import "nodes/StreamTarget.egl";
+import "nodes/KafkaSource.egl";
+import "nodes/KafkaTarget.egl";
+import "nodes/Source.egl";
+import "nodes/Target.egl";
+import "nodes/RestTarget.egl";
+import "nodes/TransformationStep.egl";
+
+"resolving node relations".println;
+for (transition in transformation.transitions){
+  transition.resolveNodes();
+}
+
+%]
+import scala.collection.{JavaConversions, immutable, mutable}
+
+val hc = new org.apache.spark.sql.hive.HiveContext(sc)
+val jobParameters: mutable.HashMap[String, AnyRef] = new mutable.HashMap[String, AnyRef]()
+[%for (param in jobParams) {%]
+jobParameters.put("[%=param.split("=")[0]%]", s"""[%=param.split("=", 2)[1].replace("\\\\/", "/")%]""")
+[%}%]
+[%
+
+var sortedNodes = Sequence{};
+
+for (node in transformation.targets) {
+    var targetNodes = Sequence{};
+    findInputs(node, targetNodes);
+    sortedNodes.addAll(targetNodes.invert());
+}
+var aliases = Sequence{};
+%][%=declareSources(transformation, aliases)%]
+
+[%
+
+for(node in sortedNodes) {
+    if(node.~declared <> true) {
+        if(node.isKindOf(src!SparkSQL) or node.isKindOf(src!Join)){
+            %][%=node.declareHive(aliases)%]
+            [%            
+        } else {
+            %][%=node.name%]
+            [%
+        }
+    node.~declared = true;
+    }
+}
+
+operation findInputs(node, allNodes){
+    var inputs = getInputNodes(node);
+    for(i in inputs) {
+        if(allNodes.selectOne(t|t == i) == null) {
+            allNodes.add(i);
+            findInputs(i, allNodes);
+        }
+    }
+}
+
+operation getTransitionsFrom(node) {
+    return node.transformation.transitions.select(t|t.~sourceNode == node);
+}
+
+@template
+operation declareSources(transformation, aliases) {    
+    for (source in transformation.sources){
+        if(source.isKindOf(src!LocalSource) or source.isKindOf(src!ExpressionSource) or source.isKindOf(src!HiveSource)){
+            %][%=source.declareHive(aliases)%]
+            [%
+        }        
+        source.~declared = true;
+    }
+}
+
+operation getHiveDomain(dataTypeDomain){
+    if(dataTypeDomain.toString() == "INTEGER") {
+        return "INT";
+    }
+    if(dataTypeDomain.toString() == "DATETIME") {
+        return "TIMESTAMP";
+    }    
+    return dataTypeDomain.toString();
+}
+
+@template
+operation declareFields(outputPort) {
+    for(field in outputPort.fields){%][%=field.name + " " + getHiveDomain(field.dataTypeDomain)%][%if (hasMore){%], [%}%][%}
+}
+
+@template
+operation src!LocalSource declareHive(aliases) {
+    var transitions = getTransitionsFrom(self);
+    for(transition in transitions) {
+        var viewName = getTargetName(transition);
+        if(aliases.selectOne(a|a == viewName) == null and viewName <> null) {
+            %]hc.sql(s"""DROP TABLE IF EXISTS [%=viewName%]""")
+            [%
+            %]hc.sql(s"""CREATE EXTERNAL TABLE [%=viewName%] ([%=declareFields(self.outputPort)%]) STORED AS [%=self.localFileFormat%] LOCATION '[%=self.localFileName%]'""")
+            [%
+            aliases.add(transition.finish.get("alias"));
+        }
+    }
+}
+
+@template
+operation src!ExpressionSource declareHive(aliases) {
+    var transitions = getTransitionsFrom(self);
+    for(transition in transitions) {
+        var viewName = getTargetName(transition);
+        if(aliases.selectOne(a|a == viewName) == null and viewName <> null) {
+            %]hc.sql(s"""DROP VIEW IF EXISTS [%=viewName%]""")
+            [%
+            %]hc.sql(s"""CREATE VIEW IF NOT EXISTS [%=viewName%] AS SELECT [%for(field in self.outputPort.fields){%][%="cast (NULL as " + getHiveDomain(field.dataTypeDomain) + ") as " + field.name%][%if (hasMore){%], [%}%][%}%]""")
+            [%
+            aliases.add(transition.finish.get("alias"));
+        }
+    }
+}
+
+operation getTargetName(transition) {
+    if(transition.~targetNode.isKindOf(src!SparkSQL)) {
+        return transition.finish.get("alias");
+    }
+    if(transition.~targetNode.isKindOf(src!LocalTarget)) {
+        return transition.~targetNode.get("name");
+    }
+    if(transition.~targetNode.isKindOf(src!Join)) {            
+        if(transition.finish == transition.~targetNode.inputPort) {
+            return "left_" + transition.~targetNode.get("name");
+        }
+        if(transition.finish == transition.~targetNode.joineePort) {
+            return "right_" + transition.~targetNode.get("name");
+        }            
+    }
+    return null;
+}
+
+operation src!Join joinStr() {
+    return Sequence{0..self.keyFields.size() - 1}.collect(i| 'left_' + self.name + '.' + self.keyFields.at(i) + ' = ' + 'right_' + self.name + '.' + self.joineeKeyFields.at(i)).concat(" and ");
+}
+
+@template
+operation src!Join declareHive(aliases) {
+    var transitions = getTransitionsFrom(self);
+    
+    for(transition in transitions) {
+        var viewName = getTargetName(transition);
+        %]hc.sql(s"""DROP VIEW IF EXISTS [%=viewName%]""")
+        [%
+        %]hc.sql(s"""CREATE VIEW [%=viewName%] AS SELECT [%for(field in self.outputPort.fields){%][%=field.name%][%if (hasMore){%], [%}%][%}%] FROM left_[%=self.name%], right_[%=self.name%] WHERE [%=self.joinStr()%]""")
+        [%            
+    }    
+}
+
+@template
+operation src!SparkSQL declareHive(aliases) {
+    var transitions = getTransitionsFrom(self);
+    for(transition in transitions) {
+        var viewName = getTargetName(transition);
+        if(aliases.selectOne(a|a == viewName) == null and viewName <> null) {
+            %]hc.sql(s"""DROP VIEW IF EXISTS [%=viewName%]""")
+            [%
+            %]hc.sql(s"""CREATE VIEW [%=viewName%] AS [%=self.statement%]""")
+            [%
+            aliases.add(viewName);
+        }
+    }
+}
+
+@template
+operation src!HiveSource declareHive(aliases) {
+    var transitions = getTransitionsFrom(self);
+    for(transition in transitions) {
+        var viewName = getTargetName(transition);
+        if(aliases.selectOne(a|a == viewName) == null and viewName <> null) {
+            %]hc.sql(s"""DROP VIEW IF EXISTS [%=viewName%]""")
+            [%
+            %]hc.sql(s"""CREATE VIEW [%=viewName%] AS [%=self.statement%]""")
+            [%
+            aliases.add(viewName);
+        }
+    }
+}
+
+%]

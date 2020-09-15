@@ -1,0 +1,19 @@
+[%
+
+operation src!ExpressionSource define(){%]
+
+  def get[%=self.name%](spark: SparkSession): Dataset[[%=self.getSchemaName()%]] = {
+  	import spark.implicits._
+    val expr = {
+        [%=self.expression%]
+    }
+    spark.createDataset(expr.map(m => [%=self.getSchemaName()%](
+        [%for (field in self.outputPort.fields) {%]
+        [%=field.getJavaName()%] = m.getOrElse("[%=field.name%]", null).asInstanceOf[[%=field.getFullJavaClassName()%]][%if (hasMore){%],[%}%]
+        
+        [%}%]
+    )))
+  }
+[%}
+
+%]

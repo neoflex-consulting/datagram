@@ -1,0 +1,40 @@
+[%@template
+operation src!ExplodeStep defineImpl(){
+    var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+    %]
+	  val ds0 = [%=source.name%]
+      [%for (explodeField in self.explodeFields) {%]
+      [%
+        var s = '';
+        var explodeFieldArr = explodeField.field.split('\\.');
+        var prevDS = 'ds' + (loopCount - 1);
+        var currentDS = 'ds' + (loopCount);
+        for (f in explodeFieldArr) {
+            if(loopCount == 1){
+                s = prevDS + '.schema("' + f + '")';
+            } else {
+                s = s + '.dataType.asInstanceOf[org.apache.spark.sql.types.StructType]("' + f + '")';
+            }
+
+            if(hasMore == false){
+               s = s + '.dataType.typeName == "array"';
+            }
+        }
+
+      %]
+      val [%=currentDS%] = {
+	      if([%=s %]) {
+	        [%=prevDS%].withColumn("""[%=explodeField.`alias`%]""", explode($"""[%=explodeField.field%]"""))
+	      } 
+	      [% if (explodeField.`alias` <> explodeField.field) {%]      
+	      else {        
+	        [%=prevDS%].withColumn("""[%=explodeField.`alias`%]""", $"""[%=explodeField.field%]""")        
+	      }
+      }
+      [%}%]
+      [%}%]
+      ds[%=self.explodeFields.size()%].select([%for(f in self.outputPort.fields) {%]"[%=f.getJavaName()%]"[%if (hasMore) {%], [%}%][%}%])
+      .toDF([%for(f in self.outputPort.fields) {%]"[%=f.getJavaName()%]"[%if (hasMore) {%], [%}%][%}%])
+      .as[[%=self.getSchemaName()%]]
+[%}
+%]

@@ -1,0 +1,330 @@
+[%
+  workflow.name.println("workflow.egl: ");
+%]
+[%=workflow.declaration(workflowDeployment)%]
+[% @template 
+operation Workflow declaration(workflowDeployment) {%]
+[%
+	var isSla = false; 
+	isSla = self.get("sla").isDefined();
+	for (node in self.nodes) { 
+		if (node.get("sla").isDefined()) {
+			isSla = true;	
+		}
+	}
+%]
+<workflow-app xmlns='uri:oozie:workflow:0.5' [%if(isSla){%]xmlns:sla='uri:oozie:sla:0.2' [%}%]xmlns:coordinator='uri:oozie:coordinator:0.1' name='[%=self.name%]'>
+	[%=self.credentialsDeclaration(workflowDeployment)%]
+    [%=self.nodes.select(n|n.isKindOf(WFManualStart)).first().declaration(workflowDeployment)%]
+    [%for (node in self.nodes) { if (not node.isKindOf(WFEnd) and not node.isKindOf(WFStart)) {%]
+    [%=node.declaration(workflowDeployment)%]
+    [%}}%]
+    [%=self.nodes.select(n|n.isKindOf(src!WFEnd)).first().declaration(workflowDeployment)%]
+    [%if (self.get("sla").isDefined()) {%]
+    	[%=self.get("sla").slaDeclaration()%]
+    [%}%]
+</workflow-app>
+[%}%]
+[% @template 
+operation WFEnd declaration(workflowDeployment) {%]
+<end name='[%=self.name%]' />
+[%}%]
+[% @template 
+operation WFKill declaration(workflowDeployment) {%]
+<kill name='[%=self.name%]'>
+[%if (self.message.isDefined()) {%]
+    <message>[%=self.message%]</message>
+[%} else {%]
+    <message>Workflow failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+[%}%]
+</kill>
+[%}%]
+[% @template 
+operation WFDecision declaration(workflowDeployment) {%]
+<decision name='[%=self.name%]'>
+<switch>
+[%for (theCase in self.cases) {%]
+    <case to='[%=theCase.to.name%]'>[%=theCase.predicate%]</case>
+[%}%]
+    <default to="[%=self.`default`.name%]"/>
+</switch>
+</decision>
+[%}%]
+[% @template 
+operation WFFork declaration(workflowDeployment) {%]
+<fork name='[%=self.name%]'>
+[%for (path in self.paths) {%]
+    <path start='[%=path.name%]' />
+[%}%]
+</fork>
+[%}%]
+[% @template 
+operation WFJoin declaration(workflowDeployment) {%]
+<join name='[%=self.name%]' to='[%=self.to.name%]' />
+[%}%]
+[% @template 
+operation WFAction declaration(workflowDeployment) {
+var retryMax = workflowDeployment.get("oozie").get("retryMax");
+var retryInterval = workflowDeployment.get("oozie").get("retryInterval");
+var cred;
+if (workflowDeployment.get("oozie").isDefined() and workflowDeployment.get("oozie").get("isKerberosEnabled") == true and workflowDeployment.get("oozie").get("hcatPrincipal").isDefined()) {
+	cred = 'hcatauth';
+}%]
+<action name='[%=self.name%]'[%if (retryMax.isDefined()) {%] retry-max='[%=retryMax%]'[%}%][%if (retryInterval.isDefined()) {%] retry-interval='[%=retryInterval%]'[%}%][%if (cred.isDefined()) {%] cred='[%=cred%]'[%}%]>
+    [%=self.actionDeclaration(workflowDeployment)%]
+    <ok to='[%=self.ok.name%]' />
+    <error to='[%=self.error.name%]' />
+    [%if (self.get("sla").isDefined()) {%]
+    	[%=self.get("sla").slaDeclaration()%]
+    [%}%]
+</action>
+[%}%]
+[% @template 
+operation WFAction configurationPropertiesDeclaration() {%]
+	[%if(self.properties.isDefined()){%]
+	[%for (propertie in self.properties) {%]
+		<property>
+			<name>[%=propertie.name%]</name>
+			<value>[%=propertie.value%]</value>
+		</property>
+	[%}%]
+	[%}%]	
+[%}%]
+[% @template 
+operation WFSubWorkflow actionDeclaration(workflowDeployment) {
+var workflow=self.subWorkflow;%]
+<sub-workflow>
+    <app-path>[%=workflowDeployment.get("oozie").get("nameNode")%]/user/[%=workflowDeployment.get("oozie").get("user")%]/deployments/[%=workflowDeployment.get("name")%]/[%=workflow.get("name")%].xml</app-path>
+    [%if (self.propagateConfiguration == true) {%]
+    <propagate-configuration/>
+    [%}%]
+    <configuration>
+      <property>
+        <name>ROOT_WORKFLOW_ID</name>
+        <value>${firstNotNull(wf:conf("ROOT_WORKFLOW_ID"), wf:id())}</value>
+      </property>
+      [%=self.configurationPropertiesDeclaration()%]
+    </configuration>    
+</sub-workflow>
+[%}%]
+[% @template 
+operation WFTransformation actionDeclaration(workflowDeployment) {
+var sparkVer = "";
+if (workflowDeployment.get("oozie").get("spark2") == true) sparkVer = "2";
+%]
+<spark xmlns="uri:oozie:spark-action:0.1">
+    <job-tracker>${jobTracker}</job-tracker>
+    <name-node>${nameNode}</name-node>
+	[%if (self.prepare.isDefined()) {%]
+    	[%=self.prepare.prepareDeclaration()%]
+    [%}%]
+    [% var jvmOpts = workflowDeployment.get("jvmOpts") + " " + self.jvmOpts; 
+    if (jvmOpts.isDefined() and jvmOpts <> "") {%]
+    <configuration>
+        <property>
+            <name>oozie.launcher.mapreduce.map.java.opts</name>
+            <value>[%=jvmOpts.trim()%]</value>
+        </property>
+    </configuration>
+    [%}%]
+    <master>${master}</master>
+    [%if (workflowDeployment.get("mode").isDefined() and workflowDeployment.get("mode") <> "" or workflowDeployment.get("oozie").get("mode").isDefined() and workflowDeployment.get("oozie").get("mode") <> "") {%]
+    <mode>${mode}</mode>
+    [%}%]
+    <name>[%=self.transformation.name%]</name>
+    <class>ru.neoflex.meta.etl[%=sparkVer%].spark.[%=self.transformation.name%]Job</class>
+    <jar>${JARS}</jar>
+    <spark-opts>--conf spark.extraListeners= --conf spark.sql.queryExecutionListeners= [* --conf spark.yarn.jars=*.jar *][%if (workflowDeployment.get("dynamicAllocation") == true) {%] --conf spark.dynamicAllocation.enabled=true --conf spark.shuffle.service.enabled=true [%}
+     for (opt in workflowDeployment.get("sparkOpts")) {%]--conf [%=opt.get("name")%]=[%=opt.get("value")%][%=" "%][%}
+     for (opt in self.get("sparkOpts")) {%]--conf [%=opt.get("name")%]=[%=opt.get("value")%][%=" "%][%}
+     if(self.numExecutors <> null and self.numExecutors > 0) {%] --num-executors [%=self.numExecutors%] [%} else {
+        if (workflowDeployment.get("numExecutors").isDefined() and workflowDeployment.get("numExecutors") <> 0 and not checkSparkOpt(workflowDeployment, "spark.executor.instances")) {%]--num-executors ${numExecutors} [%}
+     }
+     if(self.driverMemory <> null and self.driverMemory <> "") {%] --driver-memory [%=self.driverMemory%] [%} else {
+        if (workflowDeployment.get("driverMemory").isDefined() and not checkSparkOpt(workflowDeployment, "spark.driver.memory")) {%] --driver-memory ${driverMemory} [%}
+     }
+     if(self.executorMemory <> null and self.executorMemory <> "") {%] --executor-memory [%=self.executorMemory%] [%} else { 
+        if (workflowDeployment.get("executorMemory").isDefined() and not checkSparkOpt(workflowDeployment, "spark.executor.memory")){%] --executor-memory ${executorMemory} [%}
+     }
+     if(self.executorCores <> null and self.executorCores > 0) {%] --executor-cores [%=self.executorCores%] [%} else { 
+        if (workflowDeployment.get("executorCores").isDefined() and workflowDeployment.get("executorCores") <> 0 and not checkSparkOpt(workflowDeployment, "spark.executor.cores")) {%] --executor-cores ${executorCores} [%}
+    }%] --queue [%=workflowDeployment.get("oozie").get("queue")%]</spark-opts>
+    <arg>ACTION_NAME=[%=escape(self.name)%]</arg> 
+    <arg>MASTER=${master}</arg> 
+    <arg>HOME=[%=escape(workflowDeployment.get("oozie").get("home"))%]</arg> 
+    <arg>USER=[%=escape(workflowDeployment.get("oozie").get("user"))%]</arg> 
+    [%if (workflowDeployment.get("oozie").get("ntfUrl").isDefined() and workflowDeployment.get("oozie").get("ntfUrl") <> "") {%]
+    <arg>NTF_PERSISTENT=false</arg>
+    <arg>NTF_URL=${NTF_URL}</arg>
+    <arg>NTF_DESTINATION=${NTF_DESTINATION}</arg>
+    <arg>NTF_USER=${NTF_USER}</arg>
+    <arg>NTF_PASSWORD=${PASSWORD}</arg>
+    [%}%]
+    <arg>CURRENT_WORKFLOW_ID=${wf:id()}</arg>
+    <arg>LAST_ERROR_CODE=${wf:errorCode(wf:lastErrorNode())}</arg>
+    <arg>LAST_ERROR_MESSAGE=${wf:errorMessage(wf:lastErrorNode())}</arg>
+    <arg>ROOT_WORKFLOW_ID=${firstNotNull(wf:conf("ROOT_WORKFLOW_ID"), wf:id())}</arg>
+    <arg>WF_HOME=[%=workflowDeployment.get("oozie").get("home")%]/[%=workflowDeployment.get("oozie").get("user")%]</arg>
+    [%if (workflowDeployment.get("debug") == true) {%]
+    <arg>DEBUG=true</arg>
+    [%}%]
+    <arg>FETCH_SIZE=${FETCH_SIZE}</arg>
+    <arg>SLIDE_SIZE=${SLIDE_SIZE}</arg>
+    <arg>FAIL_THRESHOLD=${FAIL_THRESHOLD}</arg>
+    <arg>PARTITION_NUM=${PARTITION_NUM}</arg>
+    <arg>JOB_NAME=[%=escape(self.transformation.name)%]</arg>
+    [%for (deployment in workflowDeployment.get("deployments")) {%]    
+    <arg>JDBC_[%=deployment.get("softwareSystem").get("name")%]_URL=${JDBC_[%=deployment.get("softwareSystem").get("name")%]_URL}</arg>
+    <arg>JDBC_[%=deployment.get("softwareSystem").get("name")%]_USER=${JDBC_[%=deployment.get("softwareSystem").get("name")%]_USER}</arg>
+    <arg>JDBC_[%=deployment.get("softwareSystem").get("name")%]_DRIVER=${JDBC_[%=deployment.get("softwareSystem").get("name")%]_DRIVER}</arg>
+    <arg>JDBC_[%=deployment.get("softwareSystem").get("name")%]_PASSWORD=${JDBC_[%=deployment.get("softwareSystem").get("name")%]_PASSWORD}</arg>
+    <arg>JDBC_[%=deployment.get("softwareSystem").get("name")%]_SCHEMA=${JDBC_[%=deployment.get("softwareSystem").get("name")%]_SCHEMA}</arg>
+    [%}%]    
+    [%for (parameter in workflowDeployment.get("parameters")) {%]    
+    <arg>[%=escape(parameter.get("name"))%]=${[%=escape(parameter.get("name"))%]}</arg>
+    [%}%]    
+    [%for (parameter in self.parameters) {%]    
+    <arg>[%=escape(parameter.name)%]=${"[%=parameter.value%]"}</arg>
+    [%}%]    
+</spark>
+[%}%]
+[% @template 
+operation WFShell actionDeclaration(workflowDeployment) {%]
+<shell xmlns="uri:oozie:shell-action:0.1">
+    <job-tracker>${jobTracker}</job-tracker>
+    <name-node>${nameNode}</name-node>
+    <configuration>
+    	<property>
+        	<name>mapred.job.queue.name</name>
+            <value>${queueName}</value>
+        </property>
+    </configuration>
+    <exec>[%=self.exec%]</exec>
+    [%for (arg in self.args) {%]
+    <argument>[%=arg%]</argument>
+    [%}%]
+    [%if (self.file.isDefined()) {%]
+    <file>[%=self.file%]</file>
+    [%}%]
+    [%if (self.captureOutput == true) {%]
+    <capture-output />
+    [%}%]
+</shell>
+[%}%]
+[% @template 
+operation FSDelete deleteDeclaration() {%]
+<delete path='[%=self.path%]'/>
+[%}%]
+[% @template 
+operation FSMkdir mkdirDeclaration() {%]
+<mkdir path='[%=self.path%]'/>
+[%}%]
+[% @template 
+operation Prepare prepareDeclaration() {%]
+<prepare>
+    [%if (self.deleteDir.isDefined()) {%]
+    	[%for (dd in self.deleteDir) {%]
+    		[%=dd.deleteDeclaration()%]
+    	[%}%]    
+    [%}%]
+    [%if (self.mkDir.isDefined()) {%]
+    	[%for (md in self.mkDir) {%]
+    		[%=md.mkdirDeclaration()%]
+    	[%}%]    
+    [%}%]    
+</prepare>
+[%}%]
+[% @template 
+operation WFJava actionDeclaration(workflowDeployment) {%]
+<java>
+    <job-tracker>${jobTracker}</job-tracker>
+    <name-node>${nameNode}</name-node>
+    [%if (self.prepare.isDefined()) {%]
+    	[%=self.prepare.prepareDeclaration()%]
+    [%}%]
+    <configuration>
+    	<property>
+        	<name>mapred.job.queue.name</name>
+            <value>${queueName}</value>
+		</property>
+	[%=self.configurationPropertiesDeclaration()%]
+        
+    </configuration>
+    <main-class>[%=self.mainclass%]</main-class>
+    <java-opts>[%=self.javaopts%]</java-opts>
+    [%for (arg in self.args) {%]
+    <arg>[%=arg%]</arg>
+    [%}%]
+    [%if (self.file.isDefined()) {%]
+    <file>[%=self.file%]</file>
+    [%}%]
+    [%if (self.archive.isDefined()) {%]
+    <archive>[%=self.archive%]</archive>
+    [%}%]    
+    [%if (self.captureOutput == true) {%]
+    <capture-output />
+    [%}%]
+</java>
+[%}%]
+[% @template 
+operation WFManualStart declaration(workflowDeployment) {%]
+<start to='[%=self.to.name%]' />
+[%}%]
+[% @template 
+operation WFAction actionDeclaration(workflowDeployment) {%]
+<!-- template not defined for action [%=self.name%] -->
+[%}%]
+[% @template 
+operation WFNode declaration(workflowDeployment) {%]
+<!-- template not defined for node [%=self.name%] -->
+[%}%]
+[%operation escape(str) {
+    var klass = Native("java.lang.Thread").currentThread().getContextClassLoader().loadClass("ru.neoflex.meta.utils.JSONHelper");
+    return klass.escape(str); 
+}
+operation checkSparkOpt(workflowDeployment, optName) {
+	if (workflowDeployment.get("sparkOpts").select(o|o.get("name") == optName).size() > 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+%]
+[% @template 
+operation Workflow credentialsDeclaration(workflowDeployment) {%]
+[%if (workflowDeployment.get("oozie").isDefined() and workflowDeployment.get("oozie").get("isKerberosEnabled") == true and workflowDeployment.get("oozie").get("hcatPrincipal").isDefined()) {%]
+<credentials>
+     <credential name="hcatauth" type="hcat">
+        <property>
+           <name>hcat.metastore.uri</name>
+           <value>[%=workflowDeployment.get("oozie").get("hcatUri")%]</value>
+        </property>
+        <property>
+            <name>hcat.metastore.principal</name>
+            <value>[%=workflowDeployment.get("oozie").get("hcatPrincipal")%]</value>
+        </property>
+     </credential>
+   </credentials>
+   [%}%]
+[%}%]
+[% @template 
+operation SlaDefinition slaDeclaration() {%]
+<sla:info>
+    <sla:nominal-time>${[%=self.nominalTime%]}</sla:nominal-time>
+	[%if (self.shouldStart.isDefined()) {%]
+    <sla:should-start>${[%=self.shouldStart%]}</sla:should-start>
+	[%}%]
+	[%if (self.shouldEnd.isDefined()) {%]
+    <sla:should-end>${[%=self.shouldEnd%]}</sla:should-end>
+	[%}%]
+	[%if (self.maxDuration.isDefined()) {%]
+    <sla:max-duration>${[%=self.maxDuration%]}</sla:max-duration>
+	[%}%]
+	[%if (self.alertEvents.isDefined()) {%]
+    <sla:alert-events>[%=self.alertEvents%]</sla:alert-events>
+	[%}%]
+	[%if (self.alertContact.isDefined()) {%]
+    <sla:alert-contact>[%=self.alertContact%]</sla:alert-contact>
+	[%}%]
+</sla:info>
+[%}%]

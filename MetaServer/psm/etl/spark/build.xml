@@ -1,0 +1,29 @@
+<project default="generate-all">
+    <include file="epsilon-ant-tasks.xml"/>
+	<property file="etl-build.properties"/>
+    
+    <target name="generate-all" depends="generate-ETL"/>
+
+    <target name="load-model">
+        <epsilon.emf.loadModel
+          name="src"
+          read="true"
+          store="false"
+          metamodeluri="http://www.neoflex.ru/meta/etl"
+          modelUri="hibernate://?dsname=teneo&amp;query1=from etl.Transformation where e_id=${transformation.id}"
+        />
+    </target>   
+  
+    <target name="validate-ETL" depends="load-model">
+        <epsilon.evl src="${etl.mspace.dir}/pim/etl/etl.evl">
+            <model ref="src" />
+        </epsilon.evl>
+    </target>   
+  
+    <target name="generate-ETL" depends="validate-ETL">
+        <epsilon.egl src="${etl.mspace.dir}/psm/etl/spark/etl.egx">
+            <model ref="src" />
+            <parameter name="targetPath" value="${etl.source.path}/src/main"/>
+        </epsilon.egl>
+    </target>
+</project>

@@ -1,0 +1,10 @@
+[%@template
+operation src!Selection defineImpl(){
+    var inputNode = getInputNodes(self).first();%]   
+[%=inputNode.name%].filter(s"""[%=interpolareParameters(self.expression)%]""")
+[%}
+
+operation src!Selection getSchemaName(){
+    return getInputNodes(self).first().getSchemaName();
+} 
+%]

@@ -1,0 +1,22 @@
+pre {
+	"Launching EGX".println();
+	var params:Map = new Map;
+	var packagePrefix = "ru.neoflex.meta.etl.spark";
+    params.put("packagePrefix",  packagePrefix);
+	
+	targetPath.println();
+	params.put("targetPath",  targetPath);
+        for (obj in src.allContents()) {
+		obj.println();
+	}
+	
+}
+
+rule EtlJob transform transformationTarget : Transformation {
+  parameters : params
+
+  template : "Transformation.egl"
+  target : params.get("targetPath") + "/scala/" + params.get("packagePrefix").replace("[.]","/") +   "/" + 
+  transformationTarget.name + "Job.scala"
+  
+}

@@ -1,0 +1,46 @@
+[%@template
+operation src!ModelBasedAnalysis defineImpl(){
+    var inputNode = getInputNodes(self).first();%]   
+val sc = spark.sparkContext    
+[%if (self.methodName == AnalysisMethod#GradientBoostedTrees) {%]
+val analysisModel = org.apache.spark.mllib.tree.model.GradientBoostedTreesModel.load(sc, s"[%=self.modelFile%]")
+[%}%]
+[%if (self.methodName == AnalysisMethod#RandomForestTrees) {%]
+val analysisModel = org.apache.spark.mllib.tree.model.RandomForestModel.load(sc, s"[%=self.modelFile%]")
+[%}%]
+[%if (self.methodName == AnalysisMethod#SVM) {%]
+val analysisModel = org.apache.spark.mllib.classification.SVMModel.load(sc, s"[%=self.modelFile%]")
+[%}%]
+[%if (self.methodName == AnalysisMethod#LogisticRegression) {%]
+val analysisModel = org.apache.spark.mllib.classification.LogisticRegressionModel.load(sc, s"[%=self.modelFile%]")
+[%}%]
+[%if (self.methodName == AnalysisMethod#LinearRegression) {%]
+val analysisModel = org.apache.spark.mllib.regression.LinearRegressionModel.load(sc, s"[%=self.modelFile%]")
+[%}%]
+[%if (self.methodName == AnalysisMethod#DecisionTree) {%]
+val analysisModel = org.apache.spark.mllib.tree.model.DecisionTreeModel.load(sc, s"[%=self.modelFile%]")
+[%}%]
+[%if (self.methodName == AnalysisMethod#NaiveBayes) {%]
+val analysisModel = org.apache.spark.mllib.classification.NaiveBayesModel.load(sc, s"[%=self.modelFile%]")
+[%}%]
+[%if (self.methodName == AnalysisMethod#IsotonicRegression) {%]
+val analysisModel = org.apache.spark.mllib.regression.IsotonicRegressionModel.load(sc, s"[%=self.modelFile%]")
+[%}%]                
+        
+[%=inputNode.name%].map(row => {                          
+    val features = org.apache.spark.mllib.linalg.Vectors.dense(
+    [%for (field in self.inputPort.fields) {%][%for (featureField in self.modelFeaturesFields) {%][%if(featureField == field.name) {%]
+        row.[%=field.name%].doubleValue()[%if (hasMore){%],[%}%]
+        
+    [%}%][%}%][%}%]
+    )
+    val prediction = analysisModel.predict(features)
+    [%=self.getSchemaName()%](
+        [%for (field in self.inputPort.fields) {%]
+        [%=field.name%] = row.[%=field.name%],
+        [%}%]
+        [%=self.labelFieldName%] = if (java.lang.Double.isNaN(prediction)) { null } else {
+        java.math.BigDecimal.valueOf(prediction).round(new java.math.MathContext(8, java.math.RoundingMode.HALF_UP));}
+    )
+})      
+[%}%]

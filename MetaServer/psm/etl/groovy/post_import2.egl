@@ -1,0 +1,75 @@
+[%
+entity.get('_type_').println("post_import2: ");
+entity.get('name').println("entity: ");
+%]
+import ru.neoflex.meta.utils.Context
+def session = Context.current.txSession
+def entity = [%=selectByName(entity)%] 
+[%for (link in entity.get('links')) {
+  link.add(getLinkPath(entity, link));
+}%]
+[%for (linkPath in entity.get('links').select(l|isCollection(l.at(2))).collect(l|l.at(3)).asSet()) {%]
+entity.[%=linkPath%].clear()
+[%}%]
+[%for (link in entity.get('links')) {%]
+[%if (isCollection(link.at(2))) {%]
+[%if (link.at(1).isDefined()) {%]
+entity.[%=link.at(3)%].add([%=getContainerPath(link.at(1))%])
+[%}%]
+[%} else {%]
+entity.[%=link.at(3)%] = [%=getContainerPath(link.at(1))%]
+[%}%]
+[%}%]
+Context.current.commit()
+[%@template
+operation getPath(entity, subEntity) {
+  if (subEntity == null) {
+    return;
+  }
+  if (entity.get('hash') <> subEntity.get('hash')) {
+    %][%=getPath(entity, subEntity.get('container'))%][%
+    if (isCollection(subEntity.get('containerReference'))) {
+      %][%=subEntity.get('containerReference').getName()%][%=getCollectionElement(subEntity)%].[%
+    } else {
+      %][%=subEntity.get('containerReference').getName()%].[%
+    }    
+  }
+}
+@template
+operation getLinkPath(entity, link) {
+  %][%=getPath(entity, link.at(0))%][%=link.at(2).getName()%][%
+}
+@template
+operation getContainerPath(entity) {
+  if (not entity.isDefined()) {
+    %]null[%
+  }
+  else if (entity.get("container") == null) {
+    %][%=selectByName(entity)%][%
+  } 
+  else {
+    %][%=getContainerPath(entity.get('container'))%].[%=entity.get('containerReference').getName()%][%if (isCollection(entity.get('containerReference'))) {%][%=getCollectionElement(entity)%][%}%][%
+  }
+}
+@template
+operation getCollectionElement(entity) {
+  if (entity.get('name').isDefined() and entity.get('name').length > 0) {
+    %].find {it.name == "[%=escape(entity.get('name'))%]"}[%
+  } 
+  else {
+    %][[%=entity.get('index')%]][%
+  }
+}
+@template
+operation selectByName(entity) {
+  %]session.createQuery("from [%=entity.get('_type_')%] where name = :name").setParameter("name", "[%=escape(entity.get('name'))%]").uniqueResult()[%
+}
+operation escape(s: String): String {
+    if (s == null)
+        return null;
+    return s.replaceAll("([$])", "\\\\$1");
+}
+operation isCollection(reference) {
+	return reference.upperBound == -1 or reference.upperBound > 1;
+}
+%]

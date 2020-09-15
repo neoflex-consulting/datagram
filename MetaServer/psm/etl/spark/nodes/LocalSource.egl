@@ -1,0 +1,32 @@
+[%
+operation src!LocalSource define(){
+    %]
+  def get[%=self.name%](spark: SparkSession) = {
+  	import spark.implicits._
+    [%if (self.localFileFormat <> LocalFileFormat#JDBC) {%]
+    import scala.reflect.runtime.universe._
+    val fileName = s"""[%=self.localFileName%]"""
+    val paths = fileName.split(",")
+    [%}%]    
+    spark
+    .[%if (self.streaming == true and self.~makeDataset <> false) {%]readStream[%} else {%]read[%}%] 
+    [%if (self.schemaOnRead <> true ){%]
+    .schema(newProductEncoder(typeTag[[%=self.getSchemaName()%]]).schema)
+    [%}%]
+    [%if (self.~makeDataset == false) {%].option("inferSchema", true)[%}%]
+    [%else if (self.localFileFormat <> LocalFileFormat#JDBC) {%][%}%]
+    .format("[%=self.localFileFormat.toString().toLowerCase()%]")
+    [%for (option in self.options) {%]
+    .option("[%=option.key%]", s"""[%=option.value%]""")
+    [%}%]
+    .[%if (self.localFileFormat <> LocalFileFormat#JDBC) {%]load(paths: _*)[%} else {%]load()[%}%]
+    [%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%] 		
+    [%if (not self.outputPort.isValidIdentifiers()) {%]	
+    .toDF([%for(f in self.outputPort.fields) {%]"[%=f.getJavaName()%]"[%if (hasMore) {%], [%}%][%}%])
+    [%}%]
+    .as[[%=self.getSchemaName()%]]
+    [%}%] 
+  }
+    [%
+}
+%]

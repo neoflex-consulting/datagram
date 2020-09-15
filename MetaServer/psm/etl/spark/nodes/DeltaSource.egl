@@ -1,0 +1,24 @@
+[%
+operation src!DeltaSource define(){
+    %]
+  def get[%=self.name%](spark: SparkSession) = {
+  	import spark.implicits._
+    import scala.reflect.runtime.universe._
+    val fileName = s"""[%=self.localFileName%]"""
+    spark.read 
+    [%if (self.~makeDataset == false) {%].option("inferSchema", true)[%}%]
+    .format("delta")
+    [%for (option in self.options) {%]
+    .option("[%=option.key%]", s"""[%=option.value%]""")
+    [%}%]
+    .load(fileName)
+    [%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%] 		
+    [%if (not self.outputPort.isValidIdentifiers()) {%]	
+    .toDF([%for(f in self.outputPort.fields) {%]"[%=f.getJavaName()%]"[%if (hasMore) {%], [%}%][%}%])
+    [%}%]
+    .as[[%=self.getSchemaName()%]]
+    [%}%] 
+  }
+    [%
+}
+%]

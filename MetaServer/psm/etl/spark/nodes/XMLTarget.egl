@@ -1,0 +1,34 @@
+[%
+operation src!XMLTarget define(){
+var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+%]
+
+  def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {
+    val path = {
+      s"""[%=self.path%]"""
+    }
+    logger.logInfo(s"XMLTarget [%=self.name%] path: ${path}")    
+    val fs = org.apache.hadoop.fs.FileSystem.get(spark.sparkContext.hadoopConfiguration)
+    if ([%=self.hdfs%] && fs.exists(new org.apache.hadoop.fs.Path(path))) {
+      fs.delete(new org.apache.hadoop.fs.Path(path), true)
+    }
+    
+    ds.write
+	  .format("com.databricks.spark.xml")
+      [%if (self.rootTag.isDefined()) {%]
+      .option("rootTag", """[%=self.rootTag%]""")
+      [%}%] [%if (self.rowTag.isDefined()) {%]
+      .option("rowTag", """[%=self.rowTag%]""")
+      [%}%] [%if (self.attributePrefix.isDefined()) {%]
+      .option("attributePrefix", """[%=self.attributePrefix%]""")
+      [%}%] [%if (self.valueTag.isDefined()) {%]
+      .option("valueTag", """[%=self.valueTag%]""")
+      [%}%][%if (self.nullValue.isDefined() and self.nullValue <> "null") {%]
+      .option("nullValue", """[%=self.nullValue%]""")
+      [%}%] [%if (self.compression.isDefined() and self.compression <> CompressionCodec#`default`) {%]
+      .option("compression", """[%=self.compression%]""") 
+      [%}%]
+      .save(path)
+  }
+[%}
+%]

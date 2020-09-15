@@ -1,0 +1,25 @@
+[%@template
+operation src!`Sequence` defineImpl(){
+    var inputNode = getInputNodes(self).first();%]   
+[%if (self.sequenceType == src!SequenceType#LOCAL){%]
+spark.createDataset([%=inputNode.name%].rdd.zipWithIndex().map {
+  case (row, index) => [%=self.getSchemaName()%](
+    [%for (f in self.outputPort.fields) {if (f.name <> self.fieldName) {%]
+    [%=f.name%] = row.[%=f.name%],                
+    [%}}%]
+    [%=self.fieldName%] = new java.math.BigDecimal(index)
+  )
+})
+[%}%]
+[%if (self.sequenceType == src!SequenceType#ORACLE){%]
+val context = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
+val [%=self.name%]_Sequence = new ru.neoflex.meta.etl2.OracleSequence(context, "[%=self.sequencedName%]", [%=self.batchSize%])
+[%=inputNode.name%].map(row => {[%=self.getSchemaName()%](        
+    [%for (f in self.outputPort.fields) {if (f.name <> self.fieldName) {%]
+    [%=f.name%] = row.[%=f.name%],        
+    [%}}%]
+    [%=self.fieldName%] = [%=self.name%]_Sequence.nextValue().asInstanceOf[java.math.BigDecimal]
+    )
+})
+[%}%]
+[%}%]

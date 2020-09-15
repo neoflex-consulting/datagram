@@ -1,0 +1,121 @@
+[%
+import "../Utils.egl";
+
+@template
+operation src!EventsProcessor defineImpl(){%]
+[%
+if(self.input <> null){
+    self.input.~name = "inputRow";
+}
+if(self.state <> null){
+    self.state.~name = "newState";
+}
+if(self.local <> null){
+    self.local.~name = "local";
+}
+if(self.output <> null){
+    self.output.~name = "output";
+}%]
+
+[%for(rule in self.rules) {
+if(rule.condition <> null) {%]
+if([%for(condition in rule.condition.conditions) {%][%=condition.expression%][%if(hasMore == true){%]&&[%}}%]) {
+[%
+var actionIndex = 0;
+%]
+[%for(action in rule.actions) {
+    if(action.isKindOf(src!AddOutputAction)){%]
+    addOutput = true
+    [%} else {
+    if(action.isKindOf(src!FunctionAction)) {%]
+    [%
+    actionIndex = actionIndex + 1;
+    var inputName = "input_" + action.get("function").name + actionIndex;
+    var resultName = "result_" + action.get("function").name + actionIndex;
+    %]
+    var [%=inputName%] = new [%=action.get("function").name + "_Input"%]([% for(param in action.paramsMapping){%][%if(param.value <> null){%][%=param.value.dataSet.~name + "." +param.value.name%][%} else {%][%="null"%][%}%][%if(hasMore == true){%], [%}%][%}%]) 
+    var [%=resultName%]: [%=action.get("function").name%]_Output = [%=action.get("function").name%]([%=inputName%])
+    [%
+        for(result in action.resultsMapping) {%]
+    [%=result.value.dataSet.~name + "." + result.value.name + " = " + resultName + "." + result.param.name%]  
+        [%}
+    } else {
+        var value = "";
+        if(action.isKindOf(SetValueAction)){
+            value = action.expression;
+        }
+        if(action.isKindOf(MapValueAction)){
+            value = action.valueField.dataSet.~name + "." + action.valueField.name;
+        }
+    %]        
+    [%=action.outputField.dataSet.~name + "." + action.outputField.name + " = " + value%]
+    [%}
+    }
+}%]
+
+}
+[%}}%]
+
+[%}
+
+@template
+operation src!EventsProcessor defineFunctions(){%]
+[%
+for(rule in self.rules) {
+    for(action in rule.actions) {
+        if(action.isKindOf(src!FunctionAction)) {
+            if(action.get("function").~alreadyDefined = null) {
+                if(action.get("function").input <> null) {
+                    action.get("function").input.setParentName(action.get("function").name);
+                %]
+[%=getStructTypeDatasetSchema(action.get("function").name + "_Input", action.get("function").input)%]
+                [%}
+                if(action.get("function").output <> null) {
+                action.get("function").output.setParentName(action.get("function").name);
+            %]
+[%=getStructTypeDatasetSchema(action.get("function").name + "_Output", action.get("function").output)%]
+[%}%]
+
+[%="def " + action.get("function").name%]([%if(action.get("function").input <> null){%][%="input: " + action.get("function").name + "_Input"%][%}%]): [%=action.get("function").name + "_Output"%] = {
+    type Result = [%=action.get("function").name + "_Output"%] 
+    [%=action.get("function").sourceCode%]
+}
+            [%
+                action.get("function").~alreadyDefined = true;
+            }
+        }
+    }
+}%]
+
+[%}
+
+@template
+operation src!EventsProcessor defineFunctionsDRL(){%]
+[%
+for(rule in self.rules) {
+    for(action in rule.actions) {
+        if(action.isKindOf(src!FunctionAction)) {
+            if(action.get("function").~alreadyDefined = null) {
+                if(action.get("function").input <> null) {
+                    action.get("function").input.setParentName(action.get("function").name);
+                %]
+[%=getStructTypeDatasetSchemaDRL(action.get("function").name + "_Input", action.get("function").input)%]
+                [%}
+                if(action.get("function").output <> null) {
+                action.get("function").output.setParentName(action.get("function").name);
+            %]
+[%=getStructTypeDatasetSchemaDRL(action.get("function").name + "_Output", action.get("function").output)%]
+[%}%]
+
+[%="function " + action.get("function").name + "_Output " + action.get("function").name%]([%if(action.get("function").input <> null){%][%=action.get("function").name + "_Input input" %][%}%]) {
+    [%=action.get("function").sourceCode%]
+}
+            [%
+                action.get("function").~alreadyDefined = true;
+            }
+        }
+    }
+}%]
+
+[%}%]
+

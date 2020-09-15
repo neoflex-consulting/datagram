@@ -1,0 +1,17 @@
+pre {
+    "Launching workflow EGX".println();
+    mspaceRoot.println("mspaceRoot: ");
+    jobDeployment.get("name").println("Deployment: ");
+    var MetaResource = new Native("ru.neoflex.meta.utils.MetaResource");
+    MetaResource.println();
+}
+
+rule WorkflowXml transform workflow: Workflow {
+  parameters {
+    var params : new Map;
+    params.put("workflowDeployment", jobDeployment);
+    return params;
+  }
+  template : MetaResource.getURL("/psm/etl/spark/workflow.egl").toString()
+  target : mspaceRoot + "/" + jobDeployment.get("name") + "/job/" + workflow.name +".xml"   
+}

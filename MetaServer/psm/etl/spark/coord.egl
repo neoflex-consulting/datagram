@@ -1,0 +1,109 @@
+[%
+  jobDeployment.get("name").println("coord.egl: ");
+%]
+[%=coJob.declaration(jobDeployment)%]
+[% @template 
+operation CoJob declaration(jobDeployment) {%]
+[%
+	var isSla = false; 
+	isSla = self.get("sla").isDefined();
+	for (node in self.action.workflow.nodes) { 
+		if (node.get("sla").isDefined()) {
+			isSla = true;	
+		}
+	}
+%]
+<coordinator-app xmlns='uri:oozie:coordinator:0.2' [%if(isSla){%]xmlns:sla='uri:oozie:sla:0.2' [%}%]name='[%=self.name%]' frequency="[%=self.frequency%]" start="[%=self.start%]" end="[%=self.end%]" timezone="[%=self.timezone%]">
+    [%=self.controlsDeclaration(jobDeployment)%]
+    [%=self.datasetsDeclaration(jobDeployment)%]
+    [%=self.inputEventsDeclaration(jobDeployment)%]
+    [%=self.outputEventsDeclaration(jobDeployment)%]
+    [%=self.action.declaration(jobDeployment)%]
+</coordinator-app>
+[%}%]
+[% @template 
+operation CoJob datasetsDeclaration(jobDeployment) {%]
+[%if (self.datasets.size() > 0) {%]
+<datasets>
+    [%for (dataset in self.datasets) { %]
+    [%=dataset.declaration(jobDeployment)%]
+    [%}%]
+</datasets>
+[%}%]
+[%}%]
+[% @template 
+operation CoJob controlsDeclaration(jobDeployment) {%]
+[%if (self.controls.isDefined()) {%]
+<controls>
+	[%if (self.controls.timeout.isDefined()) {%]
+    <timeout>[%=self.controls.timeout%]</timeout>
+    [%}%][%if (self.controls.concurrency.isDefined()) {%]
+    <concurrency>[%=self.controls.concurrency%]</concurrency>
+    [%}%][%if (self.controls.execution.isDefined()) {%]
+    <execution>[%=self.controls.execution%]</execution>
+    [%}%][%if (self.controls.throttle.isDefined()) {%]
+    <throttle>[%=self.controls.throttle%]</throttle>
+    [%}%]
+</controls>
+[%}%]
+[%}%]
+[% @template 
+operation CoDataset declaration(jobDeployment) {%]
+<dataset name='[%=self.name%]'>
+</dataset>
+[%}%]
+[% @template 
+operation CoJob inputEventsDeclaration(jobDeployment) {%]
+[%if (self.inputEvents.isDefined() and self.inputEvents.size() > 0) {%]
+<input-events>
+    [%for (inputEvent in self.inputEvents) { %]
+    [%=inputEvent.declaration(jobDeployment)%]
+    [%}%]
+</input-events>
+[%}%]
+[%}%]
+[% @template 
+operation CoDataIn declaration(jobDeployment) {%]
+<data-in name='[%=self.name%]'>
+</data-in>
+[%}%]
+[% @template 
+operation CoJob outputEventsDeclaration(jobDeployment) {%]
+[%if (self.outputEvents.isDefined() and self.outputEvents.size() > 0) {%]
+<output-events>
+    [%for (outputEvent in self.outputEvents) { %]
+    [%=outputEvent.declaration(jobDeployment)%]
+    [%}%]
+</output-events>
+[%}%]
+[%}%]
+[% @template 
+operation CoDataOut declaration(jobDeployment) {%]
+<data-out name='[%=self.name%]'>
+</data-out>
+[%}%]
+[% @template 
+operation CoAction declaration(jobDeployment) {%]
+<action>
+    [%=self.actionDeclaration(jobDeployment)%]
+    [%if (self.get("sla").isDefined()) {%]
+    	[%=self.get("sla").slaDeclaration()%]
+    [%}%]
+</action>
+[%}%]
+[% @template 
+operation CoWorkflow actionDeclaration(jobDeployment) {%]
+<workflow>
+	<app-path>[%=jobDeployment.get("oozie").get("nameNode")%]/user/[%=jobDeployment.get("oozie").get("user")%]/deployments/[%=jobDeployment.get("name")%]/[%=self.workflow.get("name")%].xml</app-path>
+	[%if (self.configuration.isDefined() and self.configuration.size() > 0) {%]
+	<configuration>
+	[%for (property in self.configuration) { %]
+        <property>
+        	<name>[%=property.name%]</name>
+            <value>[%=property.value%]</value>
+    	</property>
+    [%}%]
+    </configuration>
+    [%}%]
+</workflow>
+[%}%]

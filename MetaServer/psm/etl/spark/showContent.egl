@@ -1,0 +1,33 @@
+object ShowContent extends Serializable {
+	import scala.collection.{JavaConversions, immutable, mutable}
+	import org.apache.spark.sql._
+	
+	val jobParameters: mutable.HashMap[String, AnyRef] = new mutable.HashMap[String, AnyRef]()
+	var _defaultFS: String = ""
+	
+	def run(spark: SparkSession) = {
+	  	import spark.implicits._
+	    _defaultFS = spark.sparkContext.hadoopConfiguration.get("fs.defaultFS")
+	    [%for (param in jobParams) {%]
+        jobParameters.put("[%=param.split("=")[0]%]", s"""[%=param.split("=", 2)[1].replace("\\\\/", "/")%]""")
+        [%}%]
+	    val df = try {
+	      spark.read
+		  .option("inferSchema", true)
+		  .format("[%=format%]")
+	      [%for (option in options) {%]
+	      .option("[%=option.get("key")%]", s"""[%=option.get("value")%]""")
+	      [%}%]
+	      .load([%=path%])
+		  } catch {
+	          case e: UnsupportedOperationException => spark.emptyDataFrame
+	      }
+	      
+	      val schema = df.schema.json
+	  	  val data = df.toJSON.take([%=size%]).mkString("[", ",", "]")
+	      println(s"""{"schema":$schema, "data":$data}""")
+	    
+	  }
+  }
+  
+  ShowContent.run(spark)

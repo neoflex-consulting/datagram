@@ -1,0 +1,155 @@
+[%
+import "nodes/Aggregation.egl";
+import "Utils.egl";
+import "nodes/ExpressionSource.egl";
+import "nodes/Join.egl";
+import "nodes/Drools.egl";
+import "nodes/Sort.egl";
+import "nodes/Projection.egl";
+import "nodes/Selection.egl";
+import "nodes/Union.egl";
+import "nodes/Sequence.egl";
+import "nodes/ModelBasedAnalysis.egl";
+import "nodes/LocalTarget.egl";
+import "nodes/SparkSQL.egl";
+import "nodes/HiveSource.egl";
+import "nodes/CsvSource.egl";
+import "nodes/CsvTarget.egl";
+import "nodes/XMLSource.egl";
+import "nodes/AVROSource.egl";
+import "nodes/LocalSource.egl";
+import "nodes/HiveTarget.egl";
+import "nodes/HBaseSource.egl";
+import "nodes/HBaseTarget.egl";
+import "nodes/TableSource.egl";
+import "nodes/SQLSource.egl";
+import "nodes/TableTarget.egl";
+import "nodes/ProcedureTarget.egl";
+import "nodes/StreamTarget.egl";
+import "nodes/KafkaSource.egl";
+import "nodes/KafkaTarget.egl";
+import "nodes/Source.egl";
+import "nodes/Target.egl";
+import "nodes/ExplodeStep.egl";
+import "nodes/TransformationStep.egl";
+%]
+
+object TransformationPart extends Serializable {
+
+import java.sql.{CallableStatement, Timestamp}
+import java.util.Date
+
+import org.apache.spark.sql._
+import org.apache.spark.sql.functions._
+import org.apache.spark.storage.StorageLevel
+import org.apache.hadoop.fs.FileSystem
+import org.apache.hadoop.fs.Path
+import org.apache.hadoop.fs.FSDataInputStream
+import org.apache.hadoop.conf.Configuration
+import org.apache.spark.rdd.{JdbcRDD, RDD, EmptyRDD}
+import ru.neoflex.meta.etl2.ETLJobConst._
+import ru.neoflex.meta.etl2.{JdbcETLContext, ETLContext}
+import scala.collection.{JavaConversions, immutable, mutable}
+import ru.neoflex.meta.etl.functions._
+import ru.neoflex.meta.etl2.log._
+
+[%
+var imports = Sequence{};
+for (node in transformation.sources + transformation.targets + transformation.transformationSteps) {
+    for (imp in node.imports()) {
+        imports.add(imp);
+    }
+}
+for (imp in imports.asSet().sortBy(s|s)) {
+%][%=imp%]
+[%}
+%]
+
+[%
+"resolving node relations".println;
+for (transition in transformation.transitions){
+  transition.resolveNodes();
+}%]
+val jobParameters: mutable.HashMap[String, AnyRef] = new mutable.HashMap[String, AnyRef]()
+val _contexts: mutable.HashMap[String, JdbcETLContext] = new mutable.HashMap[String, JdbcETLContext]()
+var _defaultFS: String = ""
+var _fetchSize: Int = 1000
+val logger: Logger = DummyLogger
+
+org.apache.spark.sql.catalyst.encoders.OuterScopes.addOuterScope(this)
+[%
+var targetNode = (transformation.sources + transformation.transformationSteps).selectOne(n|n.name == getNodeName(transformation, nodeName));
+var allBeforeNodes = getAllBeforeNodes(targetNode, Sequence{}.asSet());
+transformation.~schemas = Set{};
+for (node in transformation.sources + transformation.transformationSteps) {
+	var n = allBeforeNodes.selectOne(i|i.name == node.name);
+	if(n <> null) { 
+%]
+[%=getSchema(node, workflowDeployment)%]    
+[%
+	}
+}%]
+
+  def getContext(name: String): JdbcETLContext = {
+    _contexts.get(name).getOrElse(null)
+  }
+[%for (node in transformation.sources + transformation.transformationSteps) {
+	var n = allBeforeNodes.selectOne(i|i.name == node.name);
+	if(n <> null) { 
+		if (node.name <> getNodeName(transformation, nodeName) or outputType <> 'json'){ 
+			node.~makeDataset = true;
+		} else { 
+			node.~makeDataset = false;
+		}
+		if (node.name == getNodeName(transformation, nodeName) and statement.isDefined()){
+			node.statement = statement;
+		}
+		node.define();
+	}
+%][%
+}
+%]
+
+  def run(spark: SparkSession): Any = {
+	_defaultFS = spark.sparkContext.hadoopConfiguration.get("fs.defaultFS")
+[%for (param in jobParams) {%]
+	jobParameters.put("[%=param.split("=")[0]%]", "[%=param.split("=")[1]%]")
+[%}%]
+    _fetchSize = Integer.parseInt(jobParameters.getOrElse("FETCH_SIZE", _fetchSize).toString)
+[%for (deployment in deployments) {%]
+	val context[%=deployment.get("NAME")%]: JdbcETLContext = _contexts.getOrElseUpdate("[%=deployment.get("NAME")%]", new JdbcETLContext("[%=deployment.get("NAME")%]")).asInstanceOf[JdbcETLContext]
+	context[%=deployment.get("NAME")%]._url = """[%=deployment.get("URL")%]"""
+	context[%=deployment.get("NAME")%]._schema = """[%=deployment.get("SCHEMA")%]"""
+	context[%=deployment.get("NAME")%]._user = """[%=deployment.get("USER")%]"""
+	context[%=deployment.get("NAME")%]._password = """[%=deployment.get("PASSWORD")%]"""
+	context[%=deployment.get("NAME")%]._driverClassName = """[%=deployment.get("DRIVER")%]"""
+[%}%]  
+[%	
+   	declareNodeTransformationPart(targetNode, workflowDeployment);   
+  	%]   	[%=show(getNodeName(transformation, nodeName), outputType, sampleSize)%]
+  }
+}
+
+TransformationPart.run(spark)
+
+[%
+@template
+operation show(nodeName, outputType, sampleSize){
+	if (outputType == 'json'){%]
+		val schema = [%=nodeName%].schema.json
+	  	val data = [%=nodeName%].toJSON.[%if (sampleSize.isDefined() == false or sampleSize == "") {%]collect[%} else {%]take([%=sampleSize%])[%}%].mkString("[", ",", "]")
+	    println(s"""{"schema":$schema, "data":$data}""")
+	[%} else {%][%=nodeName%].show(20, false)[%}
+}
+
+@cached
+operation getNodeName(transformation, nodeName){
+	var target = transformation.targets.selectOne(n|n.name == nodeName);
+	if (target.isDefined()) {
+		var inputNode = getInputNodes(target).first();
+		return inputNode.name;
+	} else {
+		return nodeName;
+	}
+}
+%]

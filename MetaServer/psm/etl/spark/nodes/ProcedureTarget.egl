@@ -1,0 +1,74 @@
+[%
+
+operation src!StoredProcedureTarget define(){
+     var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+  %]
+  
+  def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {
+  
+    import spark.implicits._
+    
+    val master: String = _master
+    val jobStartTime: Long = spark.sparkContext.startTime
+    val context = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
+    
+    notifyStart("[%=self.name%]", "[%=inputNode.name%]", jobStartTime)
+    
+    [%if (self.preSQL.isDefined() and self.preSQL.trim().length() > 0) {%]
+    executeUpdate(context, s"""[%=self.preSQL.trim()%]""")
+    [%}%]
+
+    val sqlText = "{call " + context._schema + ".[%=self.storedProcedure%]([%for (i in Sequence{0 .. self.inputFieldsMapping.size()-1}) { %]?[%if (i < self.inputFieldsMapping.size()-1){%],[%}%][%}%])}"
+    
+    logger.logInfo(s"StoredProcedureTarget [%=self.name%] query: ${sqlText}")    
+
+	ds.repartition(_partitionNum).mapPartitions(partition => {
+      val rejects = new java.util.ArrayList[([%=inputNode.getSchemaName()%], String)]()
+      val cn = context.getConnection
+      try {
+        cn.setAutoCommit(false)
+        val stmt = cn.prepareCall(sqlText)
+        try {
+          partition.sliding(_slideSize, _slideSize).foreach(slide => {
+            processSlice(cn, stmt, slide.toList, (row: [%=inputNode.getSchemaName()%], stmt: CallableStatement) =>{
+              [%for (i in Sequence{0 .. self.inputFieldsMapping.size()-1}) { 
+                 var inputField = self.inputPort.fields.selectOne(fld|fld.name=self.inputFieldsMapping.at(i).inputFieldName);
+                 if (inputField.isDefined()) {
+                 %]
+              stmt.set[%=inputField.getJavaClassName()%]([%=i + 1%], row.[%=toJavaName(inputField.name)%].asInstanceOf[[%=inputField.getFullJavaClassName()%]])
+              [%}%]
+              [%}%]
+        
+            },(successRowCount:Int) =>{
+              notifyExecUpdate("[%=self.name%]", "[%=inputNode.name%]", jobStartTime, successRowCount)
+            },(errorMessage: String, failedRow: [%=inputNode.getSchemaName()%]) =>{
+              if (rejects.size >= _rejectSize) {
+                throw new RuntimeException(s"Max Rejects Limit (${_rejectSize}) Was Reached for [%=self.name%]")
+              }
+              notifyException("[%=self.name%]", "[%=inputNode.name%]", jobStartTime ,errorMessage, failedRow)
+              rejects.add((failedRow, errorMessage))
+            })
+          })
+        } finally {
+          stmt.close()
+        }
+      } finally {
+        cn.close()
+      }
+      JavaConversions.asScalaBuffer(rejects).toIterator
+    })
+    .map { reject =>
+        (_workflowId, _applicationId, getApplicationName, "[%=self.name%]", reject._1.toString, reject._2, System.currentTimeMillis)
+    }
+    .toDF("workflowid", "appid", "classname", "methodname", "object", "exception", "ts")
+    .coalesce(1).write.mode(SaveMode.Append).format("json").save(s"${_applicationHome}/rejects.json")
+
+    [%if (self.postSQL.isDefined() and self.postSQL.trim().length() > 0) {%]
+    executeUpdate(context, s"""[%=self.postSQL.trim()%]""")
+    [%}%]
+    notifyFinish("[%=self.name%]", "[%=inputNode.name%]", jobStartTime)
+  }
+[%
+}
+
+%]

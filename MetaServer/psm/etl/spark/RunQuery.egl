@@ -1,0 +1,29 @@
+[%
+import "Utils.egl";
+"RunQuery".println();
+sqlText.println("sqlText: ");
+driverClassName.println("driverClassName: ");
+url.println("url: ");
+user.println("user: ");
+"******".println("password: ");
+sampleSize.println("sampleSize: ");
+jobParameters.println("jobParameters: ");
+sqlOptions.println("sqlOptions: ");
+%]
+import scala.collection.mutable
+val jobParameters: mutable.HashMap[String, AnyRef] = new mutable.HashMap[String, AnyRef]()
+[%for (key in jobParameters.keySet()) {%]
+jobParameters.put("[%=key%]", "[%=jobParameters.get(key)%]")
+[%}%]
+val ds = spark.read.format("jdbc").options(Map(
+	   "dbtable" -> s"""([%=interpolareParameters(sqlText)%]) t""",
+	   "driver" -> """[%=driverClassName%]""",
+	   "url" -> """[%=url%]""",
+	   "user" -> """[%=user%]""",
+	   "password" -> """[%=password%]""",
+	   "fetchSize" -> jobParameters.getOrElse("FETCH_SIZE", 100).toString
+	))[%for (option in sqlOptions) {%].
+	option("[%=option.get('key')%]", s"""[%=option.get('value')%]""")[%}%].load()
+val schema = ds.schema.json
+val data = ds.toJSON.take([%=sampleSize%]).mkString("[", ",", "]")
+println(s"""{"schema":$schema, "data":$data}""")

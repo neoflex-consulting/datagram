@@ -1,0 +1,43 @@
+[%
+import "Utils.egl";
+import "nodes/ExplodeStep.egl";
+import "nodes/ExpressionSource.egl";
+import "nodes/Join.egl";
+import "nodes/Drools.egl";
+import "nodes/Sort.egl";
+import "nodes/GroupWithState.egl";
+import "nodes/Projection.egl";
+import "nodes/Selection.egl";
+import "nodes/Union.egl";
+import "nodes/Sequence.egl";
+import "nodes/ModelBasedAnalysis.egl";
+import "nodes/LocalTarget.egl";
+import "nodes/SparkSQL.egl";
+import "nodes/HiveSource.egl";
+import "nodes/CsvSource.egl";
+import "nodes/XMLSource.egl";
+import "nodes/AVROSource.egl";
+import "nodes/CsvTarget.egl";
+import "nodes/XMLTarget.egl";
+import "nodes/LocalSource.egl";
+import "nodes/HiveTarget.egl";
+import "nodes/TableSource.egl";
+import "nodes/SQLSource.egl";
+import "nodes/TableTarget.egl";
+import "nodes/ProcedureTarget.egl";
+import "nodes/Aggregation.egl";
+import "nodes/StreamTarget.egl";
+import "nodes/KafkaSource.egl";
+import "nodes/KafkaTarget.egl";
+import "nodes/Source.egl";
+import "nodes/Target.egl";
+import "nodes/TransformationStep.egl";
+%]
+[%
+	var node = src.allContents().first();
+	//node.name.println();
+	for (transition in node.transformation.transitions){	
+	  transition.resolveNodes();  	
+	}
+%]
+[%=node.getFunctionOpenDeclaration()%]

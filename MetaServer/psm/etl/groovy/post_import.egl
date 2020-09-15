@@ -1,0 +1,73 @@
+[%
+entity.get('_type_').println("post_import: ");
+entity.get('name').println("entity: ");
+%]
+import ru.neoflex.meta.utils.Context
+def session = Context.current.txSession
+def entity = [%=selectByName(entity)%] 
+[%for (ref in entity.get('refs')) {
+  ref.~refPath = getRefPath(entity, ref);
+}%]
+[%for (refPath in entity.get('refs').select(r|r.get('dep').get('isCollection')/* and r.get('e_id').isDefined()*/).collect(r|r.~refPath).asSet()) {%]
+entity.[%=refPath%].clear()
+[%}%]
+[%for (ref in entity.get('refs')) {%]
+[%if (ref.get('dep').get('isCollection')) {%]
+[%if (ref.get('e_id').isDefined()) {%]
+entity.[%=ref.~refPath%].add([%=getContainerPath(ref)%])
+[%}%]
+[%} else {%]
+entity.[%=ref.~refPath%] = [%=getContainerPath(ref)%]
+[%}%]
+[%}%]
+Context.current.commit()
+[%@template
+operation getPath(entity, path) {
+  if (path == null or entity.get('e_id') == null) {
+    return;
+  }
+  if (entity.get('_type_') <> path.get('_type_') or entity.get('name') <> path.get('name')) {
+    %][%=getPath(entity, path.get('path'))%][%
+    if (path.get('dep').get('isCollection')) {
+      %][%=path.get('dep').get('name')%][%=getCollectionElement(path)%].[%
+    } else {
+      %][%=path.get('dep').get('name')%].[%
+    }    
+  }
+}
+@template
+operation getRefPath(entity, ref) {
+  %][%=getPath(entity, ref.get('path'))%][%=ref.get('dep').get('name')%][%
+}
+@template
+operation getContainerPath(entity) {
+  if (entity.get('e_id') == null) {
+    %]null[%
+  }
+  else if (entity.get("container") == null) {
+    %][%=selectByName(entity)%][%
+  } 
+  else {
+    var containerDep = entity.get('containerDep');
+    %][%=getContainerPath(entity.get('container'))%].[%=containerDep.get('name')%][%if (containerDep.get('isCollection')) {%][%=getCollectionElement(entity)%][%}%][%
+  }
+}
+@template
+operation getCollectionElement(path) {
+  if (path.get('name') == null) {
+    %][[%=path.get('index')%]][%
+  } 
+  else {
+    %].find {it.name == "[%=escape(path.get('name'))%]"}[%
+  }
+}
+@template
+operation selectByName(entity) {
+  %]session.createQuery("from [%=entity.get('_type_')%] where name = :name").setParameter("name", "[%=escape(entity.get('name'))%]").uniqueResult()[%
+}
+operation escape(s: String): String {
+    if (s == null)
+        return null;
+    return s.replaceAll("([$])", "\\\\$1");
+}
+%]

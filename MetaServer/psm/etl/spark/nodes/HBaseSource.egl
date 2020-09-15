@@ -1,0 +1,65 @@
+[%
+operation src!HBaseSource define(){%]
+
+def get[%=self.name%](spark: SparkSession): Dataset[[%=self.getSchemaName()%]] = {
+	
+  	import spark.implicits._
+   	import scala.reflect.runtime.universe._
+   	import org.apache.spark.sql.types._
+    val schema = newProductEncoder(typeTag[[%=self.getSchemaName()%]]).schema
+
+	def catalog = s"""{
+        |"table":{"namespace":"[%=self.namespace%]", "name":"[%=self.tableName%]"},
+        |"rowkey":"[%=self.rowkey%]",
+        |"columns":{
+        	[%for (f in self.outputPort.fields) {
+        	var column = f.column;
+        	if (not column.isDefined()) {
+        		column = f.name;
+        	} 
+        	var family = f.family;
+        	if (not family.isDefined()) {
+        		if (self.rowkey.isDefined() and self.rowkey.split(":").includes(column)) {
+        			family = "rowkey";
+        		}
+        		else {
+        			family = "0";
+        		}
+        	} 
+        	%]
+			|"[%=f.name%]":{"cf":"[%=family%]", "col":"[%=column%]", "type":"${schema("[%=f.name%]").dataType.typeName}"}[% if (hasMore){%],[%}%]
+			
+        	[%}%]
+        |}
+    |}""".stripMargin
+	spark
+		.sqlContext
+		.read
+        .options(Map("catalog" -> catalog))
+        [%if(self.minStamp.isDefined()){%]
+        .option("minStamp", s"""[%=self.minStamp%]""")
+        [%}%]
+        [%if(self.maxStamp.isDefined()){%]
+        .option("maxStamp", s"""[%=self.maxStamp%]""")
+        [%}%]
+        [%if(self.mergeToLatest.isDefined()){%]
+        .option("mergeToLatest", "[%=self.mergeToLatest%]")
+        [%}%]
+        [%if(self.maxVersions.isDefined()){%]
+        .option("maxVersions", "[%=self.maxVersions%]")
+        [%}%]        
+        .format("org.apache.spark.sql.execution.datasources.hbase")
+        .load()
+	[%if (not self.outputPort.isValidIdentifiers()) {%] 			
+		.map{ row => [%=self.getSchemaName()%](
+		[%for (field in self.outputPort.fields) {%]
+        row.getAs[[%=field.getFullJavaClassName()%]]("[%=field.name%]")[%if (hasMore){%],[%}%]
+     
+	  	[%}%]
+	)}[%} else {%]
+        .as[[%=self.getSchemaName()%]]
+	[%}%]
+}
+[%}
+
+%]

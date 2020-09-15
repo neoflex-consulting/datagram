@@ -1,0 +1,31 @@
+[%
+
+operation src!TableSource define(){
+    %]
+     def get[%=self.name%](spark: SparkSession) = {
+
+          import spark.implicits._
+          
+          val context: JdbcETLContext = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
+
+          val sqlText = s"""SELECT [%for (field in self.outputPort.fields) { %] "[%=getCorrectName(field.name)%]" as "[%=getCorrectName(field.name).toUpperCase()%]" [%if (hasMore){%], [%}}%] FROM """ + context._schema + s"""."[%=self.tableName%]" """
+
+          logger.logInfo(s"TableSource [%=self.name%] query: ${sqlText}")
+              
+          spark.read.format("jdbc").options(Map(
+               "url" -> context._url,
+               "dbtable" -> ("(" + sqlText + ") t"),
+               "driver" -> context._driverClassName,
+               "user" -> context._user,
+               "password" -> context._password,
+               "fetchSize" -> _fetchSize.toString
+          )).load()
+          [%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%]			.map{ row => [%=self.getSchemaName()%](
+               [%for (field in self.outputPort.fields) {%]
+                     row.getAs[[%=field.getFullJavaClassName()%]]("[%=getCorrectName(field.name)%]")[%if (hasMore){%],[%}%]
+                     
+               [%}%]
+	      )}[%}%]
+     }
+[%}
+%]

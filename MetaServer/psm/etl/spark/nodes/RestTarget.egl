@@ -1,0 +1,108 @@
+[%
+
+operation src!RestTarget imports(){
+    return Sequence{
+        "import java.net.URI", 
+		"import java.nio.charset.StandardCharsets",
+		"import java.security.cert.{CertificateException, X509Certificate}",
+		"import java.util",
+		"import com.fasterxml.jackson.databind.ObjectMapper",
+		"import com.fasterxml.jackson.module.scala.DefaultScalaModule",
+		"import com.fasterxml.jackson.databind.ObjectMapper",
+		"import org.apache.commons.io.IOUtils",
+		"import org.apache.http.HttpHeaders",
+		"import org.apache.http.client.HttpClient",
+		"import org.apache.http.client.methods.HttpPost",
+		"import org.apache.http.entity.StringEntity",
+		"import java.net.URLEncoder"
+   };
+}
+
+operation src!RestTarget define(){
+     var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+  %]
+  
+  @throws[Exception]
+  private def addUrlParameter(url: String, param: String, value: String) = {
+    if (url.indexOf("?", url.lastIndexOf("/")) > -1) url + "&" + param + "=" + URLEncoder.encode(value, "UTF-8")
+    else url + "?" + param + "=" + URLEncoder.encode(value, "UTF-8")
+  }
+  
+  def  getCustomClient() : HttpClient = {
+
+    import org.apache.http.conn.ssl.{SSLConnectionSocketFactory, TrustStrategy}
+    import org.apache.http.impl.client.HttpClients
+    val acceptingTrustStrategy = new TrustStrategy() {
+      @throws[CertificateException]
+      override def isTrusted(chain: Array[X509Certificate], authType: String) = true
+    }
+
+    val sslContext = org.apache.http.ssl.SSLContexts.custom.loadTrustMaterial(null, acceptingTrustStrategy).build
+
+    val csf = new SSLConnectionSocketFactory(sslContext)
+
+    val httpClient = HttpClients.custom.setSSLSocketFactory(csf).build
+
+    httpClient
+  }
+  
+  def getToken(login: String, pass: String): String = {
+    val client = getCustomClient()
+    val reqBody = "{\"loginname\":\"" + login +
+      "\", \"password\":\"" + pass + "\"}";
+    val uri = new URI(s"[%=self.authUrl%]")
+    val post = new HttpPost(uri)
+    post.addHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+    post.setEntity(new StringEntity(reqBody))
+    val resp = client.execute(post)
+
+    try {
+      val entity = resp.getEntity
+      println(resp.getStatusLine.getStatusCode, resp.getStatusLine.getReasonPhrase)
+      val str = IOUtils.toString(entity.getContent, StandardCharsets.UTF_8)
+      val mapper = new ObjectMapper
+      mapper.registerModule(DefaultScalaModule)
+      val map =  mapper.readValue(str, classOf[Map[String, String]])
+      val token = map.getOrElse("token", "")
+      println(token)
+      token
+    } finally {
+
+    }
+    null
+  }
+  
+  def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {
+  	val client = getCustomClient()
+  	var dataUrl  = s"[%=self.serviceUrl%]" 
+  	[% for (p in self.urlParameters){%]
+  		dataUrl = addUrlParameter(dataUrl, "[%=p.name%]", "[%=p.value%]")
+  	[%}%]
+    val post = new HttpPost(dataUrl)
+  	[% if(self.secured) {%]
+  	val token = getToken("[%=self.user%]", "[%=self.password%]")
+  	post.addHeader(HttpHeaders.AUTHORIZATION, token)
+  	[% }%]
+  	[% for (h in self.requestHeaders){%]
+  		post.addHeader("[%=h.name%]", "[%=h.value%]")
+  	[%}%]
+  	
+  
+	val df = ds.toDF()
+    val stringBuilder = new StringBuilder
+
+    for (row <- df.rdd.collect)
+    {
+      var str  = row.mkString(",")
+      stringBuilder.append(str).append("\r\n")
+    }
+
+	val body = "[%=self.preText%]\r\n" +stringBuilder.toString() + "[%=self.postText%]" 
+    
+    post.setEntity(new StringEntity(body))
+    val resp = client.execute(post)
+  	
+  }
+[%}
+
+%]

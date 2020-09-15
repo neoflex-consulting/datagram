@@ -1,0 +1,194 @@
+[%
+import "Utils.egl";
+import "nodes/ExplodeStep.egl";
+import "nodes/ExpressionSource.egl";
+import "nodes/Join.egl";
+import "nodes/Drools.egl";
+import "nodes/Sort.egl";
+import "nodes/GroupWithState.egl";
+import "nodes/Projection.egl";
+import "nodes/Selection.egl";
+import "nodes/Union.egl";
+import "nodes/Sequence.egl";
+import "nodes/ModelBasedAnalysis.egl";
+import "nodes/LocalTarget.egl";
+import "nodes/SparkSQL.egl";
+import "nodes/HiveSource.egl";
+import "nodes/HBaseSource.egl";
+import "nodes/CsvSource.egl";
+import "nodes/XMLSource.egl";
+import "nodes/AVROSource.egl";
+import "nodes/CsvTarget.egl";
+import "nodes/XMLTarget.egl";
+import "nodes/LocalSource.egl";
+import "nodes/HiveTarget.egl";
+import "nodes/HBaseTarget.egl";
+import "nodes/TableSource.egl";
+import "nodes/SQLSource.egl";
+import "nodes/TableTarget.egl";
+import "nodes/ProcedureTarget.egl";
+import "nodes/Aggregation.egl";
+import "nodes/StreamTarget.egl";
+import "nodes/KafkaSource.egl";
+import "nodes/KafkaTarget.egl";
+import "nodes/Source.egl";
+import "nodes/Target.egl";
+import "nodes/RestTarget.egl";
+import "nodes/DeltaTarget.egl";
+import "nodes/DeltaSource.egl";
+import "nodes/TransformationStep.egl";
+%]
+package [%=packagePrefix%]
+
+import java.sql.{CallableStatement, Timestamp}
+import java.util.Date
+
+import org.apache.spark.sql._
+import org.apache.spark.storage.StorageLevel
+import org.apache.hadoop.fs.FileSystem
+import org.apache.hadoop.fs.Path
+import org.apache.hadoop.fs.FSDataInputStream
+import org.apache.hadoop.conf.Configuration
+import org.apache.spark.rdd.{JdbcRDD, RDD, EmptyRDD}
+import ru.neoflex.meta.etl2.ETLJobConst._
+import ru.neoflex.meta.etl2.{ETLJobBase, JdbcETLContext, OracleSequence}
+import scala.collection.{JavaConversions, immutable}
+import ru.neoflex.meta.etl.functions._
+import org.apache.spark.sql.functions._
+import org.apache.livy.JobContext
+
+[%
+var imports = Sequence{};
+for (node in transformation.sources + transformation.targets + transformation.transformationSteps) {
+    for (imp in node.imports()) {
+        imports.add(imp);
+    }
+}
+for (imp in imports.asSet().sortBy(s|s)) {
+%][%=imp%]
+[%}
+
+for (node in transformation.sources + transformation.targets + transformation.transformationSteps) {
+    %][%=node.globals()%][%
+}%]
+
+[%
+"resolving node relations".println;
+for (transition in transformation.transitions){	
+  transition.resolveNodes();  	
+}%]
+
+class [%=toJavaName(transformation.name)%]Job extends ETLJobBase with org.apache.livy.Job[Unit] {
+
+  
+  var externalArgs = new Array[String](0);
+
+  def setParams(args: Array[String]) = {
+    externalArgs = args;
+  }
+  	
+  @throws(classOf[Exception])
+  override def call(jobContext: JobContext): Unit = {
+    if( externalArgs.length == 0) {
+      throw new RuntimeException("Job params is not set")
+    }
+    sc = jobContext.sc();
+    parse(externalArgs.toSeq);
+    try{
+      val sparkSession = SparkSession.builder.config(sc.getConf).getOrCreate()
+      runJob(sparkSession)
+    }finally {
+
+    }
+  }
+
+  override def getApplicationName: String = {
+    "[%=transformation.name%]"
+  }
+  
+  def run(spark: SparkSession): Any = {
+  	
+  	[% for (param in transformation.get("parameters")) { %]
+ 	jobParameters.getOrElseUpdate("[%=param.get("name")%]", {
+  		[%if (param.get("expression") == true) {%]
+  		[%=param.get("value")%]
+  		[%} else {%]
+  		s"""[%=param.get("value")%]"""
+  		[%}%]
+  	})
+	[%}%]
+	[% for (udf in transformation.get("userDefinedFunctions")) { %]
+	    spark.udf.register("[%=udf.name%]", new [%=udf.className%][%if (udf.withParameters == true) {%](jobParameters)[%}%])
+	[%}%]
+	[%for (node in transformation.targets) {
+   		declareNode(node);
+    } %] 
+    
+  }
+	[%for (node in transformation.sources + transformation.transformationSteps + transformation.targets) {
+		node.define();
+	%][%
+	
+}
+%]
+
+[%for (node in transformation.sources + transformation.targets + transformation.transformationSteps) {
+    if (node.hiveSupport()) {
+    %][%=initBuilder()%][%
+        break;
+    }    
+}%] 
+
+org.apache.spark.sql.catalyst.encoders.OuterScopes.addOuterScope(this)
+[%
+transformation.~schemas = Set{};
+for (node in transformation.sources + transformation.transformationSteps) {
+	"node".println();
+	node.name.println();
+	node.outputPort.setParentName(node.name);%]
+[%if(node.get("schemaOnRead") <> true) {%]
+[%=getSchema(node)%]
+[%}%]
+[%if(node.isKindOf(src!GroupWithState)){%]
+[%node.internalState.setParentName(node.getSchemaName() + "_InternalState");%]
+[%=getStructTypeDatasetSchema(node.getSchemaName() + "_InternalState", node.internalState)%]
+
+[%}%]
+[%}
+
+for (node in transformation.targets) {
+    if(node.isKindOf(src!StreamTarget)){
+        var format;
+        for (option in node.options) {
+            if (option.key == "format") {
+                format = option.value.toLowerCase();
+            }
+        }
+        var hbaseFormat = format == "org.apache.spark.sql.execution.datasources.hbase" or node.localFileFormat.toString() == "HBASE";
+        if (hbaseFormat and node.versionColumn.isDefined()) {
+            var inputNode = (node.transformation.transitions.selectOne(t|t.~targetNode == node)).~sourceNode;
+        %]            
+case class [%=inputNode.getSchemaName()%]ToHBaseVersioned (
+    [%for(field in inputNode.outputPort.fields) {%]
+    var [%=field.name%]: [%if(node.rowkey.isDefined() and node.rowkey.split(":").includes(field.name)) {%][%=field.getTypeName()%] [%} else {%]Map[java.lang.Long, [%=field.getTypeName()%]][%}%] [% if (hasMore){%],[%}%]
+    
+    [%}%]    
+) extends Serializable
+    [%}
+    }
+}
+
+%]
+
+}
+
+[% for (udf in transformation.get("userDefinedFunctions")) { %]
+[%=udf.code%]
+[%}%]
+
+object [%=toJavaName(transformation.name)%]Job {
+   def main(args: Array[String]): Unit = {
+     new [%=toJavaName(transformation.name)%]Job().sparkMain(args)
+  }
+}
+

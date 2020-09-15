@@ -1,0 +1,53 @@
+[%
+  jobDeployment.get("name").println("pom-run.egl: ");
+%]
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.neoflex.meta.etl</groupId>
+    <artifactId>ru.neoflex.meta.etl</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <build>
+    
+        <extensions>
+          <extension>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-ssh</artifactId>
+            <version>2.8</version>
+          </extension>
+        </extensions>
+    
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>oozie</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>sshexec</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>pom.xml</excludes>
+                            <url>[%=jobDeployment.get("oozie").get("sftp")%]</url>
+                            <serverId>[%=jobDeployment.get("oozie").get("name")%]</serverId>
+                            <failOnError>false</failOnError>
+                            <commands>
+                                <command>oozie job -oozie [%=jobDeployment.get("oozie").get("http")%] -config /home/[%=jobDeployment.get("oozie").get("user")%]/deployments/[%=jobDeployment.get("name")%]/job.properties -run</command>
+                            </commands>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+    </build>
+    <dependencies>
+    </dependencies>
+</project>

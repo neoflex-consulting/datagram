@@ -1,0 +1,45 @@
+[%
+@template
+operation src!TransformationStep declare(){
+	var inputNodes = (self.transformation.transitions.select(t|t.finish == self.inputPort));%]
+	val [%=self.name%] = get[%=self.name%](spark, [%=getInputNodes(self).collect(n|n.name).concat(", ")%])
+	[%if (self.checkpoint) {%]
+	[%=self.name%].persist(StorageLevel.[%=storageLevel(self)%])
+	[%}
+}
+
+operation src!TransformationStep imports(){
+    return Sequence{};
+}
+
+@template
+operation src!TransformationStep getSchemaName(){
+    if(self.schemaOnRead = true) {
+        %]org.apache.spark.sql.Row[%
+    } else {
+        %][%=self.name%]Schema[%
+    }
+}
+    
+@template
+operation src!TransformationStep globals(){
+    %][%
+} 
+
+@template
+operation src!TransformationStep defineImpl(){%]
+    // defineImpl not defined for [%=self%]
+[%}
+
+operation src!TransformationStep define(){%]
+
+  def get[%=self.name%](spark: SparkSession, [%=getInputNodes(self).collect(n|n.name + ": Dataset[" + n.getSchemaName() + "]").concat(", ")%]) = {
+    import spark.implicits._
+    [%=self.defineImpl()%]
+  }
+[%}
+
+operation src!TransformationStep hiveSupport(){
+    return false;
+}
+%]

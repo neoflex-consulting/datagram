@@ -1,0 +1,69 @@
+[%
+operation src!SQLSource define(){
+    %]
+    
+  def get[%=self.name%](spark: SparkSession) = {
+  
+    import spark.implicits._
+  
+    val sqlText = s"""[%=interpolareParameters(self.statement)%]"""
+    
+    logger.logInfo(s"SQLSource [%=self.name%] query: ${sqlText}")    
+    [%if (self.contextFromString == true) {%]
+    val contextName = s"""[%=self.contextString%]"""
+    [%} else {%]
+    val contextName = "[%=self.context.name%]"
+    [%}%]
+    val context: JdbcETLContext = getContext(contextName).asInstanceOf[JdbcETLContext]
+    
+    [%if (self.preSQL.isDefined() and self.preSQL.trim().length() > 0) {%]
+    val preStatement = s"""[%=self.preSQL.trim()%]"""
+    if(preStatement != "") {
+        executeUpdate(context, preStatement)
+    }
+    [%}%]
+    
+    [%if (self.isParallel == true) {%]    
+    val minMaxRow = spark.read.format("jdbc").options(Map(
+               "url" -> context._url,
+               "dbtable" -> ("(select min(t0.[%=self.partitionColumn%]), max(t0.[%=self.partitionColumn%]) from (" + sqlText + ") t0) t"),
+               "driver" -> context._driverClassName,
+               "user" -> context._user,
+               "password" -> context._password
+            )).load().collect()(0)
+    val numPartitions = s"""[%=self.numPartitions%]"""         
+    val partitionColumn = s"""[%=self.partitionColumn%]"""         
+    [%}%]
+        
+    val ds = spark.read.format("jdbc").options(Map(
+               "url" -> context._url,
+               "dbtable" -> ("(" + sqlText + ") t"),
+               "driver" -> context._driverClassName,
+               "user" -> context._user,
+               "password" -> context._password,
+               "fetchSize" -> _fetchSize.toString
+            ))[%for (option in self.sqlOptions) {%]
+            .option("[%=option.key%]", s"""[%=option.value%]""")[%}%]
+		    [%if (self.isParallel == true) {%]
+		        
+	if (numPartitions.length > 0 && partitionColumn.length > 0) {
+            ds.option("lowerBound", s"""${minMaxRow(0)}""")
+            ds.option("upperBound", s"""${minMaxRow(1)}""")
+            ds.option("numPartitions", numPartitions)
+            ds.option("partitionColumn", partitionColumn)
+	} 
+		    [%}%]
+		    
+    ds.load()[%if ((self.schemaOnRead <> true) and (self.~makeDataset <> false)) {%].map{ row => [%=self.getSchemaName()%](
+	[%for (field in self.outputPort.fields) {%]
+	  	row.getAs[[%=field.getFullJavaClassName()%]]("[%=field.name%]")[%if (hasMore){%],[%}%]
+	        
+	[%}%]
+	)}
+	[%}%]
+  }
+    [%
+}
+
+%]
+

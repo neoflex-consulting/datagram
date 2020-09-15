@@ -1,0 +1,127 @@
+[%
+operation operandDef(operand) {
+    if(operand.toString() == "equal") {
+        return "==";
+    }
+    if(operand.toString() == "notEqual") {
+        return "!=";
+    }
+    if(operand.toString() == "more") {
+        return ">";
+    }
+    if(operand.toString() == "less") {
+        return "<";
+    }
+    if(operand.toString() == "moreOrEqals") {
+        return ">=";
+    }
+    if(operand.toString() == "lessOrEqals") {
+        return "<=";
+    }            
+}
+
+@template
+operation src!ParamsCompareCondition defineImpl(){%]
+([%=self.leftParam.dataSet.~name%].[%=self.leftParam.name%] [%=operandDef(self.operand)%] [%=self.rightParam.dataSet.~name%].[%=self.rightParam.name%])
+[%}
+
+@template
+operation src!ParamsToExpressionCondition defineImpl(){%]
+([%=self.leftParam.dataSet.~name%].[%=self.leftParam.name%] [%=operandDef(self.operand)%] [%=self.expression%])
+[%}
+
+@template
+operation src!EvalCondition defineImpl(){%]
+eval([%=self.expression%])
+[%}
+
+@template
+operation src!OrCondition defineImpl(){%]
+([%for(condition in self.conditions) {%]
+
+[%=condition.defineImpl()%][%if(hasMore == true){%] || [%}%]
+[%}%])
+[%}
+
+@template
+operation src!AndCondition defineImpl(){%]
+([%for(condition in self.conditions) {%]
+
+    [%=condition.defineImpl()%][%if(hasMore == true){%] && [%}%]
+[%}%]
+
+)
+[%}
+
+operation src!Action modifyFactAction(){
+    return false;
+}
+
+operation src!FunctionAction modifyFactAction(){
+    return true;
+}
+
+operation src!MapValueAction modifyFactAction(){
+    return true;
+}
+
+operation src!SetValueAction modifyFactAction(){
+    return true;
+}
+
+operation src!InitializeFactAction modifyFactAction(){
+    return true;
+}
+
+@template
+operation src!FunctionAction definePreImpl(){%]
+    [%if(self.get("function") <> null) {%]
+    [%=self.get("function").name%]Result[%=self.~index%] = [%=self.get("function").name%](new [%=self.get("function").name + "_Input"%]([% for(param in self.paramsMapping){%][%if(param.value <> null){%]$[%=param.value.dataSet.~name + "." +param.value.name%][%} else {%][%="null"%][%}%][%if(hasMore == true){%], [%}%][%}%]))
+    [%}%]
+[%}
+
+@template
+operation src!FunctionAction defineImpl(){%]
+    [%if(self.get("function") <> null) {%]
+    [% for(rm in self.resultsMapping){
+        if(rm.value <> null){%]
+    [%if(self.~rule.modifyFact <> true) {%]$[%}%][%=rm.value.dataSet.~name%].[%=rm.value.name%] = [%=self.get("function").name%]Result[%=self.~index%].[%=rm.param.name%][%if (hasMore){%],[%}%]
+        [%}
+    }%]
+    [%}%]
+[%}
+
+@template
+operation src!MapValueAction defineImpl(){%]
+    [%if(self.outputField <> null and self.valueField <> null) {%]    [%if(self.~rule.modifyFact <> true) {%]$[%}%][%=self.outputField.dataSet.~name%].[%=self.outputField.name%] = $[%=self.valueField.dataSet.~name + "." + self.valueField.name%][%}%]
+[%}
+
+@template
+operation src!SetValueAction defineImpl(){%]
+    [%if(self.outputField <> null) {%]    [%if(self.~rule.modifyFact <> true) {%]$[%}%][%=self.outputField.dataSet.~name%].[%=self.outputField.name%] = [%=self.expression%][%}%]
+[%}
+
+@template
+operation src!SetTimeoutAction defineImpl(){%]
+    $fact.setTimeout("[%=self.duration%]")
+[%}
+
+@template
+operation src!InitializeFactAction defineImpl(){%]
+    [%if(self.~rule.modifyFact <> true) {%]$fact.[%}%]setInitialized(true)
+[%}
+
+@template
+operation src!AddOutputAction defineImpl(){%]
+    OutputType out = new OutputType(
+        [%for(field in self.~output.fields){%]
+        $output.[%=field.name%][%if (hasMore){%],[%}%]    
+        [%}%]
+        );
+    insert(out);
+[%}
+
+@template
+operation src!RemoveStateAction defineImpl(){%]
+    $fact.setRemoveState(true);
+[%}%]

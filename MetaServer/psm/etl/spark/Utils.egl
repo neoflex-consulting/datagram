@@ -1,0 +1,457 @@
+[%
+
+@template
+operation initBuilder(){%]
+
+    override def initBuilder(builder: SparkSession.Builder): SparkSession.Builder = {
+        builder.enableHiveSupport()
+    }
+    
+[%}
+
+operation collectTasks(task, value){        
+    for(t in task.get("dependsOn")) {
+        if(value.includes(t) = false) {            
+            value.add(t);
+        }
+        collectTasks(t, value);
+    }
+}
+
+operation declareNode(node){
+if (node.~declared == true) {
+    return;
+}
+for (inputNode in getInputNodes(node)) {%]
+[%=declareNode(inputNode)%]
+[%}%]
+    [%=node.declare()%]
+[%if (node.isKindOf(src!Source) or node.isKindOf(src!TransformationStep)) {%]
+[%=debug(node)%]
+[%}%]
+[%  node.~declared = true;
+}
+
+operation declareNodeTransformationPart(node, workflowDeployment){
+if (node.isDefined() == false or node.~declared == true) {
+    return;
+}
+for (inputNode in getInputNodes(node)) {%]
+[%=declareNodeTransformationPart(inputNode, workflowDeployment)%]
+[%}%]
+    [%=node.declare()%]
+[%  node.~declared = true;
+}
+
+operation getInputNodes(node) {
+    return node.transformation.transitions.select(t|t.~targetNode == node).collect(t|t.~sourceNode);
+}
+
+operation getAllBeforeNodes(node, nodes) {
+    nodes.add(node);
+    var beforeNodes = getInputNodes(node);
+    if(beforeNodes <> null){
+        for (inputNode in beforeNodes){
+            nodes.addAll(getAllBeforeNodes(inputNode, nodes));
+        }
+    }
+    return nodes;
+}
+
+@template
+operation storageLevel(node){
+	var param = node.transformation.parameters.select(p|p.name == "persistOnDisk" ).first();
+    if (param.isDefined() and param.value == "true") {
+       %]DISK_ONLY[%
+    } else {
+       %]MEMORY_ONLY[%
+    }
+}
+
+@template
+operation src!Field getJavaClassName(){
+   if (self.dataTypeDomain == src!DataTypeDomain#STRING){
+      %]String[%
+   }
+
+   else if (self.dataTypeDomain == src!DataTypeDomain#BOOLEAN){
+      %]Object[%
+   }
+
+   else if (self.dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      %]BigDecimal[%
+   }
+
+   else if (self.dataTypeDomain == src!DataTypeDomain#INTEGER){
+      %]Object[%
+   }
+
+   else if (self.dataTypeDomain == src!DataTypeDomain#LONG){
+      %]Object[%
+   }
+
+   else if (self.dataTypeDomain == src!DataTypeDomain#FLOAT){
+      %]Object[%
+   }
+
+   else if (self.dataTypeDomain == src!DataTypeDomain#DOUBLE){
+      %]Object[%
+   }
+
+   else if (self.dataTypeDomain == src!DataTypeDomain#BINARY){
+      %]Bytes[%
+   }
+
+   else if (self.dataTypeDomain == src!DataTypeDomain#DATE){
+      %]Date[%
+   }
+
+   else if (self.dataTypeDomain == src!DataTypeDomain#DATETIME){
+      %]Timestamp[%
+   }
+
+   else if (self.dataTypeDomain == src!DataTypeDomain#TIME){
+      %]Timestamp[%
+   }
+
+   else{
+      %]Object[%
+   }
+}
+
+@template
+operation src!Field getFullJavaClassName(){
+   if(self.~parentName <> null) {
+    %][%=self.~parentName%][%
+    } else if (self.dataTypeDomain <> null) {
+    %][%=javaTypeName(self.dataTypeDomain)%][%
+   }
+}
+
+operation javaTypeName(dataTypeDomain):String{
+   var result: String = "java.lang.String";
+   if (dataTypeDomain == src!DataTypeDomain#STRING){
+      result = "java.lang.String";
+   } else if (dataTypeDomain == src!DataTypeDomain#BOOLEAN){
+      result = "java.lang.Boolean";
+   } else if (dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      result = "java.math.BigDecimal";
+   } else if (dataTypeDomain == src!DataTypeDomain#INTEGER){
+      result = "java.lang.Integer";
+   } else if (dataTypeDomain == src!DataTypeDomain#LONG){
+      result = "java.lang.Long";
+   } else if (dataTypeDomain == src!DataTypeDomain#FLOAT){
+      result = "java.lang.Float";
+   } else if (dataTypeDomain == src!DataTypeDomain#DOUBLE){
+      result = "java.lang.Double";
+   } else if (dataTypeDomain == src!DataTypeDomain#BINARY){
+      result = "Array[Byte]";
+   } else if (dataTypeDomain == src!DataTypeDomain#DATE){
+      result = "java.sql.Date";
+   } else if (dataTypeDomain == src!DataTypeDomain#DATETIME or dataTypeDomain == src!DataTypeDomain#TIME){
+      result = "java.sql.Timestamp";
+   }
+   return result;
+}
+
+operation toJavaName(s : String):String{
+  var result = s;
+  if (result <> null){
+    result = result.replace("#","_").replace("\\$", "_");
+  }
+  return result;
+}
+
+operation src!Field getJavaName():String{
+  return getCorrectName(self.name);
+}
+
+operation src!Port isValidIdentifiers() {
+    for (field in self.fields) {
+        if (field.name <> field.getJavaName()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+operation getCorrectName(s : String):String{
+  var result = s;
+  if (result <> null){
+    result = result.replace("#","_")
+                   .replace("\\$","_")
+                   .replace("@", "_")
+                   .replace(">", "_")
+                   .replace("<", "_")
+                   .replace("%", "_")
+                   .replace("=", "_")
+                   .replace(":", "_")
+                   .replace("-", "_");
+    if ((result == "abstract") or (result == "case") or (result == "catch") or (result == "class")
+         or (result == "def") or (result == "do") or (result == "else") or (result == "extends")
+         or (result == "false") or (result == "final") or (result == "finally") or (result == "for")
+         or (result == "forSome") or (result == "if") or (result == "implicit") or (result == "import")
+         or (result == "lazy") or (result == "match") or (result == "new") or (result == "null")
+         or (result == "object") or (result == "override") or (result == "package") or (result == "private")
+         or (result == "protected") or (result == "return") or (result == "sealed") or (result == "super")
+         or (result == "this") or (result == "throw") or (result == "trait") or (result == "true")
+         or (result == "try") or (result == "type") or (result == "val") or (result == "var")
+         or (result == "while") or (result == "with") or (result == "yield")) {
+        result = result + "_";
+    }
+    if (not Native("java.lang.Character").isJavaIdentifierStart(s.charAt(0))) {
+        result = "_" + result;
+    }
+  }
+  return result;
+}
+
+operation src!DataSet getIndex(name) {
+    var i = 0;
+    while (i < self.fields.size()) {
+        if (self.fields.at(i).name == name) return i;
+        i = i + 1;
+    }
+    throw new Exception("index not found " + self.name + "." + name);
+}
+
+operation src!Field getIndex() {
+    return self.dataSet.getIndex(self.name);
+}
+
+// Relation between steps and transition is not bidirectional in ecore, so we should find source and target steps on both sides of transition
+operation src!Transition resolveNodes(){
+    for (source in self.transformation.sources){
+      if (source.outputPort == self.start){
+         self.~sourceNode = source;
+      }
+    }
+
+    for (step in self.transformation.transformationSteps){
+      if (step.outputPort == self.start){
+         self.~sourceNode = step;
+      }
+
+      if (step.inputPort == self.finish){
+         self.~targetNode = step;
+      }
+
+      if (step.isKindOf(src!Join)){
+         if (step.joineePort == self.finish){
+            self.~targetNode = step;
+         }
+      }
+
+      if (step.isKindOf(src!Union)){
+         if (step.unionPort == self.finish){
+            self.~targetNode = step;
+         }
+      }
+
+      if (step.isKindOf(src!SparkSQL)) {
+        for (port in step.sqlPorts){
+            if (port == self.finish) {
+                self.~targetNode = step;
+            }
+        }
+      }
+    }
+  for (tgt in self.transformation.targets){
+    if (tgt.inputPort == self.finish){
+       self.~targetNode = tgt;
+    }
+  }
+
+  if (self.~targetNode == null or self.~sourceNode == null) throw "Source or target is undefined for ".concat(self.name);
+  "Found transition: ".concat(self.name).concat("(").concat(self.~sourceNode.name.concat(" ==> ").concat(self.~targetNode.name)).concat(")").println;
+
+}
+
+operation src!ScalarType setParentName(parentName) {
+
+}
+
+operation src!StructType setParentName(parentName) {
+    self.~parentName = parentName;
+    self.internalStructure.setParentName(parentName);
+}
+
+operation src!ArrayType setParentName(parentName) {
+    self.elementType.setParentName(parentName);
+}
+
+operation src!Field setParentName(parentName) {
+    if(self.domainStructure <> null){
+        self.~parentName = parentName;
+        self.domainStructure.setParentName(parentName + "_" + self.getJavaName());
+    }
+}
+
+operation src!DataSet setParentName(parentName){
+    for (field in self.fields) {
+        field.setParentName(parentName);
+    }
+}
+
+operation src!ScalarType getTypeName(): String {
+    return javaTypeName(self.dataTypeDomain);
+}
+
+operation src!ArrayType getTypeName(): String {
+    return "Seq[" + self.elementType.getTypeName() + "]";
+}
+
+operation src!StructType getTypeName(): String {
+    return self.~parentName;
+}
+
+operation src!Field getTypeName(): String {
+    var typeName = "java.lang.String";
+    if(self.dataTypeDomain <> null) {
+        typeName = javaTypeName(self.dataTypeDomain);
+    }
+    if(self.domainStructure <> null) {
+        typeName = self.domainStructure.getTypeName();
+    }
+    return typeName;
+}
+
+@template
+operation src!StructType getSchema(parentName) {
+%][%=getStructTypeDatasetSchema(parentName, self.internalStructure)%]
+[%
+}
+
+@template
+operation src!ScalarType getSchema(parentName) {
+%][%
+}
+
+@template
+operation src!ArrayType getSchema(parentName) {
+%][%=self.elementType.getSchema(parentName)%][%
+}
+
+@template
+operation src!Field getSchema() {
+if(self.domainStructure <> null){
+%][%=self.domainStructure.getSchema(self.~parentName + "_" + self.getJavaName())%][%
+}
+}
+
+@template
+operation src!DataSet getSchema(typeName): String {%]
+[%for (field in self.fields) {if (field.domainStructure.isDefined()) {%]
+[%=field.getSchema()%]
+[%}}%]
+case class [%=typeName%](
+[%for (field in self.fields) {%]
+    var [%=field.getJavaName()%]: [%=field.getTypeName()%][%if (hasMore){%],[%}%]
+
+[%}%]
+) extends Serializable
+[%}
+
+@template
+operation src!DataSet getSchemaDRL(typeName): String {%]
+[%for (field in self.fields) {%][%=field.getSchema()%][%}%]
+
+declare [%=typeName%]
+[%for (field in self.fields) {%]    [%=field.name%]: [%=field.getTypeName()%]
+[%}%]
+end
+    [%
+}
+
+@template
+operation getStructTypeDatasetSchema(parentName, dataset){
+%][%=dataset.getSchema(parentName)%][%
+}
+
+@template
+operation getStructTypeDatasetSchemaDRL(parentName, dataset){
+%][%=dataset.getSchemaDRL(parentName)%][%
+}
+
+@template
+operation getSchema(node){
+if (not node.transformation.~schemas.includes(node.getSchemaName())) {
+  node.transformation.~schemas.add(node.getSchemaName());
+  if(node.get("schemaOnRead") <> true) {%]
+[%=getStructTypeDatasetSchema(node.getSchemaName(), node.outputPort)%]
+    [%}
+}
+}
+
+@template
+operation debug(node){
+if (not node.outputPort.debugList.selectOne(d|d.active).isDefined()) return;%]
+        if (_debug) {
+        [%for (debug in node.outputPort.debugList) { if (debug.active) {%]
+          {
+            val fileName = s"${_defaultFS}${_applicationHome}/debug/[%=node.name%]_[%=debug.name%].json"
+            [%if (debug.condition.isDefined() and debug.condition.trim() <> "") {%]
+              [%=node.name%].filter{ row =>
+                (([%for (i in node.outputPort.fields) {%][%=i.name%] : [%=i.getFullJavaClassName()%][% if (hasMore){%],  [%}} %]) => {
+                    [%=debug.condition%]
+                })([%for (i in node.outputPort.fields) {%]row.[%=i.name%][% if (hasMore){%], [%}} %])
+            }.write.json(fileName)
+            [%} else {%]
+            [%=node.name%].write.json(fileName)
+            [%}%]
+          }
+        [%}}%]
+        }
+[%}
+
+operation interpolareParameters(sql: String) {
+    var pattern = Native("java.util.regex.Pattern");
+    var matcher = pattern.compile("[&][a-zA-Z_][a-zA-Z\\d_]*").matcher(sql);
+    var params = Sequence{};
+    while (matcher.find()) {
+        params.add(sql.substring(matcher.start() + 1, matcher.end()));
+    }
+    for (param in params) {
+        var replaceValue = "'${jobParameters(" + '"' + param + '"' + ").asInstanceOf[String]}'";
+        sql = sql.replace("&" + param, replaceValue.replace("[$]", "\\\\\\$"));
+    }
+    return sql;
+}
+
+@template
+operation getHBaseTargetCatalog(target) {
+    var hbaseExplicitVersionField;
+    if(target.isKindOf(src!StreamTarget) or target.isKindOf(src!HBaseTarget)) {
+        if (target.versionColumn.isDefined()) {
+            hbaseExplicitVersionField = target.versionColumn;
+        }
+    }
+%]s"""{
+    |"table":{"namespace":"[%=target.namespace%]", "name":"[%=target.tableName%]"},
+    |"rowkey":"[%=target.rowkey%]",
+    |"columns":{
+        [%for (f in target.inputFieldsMapping) {
+        //var field = target.inputPort.fields.selectOne(ifield|ifield.name==f.inputFieldName);
+        var column = f.column;
+        if (not column.isDefined() or column.length == 0) {
+            column = f.inputFieldName;
+        }
+        var family = f.family;
+        if (not family.isDefined() or f.family.length == 0) {
+            if (target.rowkey.isDefined() and target.rowkey.split(":").includes(column)) {
+                family = 'rowkey';
+            } else {        
+                family = '0';
+            }
+        }%]
+        |"[%=f.inputFieldName%]":{"cf":"[%=family%]", "col":"[%=column%]", "type":"[%if(family = 'rowkey' or not target.versionColumn.isDefined()){%]${ds.schema("[%=f.inputFieldName%]").dataType.typeName}[%} else {%]map<long,${ds.schema("[%=f.inputFieldName%]").dataType.typeName}>[%}%]"}[% if (hasMore){%],[%}%]
+        
+        [%}%]
+    |}
+|}""".stripMargin[%
+}
+
+operation src!Transformation hasStreamTarget() {
+	return self.targets.exists(t| t.isKindOf(src!StreamTarget));
+}
+%]

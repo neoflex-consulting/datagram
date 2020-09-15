@@ -1,0 +1,19 @@
+[%@template
+operation src!Sort defineImpl(){
+    var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+    var orderByExpr = Sequence{};
+    for (f in self.sortFeatures) {
+        var expr = source.name + '("' + f.fieldName + '")';
+        if (not f.ascending) {
+            expr = expr + ".desc";
+        }
+        orderByExpr.add(expr);
+    }
+    %]
+[%=source.name%].orderBy([%=orderByExpr.concat(", ")%])
+[%}
+
+operation src!Sort getSchemaName(){
+    return getInputNodes(self).first().getSchemaName();
+} 
+%]

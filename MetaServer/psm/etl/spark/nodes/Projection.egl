@@ -1,0 +1,74 @@
+[%
+
+operation src!Projection imports(){
+    return Sequence{
+        "import org.apache.spark.sql.types.NullType"
+    };
+}
+
+@template
+
+
+
+operation src!Projection defineImpl(){	
+	
+	var inputNode = getInputNodes(self).first();
+    var sqlFields = Sequence{};
+    var transformFields = Sequence{};
+    for (f in self.outputPort.fields) {
+    	if (f.fieldOperationType == src!FieldOperationType#TRANSFORM) {
+    		transformFields.add(f);
+    	} else {
+    		sqlFields.add(f);
+    	}
+    }
+    var secretString = "_secretString_";
+    %]
+
+[%=inputNode.name%]
+[%if(transformFields.size() == 0){%]
+.select(
+	[%for (f in sqlFields) {%]
+		[%if (f.fieldOperationType == src!FieldOperationType#ADD) {%]
+			col("[%=f.sourceFields[0].name%]").alias("[%=f.name%]")[% if (hasMore){%],  [%}%]
+		[%} else if (f.fieldOperationType == src!FieldOperationType#SQL) {%] 
+			expr(s"""[%=interpolareParameters(f.expression)%]""").alias("[%=f.name%]")[% if (hasMore){%],  [%}%]
+		[%} else if (f.fieldOperationType == src!FieldOperationType#PACK) {%] 
+			struct([%=f.sourceFields.collect(s|'col("' + s.name + '")').concat(", ")%]).alias("[%=f.name%]")[% if (hasMore){%],  [%}%]
+		[%}%]
+		
+	[%}%]
+).as[[%=self.getSchemaName()%]]
+[%} else {%]	
+.select(
+	[%for (f in inputNode.outputPort.fields) {%]
+			col("[%=f.name%]").alias("[%=f.name%]")[% if (hasMore or sqlFields.size() > 0){%],  [%}%]
+			
+	[%}%]
+	[%for (f in sqlFields) {%]
+		[%if (f.fieldOperationType == src!FieldOperationType#ADD) {%]
+			col("[%=f.sourceFields[0].name%]").alias("[%=secretString + f.name%]")[% if (hasMore){%],  [%}%]
+		[%} else if (f.fieldOperationType == src!FieldOperationType#PACK) {%] 
+			struct([%=f.sourceFields.collect(s|'col("' + s.name + '")').concat(", ")%]).alias("[%=secretString + f.name%]")[% if (hasMore){%],  [%}%]
+		[%} else {%]
+			expr(s"""[%=interpolareParameters(f.expression)%]""").alias("[%=secretString + f.name%]")[% if (hasMore){%],  [%}%]
+		[%}%]
+		
+	[%}%])
+.map{ row => [%=self.getSchemaName()%](
+	[%for (f in self.outputPort.fields) {
+	    if (f.fieldOperationType <> src!FieldOperationType#TRANSFORM ) { %]
+	[%=f.getJavaName()%] = row.getAs("[%=secretString + f.name%]") [% if (hasMore){%],[%}%]
+		[%} else if (f.fieldOperationType == src!FieldOperationType#TRANSFORM) {%]
+	[%=f.getJavaName()%] = (([%for (i in f.sourceFields) {%][%=i.name%] : [%=i.getFullJavaClassName()%][% if (hasMore){%],  [%}} %]) => {
+	    [%=f.expression%]
+	})([%for (i in f.sourceFields) {%]row.getAs("[%=i.name%]")[% if (hasMore){%],  [%}} %])[% if (hasMore){%],[%}%]	
+    [%} %]    
+[%} %]
+)}
+[%}%]
+[%
+if (self.watermarkField.isDefined() and self.watermarkThreshold.isDefined()) {%]
+.withWatermark("[%=self.watermarkField%]", "[%=self.watermarkThreshold%]")
+[%}%]
+[%}%]

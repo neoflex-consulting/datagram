@@ -1,0 +1,196 @@
+[%
+operation src!LocalTarget isMappingChanged() {
+    if (self.inputFieldsMapping == null) {
+        return false;
+    }
+    if (self.inputFieldsMapping.size() == 0) {
+        return false;
+    }
+    
+    if (self.inputFieldsMapping.size() <> self.inputPort.fields.size()) {
+        return true;
+    }
+    for (i in Sequence{0..self.inputFieldsMapping.size()-1}) {
+        if (self.inputFieldsMapping[i].inputFieldName <> self.inputPort.fields[i].name or
+            self.inputFieldsMapping[i].targetColumnName <> getCorrectName(self.inputFieldsMapping[i].inputFieldName)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+@template
+operation src!LocalTarget repartition() {
+var repartitionNum = self.repartitionNum;
+if(self.repartitionNumFromString == true) {
+    repartitionNum = self.repartitionNumString;
+    if(repartitionNum == "") {
+        repartitionNum = null;
+    }
+}
+var repartitionExpr = self.repartitionExpression;
+if(repartitionExpr == "") {
+    repartitionExpr = null;
+}
+var ifRep = (self.repartitionNum <> null or (self.repartitionNumFromString == true and self.repartitionExpression <> null));
+if (ifRep = true) {%].repartition([%if(repartitionNum <> null){%]numPartitions=[%=repartitionNum%][%}%][%if(repartitionExpr <> null){%][%if(repartitionNum <> null){%], [%}%]partitionExprs=[%=repartitionExpr%][%}%])[%}%]
+[%}
+
+@template
+operation src!LocalTarget coalesce() {
+%]
+[%if (self.coalesce <> null or (self.coalesceFromString == true)) {%].coalesce([%if(self.coalesceFromString == false) {%][%=self.coalesce%][%} else {%]s"""[%=self.coalesceString%]""".toInt[%}%])[%}%]
+[%
+}
+
+@template
+operation src!LocalTarget selectFields(ds) {
+    %].select([%for (m in self.inputFieldsMapping) {%][%=ds%]("[%=getCorrectName(m.inputFieldName)%]").alias("[%=m.targetColumnName%]")[%if (hasMore){%], [%}%][%}%])[%
+}
+
+operation src!LocalTarget define(){
+var inputNode = self.getInputNode();
+var partitions = self.partitions;
+if (self.partitionsFromString == true) {
+    partitions = self.partitionsString.split("[;]").select(s|s.isDefined()).collect(s|s.trim()).select(s|s.length > 0);
+}
+%]
+
+  def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {        
+    [%if(partitions.size() > 0) {%]
+    var partitions = Array[String]([%for (p in partitions) {%]s"""[%=p%]"""[%if (hasMore){%],  [%}%][%}%])
+    [%}%]
+  [%if (self.localFileFormat <> LocalFileFormat#JDBC) {%]
+    val fileName = s"""[%=self.localFileName%]"""
+    logger.logInfo(s"LocalTarget [%=self.name%] fileName: ${fileName}")   
+    [%if (self.deleteBeforeSave == true) {%] 
+    val fs = org.apache.hadoop.fs.FileSystem.get(spark.sparkContext.hadoopConfiguration)
+    [%if (partitions.size() == 0) {%] 
+    logger.logInfo(s"Delete: ${fileName}")   
+    if (fs.exists(new org.apache.hadoop.fs.Path(fileName))) {
+      fs.delete(new org.apache.hadoop.fs.Path(fileName), true)
+    }
+    [%} else {%] 
+    ds.groupBy([%for (p in partitions) {%]s"""[%=p%]"""[%if (hasMore){%],  [%}%][%}%]).count.collect.foreach(t => {
+      var toDelete = s"""${fileName}[%for (i in Sequence{0..partitions.size() - 1}) {%]/[%=partitions.at(i)%]=${[%=self.getPartitionValue(partitions, i, "t.get("+i+")")%]}[%}%]"""
+      logger.logInfo(s"Delete: ${toDelete}")   
+      if (fs.exists(new org.apache.hadoop.fs.Path(toDelete))) {
+        fs.delete(new org.apache.hadoop.fs.Path(toDelete), true)
+      }
+    })    
+    [%}}} 
+    if (self.saveMode <> SaveMode#DISCARD) {%]
+    val dsOut = ds[%if (self.isMappingChanged()) {%][%=self.selectFields("ds")%][%}%]
+    
+    [%if(partitions.size() > 0){%]
+    dsOut[%=self.repartition()%][%=self.coalesce()%]
+        .write
+        .[%if (self.localFileFormat <> LocalFileFormat#JDBC and partitions.size() > 0) {%]partitionBy([%for (p in partitions) {%]s"""[%=p%]"""[% if (hasMore){%],  [%}}%])
+        .[%}%]mode(SaveMode.[%if (self.saveMode==SaveMode#APPEND) {%]Append[%}else{%]Overwrite[%}%])
+        .format("[%=self.localFileFormat.toString().toLowerCase()%]")
+        [%for (option in self.options) {%]
+        .option("[%=option.key%]", s"""[%=option.value%]""")
+        [%}%]
+        .[%if (self.localFileFormat <> LocalFileFormat#JDBC) {%]save(fileName)[%} else {%]save()[%}%]        
+    [%} else {%]
+    dsOut[%=self.repartition()%][%=self.coalesce()%]
+        .write
+        .mode(SaveMode.[%if (self.saveMode==SaveMode#APPEND) {%]Append[%}else{%]Overwrite[%}%])
+        .format("[%=self.localFileFormat.toString().toLowerCase()%]")
+        [%for (option in self.options) {%]
+        .option("[%=option.key%]", s"""[%=option.value%]""")
+        [%}%]
+        .[%if (self.localFileFormat <> LocalFileFormat#JDBC) {%]save(fileName)[%} else {%]save()[%}%]    
+    [%}%]
+    
+    [%if (self.registerTable == true) {%]
+    var partitionFields = Array[String]([%for (p in partitions) {%]s"""[%=p%]"""[%if (hasMore){%],  [%}%][%}%])
+    val fieldComments = Map[String, String]([%for (ifm in self.inputFieldsMapping) {%](s"""[%=ifm.targetColumnName%]""" -> [%if(ifm.comment = null) {%] null[%} else {%] s"""[%=ifm.comment%]"""[%}%])[%if (hasMore) {%], [%}%][%}%])
+    def makeTypeDescription(dataType: org.apache.spark.sql.types.DataType): String = {
+      if (dataType.isInstanceOf[org.apache.spark.sql.types.ArrayType]) {
+        "ARRAY<" + makeTypeDescription(dataType.asInstanceOf[org.apache.spark.sql.types.ArrayType].elementType) + ">"
+      }
+      else if (dataType.isInstanceOf[org.apache.spark.sql.types.StructType]) {
+        "STRUCT<" + dataType.asInstanceOf[org.apache.spark.sql.types.StructType].toList.map(f=>f.name + ": " + makeTypeDescription(f.dataType)).mkString(", ") + ">"
+      }
+      else {
+        dataType.typeName
+      }
+    }
+    var fieldStr = dsOut.schema.fields.filterNot(f => partitionFields.contains(f.name.toLowerCase)).map((f)=>{f.name.toLowerCase + " " + makeTypeDescription(f.dataType) + " " + (if (fieldComments.getOrElse(f.name, null) != null) " COMMENT " + "\"" + fieldComments(f.name) + "\"" else "")}).mkString(", ")    
+    var partStr = dsOut.schema.fields.filter(f => partitionFields.contains(f.name.toLowerCase)).map(f => f.name.toLowerCase + " " + makeTypeDescription(f.dataType) + " " + (if (fieldComments.getOrElse(f.name, null) != null) " COMMENT " + "\"" + fieldComments(f.name) + "\"" else "")).mkString(", ")
+    spark.sql(s"""DROP TABLE IF EXISTS [%=self.hiveTableName%]""")
+    val createQuery = s"""CREATE EXTERNAL TABLE [%=self.hiveTableName%](${fieldStr})
+    [%if (self.description <> null) {%]
+    COMMENT "[%=self.description%]"
+    [%}%]
+    [%if (self.options.size() > 0) {%]
+    OPTIONS (
+        [%for (option in self.options) {%]
+        '[%=option.key%]'='[%=option.value%]'[%if (hasMore) {%],[%}%] 
+        [%}%]
+    )
+    [%}%]
+    ${if(partStr == null || partStr == "") "" else s"PARTITIONED BY (${partStr})"}
+    STORED AS [%=self.localFileFormat%]
+    LOCATION '[%=self.localFileName%]'"""
+    logger.logInfo(s"Create external table:\n${createQuery}")   
+    spark.sql(createQuery)
+    [%if (partitions.size() > 0) {%]
+    spark.sql(s"""MSCK REPAIR TABLE [%=self.hiveTableName%]""")
+    [%}%]
+    [%}%]
+    [%}%] 
+  }
+[%}
+
+
+@template
+operation src!LocalTarget getPartitionValue(partitions, i, expr) {
+  var fieldName = partitions.at(i);
+  var field = self.inputPort.fields.selectOne(f|f.name == fieldName);
+  if (not field.isDefined()) {
+    %]"__HIVE_DEFAULT_PARTITION__"[%
+  }
+  else {
+   if (field.dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].asInstanceOf[java.math.BigDecimal].setScale(10).toPlainString}[%
+   }
+   if (field.dataTypeDomain == src!DataTypeDomain#STRING){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#BOOLEAN){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   } 
+   if (field.dataTypeDomain == src!DataTypeDomain#INTEGER){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#LONG){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#FLOAT){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#DOUBLE){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#BINARY){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#DATE){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {dateFormat.format([%=expr%].asInstanceOf[java.sql.Date])}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#DATETIME){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {timestampFormat.format([%=expr%].asInstanceOf[java.sql.Timestamp])}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#TIME){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {timeFormat.format([%=expr%].asInstanceOf[java.sql.Timestamp])}[%
+   }
+  }
+}
+
+operation src!LocalTarget hiveSupport(){
+    return self.registerTable == true;
+} 
+
+%]

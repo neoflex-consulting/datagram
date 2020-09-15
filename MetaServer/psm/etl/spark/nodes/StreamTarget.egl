@@ -1,0 +1,259 @@
+[%
+operation src!StreamTarget imports(){
+    return Sequence{
+        "import org.apache.spark.sql.streaming.OutputMode.{Append, Update, Complete}",
+        "import org.apache.spark.sql.functions._",
+        "import org.apache.spark.sql.streaming.ProcessingTime",
+        "import scala.util.parsing.json._"
+    };
+} 
+
+@template
+operation src!StreamTarget globals(){
+    var format = "";
+    for (option in self.options) {
+        if (option.key == "format") {
+            format = option.value.toLowerCase();
+        }
+    }
+    var hbaseFormat = format == "org.apache.spark.sql.execution.datasources.hbase" or self.localFileFormat.toString() == "HBASE";
+    
+    %]
+    [%if (hbaseFormat) {%] 
+class HBaseSink[%=self.name%](options: Map[String, String]) extends org.apache.spark.sql.execution.streaming.Sink with org.apache.spark.internal.Logging {
+    override def addBatch(batchId: Long, data: DataFrame): Unit = synchronized {
+    
+        val schema = data.schema
+
+        val res = data.queryExecution.toRdd.mapPartitions { rows =>
+            val converter = org.apache.spark.sql.catalyst.CatalystTypeConverters.createToScalaConverter(schema)            
+            
+            rows.map(converter(_).asInstanceOf[Row])
+            
+        }
+
+        val df = data.sparkSession.createDataFrame(res, schema)
+       
+        df.write
+            .options(Map("catalog"->options.get("catalog").get.toString, "newtable" -> options.get("newtable").get.toString))
+            .format("org.apache.spark.sql.execution.datasources.hbase").save()
+    }
+}
+
+class HBaseSinkProvider[%=self.name%] extends org.apache.spark.sql.sources.StreamSinkProvider with org.apache.spark.sql.sources.DataSourceRegister {
+    def createSink(
+              sqlContext: SQLContext,
+              parameters: Map[String, String],
+              partitionColumns: Seq[String],
+              outputMode: org.apache.spark.sql.streaming.OutputMode): org.apache.spark.sql.execution.streaming.Sink = {new HBaseSink[%=self.name%](parameters)}
+
+    def shortName(): String = "hbase[%=self.name%]"
+}
+    [%}%]    
+    [%
+} 
+
+
+operation src!StreamTarget define(){
+var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+var format = self.localFileFormat.toString().toLowerCase();
+var localFileName = "";
+var checkpointLocation = "";
+var catalog;
+if (self.localFileName.isDefined()) {
+    localFileName = self.localFileName;
+}
+if (self.checkpointLocation.isDefined()) {
+    checkpointLocation = self.checkpointLocation;
+}
+for (option in self.options) {
+    if (option.key == "path") {
+        localFileName = option.value;
+    }
+    else if (option.key == "checkpointLocation") {
+        checkpointLocation = option.value;
+    }
+    else if (option.key == "format") {
+        format = option.value.toLowerCase();
+    }
+    else if (option.key == "catalog") {
+        catalog = option.value;
+    }
+}
+var jdbcFormat = format == "jdbc";
+var hbaseFormat = format == "org.apache.spark.sql.execution.datasources.hbase" or self.localFileFormat.toString() == "HBASE";
+var catalogFormatted = true;
+if (hbaseFormat) {
+    format = "org.apache.spark.sql.execution.datasources.hbase";
+    if (not catalog.isDefined()) {
+        catalogFormatted = false;
+        catalog = getHBaseTargetCatalog(self);
+    }
+}
+%]
+    
+  def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {
+
+	var path : String = ""
+	[%if (jdbcFormat) {%]
+	path = "[%=localFileName%]"
+	[%} else {%]
+	path = s"""[%=localFileName%]"""
+	[%}%]
+	logger.logInfo(s"StreamingTarget [%=self.name%] path: ${path}")
+
+    [%if (jdbcFormat) {%]
+    val context = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
+    class JDBCSink(url: String, user: String, pwd: String, driver: String) extends org.apache.spark.sql.ForeachWriter[[%=inputNode.getSchemaName()%]]{
+        var connection:java.sql.Connection = _
+        var statement:java.sql.Statement = _
+
+        def open(partitionId: Long, version: Long):Boolean = {
+            Class.forName(driver)
+            connection = java.sql.DriverManager.getConnection(url, user, pwd)
+            statement = connection.createStatement
+            true
+        }
+
+        def process(value: [%=inputNode.getSchemaName()%]): Unit = {            
+            [%
+            var fieldNames = "";
+            var fieldValues = "";
+            for(field in inputNode.outputPort.fields) {
+                fieldNames = fieldNames + field.name;                
+                fieldValues = fieldValues + "'${value." + field.name + "}'";
+                if(hasMore){
+                    fieldNames = fieldNames + ", ";
+                    fieldValues = fieldValues + ", ";
+                }
+            }
+            %]
+            var sql: String = s"INSERT INTO [%=self.localFileName%] ([%=fieldNames%]) VALUES ([%=fieldValues%])"
+            statement.executeUpdate(sql)
+        }
+
+        def close(errorOrNull:Throwable):Unit = {
+            connection.close
+        }
+    }      
+    
+    val forEachWriter = new JDBCSink(context._url, context._user, context._password, context._driverClassName)
+    [%}%]
+    [%if (hbaseFormat and self.versionColumn.isDefined()) {%]
+    import spark.implicits._            
+    [%}%]
+    
+     [%	
+ 	 var triggerUnits;
+ 	 switch (self.triggerUnits) {
+ 	  	 case src!TimeUnits#MILLISECONDS : triggerUnits = "milliseconds";
+ 	  	 case src!TimeUnits#SECONDS : triggerUnits = "seconds";
+ 	  	 case src!TimeUnits#MINUTES : triggerUnits = "minutes";
+ 	  	 case src!TimeUnits#HOURS : triggerUnits = "hours";
+ 	  	 case src!TimeUnits#DAYS : triggerUnits = "days";
+ 	  	 default : triggerUnits = "milliseconds";
+ 	 }%]
+    val writer = ds[%if (hbaseFormat and self.versionColumn.isDefined()) {%]            
+            .map(row => [%=inputNode.getSchemaName()%]ToHBaseVersioned(
+                [%for(field in inputNode.outputPort.fields) {%]
+                [%if(self.rowkey.isDefined() and self.rowkey.split(":").includes(field.name)) {%]
+                row.[%=field.name%] [%} else {%]
+                Map(row.[%=self.versionColumn%] -> row.[%=field.name%])[%}%] [% if (hasMore){%],[%}%]                
+                [%}%])
+            )
+        [%}%]
+        .writeStream
+        [%if (jdbcFormat) {%]
+        .foreach(forEachWriter)
+        [%}%]
+        [%if (hbaseFormat) {%]
+        .format("ru.neoflex.meta.etl2.spark.HBaseSinkProvider[%=self.name%]")
+        [%}%]
+        [%if (self.partitions.size() > 0) {%]
+        .partitionBy([%for (p in self.partitions) {%]"[%=p%]"[% if (hasMore){%],  [%}}%])
+        [%}%]
+        [%if (self.trigger.isDefined()){%]
+        .trigger(ProcessingTime("[%=self.trigger%] [%=triggerUnits%]"))
+        [%}%]
+        [%if (jdbcFormat = false and hbaseFormat = false) {%]
+        .format("[%=format%]")
+        [%}%]
+        [%if (catalog.isDefined()) {%]
+            [%if(catalogFormatted = false) {%]
+        .option("catalog", [%=catalog%])
+            [%} else {%]
+        .option("catalog", s"""[%=catalog%]""")
+            [%}%]
+        [%}%]
+        [%if (self.localFileFormat.toString() == "HBASE") {%]
+        .option("newtable", "[%=self.newTable%]")
+        [%}%]
+        [%for (option in self.options) {
+        	if (option.key <> "path" and option.key <> "checkpointLocation" and option.key <> "format" and option.key <> "catalog") {%]
+        .option("[%=option.key%]", s"""[%=option.value%]""")       	
+          [%}
+        }%]
+        .option("path", path) 
+        .option("checkpointLocation", s"""[%=checkpointLocation%]""")
+        [%if (jdbcFormat = false) {%]
+        .outputMode([%if (self.outputMode == src!StreamOutputMode#APPEND){%]Append[%} else if (self.outputMode == src!StreamOutputMode#COMPLETE) {%]Complete[%}else if (self.outputMode == src!StreamOutputMode#UPDATE) {%]Update[%}%])
+        [%}%]
+        
+    [%if(self.transformation.targets.select(t|t.isKindOf(src!StreamTarget)).last() == self){%]
+        [%if(self.refreshTimeoutMs <> null){%]
+    var runQuery = true
+    val startTime = System.currentTimeMillis
+    val waitQuery:Long = [%if(self.timeoutMs = null){%]0[%} else {%][%=self.timeoutMs%][%}%]
+    
+    while(runQuery){
+        val query = writer.start()
+        query.awaitTermination([%=self.refreshTimeoutMs%])
+        query.stop()
+        if(waitQuery != 0 && waitQuery <= System.currentTimeMillis - startTime) {
+            runQuery = false
+        }
+    }
+        [%} else {%]
+    writer.start().awaitTermination([%=self.timeoutMs%])    
+        [%}%]
+    [%} else {%]
+    writer.start()    
+    [%}%]
+  }
+[%}
+
+
+@template
+operation src!StreamTarget getPartitionValue(i, expr) {
+  var fieldName = self.partitions.at(i);
+  var field = self.inputPort.fields.selectOne(f|f.name == fieldName);
+   if (field.dataTypeDomain == src!DataTypeDomain#DECIMAL){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].asInstanceOf[java.math.BigDecimal].setScale(10).toPlainString}[%
+   }
+   if (field.dataTypeDomain == src!DataTypeDomain#STRING){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#BOOLEAN){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   } 
+   if (field.dataTypeDomain == src!DataTypeDomain#INTEGER){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#LONG){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#BINARY){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {[%=expr%].toString}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#DATE){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {dateFormat.format([%=expr%].asInstanceOf[java.sql.Date])}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#DATETIME){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {timestampFormat.format([%=expr%].asInstanceOf[java.sql.Timestamp])}[%
+   }   
+   if (field.dataTypeDomain == src!DataTypeDomain#TIME){
+      %]if ([%=expr%] == null) {"__HIVE_DEFAULT_PARTITION__"} else {timeFormat.format([%=expr%].asInstanceOf[java.sql.Timestamp])}[%
+   }
+}
+
+%]

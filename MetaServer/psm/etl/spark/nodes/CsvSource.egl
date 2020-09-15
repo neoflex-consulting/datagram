@@ -1,0 +1,63 @@
+[%
+
+operation src!CSVSource define(){%]
+
+  def get[%=self.name%](spark: SparkSession) = {
+  	import spark.implicits._
+   	import scala.reflect.runtime.universe._
+    val schema = newProductEncoder(typeTag[[%=self.getSchemaName()%]]).schema
+    val path = {
+      s"""[%=self.path%]"""
+    }
+    
+    try {
+      spark.read
+      [%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%].schema(schema)
+      [%} else {%].option("inferSchema", true)[%}%] [%if (self.csvFormat == src!CSVFormat#EXCEL) {/* EXCEL */%]
+      .format("com.crealytics.spark.excel") [%if (self.header.isDefined()) {%]
+      .option("useHeader", """[%=self.header%]""") 
+      [%}%] [%if (self.dataAddress.isDefined() and self.dataAddress.trim().length() > 0) {%]
+      .option("dataAddress", """[%=self.dataAddress%]""")
+      [%}%] [%if (self.treatEmptyValuesAsNulls.isDefined()) {%] 
+      .option("treatEmptyValuesAsNulls", """[%=self.treatEmptyValuesAsNulls%]""") 
+      [%}%] [%if (self.addColorColumns.isDefined()) {%] 
+      .option("addColorColumns", """[%=self.addColorColumns%]""") 
+      [%}%] [%if (self.timestampFormat.isDefined() and self.timestampFormat.trim().length() > 0) {%]
+      .option("timestampFormat", """[%=self.timestampFormat%]""")
+      [%}%] [%if (self.maxRowsInMemory.isDefined()) {%] 
+      .option("maxRowsInMemory", """[%=self.maxRowsInMemory%]""") 
+      [%}%] [%if (self.sampleSize.isDefined()) {%] 
+      .option("excerptSize", """[%=self.sampleSize%]""") 
+      [%}%] [%if (self.workbookPassword.isDefined() and self.workbookPassword.trim().length() > 0) {%]
+      .option("workbookPassword", """[%=self.workbookPassword%]""") 
+      [%}%]  
+      .load(path)
+      [%} else {/* CSV */%] [%if (self.header.isDefined()) {%]
+      .option("header", """[%=self.header%]""") 
+      [%}%] [%if (self.charset.isDefined() and self.charset.trim().length() > 0) {%]
+      .option("charset", """[%=self.charset%]""")
+      [%}%] [%if (self.delimiter.isDefined() and self.delimiter.trim().length() > 0) {%]
+      .option("sep", """[%=self.delimiter%]""") 
+      [%}%] [%if (self.quote.isDefined() and self.quote.trim().length() > 0) {%]
+      .option("quote", """[%=self.quote%]""") 
+      [%}%] [%if (self.escape.isDefined() and self.escape.trim().length() > 0) {%]
+      .option("escape", """[%=self.escape%]""")
+      [%}%] [%if (self.comment.isDefined() and self.comment.trim().length() > 0) {%] 
+      .option("comment", """[%=self.comment%]""") 
+      [%}%] [%if (self.dateFormat.isDefined() and self.dateFormat.trim().length() > 0) {%]
+      .option("timestampFormat", """[%=self.dateFormat%]""")
+      [%}%] [%if (self.nullValue.isDefined() and self.nullValue.trim().length() > 0) {%]
+      .option("nullValue", """[%=self.nullValue%]""") 
+      [%}%]  
+      .csv(path)
+      [%}%] 
+      [%if (self.~makeDataset <> false) {%].as[[%=self.getSchemaName()%]][%}%]
+      
+	  } catch {
+          case e: UnsupportedOperationException =>  [%if (self.~makeDataset <> false) {%]spark.emptyDataset[[%=self.getSchemaName()%]][%} else {%]spark.emptyDataFrame[%}%]
+      }
+    
+  }
+[%}
+
+%]

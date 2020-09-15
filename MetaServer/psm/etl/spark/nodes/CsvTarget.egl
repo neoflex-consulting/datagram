@@ -1,0 +1,60 @@
+[%
+operation src!CSVTarget define(){
+var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+%]
+
+  def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {
+    val path = {
+      s"""[%=self.path%]"""
+    }
+    logger.logInfo(s"CSVTarget [%=self.name%] path: ${path}")
+    [%if (self.csvFormat <> src!CSVFormat#EXCEL) {%]
+    val fs = org.apache.hadoop.fs.FileSystem.get(spark.sparkContext.hadoopConfiguration)
+    if ([%=self.hdfs%] && fs.exists(new org.apache.hadoop.fs.Path(path))) {
+      fs.delete(new org.apache.hadoop.fs.Path(path), true)
+    }
+    [%}%]    
+    
+    ds.write
+      [%if (self.csvFormat == src!CSVFormat#EXCEL) {/* EXCEL */%]
+      .format("com.crealytics.spark.excel") [%if (self.header.isDefined()) {%]
+      .option("useHeader", """[%=self.header%]""")
+      [%}%] [%if (self.saveMode.isDefined()) {%]
+      .mode("[%if (self.saveMode==SaveMode#APPEND) {%]append[%}else{%]overwrite[%}%]")
+      [%}%] [%if (self.dataAddress.isDefined() and self.dataAddress.trim().length() > 0) {%]
+      .option("dataAddress", """[%=self.dataAddress%]""")
+      [%}%] [%if (self.timestampFormat.isDefined() and self.timestampFormat.trim().length() > 0) {%]
+      .option("timestampFormat", """[%=self.timestampFormat%]""")
+      [%}%] [%if (self.dateFormat.isDefined() and self.dateFormat.trim().length() > 0) {%]
+      .option("dateFormat", """[%=self.dateFormat%]""")
+      [%}%]
+      .save(path)
+      [%} else {/* CSV */%]
+      [%if (self.header.isDefined()) {%]
+      .option("header", """[%=self.header%]""")
+      [%}%] [%if (self.charset.isDefined() and self.charset.trim().length() > 0) {%] 
+      .option("charset", """[%=self.charset%]""") 
+      [%}%] [%if (self.delimiter.isDefined() and self.delimiter.trim().length() > 0) {self.delimiter.println;%]
+      .option("sep", """[%=self.delimiter%]""") 
+      [%}%] [%if (self.quote.isDefined() and self.quote.trim().length() > 0) {%]
+      .option("quote", """[%=self.quote%]""")
+      [%}%] [%if (self.escape.isDefined() and self.escape.trim().length() > 0) {%]
+      .option("escape", """[%=self.escape%]""") 
+      [%}%] [%if (self.comment.isDefined() and self.comment.trim().length() > 0) {%]
+      .option("comment", """[%=self.comment%]""") 
+      [%}%] [%if (self.dateFormat.isDefined() and self.dateFormat.trim().length() > 0) {%]
+      .option("timestampFormat", """[%=self.dateFormat%]""")
+      [%}%] [%if (self.nullValue.isDefined() and self.nullValue.trim().length() > 0) {%]
+      .option("nullValue", """[%=self.nullValue%]""") 
+      [%}%] [%if (self.codec.isDefined() and self.codec <> CompressionCodec#`default`) {%]
+      .option("compression", """[%=self.codec%]""") 
+      [%}%] [%if (self.quoteMode.isDefined() and self.quoteMode <> QuoteMode#DEFAULT and self.quoteMode <> QuoteMode#MINIMAL) {%]
+      [%if (self.quoteMode == QuoteMode#ALL) {%].option("quoteAll", """true""")[%}%]
+	  [%if (self.quoteMode == QuoteMode#NONE) {%].option("quote", "")[%}%]
+	  [%if (self.quoteMode == QuoteMode#NON_NUMERIC) throw "NON_NUMERIC quoteMode is not supported in spark 2";%]
+      [%}%] 
+      .csv(path)
+      [%}%]
+  }
+[%}
+%]

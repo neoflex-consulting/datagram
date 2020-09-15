@@ -1,0 +1,30 @@
+[%@template
+operation src!SparkSQL defineImpl(){
+
+	for (sqlPort in self.sqlPorts) {
+		var inputNode = (self.transformation.transitions.selectOne(t|t.finish == sqlPort)).~sourceNode;%]	
+		[%=inputNode.name%].createOrReplaceTempView("[%=sqlPort.`alias`%]")
+	
+	[%}
+	%]
+			
+	val sqlText = s"""[%=interpolareParameters(self.statement)%]"""	
+	val queryResult = spark.sql(s"${sqlText}")
+	
+	[% if (self.explain) {%]	
+	val explainText = queryResult.explain(true)
+	if (_debug) {
+		logger.logInfo(s"${explainText}")
+	} 
+	[%}%]
+		
+	queryResult[%if ((self.schemaOnRead <> true) and (self.~makeDataset <> false)) {%].as[[%=self.getSchemaName()%]][%}%]
+      
+	[%
+}
+
+operation src!SparkSQL hiveSupport(){
+    return false;
+}
+
+%]

@@ -1,0 +1,87 @@
+[%
+operation src!KafkaSource imports(){
+    return Sequence{
+    };
+} 
+
+operation src!KafkaSource define(){
+    %]
+  def get[%=self.name%](spark: SparkSession): Dataset[[%=self.getSchemaName()%]] = {
+    import spark.implicits._
+    import scala.reflect.runtime.universe._
+    import org.apache.avro.Schema
+    import org.apache.avro.io.{DecoderFactory, EncoderFactory}
+    import org.apache.avro.file.{DataFileReader, SeekableByteArrayInput}
+    import org.apache.avro.generic.{GenericData, GenericDatumReader, GenericDatumWriter, GenericRecord}    
+    
+    [%
+    var consumeType;
+    switch (self.kafkaConsumeType) {
+        case src!KafkaConsumeType#ASSIGN : consumeType = "assign";
+        case src!KafkaConsumeType#SUBSCRIBE : consumeType = "subscribe";
+        case src!KafkaConsumeType#SUBSCRIBE_PATTERN : consumeType = "subscribePattern";
+        default : consumeType = "assign"; 
+    }%]
+ 
+    spark
+    .[%if (self.transformation.hasStreamTarget()) {%]readStream[%} else {%]read[%}%]
+    
+    .format("kafka")
+    .option("kafka.bootstrap.servers", s"""[%=self.bootstrapServers%]""")
+    .option("[%=consumeType%]", s"""[%=self.consumeOptionValue%]""")
+    [%for (option in self.options) {%]
+    .option("[%=option.key%]", s"""[%=option.value%]""")
+    [%}%]
+    .load()
+    [%if(self.valueScheme <> null and self.valueScheme.schemeType = SchemeType#AVRO and (self.valueType = ValueType#AVROFILE or self.valueType = ValueType#AVRO)) {%]
+    [%if(self.valueType = ValueType#AVRO) {%]   .map { row => { [%} else {%]    .flatMap { row => { [%}%]
+    
+        val schema = new Schema.Parser().parse(s"""[%=self.valueScheme.schemeString%]""")   
+        val datumReader = new GenericDatumReader[GenericRecord](schema)
+    
+        [%if(self.valueType = ValueType#AVRO) {%]
+        def deserialize(bytes: Array[Byte]): [%=self.getSchemaName()%] = {
+    
+            val decoder = DecoderFactory.get.binaryDecoder(bytes, null)
+            val record = datumReader.read(null, decoder)
+            
+            [%for(f in self.outputPort.fields) {%]
+            if(record.get("[%=f.get("name")%]") == null) {
+                 throw new NullPointerException("[%=f.get("name")%]")
+            }
+            
+            [%}%]            
+    
+            [%=self.getSchemaName()%](
+                [%for(f in self.outputPort.fields) {%]
+                record.get("[%=f.get("name")%]")[%if(f.dataTypeDomain = src!DataTypeDomain#STRING ){%].toString[%}%].asInstanceOf[[%=f.getFullJavaClassName()%]][%if (hasMore) {%], [%}%]
+                
+                [%}%]
+            )
+        }
+        [%}%]
+        [%if(self.valueType = ValueType#AVROFILE) {%]
+        def deserialize(bytes: Array[Byte]): Seq[[%=self.getSchemaName()%]] = {
+            val dataFileReader:DataFileReader[GenericRecord]  = new DataFileReader[GenericRecord](new SeekableByteArrayInput(bytes), datumReader)
+            var res:Seq[[%=self.getSchemaName()%]] = Seq.empty[[%=self.getSchemaName()%]]
+            while (dataFileReader.hasNext()) {
+                val record:GenericRecord = dataFileReader.next()
+                                
+                res = res :+ [%=self.getSchemaName()%](
+                    [%for(f in self.outputPort.fields) {%]
+                    if (record.get("[%=f.get("name")%]") == null) null else record.get("[%=f.get("name")%]")[%if(f.dataTypeDomain = src!DataTypeDomain#STRING ){%].toString[%}%].asInstanceOf[[%=f.getFullJavaClassName()%]][%if (hasMore) {%], [%}%]
+                    
+                    [%}%]
+                )
+            }
+            res
+        }
+        [%}%]
+        deserialize(row.getAs("value"))
+    } }
+    [%}%]
+    .as[[%=self.getSchemaName()%]]
+  }
+    [%
+}
+%]

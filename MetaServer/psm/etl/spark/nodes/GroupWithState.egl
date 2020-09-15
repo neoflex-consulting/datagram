@@ -1,0 +1,199 @@
+[%
+import "EventsProcessor.egl";
+
+operation src!GroupWithState imports(){
+    if(self.eventsProcessor == null) {
+        return Sequence{
+            "import org.apache.spark.sql.streaming.{GroupStateTimeout, OutputMode, GroupState}"
+        };
+    } else {
+        return Sequence{
+            "import org.apache.spark.sql.streaming.{GroupStateTimeout, OutputMode, GroupState}",
+            "import org.kie.api.KieServices",
+            "import org.kie.api.builder.Message.Level",
+            "import org.kie.api.io.ResourceType",
+            "import org.kie.api.io.ResourceConfiguration",
+            "import org.kie.api.runtime.KieSession",
+            "import org.kie.api.KieBase",
+            "import org.drools.compiler.compiler.io.memory.MemoryFileSystem",
+            "import org.kie.internal.builder.KnowledgeBuilderFactory",
+            "import org.kie.internal.builder.DecisionTableConfiguration",
+            "import org.kie.internal.builder.DecisionTableInputType",
+            "import java.util.ArrayList"
+        };    
+    }
+}
+
+@template
+operation src!GroupWithState getFunctionOpenDeclaration() {	
+    var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+    var groupByFields = self.getGroupByFields(source);
+    %]def updateAcrossEvents(keyval: Tuple[%=groupByFields.size%][[%for(f in groupByFields){%][%=f.getFullJavaClassName()%][% if (hasMore){%], [%}%] [%}%]], inputs: Iterator[[%=source.getSchemaName()%]], state: GroupState[[%=self.getSchemaName()%]_InternalState]): Iterator[[%=self.getSchemaName()%]] = {
+        type InputRow = [%=source.getSchemaName()%]
+        type OutputRow = [%=self.getSchemaName()%]
+        type InternalState = [%=self.getSchemaName()%]_InternalState[%
+}
+
+@template
+operation src!GroupWithState getFunctionCloseDeclaration() {
+    %]}[%
+}
+
+operation src!GroupWithState getGroupByFields(source): List {
+    var groupByFields = new List;
+    for(n in self.groupByKey) {
+    	for(field in source.outputPort.fields) {
+    		if(field.name == n) {
+    			groupByFields.add(field);
+    		}
+    	}
+    }
+    return groupByFields;
+}
+
+@template
+operation src!GroupWithState globals(){
+%]
+
+object Global[%=self.name%] {
+    var kbase: KieBase = null
+}[%
+
+}
+
+@template
+operation src!GroupWithState defineImpl(){
+    var source = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+    var groupByFields = self.getGroupByFields(source);
+    self.internalState.setParentName(self.getSchemaName() + "_InternalState");
+    %]
+    
+    org.apache.spark.sql.catalyst.encoders.OuterScopes.addOuterScope(this)	     
+       
+    [%=self.getFunctionOpenDeclaration()%]
+    [%if(self.eventsProcessor == null) {%]
+        [%=self.flatMapGroupsWithState%]
+    [%} else {%]      
+        [%if(self.internalStateTimeout <> null and self.internalStateTimeout <> "") {%]
+        if (state.hasTimedOut) {
+            state.remove()
+            List[OutputRow]().iterator
+        } else [%}%]
+        if(inputs.hasNext == false) {
+           List[OutputRow]().iterator
+        } else {
+            var outputs = List[OutputRow]()
+            var newState: InternalState = null
+            
+            
+            if (state.exists) {
+                newState = state.get
+            } else {                
+                newState = new InternalState([%for(field in self.eventsProcessor.state.fields){%]null[% if (hasMore){%], [%}%][%}%])
+            }
+            if(Global[%=self.name%].kbase == null) {
+                println("KieBase Initialization!!!");                            
+                val kieServices = KieServices.Factory.get()
+                val kfs = kieServices.newKieFileSystem()
+                val kieRepository = kieServices.getRepository()
+                val res = kieServices.getResources().newReaderResource(new java.io.StringReader("""[%=self.eventsProcessor.body%]"""))
+                kfs.write("src/main/resources/simple.drl", res)
+        
+                val kieBuilder = kieServices.newKieBuilder(kfs)
+                kieBuilder.buildAll()
+                if (kieBuilder.getResults().hasMessages(Level.ERROR)) {
+                    throw new RuntimeException("Build Errors:\n" + kieBuilder.getResults().toString())
+                }
+                val module = kieBuilder.getKieModule()
+                val kieContainer = kieServices.newKieContainer(module.getReleaseId())
+                val kieBaseName = kieContainer.getKieBaseNames().iterator().next()
+                Global[%=self.name%].kbase = kieContainer.getKieBase(kieBaseName)                        
+            }
+            
+            [%if(self.watermarkField = null) {%]            
+            val iterator = inputs[%} else {%]            
+            val iterator = inputs.toList.sortWith((left, right) => if((left == null || right == null) || (left.[%=self.watermarkField%] == null || right.[%=self.watermarkField%] == null)) false else left.[%=self.watermarkField%].before(right.[%=self.watermarkField%])).iterator
+            [%}%]
+            
+            val factType = Global[%=self.name%].kbase.getFactType("ru.neoflex.meta.etl2.spark", "Fact");            
+            val inputType = Global[%=self.name%].kbase.getFactType("ru.neoflex.meta.etl2.spark", "InputType");
+            val outputType = Global[%=self.name%].kbase.getFactType("ru.neoflex.meta.etl2.spark", "OutputType");
+            
+            [%if(self.eventsProcessor.state <> null){%]
+            val stateType = Global[%=self.name%].kbase.getFactType("ru.neoflex.meta.etl2.spark", "StateType");
+            [%}%]
+            [%if(self.eventsProcessor.local <> null){%]
+            val localType = Global[%=self.name%].kbase.getFactType("ru.neoflex.meta.etl2.spark", "LocalType");
+            [%}%]
+                         
+            while(iterator.hasNext)
+            {
+                var session: KieSession = Global[%=self.name%].kbase.newKieSession();
+
+                if (_debug) {
+                    KieServices.Factory.get().getLoggers().newConsoleLogger(session)
+                }
+                
+                val fact = factType.newInstance();
+                [%if(self.eventsProcessor.state <> null){%]
+                val stateType = Global[%=self.name%].kbase.getFactType("ru.neoflex.meta.etl2.spark", "StateType");
+                val stateFact = stateType.newInstance();
+                [%for (field in self.eventsProcessor.state.fields) { %]
+                stateType.set(stateFact, "[%=field.getJavaName()%]", newState.[%=field.getJavaName()%])
+                [%}%]
+                factType.set(fact, "state", stateFact)            
+                [%}%]
+                [%if(self.eventsProcessor.local <> null){%]
+                val localFact = localType.newInstance();
+                factType.set(fact, "local", localFact)
+                [%}%]                
+                val inputFact = inputType.newInstance()
+                val row = iterator.next
+                [%for (field in self.eventsProcessor.input.fields) { %]
+                inputType.set(inputFact, "[%=field.getJavaName()%]", row.[%=field.getJavaName()%])
+                [%}%]
+                factType.set(fact, "input", inputFact)
+                factType.set(fact, "output", outputType.newInstance())
+                val factHandle = session.insert(fact)
+                session.fireAllRules()
+                
+                val outputIterator = session.getQueryResults("getOutput").iterator()
+                
+                while(outputIterator.hasNext()){
+                    val r = outputIterator.next()
+                    val ro = r.get("result")
+                    outputs = [%=self.getSchemaName()%]([%
+                    for (field in self.eventsProcessor.output.fields) {%]    
+                        [%=field.getJavaName()%] = outputType.get(ro, "[%=field.getJavaName()%]").asInstanceOf[[%=field.getFullJavaClassName()%]][%if (hasMore){%],[%}%]
+                    [%}%]
+            
+                    ) :: outputs
+                }
+                val factUpdated = session.getObject(factHandle)
+                [%if(self.eventsProcessor.state <> null){%]                
+                val stateUpdated = factType.get(factUpdated, "state")
+                [%for (field in self.eventsProcessor.state.fields) {%]    
+                newState.[%=field.getJavaName()%] = stateType.get(stateUpdated, "[%=field.getJavaName()%]").asInstanceOf[[%=field.getFullJavaClassName()%]]
+                [%}%]
+                if(factType.get(factUpdated, "removeState") != true) {                    
+                    state.update(newState) 
+                } else {
+                    state.remove()
+                }
+                if(factType.get(factUpdated, "timeout") != null) {
+                    state.setTimeoutDuration(factType.get(factUpdated, "timeout").toString())
+                }
+                [%}%]
+                session.dispose()
+            }
+
+            [%if(self.internalStateTimeout <> null and self.internalStateTimeout <> "") {%]
+            state.setTimeoutDuration("[%=self.internalStateTimeout%]")
+            [%}%]            
+            outputs.iterator
+        }
+    [%}%]
+    [%=self.getFunctionCloseDeclaration()%]
+    [%=source.name%].groupByKey(row=>new Tuple[%=groupByFields.size%]([%for(f in groupByFields){%]row.[%=f.name%][% if (hasMore){%], [%}%] [%}%]))
+        .flatMapGroupsWithState[[%=self.getSchemaName()%]_InternalState, [%=self.getSchemaName()%]](OutputMode.[%if (self.outputMode == src!StreamOutputMode#APPEND){%]Append[%} else if (self.outputMode == src!StreamOutputMode#COMPLETE) {%]Complete[%}else if (self.outputMode == src!StreamOutputMode#UPDATE) {%]Update[%}%], GroupStateTimeout.ProcessingTimeTimeout)(updateAcrossEvents)        
+[%}%]

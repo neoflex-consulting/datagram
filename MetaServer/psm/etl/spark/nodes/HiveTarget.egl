@@ -1,0 +1,42 @@
+[%
+
+operation src!HiveTarget define(){
+     var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
+%]
+
+def [%=self.name%](spark: SparkSession, ds: Dataset[[%=inputNode.getSchemaName()%]]): Unit = {
+
+ 	 import spark.implicits._
+     [%if (self.preSQL.isDefined() and self.preSQL.trim().length() > 0) {%]
+     spark.sql(s"""[%=self.preSQL.trim()%]""")
+     [%}%]
+     
+	 [%	
+ 	 var writeMode;
+ 	 switch (self.hiveTargetType) {
+ 	  	 case src!HiveTargetType#APPEND : writeMode = "append";
+ 	  	 case src!HiveTargetType#OVERWRITE : writeMode = "overwrite";
+ 	  	 case src!HiveTargetType#IGNORE : writeMode = "ignore";
+ 	  	 case src!HiveTargetType#ERROR : writeMode = "error";
+ 	  	 default : writeMode = "append";
+ 	 }%]
+ 	 
+ 	 [%	
+ 	 if (self.partitions.size > 0) {%]
+ 	  	 ds.write.partitionBy([% for (part in self.partitions) {%]"[%=part%]"[%if (hasMore){%], [%}%] [%} %]).mode("[%=writeMode%]").saveAsTable("[%=self.tableName%]")
+ 	 [%}
+ 	 else {%]
+ 	  	 ds.write.mode("[%=writeMode%]").saveAsTable("[%=self.tableName%]")
+ 	 [%}			
+
+ 	 if (self.postSQL.isDefined() and self.postSQL.trim().length() > 0) {%]
+ 	  	 spark.sql(s"""[%=self.preSQL.trim()%]""")
+ 	 [%}%]	  
+  }
+[%}
+
+operation src!HiveTarget hiveSupport(){
+    return true;
+} 
+
+%]

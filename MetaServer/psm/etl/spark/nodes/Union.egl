@@ -1,0 +1,15 @@
+[%@template
+operation src!Union defineImpl(){
+          var inputNode = (self.transformation.transitions.selectOne(t|t.finish == self.inputPort)).~sourceNode; 
+          var unionNode = (self.transformation.transitions.selectOne(t|t.finish == self.unionPort)).~sourceNode;%]
+[%=inputNode.name%]
+.select(
+	[%for (f in self.outputPort.fields) {%]
+		[%if (f.inputPortField.isDefined()) {%]
+	col("[%=f.inputPortField.name%]").alias("[%=f.name%]")
+		[%} else {%]
+	expr("null").alias("[%=f.name%]")
+		[%}%][% if (hasMore){%], [%}%]
+	[%}%]
+).union([%=unionNode.name%].asInstanceOf[Dataset[org.apache.spark.sql.Row]]).as[[%=self.getSchemaName()%]]
+[%}%]
