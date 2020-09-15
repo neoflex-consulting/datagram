@@ -920,6 +920,9 @@ public class GitflowSvc extends BaseSvc {
         try {
             inGitTransaction("deleteEObject " + dir + "/" + name, (Callable<Void>) () -> {
                 Path modelPath = getCurrentGfs().getPath(dir);
+                if (!Files.isDirectory(modelPath)) {
+                    return null;
+                }
                 Files.walk(modelPath)
                         .filter(Files::isRegularFile).
                         filter(file -> file.getFileName().toString().startsWith(name + "."))
