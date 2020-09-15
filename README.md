@@ -20,11 +20,20 @@ git clone https://github.com/neoflex-ru/datagram.git
 cd datagram
 mvn -f pom3.xml package
 docker-compose -f bd-runtime/docker-compose.yml pull
-docker-compose -f bd-runtime/docker-compose.yml build datagram
 docker-compose -f bd-runtime/docker-compose.yml up -d
 ```
 
 ### Проверка работоспособности
+Проверить логи программы можно командой:
+```
+docker-compose -f bd-runtime/docker-compose.yml logs datagram
+```
+В логе не должно быть сообщений об ошибках, программа стартовала успешно,
+если в логе появилась запись:
+```
+Started MServerConfiguration in 80.091 seconds (JVM running for 91.57)
+```
+
 Откройте начальную страницу [__Datagram__](http://localhost:8089/) в браузере.
 
 __Логин__/__пароль__: admin/admin
