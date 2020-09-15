@@ -199,7 +199,9 @@ services:
       - ./datagram/mspace:/opt/datagram/mspace
       - ../mserver/target/mserver-2.0-SNAPSHOT.jar:/opt/datagram/mserver-2.0-SNAPSHOT.jar
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark3lib/2.0-SNAPSHOT/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
+      - ../spark2lib/pom3.xml:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark3lib/2.0-SNAPSHOT/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.pom
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/2.0-SNAPSHOT/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
+      - ../runtime/pom3.xml:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/2.0-SNAPSHOT/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.pom
     expose:
       - 1-65535
     ports:
