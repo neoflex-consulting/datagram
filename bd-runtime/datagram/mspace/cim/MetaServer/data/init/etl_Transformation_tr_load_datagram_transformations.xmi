@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="ASCII"?>
+<etl:Transformation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:etl="http://www.neoflex.ru/meta/etl" name="tr_load_datagram_transformations" label="tr_load_datagram_transformations" sparkVersion="SPARK3" jsonView="{&quot;cells&quot;:[{&quot;type&quot;:&quot;devs.transformation.SqlSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:63,&quot;y&quot;:26},&quot;angle&quot;:0,&quot;id&quot;:&quot;f22c5c29-65ab-4181-9a79-cb192619cdbf&quot;,&quot;name&quot;:&quot;SQL_0&quot;,&quot;z&quot;:1,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;etl_transformation&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SqlSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:117,&quot;y&quot;:243},&quot;angle&quot;:0,&quot;id&quot;:&quot;bc123ec6-4a03-4d5c-86fb-48533e28526c&quot;,&quot;name&quot;:&quot;SQL_1&quot;,&quot;z&quot;:2,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;auth_auditinfo&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SqlSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:269,&quot;y&quot;:426},&quot;angle&quot;:0,&quot;id&quot;:&quot;0a517dc1-2ea7-4b37-88af-f1e129332e9e&quot;,&quot;name&quot;:&quot;SQL_7&quot;,&quot;z&quot;:3,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;etl_project&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Join&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;,&quot;join&quot;],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}},{&quot;id&quot;:&quot;join&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;join&quot;}}},{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:312,&quot;y&quot;:112},&quot;angle&quot;:0,&quot;id&quot;:&quot;50b9c758-9020-4bf1-b720-a4def70e081f&quot;,&quot;name&quot;:&quot;Join_3&quot;,&quot;z&quot;:4,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Join_3&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Join&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;,&quot;join&quot;],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}},{&quot;id&quot;:&quot;join&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;join&quot;}}},{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:445,&quot;y&quot;:278},&quot;angle&quot;:0,&quot;id&quot;:&quot;11d5cb29-0ee5-4b22-8204-0f1a3bd645b1&quot;,&quot;name&quot;:&quot;Join_6&quot;,&quot;z&quot;:5,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Join_6&quot;}}},{&quot;type&quot;:&quot;devs.transformation.LocalTarget&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;],&quot;outPorts&quot;:[],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:692,&quot;y&quot;:282},&quot;angle&quot;:0,&quot;id&quot;:&quot;5c882aef-414c-4d67-bbf2-305e0075d47e&quot;,&quot;name&quot;:&quot;Local_9&quot;,&quot;z&quot;:6,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Local_9&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;f22c5c29-65ab-4181-9a79-cb192619cdbf&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;50b9c758-9020-4bf1-b720-a4def70e081f&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;c3513808-114f-4e63-93af-0a977059ac1a&quot;,&quot;z&quot;:7,&quot;name&quot;:&quot;a15610d3-edb5-4907-a3e5-bf1df97e1211&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;a15610d3-edb5-4907-a3e5-bf1df97e1211&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;bc123ec6-4a03-4d5c-86fb-48533e28526c&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;50b9c758-9020-4bf1-b720-a4def70e081f&quot;,&quot;port&quot;:&quot;join&quot;},&quot;id&quot;:&quot;cf3dd5c6-c5bc-4fd4-a92f-2b8e463e911f&quot;,&quot;z&quot;:8,&quot;name&quot;:&quot;a4d6b84c-f4d9-4ca3-ba22-8246f661b691&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;a4d6b84c-f4d9-4ca3-ba22-8246f661b691&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;0a517dc1-2ea7-4b37-88af-f1e129332e9e&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;11d5cb29-0ee5-4b22-8204-0f1a3bd645b1&quot;,&quot;port&quot;:&quot;join&quot;},&quot;id&quot;:&quot;9f0817fc-233a-4b9c-9dc5-c19ae743d901&quot;,&quot;z&quot;:9,&quot;name&quot;:&quot;45a8bf44-4ff9-4143-a28a-e0280ce660d1&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;45a8bf44-4ff9-4143-a28a-e0280ce660d1&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;50b9c758-9020-4bf1-b720-a4def70e081f&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;11d5cb29-0ee5-4b22-8204-0f1a3bd645b1&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;393d9209-5ad4-44ec-a351-1d70a757bde4&quot;,&quot;z&quot;:10,&quot;name&quot;:&quot;30ee7709-5f08-48fb-9634-54e5f971f88e&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;30ee7709-5f08-48fb-9634-54e5f971f88e&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;11d5cb29-0ee5-4b22-8204-0f1a3bd645b1&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;5c882aef-414c-4d67-bbf2-305e0075d47e&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;1ad67a65-673f-4167-bc7e-50d775175d27&quot;,&quot;z&quot;:11,&quot;name&quot;:&quot;c603dba3-df99-4063-bb6c-d49a2bd85fa4&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;c603dba3-df99-4063-bb6c-d49a2bd85fa4&quot;}}}]}">
+  <targets xsi:type="etl:LocalTarget" name="Local_9" label="Local_9" localFileName="/temp/transformations" saveMode="OVERWRITE">
+    <inputPort name="Local_9in">
+      <fields name="transformation_name" dataTypeDomain="STRING"/>
+      <fields name="connectasloggedinuser" dataTypeDomain="BOOLEAN"/>
+      <fields name="svncommitmessage" dataTypeDomain="STRING"/>
+      <fields name="svnenabled" dataTypeDomain="BOOLEAN"/>
+      <fields name="svnpassword" dataTypeDomain="STRING"/>
+      <fields name="svnurl" dataTypeDomain="STRING"/>
+      <fields name="svnusername" dataTypeDomain="STRING"/>
+      <fields name="vcstype" dataTypeDomain="STRING"/>
+      <fields name="buildversion" dataTypeDomain="STRING"/>
+      <fields name="description" dataTypeDomain="STRING"/>
+      <fields name="transformation_id" dataTypeDomain="LONG"/>
+      <fields name="label" dataTypeDomain="STRING"/>
+      <fields name="project_project_e_id" dataTypeDomain="LONG"/>
+      <fields name="sparkversion" dataTypeDomain="STRING"/>
+      <fields name="changedatetime" dataTypeDomain="DATETIME"/>
+      <fields name="changeuser" dataTypeDomain="STRING"/>
+      <fields name="createdatetime" dataTypeDomain="DATETIME"/>
+      <fields name="createuser" dataTypeDomain="STRING"/>
+      <fields name="project_name" dataTypeDomain="STRING"/>
+    </inputPort>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="transformation_name" targetColumnName="transformation_name"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="connectasloggedinuser" targetColumnName="connectasloggedinuser"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="svncommitmessage" targetColumnName="svncommitmessage"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="svnenabled" targetColumnName="svnenabled"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="svnpassword" targetColumnName="svnpassword"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="svnurl" targetColumnName="svnurl"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="svnusername" targetColumnName="svnusername"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="vcstype" targetColumnName="vcstype"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="buildversion" targetColumnName="buildversion"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="description" targetColumnName="description"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="transformation_id" targetColumnName="transformation_id"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="label" targetColumnName="label"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="project_project_e_id" targetColumnName="project_project_e_id"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="sparkversion" targetColumnName="sparkversion"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="changedatetime" targetColumnName="changedatetime"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="changeuser" targetColumnName="changeuser"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="createdatetime" targetColumnName="createdatetime"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="createuser" targetColumnName="createuser"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="project_name" targetColumnName="project_name"/>
+  </targets>
+  <transformationSteps xsi:type="etl:Join" name="Join_3" label="Join_3">
+    <outputPort name="Join_3out">
+      <fields xsi:type="etl:ProjectionField" name="buildversion" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.1"/>
+      <fields xsi:type="etl:ProjectionField" name="description" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.2"/>
+      <fields xsi:type="etl:ProjectionField" name="transformation_id" dataTypeDomain="LONG" sourceFields="//@transformationSteps.0/@inputPort/@fields.4"/>
+      <fields xsi:type="etl:ProjectionField" name="label" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.6"/>
+      <fields xsi:type="etl:ProjectionField" name="transformation_name" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.7"/>
+      <fields xsi:type="etl:ProjectionField" name="project_project_e_id" dataTypeDomain="LONG" sourceFields="//@transformationSteps.0/@inputPort/@fields.8"/>
+      <fields xsi:type="etl:ProjectionField" name="sparkversion" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.9"/>
+      <fields xsi:type="etl:ProjectionField" name="changedatetime" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.0/@joineePort/@fields.0"/>
+      <fields xsi:type="etl:ProjectionField" name="changeuser" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@joineePort/@fields.1"/>
+      <fields xsi:type="etl:ProjectionField" name="createdatetime" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.0/@joineePort/@fields.2"/>
+      <fields xsi:type="etl:ProjectionField" name="createuser" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@joineePort/@fields.3"/>
+    </outputPort>
+    <inputPort name="Join_3in">
+      <fields name="auditinfo_auditinfo_e_id" dataTypeDomain="LONG"/>
+      <fields name="buildversion" dataTypeDomain="STRING"/>
+      <fields name="description" dataTypeDomain="STRING"/>
+      <fields name="dtype" dataTypeDomain="STRING"/>
+      <fields name="e_id" dataTypeDomain="LONG"/>
+      <fields name="jsonview" dataTypeDomain="STRING"/>
+      <fields name="label" dataTypeDomain="STRING"/>
+      <fields name="name" dataTypeDomain="STRING"/>
+      <fields name="project_project_e_id" dataTypeDomain="LONG"/>
+      <fields name="sparkversion" dataTypeDomain="STRING"/>
+    </inputPort>
+    <joineePort name="Join_3join">
+      <fields name="changedatetime" dataTypeDomain="DATETIME"/>
+      <fields name="changeuser" dataTypeDomain="STRING"/>
+      <fields name="createdatetime" dataTypeDomain="DATETIME"/>
+      <fields name="createuser" dataTypeDomain="STRING"/>
+      <fields name="dtype" dataTypeDomain="STRING"/>
+      <fields name="e_container" dataTypeDomain="STRING"/>
+      <fields name="econtainer_class" dataTypeDomain="STRING"/>
+      <fields name="e_container_feature_name" dataTypeDomain="STRING"/>
+      <fields name="e_id" dataTypeDomain="LONG"/>
+    </joineePort>
+    <keyFields>auditinfo_auditinfo_e_id</keyFields>
+    <joineeKeyFields>e_id</joineeKeyFields>
+  </transformationSteps>
+  <transformationSteps xsi:type="etl:Join" name="Join_6" label="Join_6" joinType="LEFT">
+    <outputPort name="Join_6out">
+      <fields xsi:type="etl:ProjectionField" name="transformation_name" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@inputPort/@fields.4"/>
+      <fields xsi:type="etl:ProjectionField" name="connectasloggedinuser" dataTypeDomain="BOOLEAN" sourceFields="//@transformationSteps.1/@joineePort/@fields.0"/>
+      <fields xsi:type="etl:ProjectionField" name="svncommitmessage" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@joineePort/@fields.5"/>
+      <fields xsi:type="etl:ProjectionField" name="svnenabled" dataTypeDomain="BOOLEAN" sourceFields="//@transformationSteps.1/@joineePort/@fields.6"/>
+      <fields xsi:type="etl:ProjectionField" name="svnpassword" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@joineePort/@fields.7"/>
+      <fields xsi:type="etl:ProjectionField" name="svnurl" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@joineePort/@fields.8"/>
+      <fields xsi:type="etl:ProjectionField" name="svnusername" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@joineePort/@fields.9"/>
+      <fields xsi:type="etl:ProjectionField" name="vcstype" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@joineePort/@fields.10"/>
+      <fields xsi:type="etl:ProjectionField" name="buildversion" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@inputPort/@fields.0"/>
+      <fields xsi:type="etl:ProjectionField" name="description" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@inputPort/@fields.1"/>
+      <fields xsi:type="etl:ProjectionField" name="transformation_id" dataTypeDomain="LONG" sourceFields="//@transformationSteps.1/@inputPort/@fields.2"/>
+      <fields xsi:type="etl:ProjectionField" name="label" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@inputPort/@fields.3"/>
+      <fields xsi:type="etl:ProjectionField" name="project_project_e_id" dataTypeDomain="LONG" sourceFields="//@transformationSteps.1/@inputPort/@fields.5"/>
+      <fields xsi:type="etl:ProjectionField" name="sparkversion" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@inputPort/@fields.6"/>
+      <fields xsi:type="etl:ProjectionField" name="changedatetime" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.1/@inputPort/@fields.7"/>
+      <fields xsi:type="etl:ProjectionField" name="changeuser" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@inputPort/@fields.8"/>
+      <fields xsi:type="etl:ProjectionField" name="createdatetime" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.1/@inputPort/@fields.9"/>
+      <fields xsi:type="etl:ProjectionField" name="createuser" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@inputPort/@fields.10"/>
+      <fields xsi:type="etl:ProjectionField" name="project_name" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@joineePort/@fields.3" expression="&quot;&quot;"/>
+    </outputPort>
+    <inputPort name="Join_6in">
+      <fields name="buildversion" dataTypeDomain="STRING"/>
+      <fields name="description" dataTypeDomain="STRING"/>
+      <fields name="transformation_id" dataTypeDomain="LONG"/>
+      <fields name="label" dataTypeDomain="STRING"/>
+      <fields name="transformation_name" dataTypeDomain="STRING"/>
+      <fields name="project_project_e_id" dataTypeDomain="LONG"/>
+      <fields name="sparkversion" dataTypeDomain="STRING"/>
+      <fields name="changedatetime" dataTypeDomain="DATETIME"/>
+      <fields name="changeuser" dataTypeDomain="STRING"/>
+      <fields name="createdatetime" dataTypeDomain="DATETIME"/>
+      <fields name="createuser" dataTypeDomain="STRING"/>
+    </inputPort>
+    <joineePort name="Join_6join">
+      <fields name="connectasloggedinuser" dataTypeDomain="BOOLEAN"/>
+      <fields name="dtype" dataTypeDomain="STRING"/>
+      <fields name="e_id" dataTypeDomain="LONG"/>
+      <fields name="name" dataTypeDomain="STRING"/>
+      <fields name="project_parentproject_e_id" dataTypeDomain="LONG"/>
+      <fields name="svncommitmessage" dataTypeDomain="STRING"/>
+      <fields name="svnenabled" dataTypeDomain="BOOLEAN"/>
+      <fields name="svnpassword" dataTypeDomain="STRING"/>
+      <fields name="svnurl" dataTypeDomain="STRING"/>
+      <fields name="svnusername" dataTypeDomain="STRING"/>
+      <fields name="vcstype" dataTypeDomain="STRING"/>
+    </joineePort>
+    <keyFields>project_project_e_id</keyFields>
+    <joineeKeyFields>e_id</joineeKeyFields>
+  </transformationSteps>
+  <sources xsi:type="etl:SQLSource" name="SQL_0" label="etl_transformation" schemaOnRead="true" statement="select&#xA;&#x9;auditinfo_auditinfo_e_id,&#xA;&#x9;buildversion,&#xA;&#x9;description,&#xA;&#x9;dtype,&#xA;&#x9;e_id,&#xA;&#x9;jsonview,&#xA;&#x9;label,&#xA;&#x9;name,&#xA;&#x9;project_project_e_id,&#xA;&#x9;sparkversion&#xA;from etl_transformation">
+    <outputPort name="SQL_0out">
+      <fields name="auditinfo_auditinfo_e_id" dataTypeDomain="LONG"/>
+      <fields name="buildversion" dataTypeDomain="STRING"/>
+      <fields name="description" dataTypeDomain="STRING"/>
+      <fields name="dtype" dataTypeDomain="STRING"/>
+      <fields name="e_id" dataTypeDomain="LONG"/>
+      <fields name="jsonview" dataTypeDomain="STRING"/>
+      <fields name="label" dataTypeDomain="STRING"/>
+      <fields name="name" dataTypeDomain="STRING"/>
+      <fields name="project_project_e_id" dataTypeDomain="LONG"/>
+      <fields name="sparkversion" dataTypeDomain="STRING"/>
+    </outputPort>
+  </sources>
+  <sources xsi:type="etl:SQLSource" name="SQL_1" label="auth_auditinfo" schemaOnRead="true" statement="select&#xA;&#x9;changedatetime,&#xA;&#x9;changeuser,&#xA;&#x9;createdatetime,&#xA;&#x9;createuser,&#xA;&#x9;dtype,&#xA;&#x9;e_container,&#xA;&#x9;econtainer_class,&#xA;&#x9;e_container_feature_name,&#xA;&#x9;e_id&#xA;from auth_auditinfo">
+    <outputPort name="SQL_1out">
+      <fields name="changedatetime" dataTypeDomain="DATETIME"/>
+      <fields name="changeuser" dataTypeDomain="STRING"/>
+      <fields name="createdatetime" dataTypeDomain="DATETIME"/>
+      <fields name="createuser" dataTypeDomain="STRING"/>
+      <fields name="dtype" dataTypeDomain="STRING"/>
+      <fields name="e_container" dataTypeDomain="STRING"/>
+      <fields name="econtainer_class" dataTypeDomain="STRING"/>
+      <fields name="e_container_feature_name" dataTypeDomain="STRING"/>
+      <fields name="e_id" dataTypeDomain="LONG"/>
+    </outputPort>
+  </sources>
+  <sources xsi:type="etl:SQLSource" name="SQL_7" label="etl_project" schemaOnRead="true" statement="select&#xA;&#x9;connectasloggedinuser,&#xA;&#x9;dtype,&#xA;&#x9;e_id,&#xA;&#x9;name,&#xA;&#x9;project_parentproject_e_id,&#xA;&#x9;svncommitmessage,&#xA;&#x9;svnenabled,&#xA;&#x9;svnpassword,&#xA;&#x9;svnurl,&#xA;&#x9;svnusername,&#xA;&#x9;vcstype&#xA;from etl_project">
+    <outputPort name="SQL_7out">
+      <fields name="connectasloggedinuser" dataTypeDomain="BOOLEAN"/>
+      <fields name="dtype" dataTypeDomain="STRING"/>
+      <fields name="e_id" dataTypeDomain="LONG"/>
+      <fields name="name" dataTypeDomain="STRING"/>
+      <fields name="project_parentproject_e_id" dataTypeDomain="LONG"/>
+      <fields name="svncommitmessage" dataTypeDomain="STRING"/>
+      <fields name="svnenabled" dataTypeDomain="BOOLEAN"/>
+      <fields name="svnpassword" dataTypeDomain="STRING"/>
+      <fields name="svnurl" dataTypeDomain="STRING"/>
+      <fields name="svnusername" dataTypeDomain="STRING"/>
+      <fields name="vcstype" dataTypeDomain="STRING"/>
+    </outputPort>
+  </sources>
+  <transitions name="a15610d3-edb5-4907-a3e5-bf1df97e1211" start="//@sources.0/@outputPort" finish="//@transformationSteps.0/@inputPort"/>
+  <transitions name="a4d6b84c-f4d9-4ca3-ba22-8246f661b691" start="//@sources.1/@outputPort" finish="//@transformationSteps.0/@joineePort"/>
+  <transitions name="45a8bf44-4ff9-4143-a28a-e0280ce660d1" start="//@sources.2/@outputPort" finish="//@transformationSteps.1/@joineePort"/>
+  <transitions name="30ee7709-5f08-48fb-9634-54e5f971f88e" start="//@transformationSteps.0/@outputPort" finish="//@transformationSteps.1/@inputPort"/>
+  <transitions name="c603dba3-df99-4063-bb6c-d49a2bd85fa4" start="//@transformationSteps.1/@outputPort" finish="//@targets.0/@inputPort"/>
+  <auditInfo changeUser="admin" changeDateTime="2020-09-15T14:04:14.163+0000" createUser="admin" createDateTime="2020-09-15T10:45:01.315+0000"/>
+</etl:Transformation>
