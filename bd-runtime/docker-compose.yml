@@ -158,7 +158,9 @@ services:
     volumes:
       - ./livy_batches:/livy_batches
       - ./data:/data
-#      - ./bd-base/extralib/:/usr/livy/repl_2.12-jars/
+      - ./bd-base/extralib:/extralib
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
     environment:
