@@ -1,0 +1,40 @@
+[%
+import "execUtils.egl";
+
+var expression = interpolateParameters(dataset.get("expression"));
+var interpreter = dataset.get("interpreter");
+%]
+import org.apache.spark.sql.DataFrame
+import scala.collection.{JavaConversions, immutable, mutable}
+
+[%
+var ws = Workspace.all.first();
+%]
+val jobParameters: mutable.HashMap[String, AnyRef] = new mutable.HashMap[String, AnyRef]()
+[%for (param in ws.parameters) {%]
+jobParameters.put("[%=param.name%]", "[%=param.value%]")
+[%}%]
+
+// начитка датасетов
+// для link, jdbc - регистрация временных hive view
+[%
+for (ds in S.allContents()) {
+  if (ds.isKindOf(AbstractDataset)) {
+    ds.register(ds.shortName);
+  }
+}
+%]
+
+// выполнение кода
+  def getData(): DataFrame = {
+[%if (interpreter.toString() == "SQL") {%]
+      spark.sql(s"""[%=expression.trim()%]""")
+[%} else if (interpreter.toString() == "SPARK") {%]
+      [%=expression.trim()%]
+[%}%]
+  }
+  val result = getData()
+
+  val schema = result.schema.json
+  val data = result.toJSON.take([%=limit%]).mkString("[", ",", "]")
+  println(s"""\n{"schema":$schema, "data":$data}""")

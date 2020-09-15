@@ -1,0 +1,40 @@
+[%
+var dataset = HiveExternalDataset.all.first();
+
+var path = dataset.path;
+var ftype = dataset.fileType.toString().toLowerCase();
+var db = dataset.db;
+var table = dataset.table;
+%]
+
+import scala.util.matching.Regex
+
+spark.sql("use [%=db%]")
+spark.sql("drop table if exists [%=db%].[%=table%]")
+
+val df = spark.read.[%=ftype%]("[%=path%]")
+val inpFName = df.inputFiles.head
+val r = new Regex("(\\w+)=")
+
+val partNames = (r findAllIn inpFName).map(_.toUpperCase).map(s => s.substring(0, s.length - 1)).toArray
+val partitions = df.schema.filter(f => partNames.contains(f.name.toUpperCase))
+val partitionsCode = partitions.map(f => s"${f.name} ${f.dataType.typeName}").mkString(",\n")
+
+val code = new StringBuilder
+code ++= "create external table [%=db%].[%=table%] (\n"
+code ++= df.schema.filterNot(f => partNames.contains(f.name.toUpperCase)).map(f => s"${f.name} ${f.dataType.typeName}").mkString(",\n")
+code ++= ")"
+if (partNames.length > 0) {
+  code ++= s"\npartitioned by ($partitionsCode)\n"
+}
+code ++= """
+stored as [%=ftype%]
+location '[%=path%]'
+"""
+spark.sql(s"${code.toString()}")
+
+if (partNames.length > 0) {
+  spark.sql("msck repair table [%=db%].[%=table%]")
+}
+
+

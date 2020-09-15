@@ -103,14 +103,14 @@
     <dependencies>
     	<dependency>
             <groupId>org.apache.livy</groupId>
-            <artifactId>livy-api</artifactId>
-            <version>0.8.0-incubating-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.livy</groupId>
-            <artifactId>livy-scala-api_2.11</artifactId>
-            <version>0.8.0-incubating-SNAPSHOT</version>
-        </dependency>
+                <artifactId>livy-api</artifactId>
+                <version>0.7.0-incubating</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.livy</groupId>
+                <artifactId>livy-scala-api_2.11</artifactId>
+                <version>0.7.0-incubating</version>
+            </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.11</artifactId>

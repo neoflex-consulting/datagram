@@ -1,0 +1,10 @@
+[%
+var ws = Workspace.all.first();
+%]
+import scala.collection.{JavaConversions, immutable, mutable}
+
+val jobParameters: mutable.HashMap[String, AnyRef] = new mutable.HashMap[String, AnyRef]()
+[%for (param in ws.parameters) {%]
+jobParameters.put("[%=param.name%]", "[%=param.value%]")
+[%}%]
+

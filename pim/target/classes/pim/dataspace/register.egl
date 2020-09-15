@@ -1,0 +1,10 @@
+[%
+import "execUtils.egl";
+
+for (ds in S.allContents()) {
+  if (ds.isKindOf(AbstractDataset)) {
+    ds.register(registerName);
+  }
+}
+%]
+
