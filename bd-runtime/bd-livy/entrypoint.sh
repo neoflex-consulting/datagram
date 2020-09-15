@@ -20,4 +20,6 @@ if [[ -n "${LIVY_PORT}" ]]; then
   echo "livy.server.port=${LIVY_PORT}" >> "${LIVY_CONF_DIR}/livy.conf"
 fi
 
+ln -s /extralib/* ${LIVY_HOME}/repl_2.12-jars/
+
 "$LIVY_HOME/bin/livy-server" $@

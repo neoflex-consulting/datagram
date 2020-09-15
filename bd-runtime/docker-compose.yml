@@ -94,6 +94,7 @@ services:
       - 9864:9864
       #Spark worker UI
       - 8081:8081
+      - 8042:8042
     volumes:
       - ./data:/data
       - ./bd-base/extralib:/extralib
@@ -132,6 +133,7 @@ services:
       - 9865:9865
       # Spark worker UI
       - 8082:8082
+      - 8043:8042
     volumes:
       - ./data:/data
       - ./bd-base/extralib:/extralib
@@ -161,8 +163,9 @@ services:
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
+#      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
+#      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
+#      - ./bd-base/extralib/postgresql-42.2.12.jre6.jar:/usr/livy/repl_2.12-jars/postgresql-42.2.12.jre6.jar
     environment:
       - SPARK_MASTER=yarn
       # Intentionally not specified - if it's set here, then we can't override it
