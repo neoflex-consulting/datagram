@@ -9,6 +9,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <node-version>v14.7.0</node-version>
         <npm-version>6.14.7</npm-version>
     </properties>
