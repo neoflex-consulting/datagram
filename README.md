@@ -11,6 +11,8 @@
 На Linux должен быть установлен docker-compose.
 
 Убедитесь, что у вас установлен git, и на Windows лучше отключить трансляцию CRLF-LF командой
+
+Убедитесь, что у вас установлен maven и работает команда mvn.
 ```
 git config --global core.autocrlf false
 ```
@@ -37,6 +39,14 @@ Started MServerConfiguration in 80.091 seconds (JVM running for 91.57)
 Откройте начальную страницу [__Datagram__](http://localhost:8089/) в браузере.
 
 __Логин__/__пароль__: admin/admin
+
+В интерфейсе программы перейдите в проект blueprint ETL/ Project/ blueprint,
+и выполните команду (молния вверху) Import Repo.
+
+Откройте трансформацию  ETL/ Transformation/ tr_load_datagram_transformations
+и запустите её на исполнение (Run внизу и ещё раз Run в открывшемся окошке).
+
+
 
 ### Ссылки на WEB UI
 Ресурс|URL
