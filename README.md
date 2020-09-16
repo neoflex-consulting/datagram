@@ -20,7 +20,7 @@ git config --global core.autocrlf false
 ```
 git clone https://github.com/neoflex-ru/datagram.git
 cd datagram
-mvn -f pom3.xml package
+mvn -f pom3.xml clean install
 docker-compose -f bd-runtime/docker-compose.yml pull
 docker-compose -f bd-runtime/docker-compose.yml up -d
 ```
@@ -56,7 +56,16 @@ __Логин__/__пароль__: admin/admin
 Для просмотра содержимого hdfs откройте HDFS Console ([+] справа вверху). 
 Должен появиться новый каталог `/temp/transformations` с содержимым выгрузки.
 
-### Ссылки на WEB UI
+Для получения maven проекта по сборке трансформации (для использования в процессах CI/CD)
+выполните команду (логин/пароль: admin/admin)
+```
+git clone http://localhost:8089/git/default
+```
+__ИЛИ__, в каталоге `./bd-runtime/datagram/gitflow/default` выполнить команду
+```
+git reset --hard
+```
+## Ссылки на WEB UI
 Ресурс|URL
 ------|---
 Datagram|http://localhost:8089/
