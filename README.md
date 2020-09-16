@@ -2,20 +2,20 @@
 
 ## Быстрый запуск Datagram
 ### Требования к компьютеру
-Минимальное количество памяти компьютера - 16ГБ, т.к. запускается не только сам datagram, но и его рантайм,
+Минимальное количество памяти компьютера - 16ГБ (лучше 32 для сложных трансформаций), 
+т.к. запускается не только сам datagram, но и его рантайм,
 фактически, локальный кластер hadoop.
 
 Если вы на Windows, убедитесь, что у вас установлен и настроен [Docker Desktop](https://www.docker.com/products/docker-desktop).
-По умолчанию, ему выделяется мало памяти, увеличьте это значение в настройках Docker Desktop.
-На Windows разрешите шарить файлы из каталога, куда устанавливается datagram (Docker Desktop/Settings/Resources/File Sharing).
+По умолчанию, ему выделяется мало памяти, увеличьте это значение (до 6ГБ) в настройках Docker Desktop.
+На Windows разрешите шарить файлы из того каталога, куда устанавливается datagram (Docker Desktop/Settings/Resources/File Sharing).
 На Linux должен быть установлен docker-compose.
 
 Убедитесь, что у вас установлен git, и на Windows лучше отключить трансляцию CRLF-LF командой
-
-Убедитесь, что у вас установлен maven и работает команда mvn.
 ```
 git config --global core.autocrlf false
 ```
+Убедитесь, что у вас установлен maven и работает команда mvn.
 ### Сборка и запуск
 ```
 git clone https://github.com/neoflex-ru/datagram.git
@@ -40,15 +40,21 @@ Started MServerConfiguration in 80.091 seconds (JVM running for 91.57)
 
 __Логин__/__пароль__: admin/admin
 
-В интерфейсе программы перейдите в проект blueprint ETL/ Project/ blueprint,
+В интерфейсе программы перейдите в проект blueprint `ETL/ Project/ blueprint`,
 и выполните команду (молния вверху) Import Repo.
 
-Откройте трансформацию  ETL/ Transformation/ tr_load_datagram_transformations
-и запустите её на исполнение (Run внизу и ещё раз Run в открывшемся окошке).
+Откройте трансформацию  `ETL/ Transformation/ tr_load_datagram_transformations`,
+эта тестовая трансформация делает выгрузку списка трансформаций из BD метаданных datagram.
+Запустите её на исполнение (кнопка Run внизу и ещё раз Run в открывшемся окошке).
 
 Для отслеживания процесса сборки/выполнения откройте панель логов (кнопка View Logs внизу)
 
+Для просмотра кода трансформации откройте Source Code Editor ([+] справа вверху)
 
+Для просмотра логов Livy кликните на bd-livy (слева, в панели ссылок), лог выполнения на закладке Batches.
+
+Для просмотра содержимого hdfs откройте HDFS Console ([+] справа вверху). 
+Должен появиться новый каталог `/temp/transformations` с содержимым выгрузки.
 
 ### Ссылки на WEB UI
 Ресурс|URL
