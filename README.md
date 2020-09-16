@@ -30,6 +30,8 @@ docker-compose -f bd-runtime/docker-compose.yml up -d
 ```
 docker-compose -f bd-runtime/docker-compose.yml logs datagram
 ```
+__ИЛИ__ в файле `./bd-runtime/datagram/logs/mserver.log`.
+
 В логе не должно быть сообщений об ошибках, программа стартовала успешно,
 если в логе появилась запись:
 ```
