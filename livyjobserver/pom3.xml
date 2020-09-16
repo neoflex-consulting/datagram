@@ -20,6 +20,7 @@
         </plugins>
     </build>
     <properties>
+        <java.version>1.8</java.version>
         <livy.version>0.7.0-incubating</livy.version>
     </properties>
     <dependencies>
