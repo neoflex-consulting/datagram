@@ -7,7 +7,7 @@
 фактически, локальный кластер hadoop.
 
 Если вы на Windows, убедитесь, что у вас установлен и настроен [Docker Desktop](https://www.docker.com/products/docker-desktop).
-По умолчанию, ему выделяется мало памяти, увеличьте это значение (до 6ГБ) в настройках Docker Desktop.
+По умолчанию, ему выделяется мало памяти, увеличьте это значение (до 8ГБ) в настройках Docker Desktop.
 На Windows разрешите шарить файлы из того каталога, куда устанавливается datagram (Docker Desktop/Settings/Resources/File Sharing).
 На Linux должен быть установлен docker-compose.
 
@@ -76,3 +76,9 @@ Livy|http://localhost:8998/
 Spark|http://localhost:8080/
 Name Node|http://localhost:9870/
 
+Для просмотра логов кластера, в файл `C:\Windows\System32\drivers\etc\hosts ` (или `/etc/hosts`) нужно добавить следующие строки:
+```
+127.0.0.1 master
+127.0.0.1 worker1
+127.0.0.1 worker2
+```
