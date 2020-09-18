@@ -18,7 +18,7 @@ git config --global core.autocrlf false
 Убедитесь, что у вас установлен maven и работает команда mvn.
 ### Сборка и запуск
 ```
-git clone https://github.com/neoflex-ru/datagram.git
+git clone https://github.com/neoflex-consulting/datagram.git
 cd datagram
 mvn -f pom3.xml clean install
 docker-compose -f bd-runtime/docker-compose.yml pull
