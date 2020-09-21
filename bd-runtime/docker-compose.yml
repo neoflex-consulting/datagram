@@ -58,7 +58,6 @@ services:
       # webhdfs
       - 51070:50070
     volumes:
-      - ./data:/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
@@ -96,7 +95,7 @@ services:
       - 8081:8081
       - 8042:8042
     volumes:
-      - dfs1_data:/dfs/data
+#      - dfs1_data:/dfs/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
@@ -135,7 +134,7 @@ services:
       - 8082:8082
       - 8043:8042
     volumes:
-      - dfs2_data:/dfs/data
+#      - dfs2_data:/dfs/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
@@ -159,13 +158,14 @@ services:
       - worker2
     volumes:
       - ./livy_batches:/livy_batches
-      - ./data:/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
-#      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
-#      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
 #      - ./bd-base/extralib/postgresql-42.2.12.jre6.jar:/usr/livy/repl_2.12-jars/postgresql-42.2.12.jre6.jar
+#      - ./bd-base/extralib/ojdbc8.jar:/usr/livy/repl_2.12-jars/ojdbc8.jar
+#      - ./bd-base/extralib/HiveJDBC4.jar:/usr/livy/repl_2.12-jars/HiveJDBC4.jar
     environment:
       - SPARK_MASTER=yarn
       # Intentionally not specified - if it's set here, then we can't override it
@@ -174,7 +174,7 @@ services:
       #      - SPARK_DEPLOY_MODE=client
 
       - LOCAL_DIR_WHITELIST=/data/batches/
-      - ENABLE_HIVE_CONTEXT=false
+      - ENABLE_HIVE_CONTEXT=true
       # Defaults are fine for variables below. Uncomment to change them.
     #      - LIVY_HOST=0.0.0.0
     #      - LIVY_PORT=8998

@@ -1,2 +1,5 @@
 /.idea/
-/*/*.iml
+/**/*.iml
+/**/target
+/**/build/
+/**/node_modules/

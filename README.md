@@ -7,7 +7,7 @@
 фактически, локальный кластер hadoop.
 
 Если вы на Windows, убедитесь, что у вас установлен и настроен [Docker Desktop](https://www.docker.com/products/docker-desktop).
-По умолчанию, ему выделяется мало памяти, увеличьте это значение (до 6ГБ) в настройках Docker Desktop.
+По умолчанию, ему выделяется мало памяти, увеличьте это значение (до 8ГБ) в настройках Docker Desktop.
 На Windows разрешите шарить файлы из того каталога, куда устанавливается datagram (Docker Desktop/Settings/Resources/File Sharing).
 На Linux должен быть установлен docker-compose.
 
@@ -18,7 +18,7 @@ git config --global core.autocrlf false
 Убедитесь, что у вас установлен maven и работает команда mvn.
 ### Сборка и запуск
 ```
-git clone https://github.com/neoflex-ru/datagram.git
+git clone https://github.com/neoflex-consulting/datagram.git
 cd datagram
 mvn -f pom3.xml clean install
 docker-compose -f bd-runtime/docker-compose.yml pull
@@ -74,4 +74,11 @@ Datagram|http://localhost:8089/
 Yarn|http://localhost:8088/
 Livy|http://localhost:8998/
 Spark|http://localhost:8080/
+Name Node|http://localhost:9870/
 
+Для просмотра логов кластера, в файл `C:\Windows\System32\drivers\etc\hosts ` (или `/etc/hosts`) нужно добавить следующие строки:
+```
+127.0.0.1 master
+127.0.0.1 worker1
+127.0.0.1 worker2
+```
