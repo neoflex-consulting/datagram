@@ -7571,6 +7571,17 @@
         }
       }
     },
+    "MLFlowServer": {
+      "caption": "MLFlow сервер",
+      "attrs": {
+        "name": {
+          "caption": "MLFlow сервер"
+        },
+        "http": {
+          "caption": "Http url"
+        }
+      }
+    },
     "AtlasQNameOption": {
       "caption": "QNampe opt",
       "attrs": {

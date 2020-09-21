@@ -3844,6 +3844,12 @@
           "placeholder": "Enter Name...",
           "help": ""
         },
+        "description": {
+          "caption": "Description",
+          "placeholder": "Enter Description...",
+          "help": ""
+        },
+
         "label": {
           "caption": "Label",
           "placeholder": "Enter Label...",
@@ -7592,6 +7598,17 @@
         },
         "qnamePatterns": {
           "caption": "Qualified name patterns"
+        }
+      }
+    },
+    "MLFlowServer": {
+      "caption": "MLFlow Server",
+      "attrs": {
+        "name": {
+          "caption": "MLFlow service"
+        },
+        "http": {
+          "caption": "Http url"
         }
       }
     },
