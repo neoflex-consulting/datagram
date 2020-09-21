@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat
 
 /* protected region MetaServer.etlProject.inport on begin */
 /* protected region MetaServer.etlProject.inport end */
+
 class Project extends GenerationBase {
     /* protected region MetaServer.etlProject.statics on begin */
     private final static Log logger = LogFactory.getLog(Project.class)
@@ -58,7 +59,7 @@ class Project extends GenerationBase {
     }
 
     static setEntityJsonView(Map entity, boolean force) {
-        if(entity.containsKey("jsonView") && (entity.jsonView == null || entity.jsonView == "" || force)){
+        if (entity.containsKey("jsonView") && (entity.jsonView == null || entity.jsonView == "" || force)) {
             def emfModel = EMF.create("S", entity)
             def jsonView = Context.current.contextSvc.epsilonSvc.executeEgl("pim/etl/ui/psm/rapid/${entity._type_.split("\\.").last().toLowerCase()}JsonView.egl", [:], [emfModel])
             entity.jsonView = jsonView
@@ -87,8 +88,7 @@ class Project extends GenerationBase {
                         ECoreUtils.merge(EObjectMap.wrap(entity), EObjectMap.wrap(root), true)
                         Context.current.savepoint()
                     }
-                }
-                else {
+                } else {
                     if (!emulate) {
                         ECoreUtils.merge(null, EObjectMap.wrap(root), true)
                         Context.current.savepoint()
@@ -139,8 +139,7 @@ class Project extends GenerationBase {
             Context.User user = Context.current.user
             userName = user.getName()
             password = user.getPassword()
-        }
-        else {
+        } else {
             userName = project.svnUserName
             password = Project.getPassword(project)
         }
@@ -161,7 +160,7 @@ class Project extends GenerationBase {
         eCoreHelper.getAllDependentObjectsOfEntity(entity).findAll {
             def e = Database.new.get(it)
             e.project?.e_id == project.e_id
-        }. each {
+        }.each {
             List newFiles = exportProjectEntity(project, it, svnCommitMessage)
             files.addAll(newFiles)
         }
@@ -170,7 +169,7 @@ class Project extends GenerationBase {
 
     static List exportProjectEntity(Map project, Map entity, svnCommitMessage) {
         def projectDir = Project.getProjectDir(project)
-        def newFiles = Project.exportEntity(entity, projectDir)
+        def newFiles = Project.exportEntity(entity, projectDir, [].toSet())
         if (project.svnEnabled == true) {
             getVCS(project).commit(newFiles, SecurityContextHolder.context.authentication.name + ": " + svnCommitMessage)
         }
@@ -221,11 +220,15 @@ class Project extends GenerationBase {
         return new File(projectDir, "${entity._type_.replace(".", "_")}_${entity.name}.${ext}")
     }
 
-    static List<File> exportEntity(Map entity, File projectDir) {
+    static List<File> exportEntity(Map entity, File projectDir, Set<String> done) {
+        def result = []
         def helper = new ECoreHelper()
         entity = helper.getObject(entity._type_, entity.e_id, entity.name)
+        if (done.contains(entity.hash)) {
+            return result
+        }
+        done.add(entity.hash)
         logger.info("Exporting ${entity._type_} ${entity.name} into ${projectDir.getAbsolutePath()}")
-        def result = []
         def file = getFile(entity, projectDir, "xmi")
         exportEntities([entity], file)
         result.add(file)
@@ -243,12 +246,8 @@ class Project extends GenerationBase {
                 result.add(piFile)
             }
         }
-        def db = new Database("teneo")
-        def ents = helper.getAllDependentObjects(entity)
-        for (ent in ents) {
-            if(!ent.get("e_id").equals(entity.get("e_id"))){
-                result.addAll(exportEntity(ent, projectDir))
-            }
+        helper.getAllDependentObjects(entity).each {
+            result.addAll(exportEntity(it, projectDir, done))
         }
         def extension = ExtensionRegistry.instance.get(entity)
         if (extension != null) {
@@ -261,7 +260,7 @@ class Project extends GenerationBase {
         def db = new Database("teneo")
         def resTo = EMFResource.createResource(xmiFile, new ResourceSetImpl())
         try {
-            resTo.getContents().addAll(EcoreUtil.copyAll(objs.collect {db.get(it._type_, (Long) it.e_id)}))
+            resTo.getContents().addAll(EcoreUtil.copyAll(objs.collect { db.get(it._type_, (Long) it.e_id) }))
             logger.info("saving ${xmiFile.name}")
             resTo.save([PROCESS_DANGLING_HREF: "DISCARD"])
         }
@@ -275,7 +274,7 @@ class Project extends GenerationBase {
     }
 
     private static void initRepo(File initDir, boolean rename = false) {
-        if (initDir.exists() && initDir.list().any {it.toLowerCase().endsWith(".xmi")}) {
+        if (initDir.exists() && initDir.list().any { it.toLowerCase().endsWith(".xmi") }) {
             def query = '''SELECT 'TRUNCATE TABLE '
                                || array_to_string(array_agg(quote_ident(schemaname) || '.' || quote_ident(tablename)), ', ')
                                || ' CASCADE'
@@ -293,9 +292,9 @@ class Project extends GenerationBase {
     /* protected region MetaServer.etlProject.statics end */
 
     static Object importProject(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.importProject on begin */
+        /* protected region MetaServer.etlProject.importProject on begin */
         def db = new Database("teneo")
-        def project = db.get("etl.Project", (Long)entity.e_id)
+        def project = db.get("etl.Project", (Long) entity.e_id)
         logger.info("Import project ${project._type_}[${project.name}]")
         def projectDir = getProjectDir(project)
         if (project.svnEnabled == true) {
@@ -311,73 +310,74 @@ class Project extends GenerationBase {
     }
 
     static Object exportProject(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.exportProject on begin */
+        /* protected region MetaServer.etlProject.exportProject on begin */
         def db = new Database("teneo")
-        def project = db.get("etl.Project", (Long)entity.e_id)
+        def project = db.get("etl.Project", (Long) entity.e_id)
         logger.info("Export project ${project._type_} ${project.name}")
         def projectDir = getProjectDir(project)
         projectDir.mkdirs()
         logger.info("Export dir: ${projectDir.canonicalPath}")
         FileSystem.clearFolder(projectDir)
-
+        def done = [].toSet()
         //def ents = MetaInfo.getAllRefsOfAllDirectDepsWithRefs(entity).findAll {MetaInfo.isTopLevelEntity(it)}
         def ents = (new ECoreHelper()).getAllReferencedObjectsOfDependedObjects(project)
         for (ent in ents) {
-            exportEntity(ent, projectDir)
+            exportEntity(ent, projectDir, done)
         }
         if (project.svnEnabled == true) {
             project.svnCommitMessage = entity.svnCommitMessage
             db.save(project)
             svnCommit(entity, null)
         }
-        return ents.collect {[_type_: it._type_, name: it.name, e_id:it.e_id]}
+        return ents.collect { [_type_: it._type_, name: it.name, e_id: it.e_id] }
         /* protected region MetaServer.etlProject.exportProject end */
     }
 
     static Object importRepo(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.importRepo on begin */
+        /* protected region MetaServer.etlProject.importRepo on begin */
         def initDir = new File(BaseSvc.getDeployDir(), "cim/MetaServer/data/all")
         initRepo(initDir)
         /* protected region MetaServer.etlProject.importRepo end */
     }
 
     static Object exportRepo(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.exportRepo on begin */
-        def entities = MetaInfo.getTopLevelEntities(false).sort {"${it._type_} ${it.name}"}
+        /* protected region MetaServer.etlProject.exportRepo on begin */
+        def entities = MetaInfo.getTopLevelEntities(false).sort { "${it._type_} ${it.name}" }
         logger.info("Exporting repository. Objects count: ${entities.size()}")
         def dir = new File(BaseSvc.getDeployDir(), "cim/MetaServer/data/all")
         FileSystem.clearFolder(dir)
+        def done = [].toSet()
         for (ent in entities) {
             try {
-                exportEntity(ent, dir)
+                exportEntity(ent, dir, done)
             }
             catch (Throwable th) {
                 logger.error("${ent._type_}[${ent.e_id}/${ent?.name}]", th)
             }
         }
-        return entities.collect {[_type_: it._type_, name: it.name, e_id:it.e_id]}
+        return entities.collect { [_type_: it._type_, name: it.name, e_id: it.e_id] }
         /* protected region MetaServer.etlProject.exportRepo end */
     }
 
     static Object clear(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.clear on begin */
+        /* protected region MetaServer.etlProject.clear on begin */
         def db = new Database("teneo")
         def directDeps = MetaInfo.getAllDirectDeps(entity)
-        def deps = MetaInfo.getAllDeps(entity).findAll {'dwh.StagingArea' != it._type_ && 'rt.ImportWizard' != it._type_}
+        def deps = MetaInfo.getAllDeps(entity).findAll { 'dwh.StagingArea' != it._type_ && 'rt.ImportWizard' != it._type_ }
         for (dep in deps) {
             def depString = "Dependency ${dep._type_}[${dep.e_id}/${dep.name}]".toString()
             logger.debug(depString)
-            if (!directDeps.any {it._type_ == dep._type_ && it.e_id == dep.e_id}) {
+            if (!directDeps.any { it._type_ == dep._type_ && it.e_id == dep.e_id }) {
                 throw new RuntimeException(depString + " not in project")
             }
-            db.delete(dep._type_, db.get(dep._type_, (Long)dep.e_id))
+            db.delete(dep._type_, db.get(dep._type_, (Long) dep.e_id))
         }
-        return deps.collect {[_type_: it._type_, name: it.name, e_id: it.e_id]}
+        return deps.collect { [_type_: it._type_, name: it.name, e_id: it.e_id] }
         /* protected region MetaServer.etlProject.clear end */
     }
 
     static Object setJsonView(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.setJsonView on begin */
+        /* protected region MetaServer.etlProject.setJsonView on begin */
         if (entity == null) {
             return ["null entity"]
         }
@@ -387,9 +387,9 @@ class Project extends GenerationBase {
     }
 
     static Object importScripts(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.importScripts on begin */
+        /* protected region MetaServer.etlProject.importScripts on begin */
         def db = new Database("teneo")
-        def project = db.get("etl.Project", (Long)entity.e_id)
+        def project = db.get("etl.Project", (Long) entity.e_id)
         logger.info("Import scripts for ${project._type_}[${project.name}]")
         def projectDir = getProjectDir(entity)
         return importDir(db, projectDir, true)
@@ -397,7 +397,7 @@ class Project extends GenerationBase {
     }
 
     static Object clearLost(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.clearLost on begin */
+        /* protected region MetaServer.etlProject.clearLost on begin */
         def restored = []
         def deleted = []
         MetaInfo.getLost(deleted, restored)
@@ -406,7 +406,7 @@ class Project extends GenerationBase {
     }
 
     static Object svnCheckout(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.svnCheckout on begin */
+        /* protected region MetaServer.etlProject.svnCheckout on begin */
         if (entity.svnEnabled != true) {
             return ["VCS not enabled for project ${entity.name}".toString()]
         }
@@ -416,7 +416,7 @@ class Project extends GenerationBase {
     }
 
     static Object svnUpdate(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.svnUpdate on begin */
+        /* protected region MetaServer.etlProject.svnUpdate on begin */
         if (entity.svnEnabled != true) {
             return ["VCS not enabled for project ${entity.name}".toString()]
         }
@@ -426,15 +426,14 @@ class Project extends GenerationBase {
     }
 
     static Object svnCheckoutOrUpdate(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.svnCheckoutOrUpdate on begin */
+        /* protected region MetaServer.etlProject.svnCheckoutOrUpdate on begin */
         if (entity.svnEnabled != true) {
             return ["VCS not enabled for project ${entity.name}".toString()]
         }
         def vcs = getVCS(entity)
         if (vcs.isVersioned()) {
             vcs.update()
-        }
-        else {
+        } else {
             vcs.checkout()
         }
         return ["OK"]
@@ -442,7 +441,7 @@ class Project extends GenerationBase {
     }
 
     static Object svnCommit(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.svnCommit on begin */
+        /* protected region MetaServer.etlProject.svnCommit on begin */
         if (entity.svnEnabled != true) {
             return ["VCS not enabled for project ${entity.name}".toString()]
         }
@@ -453,7 +452,7 @@ class Project extends GenerationBase {
     }
 
     static Object svnCleanup(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProject.svnCleanup on begin */
+        /* protected region MetaServer.etlProject.svnCleanup on begin */
         if (entity.svnEnabled != true) {
             return ["VCS not enabled for project ${entity.name}".toString()]
         }
@@ -470,7 +469,7 @@ class Project extends GenerationBase {
         PipedInputStream pipedInputStream = new PipedInputStream()
         PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream)
         new Thread() {
-            void run () {
+            void run() {
                 ZipUtils.zipDirectory(projectDir, pipedOutputStream, true, "^\\..*")
             }
         }.start()
@@ -501,10 +500,10 @@ class Project extends GenerationBase {
             def fileInfo = getVCS(project).getFileInfo(file)
             if (fileInfo != null) {
                 return [
-                    lastCommitAuthor: fileInfo.lastCommitAuthor,
-                    lastChangedDate: fileInfo.lastChangedDate,
-                    lastChangedRevision: fileInfo.lastChangedRevision,
-                    logMessage: fileInfo.logMessage
+                        lastCommitAuthor   : fileInfo.lastCommitAuthor,
+                        lastChangedDate    : fileInfo.lastChangedDate,
+                        lastChangedRevision: fileInfo.lastChangedRevision,
+                        logMessage         : fileInfo.logMessage
                 ]
             }
         }
