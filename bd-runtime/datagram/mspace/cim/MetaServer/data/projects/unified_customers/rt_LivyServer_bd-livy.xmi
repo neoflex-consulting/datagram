@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rt:LivyServer xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:rt="http://www.neoflex.ru/meta/rt" name="bd-livy" http="http://livy:8998/" home="/user" user="root" webhdfs="http://master:9870/webhdfs/v1" isDefault="true"/>

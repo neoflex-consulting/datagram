@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rel:Scheme xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rel="http://www.neoflex.ru/meta/relational" name="ML_at_customers">
+  <tables name="CTL_ACTIVE_PARAMS">
+    <columns name="WORKFLOW_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="INSTANCE_NUM" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="FOLDER_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="TASK_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="PARAM_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="PARAM_VALUE" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+  </tables>
+  <tables name="CTL_PARAM_LIST">
+    <columns name="WORKFLOW_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="TASK_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="PARAM_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="PARAM_CODE" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="200"/>
+    </columns>
+    <columns name="PARAM_VALUE" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="PARAM_DESC" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="EFF_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="EXP_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </tables>
+  <tables name="CTL_WORKFLOWS">
+    <columns name="WORKFLOW_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="FOLDER_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="SOURCE_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="SERVER_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="WORKFLOW_STATUS" nullable="true">
+      <dataType xsi:type="rel:CHAR" length="1"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_SH" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="200"/>
+    </columns>
+    <columns name="FIRST_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="LOAD_PERIOD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="3"/>
+    </columns>
+    <columns name="PARTS_LOAD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="3"/>
+    </columns>
+    <columns name="INSTANCE_CNT" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="SKIP_INTERVALS" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2"/>
+    </columns>
+    <columns name="SKIP_DEPENDENCIES" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2"/>
+    </columns>
+    <columns name="MERGE_INTERVALS" nullable="true">
+      <dataType xsi:type="rel:CHAR" length="2"/>
+    </columns>
+    <columns name="LOAD_OFFSET" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="RELOAD_OFFSET" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="LOAD_DIRECTION" nullable="true">
+      <dataType xsi:type="rel:CHAR" length="2"/>
+    </columns>
+    <columns name="FORCE_START" nullable="true">
+      <dataType xsi:type="rel:CHAR" length="1"/>
+    </columns>
+    <columns name="WORKFLOW_DESC" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="PERIOD_DURATION" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+  </tables>
+  <tables name="CTL_WORKFLOW_LOAD">
+    <columns name="WORKFLOW_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="80"/>
+    </columns>
+    <columns name="START_LOAD_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="END_LOAD_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="LOAD_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="START_RUN_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="END_RUN_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </tables>
+  <tables name="DIM_CLIENT">
+    <columns name="CLIENT_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="UNQ_SRC_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="NAME_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="NAME_RUS_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="NAME_ENG_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="NAME_ORIG_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="INN_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="OGRN_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="KIO_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="BIC_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="SWIFT_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="REL_CLIENT_GROUP_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_MEMBER_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_COUNTRY_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_BUSINESS_CATEGORY_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_INDUSTRY_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_CLIENT_TYPE_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="RESIDENT_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="LICENSE_NUM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="SUBHOLDING" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="UNIFIED_CLIENT_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="INDUSTRY_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="TECH_CLIENT_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="SRC_STM_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="6"/>
+    </columns>
+    <columns name="PROCESSED_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="IS_DELETE_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="HASH_TAG" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="32"/>
+    </columns>
+    <columns name="LOAD_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+  </tables>
+  <tables name="DIM_CLIEN_TECH">
+    <columns name="CLIENT_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="UNQ_SRC_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="NAME_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="FULL_NAME_ORIG_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="FULL_NAME_ENG_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="INN_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="OGRN_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="KIO_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="BIC_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="SWIFT_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="REL_CLIENT_GROUP_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_MEMBER_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_COUNTRY_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_BUSINESS_CATEGORY_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_INDUSTRY_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_CLIENT_TYPE_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="RESIDENT_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="LICENSE_NUM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="SRCREF_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="SUBHOLDING_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="UNIFIED_CLIENT_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="TECH_CLIENT_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="SRC_STM_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="6"/>
+    </columns>
+    <columns name="PROCESSED_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="EFFECTIVE_FROM_DT" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="EFFECTIVE_TO_DT" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="IS_DELETE_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="HASH_TAG" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="32"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="CLOSED_WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+  </tables>
+  <tables name="IDM_MNS_BUSINESS_CATEGORY">
+    <columns name="SRC_ID_1" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="255"/>
+    </columns>
+    <columns name="RK_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="PROCESSED_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </tables>
+  <tables name="IDM_MNS_COUNTRY">
+    <columns name="SRC_ID_1" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="RK_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="PROCESSED_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </tables>
+  <tables name="IDM_MNS_INDUSTRY">
+    <columns name="SRC_ID_1" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="RK_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="PROCESSED_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </tables>
+  <tables name="IDM_NSI_VTB_GROUP_MEMBER">
+    <columns name="SRC_ID_1" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="RK_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="PROCESSED_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </tables>
+  <tables name="IDM_PKB_CLIENT_GROUP">
+    <columns name="SRC_ID_1" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="20"/>
+    </columns>
+    <columns name="RK_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="PROCESSED_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </tables>
+  <tables name="IDM_UNIF_CLIENT">
+    <columns name="SRC_ID_1" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="20"/>
+    </columns>
+    <columns name="RK_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="PROCESSED_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </tables>
+  <tables name="META_COUNTRIES">
+    <columns name="CODE" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="20"/>
+    </columns>
+    <columns name="NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+  </tables>
+  <tables name="META_ORGS">
+    <columns name="NUMBER_" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="1024"/>
+    </columns>
+    <columns name="DATE_" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="20"/>
+    </columns>
+    <columns name="NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="1024"/>
+    </columns>
+    <columns name="ADDRESS" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="1024"/>
+    </columns>
+    <columns name="INN" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="20"/>
+    </columns>
+    <columns name="OGRN" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="20"/>
+    </columns>
+    <columns name="COLUMN1" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="20"/>
+    </columns>
+  </tables>
+  <tables name="STG_S04_UNIF_CLIENT">
+    <columns name="CLIENT_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="FULL_NAME_ENG" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="FULL_NAME_RUS" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="255"/>
+    </columns>
+    <columns name="INN" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="INDUSTRY" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="INDUSTRY_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="KIO" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="TECH_CLIENT_FLAG" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="LICENSE" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="OGRN" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="OFFICIAL_INDUSTRY_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="OFFICIAL_INDUSTRY_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="PARENT_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="PARENT_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="RESIDENT_FLAG" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="SWIFT" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="BUSINESS_CATEGORY_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="BUSINESS_CATEGORY_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="BIC" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="COUNTRY_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="COUNTRY_NAME" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="ROWSTATUS" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="AUTO_MODE" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="AUTO_FLAG" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="4000"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="PROCESSED_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="LOAD_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+  </tables>
+  <tables name="TRP_S04_DIM_CLIENT">
+    <columns name="CLIENT_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="UNQ_SRC_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="NAME_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="NAME_RUS_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="NAME_ENG_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="NAME_ORIG_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="INN_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="OGRN_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="KIO_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="BIC_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="SWIFT_CD" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="REL_CLIENT_GROUP_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_MEMBER_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_COUNTRY_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_BUSINESS_CATEGORY_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_INDUSTRY_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="REL_CLIENT_TYPE_UID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="RESIDENT_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="LICENSE_NUM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="SUBHOLDING" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="UNIFIED_CLIENT_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="INDUSTRY_NM" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="254"/>
+    </columns>
+    <columns name="TECH_CLIENT_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="SRC_STM_ID" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="6"/>
+    </columns>
+    <columns name="PROCESSED_DTTM" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="IS_DELETE_FLG" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="WORKFLOW_RUN_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+    <columns name="HASH_TAG" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="32"/>
+    </columns>
+    <columns name="LOAD_ID" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="22"/>
+    </columns>
+  </tables>
+</rel:Scheme>

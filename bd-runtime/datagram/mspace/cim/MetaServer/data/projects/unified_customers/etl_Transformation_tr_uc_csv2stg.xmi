@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ASCII"?>
+<etl:Transformation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:etl="http://www.neoflex.ru/meta/etl" name="tr_uc_csv2stg" label="tr_uc_csv2stg" jsonView="{&quot;cells&quot;:[{&quot;type&quot;:&quot;devs.transformation.CSVSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:87,&quot;y&quot;:154},&quot;angle&quot;:0,&quot;id&quot;:&quot;9c127738-74a6-47e6-95d0-7c150dc9d2de&quot;,&quot;name&quot;:&quot;CSV_0&quot;,&quot;z&quot;:1,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;export.csv&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Projection&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}},{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:270,&quot;y&quot;:150},&quot;angle&quot;:0,&quot;id&quot;:&quot;68c822ba-0ebb-48af-baf2-41dc85aeb73e&quot;,&quot;name&quot;:&quot;Projection_2&quot;,&quot;z&quot;:2,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Projection_2&quot;}}},{&quot;type&quot;:&quot;devs.transformation.TableTarget&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;],&quot;outPorts&quot;:[],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:480,&quot;y&quot;:150},&quot;angle&quot;:0,&quot;id&quot;:&quot;aa544479-895f-4bf0-9870-c9ddcf9bc0c6&quot;,&quot;name&quot;:&quot;Table_1&quot;,&quot;z&quot;:3,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;STG_S04_UNIF_CLIENT&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;9c127738-74a6-47e6-95d0-7c150dc9d2de&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;68c822ba-0ebb-48af-baf2-41dc85aeb73e&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;c24e6184-2431-49e8-a04a-102283e5bd38&quot;,&quot;z&quot;:4,&quot;attrs&quot;:{}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;68c822ba-0ebb-48af-baf2-41dc85aeb73e&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;aa544479-895f-4bf0-9870-c9ddcf9bc0c6&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;c1618f69-0e83-46af-85d1-9f053d04a7f5&quot;,&quot;z&quot;:5,&quot;attrs&quot;:{}}]}">
+  <targets xsi:type="etl:TableTarget" name="Table_1" label="STG_S04_UNIF_CLIENT" tableName="STG_S04_UNIF_CLIENT">
+    <inputPort name="Table_1in">
+      <fields name="id" dataTypeDomain="STRING"/>
+      <fields name="name" dataTypeDomain="STRING"/>
+      <fields name="name_russian" dataTypeDomain="STRING"/>
+      <fields name="inn" dataTypeDomain="STRING"/>
+      <fields name="branch" dataTypeDomain="STRING"/>
+      <fields name="branch_name" dataTypeDomain="STRING"/>
+      <fields name="kio" dataTypeDomain="STRING"/>
+      <fields name="tech_flag" dataTypeDomain="STRING"/>
+      <fields name="license" dataTypeDomain="STRING"/>
+      <fields name="branch_off" dataTypeDomain="STRING"/>
+      <fields name="branch_off_name" dataTypeDomain="STRING"/>
+      <fields name="parent_id" dataTypeDomain="STRING"/>
+      <fields name="parent_name" dataTypeDomain="STRING"/>
+      <fields name="resident_flag" dataTypeDomain="STRING"/>
+      <fields name="swift" dataTypeDomain="STRING"/>
+      <fields name="bcat" dataTypeDomain="STRING"/>
+      <fields name="bcat_name" dataTypeDomain="STRING"/>
+      <fields name="bik" dataTypeDomain="STRING"/>
+      <fields name="country" dataTypeDomain="STRING"/>
+      <fields name="country_name" dataTypeDomain="STRING"/>
+      <fields name="status" dataTypeDomain="STRING"/>
+      <fields name="link_type" dataTypeDomain="STRING"/>
+      <fields name="unlink_type" dataTypeDomain="STRING"/>
+      <fields name="LOAD_ID" dataTypeDomain="STRING"/>
+      <fields name="AUTO_FLAG" dataTypeDomain="STRING"/>
+      <fields name="AUTO_MODE" dataTypeDomain="STRING"/>
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATE"/>
+      <fields name="EMPTY_STRING" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="STRING"/>
+    </inputPort>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="AUTO_FLAG" targetColumnName="AUTO_FLAG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="AUTO_MODE" targetColumnName="AUTO_MODE"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="bik" targetColumnName="BIC"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="bcat" targetColumnName="BUSINESS_CATEGORY_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="bcat_name" targetColumnName="BUSINESS_CATEGORY_NAME"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="id" targetColumnName="CLIENT_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="country" targetColumnName="COUNTRY_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="country_name" targetColumnName="COUNTRY_NAME"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="name" targetColumnName="FULL_NAME_ENG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="name_russian" targetColumnName="FULL_NAME_RUS"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="EMPTY_STRING" targetColumnName="INDUSTRY"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="EMPTY_STRING" targetColumnName="INDUSTRY_NAME"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="inn" targetColumnName="INN"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="kio" targetColumnName="KIO"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="license" targetColumnName="LICENSE"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="LOAD_ID" targetColumnName="LOAD_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="EMPTY_STRING" targetColumnName="OFFICIAL_INDUSTRY_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="EMPTY_STRING" targetColumnName="OFFICIAL_INDUSTRY_NAME"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="EMPTY_STRING" targetColumnName="OGRN"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="parent_id" targetColumnName="PARENT_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="parent_name" targetColumnName="PARENT_NAME"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="PROCESSED_DTTM" targetColumnName="PROCESSED_DTTM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="resident_flag" targetColumnName="RESIDENT_FLAG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="EMPTY_STRING" targetColumnName="ROWSTATUS"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="swift" targetColumnName="SWIFT"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="tech_flag" targetColumnName="TECH_CLIENT_FLAG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="WORKFLOW_RUN_ID" targetColumnName="WORKFLOW_RUN_ID"/>
+  </targets>
+  <transformationSteps xsi:type="etl:Projection" name="Projection_2" label="Projection_2">
+    <outputPort name="Projection_2out">
+      <fields xsi:type="etl:ProjectionField" name="id" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.0"/>
+      <fields xsi:type="etl:ProjectionField" name="name" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.1"/>
+      <fields xsi:type="etl:ProjectionField" name="name_russian" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.2"/>
+      <fields xsi:type="etl:ProjectionField" name="inn" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.3"/>
+      <fields xsi:type="etl:ProjectionField" name="branch" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.4"/>
+      <fields xsi:type="etl:ProjectionField" name="branch_name" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.5"/>
+      <fields xsi:type="etl:ProjectionField" name="kio" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.6"/>
+      <fields xsi:type="etl:ProjectionField" name="tech_flag" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.7"/>
+      <fields xsi:type="etl:ProjectionField" name="license" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.8"/>
+      <fields xsi:type="etl:ProjectionField" name="branch_off" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.9"/>
+      <fields xsi:type="etl:ProjectionField" name="branch_off_name" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.10"/>
+      <fields xsi:type="etl:ProjectionField" name="parent_id" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.11"/>
+      <fields xsi:type="etl:ProjectionField" name="parent_name" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.12"/>
+      <fields xsi:type="etl:ProjectionField" name="resident_flag" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.13"/>
+      <fields xsi:type="etl:ProjectionField" name="swift" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.14"/>
+      <fields xsi:type="etl:ProjectionField" name="bcat" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.15"/>
+      <fields xsi:type="etl:ProjectionField" name="bcat_name" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.16"/>
+      <fields xsi:type="etl:ProjectionField" name="bik" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.17"/>
+      <fields xsi:type="etl:ProjectionField" name="country" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.18"/>
+      <fields xsi:type="etl:ProjectionField" name="country_name" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.19"/>
+      <fields xsi:type="etl:ProjectionField" name="status" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.20"/>
+      <fields xsi:type="etl:ProjectionField" name="link_type" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.21"/>
+      <fields xsi:type="etl:ProjectionField" name="unlink_type" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.22"/>
+      <fields xsi:type="etl:ProjectionField" name="LOAD_ID" dataTypeDomain="STRING" expression="&quot;${jobParameters(&quot;LOAD_ID&quot;)}&quot;" fieldOperationType="SQL"/>
+      <fields xsi:type="etl:ProjectionField" name="AUTO_FLAG" dataTypeDomain="STRING" expression="&quot;&quot;" fieldOperationType="SQL"/>
+      <fields xsi:type="etl:ProjectionField" name="AUTO_MODE" dataTypeDomain="STRING" expression="&quot;&quot;" fieldOperationType="SQL"/>
+      <fields xsi:type="etl:ProjectionField" name="PROCESSED_DTTM" dataTypeDomain="DATE" expression="current_date()" fieldOperationType="SQL"/>
+      <fields xsi:type="etl:ProjectionField" name="EMPTY_STRING" dataTypeDomain="STRING" expression="&quot;&quot;" fieldOperationType="SQL"/>
+      <fields xsi:type="etl:ProjectionField" name="WORKFLOW_RUN_ID" dataTypeDomain="STRING" expression="&quot;${jobParameters(&quot;CURRENT_WORKFLOW_ID&quot;)}&quot;" fieldOperationType="SQL"/>
+    </outputPort>
+    <inputPort name="Projection_2in">
+      <fields name="id" dataTypeDomain="STRING"/>
+      <fields name="name" dataTypeDomain="STRING"/>
+      <fields name="name_russian" dataTypeDomain="STRING"/>
+      <fields name="inn" dataTypeDomain="STRING"/>
+      <fields name="branch" dataTypeDomain="STRING"/>
+      <fields name="branch_name" dataTypeDomain="STRING"/>
+      <fields name="kio" dataTypeDomain="STRING"/>
+      <fields name="tech_flag" dataTypeDomain="STRING"/>
+      <fields name="license" dataTypeDomain="STRING"/>
+      <fields name="branch_off" dataTypeDomain="STRING"/>
+      <fields name="branch_off_name" dataTypeDomain="STRING"/>
+      <fields name="parent_id" dataTypeDomain="STRING"/>
+      <fields name="parent_name" dataTypeDomain="STRING"/>
+      <fields name="resident_flag" dataTypeDomain="STRING"/>
+      <fields name="swift" dataTypeDomain="STRING"/>
+      <fields name="bcat" dataTypeDomain="STRING"/>
+      <fields name="bcat_name" dataTypeDomain="STRING"/>
+      <fields name="bik" dataTypeDomain="STRING"/>
+      <fields name="country" dataTypeDomain="STRING"/>
+      <fields name="country_name" dataTypeDomain="STRING"/>
+      <fields name="status" dataTypeDomain="STRING"/>
+      <fields name="link_type" dataTypeDomain="STRING"/>
+      <fields name="unlink_type" dataTypeDomain="STRING"/>
+    </inputPort>
+  </transformationSteps>
+  <sources xsi:type="etl:CSVSource" name="CSV_0" label="export.csv" hdfs="false" path="file:///data/export.csv" header="true" quote="&quot;" escape="\">
+    <outputPort name="CSV_0out">
+      <fields name="id" dataTypeDomain="STRING"/>
+      <fields name="name" dataTypeDomain="STRING"/>
+      <fields name="name_russian" dataTypeDomain="STRING"/>
+      <fields name="inn" dataTypeDomain="STRING"/>
+      <fields name="branch" dataTypeDomain="STRING"/>
+      <fields name="branch_name" dataTypeDomain="STRING"/>
+      <fields name="kio" dataTypeDomain="STRING"/>
+      <fields name="tech_flag" dataTypeDomain="STRING"/>
+      <fields name="license" dataTypeDomain="STRING"/>
+      <fields name="branch_off" dataTypeDomain="STRING"/>
+      <fields name="branch_off_name" dataTypeDomain="STRING"/>
+      <fields name="parent_id" dataTypeDomain="STRING"/>
+      <fields name="parent_name" dataTypeDomain="STRING"/>
+      <fields name="resident_flag" dataTypeDomain="STRING"/>
+      <fields name="swift" dataTypeDomain="STRING"/>
+      <fields name="bcat" dataTypeDomain="STRING"/>
+      <fields name="bcat_name" dataTypeDomain="STRING"/>
+      <fields name="bik" dataTypeDomain="STRING"/>
+      <fields name="country" dataTypeDomain="STRING"/>
+      <fields name="country_name" dataTypeDomain="STRING"/>
+      <fields name="status" dataTypeDomain="STRING"/>
+      <fields name="link_type" dataTypeDomain="STRING"/>
+      <fields name="unlink_type" dataTypeDomain="STRING"/>
+    </outputPort>
+  </sources>
+  <transitions name="cf7f8435-f4a0-42f1-ab99-a5766ad92187" start="//@sources.0/@outputPort" finish="//@transformationSteps.0/@inputPort"/>
+  <transitions name="0310199c-2d02-4dc7-a3d7-716b7f88a2d3" start="//@transformationSteps.0/@outputPort" finish="//@targets.0/@inputPort"/>
+  <auditInfo changeUser="admin" changeDateTime="2020-09-22T10:43:37.831+0300" createUser="admin" createDateTime="2020-09-22T08:47:14.474+0300"/>
+</etl:Transformation>
