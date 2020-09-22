@@ -90,7 +90,7 @@ class TableView extends Component {
             this.props.updateNodeEntity(full, this.props.cellEntity)
         }
         if (cellEntity._type_ === 'etl.TableTarget') {
-            const inputFields = selectedRowKeys.map(fld => ({ _type_: 'etl.TableTargetFeature', inputFieldName: fld.field, targetColumnName: fld.field }))
+            const inputFields = selectedRowKeys.map(fld => ({ _type_: 'etl.TableTargetFeature', inputFieldName: '', targetColumnName: fld.field }))
             this.props.updateNodeEntity(update(this.props.cellEntity, { $set: { inputFieldsMapping: inputFields, tableName: selectedTable[0].table } }), this.props.cellEntity)
         }
         if (cellEntity._type_ === 'etl.HiveTarget') {
