@@ -81,4 +81,5 @@ Name Node|http://localhost:9870/
 127.0.0.1 master
 127.0.0.1 worker1
 127.0.0.1 worker2
+127.0.0.1 livy
 ```

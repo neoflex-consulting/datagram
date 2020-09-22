@@ -58,6 +58,7 @@ services:
       # webhdfs
       - 51070:50070
     volumes:
+      - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
@@ -96,6 +97,7 @@ services:
       - 8042:8042
     volumes:
 #      - dfs1_data:/dfs/data
+      - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
@@ -135,6 +137,7 @@ services:
       - 8043:8042
     volumes:
 #      - dfs2_data:/dfs/data
+      - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
@@ -158,6 +161,7 @@ services:
       - worker2
     volumes:
       - ./livy_batches:/livy_batches
+      - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
