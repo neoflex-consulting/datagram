@@ -111,7 +111,7 @@ class Transformation extends GenerationBase {
                 emfModel.load(properties, "")
 
                 def transformationGenerator = "/psm/etl/spark/Transformation2.egx";
-                if(transformation.sparkVersion != null &&  transformation.sparkVersion.name == "SPARK3"){
+                if(transformation.sparkVersion == null ||  transformation.sparkVersion.name == "SPARK3"){
                     transformationGenerator = "/psm/etl/spark/Transformation3.egx";
                 }
                 Context.current.getContextSvc().epsilonSvc.executeEgx(transformationGenerator, [mspaceRoot: tmp.toUri().toString(),  nodeName: params.nodeName, outputType: params.outputType], [emfModel])
