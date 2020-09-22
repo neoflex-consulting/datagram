@@ -114,15 +114,11 @@
                 <artifactId>scala-maven-plugin</artifactId>
                 <version>3.2.2</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc6 -->
             <dependency>
                 <groupId>com.oracle.database.jdbc</groupId>
-                <artifactId>ojdbc6</artifactId>
-                <version>11.2.0.4</version>
+                    <artifactId>ojdbc6</artifactId>
+                    <version>11.2.0.4</version>
             </dependency>
-
-
-
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
