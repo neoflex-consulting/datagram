@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="ASCII"?>
+<etl:Transformation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:etl="http://www.neoflex.ru/meta/etl" name="tr_uc_stg2trp" label="tr_uc_stg2trp" sparkVersion="SPARK3" jsonView="{&quot;cells&quot;:[{&quot;type&quot;:&quot;devs.transformation.SqlSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:90,&quot;y&quot;:30},&quot;angle&quot;:0,&quot;id&quot;:&quot;ca73be7d-b76b-4078-b1f0-dffb266ed897&quot;,&quot;name&quot;:&quot;STG_S04_UNIF_CLIENT&quot;,&quot;z&quot;:1,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;STG_S04_UNIF_CLIENT&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SqlSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:90,&quot;y&quot;:150},&quot;angle&quot;:0,&quot;id&quot;:&quot;65e7bc8c-689c-4c52-88bf-7108d5c765c8&quot;,&quot;name&quot;:&quot;IDM_UNIF_CLIENT&quot;,&quot;z&quot;:2,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;IDM_UNIF_CLIENT&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SqlSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:90,&quot;y&quot;:270},&quot;angle&quot;:0,&quot;id&quot;:&quot;3d92b841-c143-43b2-a50d-903416b60728&quot;,&quot;name&quot;:&quot;IDM_NSI_VTB_GROUP_MEMBER&quot;,&quot;z&quot;:3,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;IDM_NSI_VTB_GROUP_MEMBER&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SqlSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:90,&quot;y&quot;:390},&quot;angle&quot;:0,&quot;id&quot;:&quot;e85bd426-4a27-450c-a6ad-a782bcd5267d&quot;,&quot;name&quot;:&quot;IDM_MNS_INDUSTRY&quot;,&quot;z&quot;:4,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;IDM_MNS_INDUSTRY&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SqlSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:90,&quot;y&quot;:510},&quot;angle&quot;:0,&quot;id&quot;:&quot;34daa340-8b03-4056-aea4-10d37d68c995&quot;,&quot;name&quot;:&quot;IDM_MNS_BUSINESS_CATEGORY&quot;,&quot;z&quot;:5,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;IDM_MNS_BUSINESS_CATEGORY&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SqlSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:90,&quot;y&quot;:630},&quot;angle&quot;:0,&quot;id&quot;:&quot;b5dee85c-53d6-473d-9c5a-07ced2330b79&quot;,&quot;name&quot;:&quot;IDM_MNS_COUNTRY&quot;,&quot;z&quot;:6,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;IDM_MNS_COUNTRY&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SqlSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:90,&quot;y&quot;:750},&quot;angle&quot;:0,&quot;id&quot;:&quot;53c268c8-0c44-4157-8bb6-af8d57fb11bb&quot;,&quot;name&quot;:&quot;IDM_PKB_CLIENT_GROUP&quot;,&quot;z&quot;:7,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;IDM_PKB_CLIENT_GROUP&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SparkSQL&quot;,&quot;size&quot;:{&quot;width&quot;:295,&quot;height&quot;:392},&quot;inPorts&quot;:[&quot;sqlin&quot;],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}},{&quot;id&quot;:&quot;0&quot;,&quot;multiple&quot;:true,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;STG&quot;,&quot;visibility&quot;:&quot;visible&quot;},&quot;circle&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}},{&quot;id&quot;:&quot;1&quot;,&quot;multiple&quot;:true,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;IDM_1&quot;,&quot;visibility&quot;:&quot;visible&quot;},&quot;circle&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}},{&quot;id&quot;:&quot;2&quot;,&quot;multiple&quot;:true,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;IDM_2&quot;,&quot;visibility&quot;:&quot;visible&quot;},&quot;circle&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}},{&quot;id&quot;:&quot;3&quot;,&quot;multiple&quot;:true,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;IDM_3&quot;,&quot;visibility&quot;:&quot;visible&quot;},&quot;circle&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}},{&quot;id&quot;:&quot;4&quot;,&quot;multiple&quot;:true,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;IDM_4&quot;,&quot;visibility&quot;:&quot;visible&quot;},&quot;circle&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}},{&quot;id&quot;:&quot;5&quot;,&quot;multiple&quot;:true,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;IDM_5&quot;,&quot;visibility&quot;:&quot;visible&quot;},&quot;circle&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}},{&quot;id&quot;:&quot;6&quot;,&quot;multiple&quot;:true,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;IDM_6&quot;,&quot;visibility&quot;:&quot;visible&quot;},&quot;circle&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}]},&quot;position&quot;:{&quot;x&quot;:360,&quot;y&quot;:210},&quot;angle&quot;:0,&quot;id&quot;:&quot;77c2eeae-3330-42d4-8ed3-74460110bf1a&quot;,&quot;name&quot;:&quot;Spark_SQL_1&quot;,&quot;z&quot;:8,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Spark_SQL_1&quot;}}},{&quot;type&quot;:&quot;devs.transformation.TableTarget&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;],&quot;outPorts&quot;:[],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:750,&quot;y&quot;:360},&quot;angle&quot;:0,&quot;id&quot;:&quot;02d7e410-58e9-48af-ac47-53b6e228643e&quot;,&quot;name&quot;:&quot;Table_15&quot;,&quot;z&quot;:9,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Table_15&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;ca73be7d-b76b-4078-b1f0-dffb266ed897&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;77c2eeae-3330-42d4-8ed3-74460110bf1a&quot;,&quot;port&quot;:&quot;0&quot;},&quot;id&quot;:&quot;2ba22941-3e4c-47c5-bd8d-c4639dadf308&quot;,&quot;z&quot;:10,&quot;name&quot;:&quot;cf24d880-8488-4164-a9ed-c8a6ac572835&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;cf24d880-8488-4164-a9ed-c8a6ac572835&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;65e7bc8c-689c-4c52-88bf-7108d5c765c8&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;77c2eeae-3330-42d4-8ed3-74460110bf1a&quot;,&quot;port&quot;:&quot;1&quot;},&quot;id&quot;:&quot;c00b66f2-03be-4e0d-a054-4f0f6d1af07b&quot;,&quot;z&quot;:11,&quot;name&quot;:&quot;c68bffa1-7c10-48a3-9fca-efa933758df1&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;c68bffa1-7c10-48a3-9fca-efa933758df1&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;3d92b841-c143-43b2-a50d-903416b60728&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;77c2eeae-3330-42d4-8ed3-74460110bf1a&quot;,&quot;port&quot;:&quot;2&quot;},&quot;id&quot;:&quot;93857456-2c1b-4366-8127-4d980a7c5bdc&quot;,&quot;z&quot;:12,&quot;name&quot;:&quot;667c3cbc-6d1b-4a33-b1d4-3453d79fc05d&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;667c3cbc-6d1b-4a33-b1d4-3453d79fc05d&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;e85bd426-4a27-450c-a6ad-a782bcd5267d&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;77c2eeae-3330-42d4-8ed3-74460110bf1a&quot;,&quot;port&quot;:&quot;3&quot;},&quot;id&quot;:&quot;da488d61-5a97-448a-a690-d01c0661e496&quot;,&quot;z&quot;:13,&quot;name&quot;:&quot;9828420a-9216-436b-9e5b-78b8b6903ea6&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;9828420a-9216-436b-9e5b-78b8b6903ea6&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;34daa340-8b03-4056-aea4-10d37d68c995&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;77c2eeae-3330-42d4-8ed3-74460110bf1a&quot;,&quot;port&quot;:&quot;4&quot;},&quot;id&quot;:&quot;2eabd201-f17d-4086-a9e1-5005319d1660&quot;,&quot;z&quot;:14,&quot;name&quot;:&quot;833efdbc-957e-4c0d-be06-5a351ad610e0&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;833efdbc-957e-4c0d-be06-5a351ad610e0&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;b5dee85c-53d6-473d-9c5a-07ced2330b79&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;77c2eeae-3330-42d4-8ed3-74460110bf1a&quot;,&quot;port&quot;:&quot;5&quot;},&quot;id&quot;:&quot;6ae6513b-4ee4-4bfa-85b3-9a62786e6d6f&quot;,&quot;z&quot;:15,&quot;name&quot;:&quot;7331ff47-5396-432a-8c2e-dc60404bc137&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;7331ff47-5396-432a-8c2e-dc60404bc137&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;53c268c8-0c44-4157-8bb6-af8d57fb11bb&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;77c2eeae-3330-42d4-8ed3-74460110bf1a&quot;,&quot;port&quot;:&quot;6&quot;},&quot;id&quot;:&quot;31245b80-9d86-4dc2-9dc5-8a5281a41d84&quot;,&quot;z&quot;:16,&quot;name&quot;:&quot;eccccb23-0475-4980-8f0b-ae473b63be19&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;eccccb23-0475-4980-8f0b-ae473b63be19&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;77c2eeae-3330-42d4-8ed3-74460110bf1a&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;02d7e410-58e9-48af-ac47-53b6e228643e&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;2186801d-cd8e-4956-b5b0-bc6b04aa329c&quot;,&quot;z&quot;:17,&quot;name&quot;:&quot;04fa4332-3c5c-4fd4-99bb-5eaf34307e33&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;04fa4332-3c5c-4fd4-99bb-5eaf34307e33&quot;}}}]}">
+  <targets xsi:type="etl:TableTarget" name="Table_15" label="Table_15" tableName="TRP_S04_DIM_CLIENT">
+    <inputPort name="Table_15in">
+      <fields name="CLIENT_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="UNQ_SRC_ID" dataTypeDomain="STRING"/>
+      <fields name="NAME_NM" dataTypeDomain="STRING"/>
+      <fields name="NAME_RUS_NM" dataTypeDomain="STRING"/>
+      <fields name="NAME_ENG_NM" dataTypeDomain="STRING"/>
+      <fields name="NAME_ORIG_NM" dataTypeDomain="STRING"/>
+      <fields name="INN_CD" dataTypeDomain="STRING"/>
+      <fields name="OGRN_CD" dataTypeDomain="STRING"/>
+      <fields name="KIO_CD" dataTypeDomain="STRING"/>
+      <fields name="BIC_CD" dataTypeDomain="STRING"/>
+      <fields name="SWIFT_CD" dataTypeDomain="STRING"/>
+      <fields name="REL_CLIENT_GROUP_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="REL_MEMBER_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="REL_COUNTRY_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="REL_BUSINESS_CATEGORY_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="REL_INDUSTRY_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="REL_CLIENT_TYPE_UID" dataTypeDomain="STRING"/>
+      <fields name="RESIDENT_FLG" dataTypeDomain="STRING"/>
+      <fields name="LICENSE_NUM" dataTypeDomain="STRING"/>
+      <fields name="SUBHOLDING" dataTypeDomain="STRING"/>
+      <fields name="UNIFIED_CLIENT_NM" dataTypeDomain="INTEGER"/>
+      <fields name="INDUSTRY_NM" dataTypeDomain="STRING"/>
+      <fields name="TECH_CLIENT_FLG" dataTypeDomain="STRING"/>
+      <fields name="HASH_TAG" dataTypeDomain="STRING"/>
+      <fields name="IS_DELETE_FLG" dataTypeDomain="INTEGER"/>
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATE"/>
+      <fields name="LOAD_ID" dataTypeDomain="STRING"/>
+      <fields name="SRC_STM_ID" dataTypeDomain="STRING"/>
+      <fields name="UNIFIED_CLIENT_FLG" dataTypeDomain="INTEGER"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="STRING"/>
+    </inputPort>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="BIC_CD" targetColumnName="BIC_CD"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="CLIENT_UID" targetColumnName="CLIENT_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="HASH_TAG" targetColumnName="HASH_TAG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="INDUSTRY_NM" targetColumnName="INDUSTRY_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="INN_CD" targetColumnName="INN_CD"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="IS_DELETE_FLG" targetColumnName="IS_DELETE_FLG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="KIO_CD" targetColumnName="KIO_CD"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="LICENSE_NUM" targetColumnName="LICENSE_NUM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="LOAD_ID" targetColumnName="LOAD_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="NAME_ENG_NM" targetColumnName="NAME_ENG_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="NAME_NM" targetColumnName="NAME_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="NAME_ORIG_NM" targetColumnName="NAME_ORIG_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="NAME_RUS_NM" targetColumnName="NAME_RUS_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="OGRN_CD" targetColumnName="OGRN_CD"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="PROCESSED_DTTM" targetColumnName="PROCESSED_DTTM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_BUSINESS_CATEGORY_UID" targetColumnName="REL_BUSINESS_CATEGORY_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_CLIENT_GROUP_UID" targetColumnName="REL_CLIENT_GROUP_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_CLIENT_TYPE_UID" targetColumnName="REL_CLIENT_TYPE_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_COUNTRY_UID" targetColumnName="REL_COUNTRY_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_INDUSTRY_UID" targetColumnName="REL_INDUSTRY_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_MEMBER_UID" targetColumnName="REL_MEMBER_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="RESIDENT_FLG" targetColumnName="RESIDENT_FLG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="SRC_STM_ID" targetColumnName="SRC_STM_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="SUBHOLDING" targetColumnName="SUBHOLDING"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="SWIFT_CD" targetColumnName="SWIFT_CD"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="TECH_CLIENT_FLG" targetColumnName="TECH_CLIENT_FLG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="UNIFIED_CLIENT_FLG" targetColumnName="UNIFIED_CLIENT_FLG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="UNQ_SRC_ID" targetColumnName="UNQ_SRC_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="WORKFLOW_RUN_ID" targetColumnName="WORKFLOW_RUN_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="CLIENT_UID" targetColumnName="CLIENT_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="NAME_NM" targetColumnName="NAME_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="NAME_RUS_NM" targetColumnName="NAME_RUS_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="NAME_ENG_NM" targetColumnName="NAME_ENG_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="NAME_ORIG_NM" targetColumnName="NAME_ORIG_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="INN_CD" targetColumnName="INN_CD"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="OGRN_CD" targetColumnName="OGRN_CD"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="KIO_CD" targetColumnName="KIO_CD"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="BIC_CD" targetColumnName="BIC_CD"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="SWIFT_CD" targetColumnName="SWIFT_CD"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_CLIENT_GROUP_UID" targetColumnName="REL_CLIENT_GROUP_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_MEMBER_UID" targetColumnName="REL_MEMBER_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_COUNTRY_UID" targetColumnName="REL_COUNTRY_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_BUSINESS_CATEGORY_UID" targetColumnName="REL_BUSINESS_CATEGORY_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_INDUSTRY_UID" targetColumnName="REL_INDUSTRY_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="REL_CLIENT_TYPE_UID" targetColumnName="REL_CLIENT_TYPE_UID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="RESIDENT_FLG" targetColumnName="RESIDENT_FLG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="LICENSE_NUM" targetColumnName="LICENSE_NUM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="SUBHOLDING" targetColumnName="SUBHOLDING"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="UNIFIED_CLIENT_NM" targetColumnName="UNIFIED_CLIENT_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="INDUSTRY_NM" targetColumnName="INDUSTRY_NM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="TECH_CLIENT_FLG" targetColumnName="TECH_CLIENT_FLG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="IS_DELETE_FLG" targetColumnName="IS_DELETE_FLG"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="PROCESSED_DTTM" targetColumnName="PROCESSED_DTTM"/>
+  </targets>
+  <transformationSteps xsi:type="etl:SparkSQL" name="Spark_SQL_1" label="Spark_SQL_1" statement="SELECT&#xD;&#xA;IDM_1.RK_UID AS CLIENT_UID,&#xD;&#xA;STG.CLIENT_ID AS UNQ_SRC_ID,&#xD;&#xA;NULL AS NAME_NM,&#xD;&#xA;STG.FULL_NAME_RUS AS NAME_RUS_NM,&#xD;&#xA;STG.FULL_NAME_ENG AS NAME_ENG_NM,&#xD;&#xA;NULL AS NAME_ORIG_NM,&#xD;&#xA;STG.INN AS INN_CD,&#xD;&#xA;STG.OGRN AS OGRN_CD,&#xD;&#xA;STG.KIO AS KIO_CD,&#xD;&#xA;STG.BIC AS BIC_CD,&#xD;&#xA;STG.SWIFT AS SWIFT_CD,&#xD;&#xA;IDM_6.RK_UID AS REL_CLIENT_GROUP_UID,&#xD;&#xA;IDM_2.RK_UID AS REL_MEMBER_UID,/*62 &#x437;&#x43d;&#x430;&#x435;&#x447;&#x43d;&#x438;&#x435; &#x437;&#x430;&#x434;&#x430;&#x435;&#x442;&#x441;&#x44f; &#x43f;&#x430;&#x440;&#x430;&#x43c;&#x435;&#x442;&#x440;&#x43e;&#x43c; */&#xD;&#xA;IDM_5.RK_UID AS REL_COUNTRY_UID,&#xD;&#xA;IDM_4.RK_UID AS REL_BUSINESS_CATEGORY_UID,&#xD;&#xA;IDM_3.RK_UID AS REL_INDUSTRY_UID,&#xD;&#xA;NULL AS REL_CLIENT_TYPE_UID,&#xD;&#xA;STG.RESIDENT_FLAG AS RESIDENT_FLG,&#xD;&#xA;STG.LICENSE AS LICENSE_NUM,&#xD;&#xA;NULL AS SUBHOLDING,&#xD;&#xA;1 AS UNIFIED_CLIENT_NM,&#xD;&#xA;STG.INDUSTRY_NAME AS INDUSTRY_NM,&#xD;&#xA;STG.TECH_CLIENT_FLAG AS TECH_CLIENT_FLG,&#xD;&#xA;'' AS HASH_TAG,&#xD;&#xA;0 AS IS_DELETE_FLG&#xD;&#xA;STG.LOAD_ID as PROCESSED_DTTM,&#xD;&#xA;STG.PROCESSED_DTTM as PROCESSED_DTTM,&#xD;&#xA;'' as SRC_STM_ID,&#xD;&#xA;0 as UNIFIED_CLIENT_FLG,&#xD;&#xA;STG.WORKFLOW_RUN_ID as WORKFLOW_RUN_ID&#xD;&#xA;&#xD;&#xA;from STG&#xD;&#xA;&#xD;&#xA;LEFT JOIN IDM_1 --(&#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x430; &#x441;&#x443;&#x440;&#x440;&#x43e;&#x433;&#x430;&#x442;&#x43d;&#x44b;&#x445; &#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x439; &#x43f;&#x43e; &#x443;&#x43d;&#x438;&#x444; &#x43a;&#x43b;&#x438;&#x435;&#x43d;&#x442;&#x430;&#x43c;)&#xD;&#xA;ON STG.CLIENT_ID=IDM_1.SRC_ID_1&#xD;&#xA;&#xD;&#xA;LEFT JOIN IDM_2 --(&#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x430; &#x441;&#x443;&#x440;&#x440;&#x43e;&#x433;&#x430;&#x442;&#x43d;&#x44b;&#x445; &#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x439; &#x43f;&#x43e; &#x414;&#x43e;&#x447;&#x435;&#x440;&#x43d;&#x438;&#x43c; &#x43a;&#x43e;&#x43c;&#x43f;&#x430;&#x43d;&#x438;&#x44f;&#x43c;)&#xD;&#xA;ON &amp;MEMBER=IDM_2.SRC_ID_1 --(&#x43f;&#x430;&#x440;&#x430;&#x43c;&#x435;&#x442;&#x440; $$MEMBER &#x43f;&#x440;&#x438;&#x43d;&#x438;&#x43c;&#x430;&#x435;&#x442; &#x437;&#x43d;&#x430;&#x447;&#x435;&#x43d;&#x438;&#x435; &#x43f;&#x43e; &#x443;&#x43c;&#x43e;&#x43b;&#x447;&#x430;&#x43d;&#x438;&#x44e; 62)&#xD;&#xA;&#xD;&#xA;LEFT JOIN IDM_3 --(&#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x430; &#x441;&#x443;&#x440;&#x440;&#x43e;&#x433;&#x430;&#x442;&#x43d;&#x44b;&#x445; &#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x439; &#x43f;&#x43e; &#x43e;&#x442;&#x440;&#x430;&#x441;&#x43b;&#x438; &#x438;&#x43d;&#x434;&#x443;&#x441;&#x442;&#x440;&#x438;&#x438;)&#xD;&#xA;ON STG.OFFICIAL_INDUSTRY_ID=IDM_3.SRC_ID_1&#xD;&#xA;&#xD;&#xA;LEFT JOIN IDM_4 --(&#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x430; &#x441;&#x443;&#x440;&#x440;&#x43e;&#x433;&#x430;&#x442;&#x43d;&#x44b;&#x445; &#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x439; &#x43f;&#x43e; &#x431;&#x438;&#x437;&#x43d;&#x435;&#x441; &#x43a;&#x430;&#x442;&#x435;&#x433;&#x43e;&#x440;&#x438;&#x44f;&#x43c;)&#xD;&#xA;ON STG.BUSINESS_CATEGORY_ID=IDM_4.SRC_ID_1&#xD;&#xA;&#xD;&#xA;LEFT JOIN IDM_5 --(&#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x430; &#x441;&#x443;&#x440;&#x440;&#x43e;&#x433;&#x430;&#x442;&#x43d;&#x44b;&#x445; &#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x439; &#x43f;&#x43e; &#x441;&#x442;&#x440;&#x430;&#x43d;&#x430;&#x43c;)&#xD;&#xA;ON STG.COUNTRY_ID=IDM_5.SRC_ID_1&#xD;&#xA;&#xD;&#xA;LEFT JOIN IDM_6 --(&#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x430; &#x441;&#x443;&#x440;&#x440;&#x43e;&#x433;&#x430;&#x442;&#x43d;&#x44b;&#x445; &#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x439; &#x43f;&#x43e; &#x433;&#x440;&#x443;&#x43f;&#x43f;&#x430;&#x43c; &#x43a;&#x43b;&#x438;&#x435;&#x43d;&#x442;&#x43e;&#x432; &#x438;&#x437; &#x41f;&#x41a;&#x411;)&#xD;&#xA;ON STG.PARENT_ID=IDM_6.SRC_ID_1&#xD;&#xA;&#xD;&#xA;WHERE LOAD_ID=&amp;LOAD_ID --(LOAD_ID &#x442;&#x435;&#x43a;&#x443;&#x449;&#x438;&#x439; &#x438;&#x434;&#x435;&#x43d;&#x442;&#x438;&#x444;&#x438;&#x43a;&#x430;&#x442;&#x43e;&#x440; &#x437;&#x430;&#x433;&#x440;&#x443;&#x437;&#x43a;&#x438;)&#xD;&#xA;AND CLIENT_ID IS NOT NULL &#xD;&#xA;or FULL_NAME_ENG IS NOT NULL &#xD;&#xA;or FULL_NAME_RUS IS NOT NULL &#xD;&#xA;or INN IS NOT NULL &#xD;&#xA;or KIO IS NOT NULL &#xD;&#xA;or TECH_CLIENT_FLAG IS NOT NULL &#xD;&#xA;or LICENSE IS NOT NULL &#xD;&#xA;or OGRN IS NOT NULL &#xD;&#xA;or OFFICIAL_INDUSTRY_ID IS NOT NULL &#xD;&#xA;or PARENT_ID IS NOT NULL &#xD;&#xA;or RESIDENT_FLAG IS NOT NULL &#xD;&#xA;or SWIFT IS NOT NULL &#xD;&#xA;or BUSINESS_CATEGORY_ID IS NOT NULL &#xD;&#xA;or BIC IS NOT NULL &#xD;&#xA;or COUNTRY_ID IS NOT NULL &#xD;&#xA;or ROWSTATUS IS NOT NULL or&#xD;&#xA;AUTO_FLAG IS NOT NULL or 1=0&#xD;&#xA;">
+    <outputPort name="Spark_SQL_1out">
+      <fields name="CLIENT_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="UNQ_SRC_ID" dataTypeDomain="STRING"/>
+      <fields name="NAME_NM" dataTypeDomain="STRING"/>
+      <fields name="NAME_RUS_NM" dataTypeDomain="STRING"/>
+      <fields name="NAME_ENG_NM" dataTypeDomain="STRING"/>
+      <fields name="NAME_ORIG_NM" dataTypeDomain="STRING"/>
+      <fields name="INN_CD" dataTypeDomain="STRING"/>
+      <fields name="OGRN_CD" dataTypeDomain="STRING"/>
+      <fields name="KIO_CD" dataTypeDomain="STRING"/>
+      <fields name="BIC_CD" dataTypeDomain="STRING"/>
+      <fields name="SWIFT_CD" dataTypeDomain="STRING"/>
+      <fields name="REL_CLIENT_GROUP_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="REL_MEMBER_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="REL_COUNTRY_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="REL_BUSINESS_CATEGORY_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="REL_INDUSTRY_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="REL_CLIENT_TYPE_UID" dataTypeDomain="STRING"/>
+      <fields name="RESIDENT_FLG" dataTypeDomain="STRING"/>
+      <fields name="LICENSE_NUM" dataTypeDomain="STRING"/>
+      <fields name="SUBHOLDING" dataTypeDomain="STRING"/>
+      <fields name="UNIFIED_CLIENT_NM" dataTypeDomain="INTEGER"/>
+      <fields name="INDUSTRY_NM" dataTypeDomain="STRING"/>
+      <fields name="TECH_CLIENT_FLG" dataTypeDomain="STRING"/>
+      <fields name="HASH_TAG" dataTypeDomain="STRING"/>
+      <fields name="IS_DELETE_FLG" dataTypeDomain="INTEGER"/>
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATE"/>
+      <fields name="LOAD_ID" dataTypeDomain="STRING"/>
+      <fields name="SRC_STM_ID" dataTypeDomain="STRING"/>
+      <fields name="UNIFIED_CLIENT_FLG" dataTypeDomain="INTEGER"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="STRING"/>
+    </outputPort>
+    <sqlPorts name="STG_S04_UNIF_CLIENT" alias="STG">
+      <fields name="AUTO_FLAG" dataTypeDomain="STRING"/>
+      <fields name="AUTO_MODE" dataTypeDomain="STRING"/>
+      <fields name="BIC" dataTypeDomain="STRING"/>
+      <fields name="BUSINESS_CATEGORY_ID" dataTypeDomain="STRING"/>
+      <fields name="BUSINESS_CATEGORY_NAME" dataTypeDomain="STRING"/>
+      <fields name="CLIENT_ID" dataTypeDomain="STRING"/>
+      <fields name="COUNTRY_ID" dataTypeDomain="STRING"/>
+      <fields name="COUNTRY_NAME" dataTypeDomain="STRING"/>
+      <fields name="FULL_NAME_ENG" dataTypeDomain="STRING"/>
+      <fields name="FULL_NAME_RUS" dataTypeDomain="STRING"/>
+      <fields name="INDUSTRY" dataTypeDomain="STRING"/>
+      <fields name="INDUSTRY_NAME" dataTypeDomain="STRING"/>
+      <fields name="INN" dataTypeDomain="STRING"/>
+      <fields name="KIO" dataTypeDomain="STRING"/>
+      <fields name="LICENSE" dataTypeDomain="STRING"/>
+      <fields name="LOAD_ID" dataTypeDomain="DECIMAL"/>
+      <fields name="OFFICIAL_INDUSTRY_ID" dataTypeDomain="STRING"/>
+      <fields name="OFFICIAL_INDUSTRY_NAME" dataTypeDomain="STRING"/>
+      <fields name="OGRN" dataTypeDomain="STRING"/>
+      <fields name="PARENT_ID" dataTypeDomain="STRING"/>
+      <fields name="PARENT_NAME" dataTypeDomain="STRING"/>
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RESIDENT_FLAG" dataTypeDomain="STRING"/>
+      <fields name="ROWSTATUS" dataTypeDomain="STRING"/>
+      <fields name="SWIFT" dataTypeDomain="STRING"/>
+      <fields name="TECH_CLIENT_FLAG" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </sqlPorts>
+    <sqlPorts name="IDM_UNIF_CLIENT" alias="IDM_1">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </sqlPorts>
+    <sqlPorts name="IDM_NSI_VTB_GROUP_MEMBER" alias="IDM_2">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="DECIMAL"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </sqlPorts>
+    <sqlPorts name="IDM_MNS_INDUSTRY" alias="IDM_3">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </sqlPorts>
+    <sqlPorts name="IDM_MNS_BUSINESS_CATEGORY" alias="IDM_4">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </sqlPorts>
+    <sqlPorts name="IDM_MNS_COUNTRY" alias="IDM_5">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="DECIMAL"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </sqlPorts>
+    <sqlPorts name="IDM_PKB_CLIENT_GROUP" alias="IDM_6">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </sqlPorts>
+  </transformationSteps>
+  <sources xsi:type="etl:SQLSource" name="STG_S04_UNIF_CLIENT" label="STG_S04_UNIF_CLIENT" statement="select&#xA;&#x9;AUTO_FLAG,&#xA;&#x9;AUTO_MODE,&#xA;&#x9;BIC,&#xA;&#x9;BUSINESS_CATEGORY_ID,&#xA;&#x9;BUSINESS_CATEGORY_NAME,&#xA;&#x9;CLIENT_ID,&#xA;&#x9;COUNTRY_ID,&#xA;&#x9;COUNTRY_NAME,&#xA;&#x9;FULL_NAME_ENG,&#xA;&#x9;FULL_NAME_RUS,&#xA;&#x9;INDUSTRY,&#xA;&#x9;INDUSTRY_NAME,&#xA;&#x9;INN,&#xA;&#x9;KIO,&#xA;&#x9;LICENSE,&#xA;&#x9;LOAD_ID,&#xA;&#x9;OFFICIAL_INDUSTRY_ID,&#xA;&#x9;OFFICIAL_INDUSTRY_NAME,&#xA;&#x9;OGRN,&#xA;&#x9;PARENT_ID,&#xA;&#x9;PARENT_NAME,&#xA;&#x9;PROCESSED_DTTM,&#xA;&#x9;RESIDENT_FLAG,&#xA;&#x9;ROWSTATUS,&#xA;&#x9;SWIFT,&#xA;&#x9;TECH_CLIENT_FLAG,&#xA;&#x9;WORKFLOW_RUN_ID&#xA;from STG_S04_UNIF_CLIENT">
+    <outputPort name="SQL_0out">
+      <fields name="AUTO_FLAG" dataTypeDomain="STRING"/>
+      <fields name="AUTO_MODE" dataTypeDomain="STRING"/>
+      <fields name="BIC" dataTypeDomain="STRING"/>
+      <fields name="BUSINESS_CATEGORY_ID" dataTypeDomain="STRING"/>
+      <fields name="BUSINESS_CATEGORY_NAME" dataTypeDomain="STRING"/>
+      <fields name="CLIENT_ID" dataTypeDomain="STRING"/>
+      <fields name="COUNTRY_ID" dataTypeDomain="STRING"/>
+      <fields name="COUNTRY_NAME" dataTypeDomain="STRING"/>
+      <fields name="FULL_NAME_ENG" dataTypeDomain="STRING"/>
+      <fields name="FULL_NAME_RUS" dataTypeDomain="STRING"/>
+      <fields name="INDUSTRY" dataTypeDomain="STRING"/>
+      <fields name="INDUSTRY_NAME" dataTypeDomain="STRING"/>
+      <fields name="INN" dataTypeDomain="STRING"/>
+      <fields name="KIO" dataTypeDomain="STRING"/>
+      <fields name="LICENSE" dataTypeDomain="STRING"/>
+      <fields name="LOAD_ID" dataTypeDomain="DECIMAL"/>
+      <fields name="OFFICIAL_INDUSTRY_ID" dataTypeDomain="STRING"/>
+      <fields name="OFFICIAL_INDUSTRY_NAME" dataTypeDomain="STRING"/>
+      <fields name="OGRN" dataTypeDomain="STRING"/>
+      <fields name="PARENT_ID" dataTypeDomain="STRING"/>
+      <fields name="PARENT_NAME" dataTypeDomain="STRING"/>
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RESIDENT_FLAG" dataTypeDomain="STRING"/>
+      <fields name="ROWSTATUS" dataTypeDomain="STRING"/>
+      <fields name="SWIFT" dataTypeDomain="STRING"/>
+      <fields name="TECH_CLIENT_FLAG" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </outputPort>
+  </sources>
+  <sources xsi:type="etl:SQLSource" name="IDM_UNIF_CLIENT" label="IDM_UNIF_CLIENT" statement="select&#xA;&#x9;PROCESSED_DTTM,&#xA;&#x9;RK_UID,&#xA;&#x9;SRC_ID_1,&#xA;&#x9;WORKFLOW_RUN_ID&#xA;from IDM_UNIF_CLIENT">
+    <outputPort name="SQL_3out">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </outputPort>
+  </sources>
+  <sources xsi:type="etl:SQLSource" name="IDM_NSI_VTB_GROUP_MEMBER" label="IDM_NSI_VTB_GROUP_MEMBER" statement="select&#xA;&#x9;PROCESSED_DTTM,&#xA;&#x9;RK_UID,&#xA;&#x9;SRC_ID_1,&#xA;&#x9;WORKFLOW_RUN_ID&#xA;from IDM_NSI_VTB_GROUP_MEMBER">
+    <outputPort name="SQL_5out">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="DECIMAL"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </outputPort>
+  </sources>
+  <sources xsi:type="etl:SQLSource" name="IDM_MNS_INDUSTRY" label="IDM_MNS_INDUSTRY" statement="select&#xA;&#x9;PROCESSED_DTTM,&#xA;&#x9;RK_UID,&#xA;&#x9;cast(SRC_ID_1 as varchar(100)) as SRC_ID_1,&#xA;&#x9;WORKFLOW_RUN_ID&#xA;from IDM_MNS_INDUSTRY">
+    <outputPort name="SQL_7out">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </outputPort>
+  </sources>
+  <sources xsi:type="etl:SQLSource" name="IDM_MNS_BUSINESS_CATEGORY" label="IDM_MNS_BUSINESS_CATEGORY" statement="select&#xA;&#x9;PROCESSED_DTTM,&#xA;&#x9;RK_UID,&#xA;&#x9;SRC_ID_1,&#xA;&#x9;WORKFLOW_RUN_ID&#xA;from IDM_MNS_BUSINESS_CATEGORY">
+    <outputPort name="SQL_9out">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </outputPort>
+  </sources>
+  <sources xsi:type="etl:SQLSource" name="IDM_MNS_COUNTRY" label="IDM_MNS_COUNTRY" statement="select&#xA;&#x9;PROCESSED_DTTM,&#xA;&#x9;RK_UID,&#xA;&#x9;SRC_ID_1,&#xA;&#x9;WORKFLOW_RUN_ID&#xA;from IDM_MNS_COUNTRY">
+    <outputPort name="SQL_11out">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="DECIMAL"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </outputPort>
+  </sources>
+  <sources xsi:type="etl:SQLSource" name="IDM_PKB_CLIENT_GROUP" label="IDM_PKB_CLIENT_GROUP" statement="select&#xA;&#x9;PROCESSED_DTTM,&#xA;&#x9;RK_UID,&#xA;&#x9;SRC_ID_1,&#xA;&#x9;WORKFLOW_RUN_ID&#xA;from IDM_PKB_CLIENT_GROUP">
+    <outputPort name="SQL_13out">
+      <fields name="PROCESSED_DTTM" dataTypeDomain="DATETIME"/>
+      <fields name="RK_UID" dataTypeDomain="DECIMAL"/>
+      <fields name="SRC_ID_1" dataTypeDomain="STRING"/>
+      <fields name="WORKFLOW_RUN_ID" dataTypeDomain="DECIMAL"/>
+    </outputPort>
+  </sources>
+  <transitions name="cf24d880-8488-4164-a9ed-c8a6ac572835" start="//@sources.0/@outputPort" finish="//@transformationSteps.0/@sqlPorts.0"/>
+  <transitions name="c68bffa1-7c10-48a3-9fca-efa933758df1" start="//@sources.1/@outputPort" finish="//@transformationSteps.0/@sqlPorts.1"/>
+  <transitions name="667c3cbc-6d1b-4a33-b1d4-3453d79fc05d" start="//@sources.2/@outputPort" finish="//@transformationSteps.0/@sqlPorts.2"/>
+  <transitions name="9828420a-9216-436b-9e5b-78b8b6903ea6" start="//@sources.3/@outputPort" finish="//@transformationSteps.0/@sqlPorts.3"/>
+  <transitions name="833efdbc-957e-4c0d-be06-5a351ad610e0" start="//@sources.4/@outputPort" finish="//@transformationSteps.0/@sqlPorts.4"/>
+  <transitions name="7331ff47-5396-432a-8c2e-dc60404bc137" start="//@sources.5/@outputPort" finish="//@transformationSteps.0/@sqlPorts.5"/>
+  <transitions name="eccccb23-0475-4980-8f0b-ae473b63be19" start="//@sources.6/@outputPort" finish="//@transformationSteps.0/@sqlPorts.6"/>
+  <transitions name="04fa4332-3c5c-4fd4-99bb-5eaf34307e33" start="//@transformationSteps.0/@outputPort" finish="//@targets.0/@inputPort"/>
+  <auditInfo changeUser="admin" changeDateTime="2020-09-22T15:39:10.170+0000" createUser="admin" createDateTime="2020-09-22T13:04:00.225+0000"/>
+</etl:Transformation>
