@@ -22,7 +22,7 @@ class Selection {
 
     public static Object test(Map entity, Map params = null) {
         def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SelectionValidate.egl", [step: entity], [])
-        def transformation = Database.new.get(entity.parent)
+        def transformation = entity.parent ? Database.new.get(entity.parent) : entity.transformation
         def livyServer = LivyServer.findCurrentLivyServer(Transformation.findOrCreateTRD(transformation), params)
 
         def deployDir = Context.current.getContextSvc().getDeployDir().getAbsolutePath();

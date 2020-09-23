@@ -334,8 +334,8 @@ class LivyServer {
     static Object findCurrentLivyServer(Map trDeployment, Map params = null) {
         def livyServer
 
-        if (params.livyServer != null) livyServer = params.livyServer
-        else if (trDeployment.livyServer != null) livyServer = trDeployment.livyServer
+        if (params != null && params.livyServer != null) livyServer = params.livyServer
+        else if (trDeployment != null && trDeployment.livyServer != null) livyServer = trDeployment.livyServer
         if (livyServer == null) livyServer = Database.new.list('rt.LivyServer', ['isDefault': true]).first()
 
         if (livyServer == null) throw new RuntimeException("Livy Server not found")
