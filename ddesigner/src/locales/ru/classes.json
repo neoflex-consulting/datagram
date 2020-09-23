@@ -3618,6 +3618,11 @@
           "caption": "Key Field",
           "placeholder": "Введите Key Field...",
           "help": ""
+        },
+        "comment": {
+          "caption": "Комментарий",
+          "placeholder": "Введите Comment..",
+          "help": ""
         }
       },
       "ops": {},

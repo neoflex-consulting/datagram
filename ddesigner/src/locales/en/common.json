@@ -91,5 +91,6 @@
   "format": "Format",
   "clean": "Clean IDs",
   "proceed": "Proceed",
-  "": ""
+  "": "",
+  "branch": "Branch"
 }

@@ -1,6 +1,9 @@
 import _ from 'lodash'
 
 const nodeOutputFieldsFactory = {
+    "etl.TableTarget": (node) => {
+        return node.inputPort.fields.map(f => copyField(f))
+    },
     "etl.Selection": (node) => {
         return node.inputPort.fields.map(f => copyField(f))
     },
@@ -72,11 +75,11 @@ function correctOutputFields(node) {
 }
 
 function diffPorts(newFields, oldFields) {
-    const deleted = oldFields.filter(of => newFields.every(nf => of.name !== nf.name)).map(f => {
+    const deleted = oldFields.filter(of => newFields.every(nf => of.name.toLowerCase() !== nf.name.toLowerCase())).map(f => {
         return {oldField: f, newField: undefined}
     })
     const added = newFields.map((nf, index) => {
-        let of = oldFields.find(of => of.name === nf.name)
+        let of = oldFields.find(of => of.name.toLowerCase() === nf.name.toLowerCase())
         return {oldField: of, newField: nf}
     }).filter(item => !item.oldField || item.oldField.dataTypeDomain !== item.newField.dataTypeDomain)
     if (added.length === 1 && deleted.length === 1) {
@@ -87,6 +90,7 @@ function diffPorts(newFields, oldFields) {
 }
 
 function targetInputPortHasChanged(transformation, target, inputPort, oldFields) {
+    console.log("targetInputPortHasChanged");
     const mappingType = target._type_ === "etl.StoredProcedureTarget" ? "etl.StoredProcedureParamFeature" : (
         ["etl.HBaseTarget", "etl.StreamTarget"].includes(target._type_) ? "etl.HBaseTargetFeature" : "etl.TableTargetFeature"
     )
@@ -104,16 +108,31 @@ function targetInputPortHasChanged(transformation, target, inputPort, oldFields)
                     mapping[nameAttr] = newField.name
                 }
             } else {
-                target.inputFieldsMapping = target.inputFieldsMapping.filter(m => m.inputFieldName !== oldField.name)
+                target.inputFieldsMapping = target.inputFieldsMapping.filter(m => m.inputFieldName.toLowerCase() !== oldField.name.toLowerCase())
             }
         } else {
-            target.inputFieldsMapping.push({
-                _type_: mappingType,
-                inputFieldName: newField.name,
-                [nameAttr]: newField.name
-            })
+            if(mappingType === "etl.TableTargetFeature"){
+                const mapping = target.inputFieldsMapping.find(m => m.targetColumnName.toLowerCase() === newField.name.toLowerCase())
+                if(mapping){
+                    mapping.inputFieldName = newField.name
+                }
+            }else{
+                target.inputFieldsMapping.push({
+                    _type_: mappingType,
+                    inputFieldName: newField.name,
+                    [nameAttr]: newField.name
+                })
+            }
         }
     })
+
+    if(mappingType === "etl.TableTargetFeature"){
+        target.inputFieldsMapping.forEach(m=>{
+            if(!m.inputFieldName || m.inputFieldName == ""){
+                m.inputFieldName = "";
+            }
+        });
+    }
 }
 
 function stepInputPortHasChanged(transformation, transformationStep, inputPort, oldFields) {
@@ -298,7 +317,7 @@ function inputPortHasChanged(transformation, inputPort, oldFields) {
 }
 
 function sameFields(f1, f2) {
-    return !!f1 === !!f2 && f1.name === f2.name && f1.dataTypeDomain === f2.dataTypeDomain
+    return !!f1 === !!f2 && f1.name.toLowerCase() === f2.name.toLowerCase() && f1.dataTypeDomain === f2.dataTypeDomain
 }
 
 function deepCloneWithoutId(object) {
@@ -387,7 +406,7 @@ function checkLostInputPorts(transformation) {
 function normalizeTransformationPorts(transformation, old) {
     transformation.transitions = transformation.transitions.filter(t=>t.start && t.finish)
     transformation.transformationSteps.forEach(node => {
-        correctOutputFields(node)
+        correctOutputFields(node);
     })
     transformation.transitions.forEach(t => {
         normalizeTransition(transformation, t)
