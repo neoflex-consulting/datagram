@@ -3601,6 +3601,10 @@
           "caption": "Key Field",
           "placeholder": "Enter Key Field...",
           "help": ""
+        }, "comment": {
+          "caption": "Comment",
+          "placeholder": "Enter Comment..",
+          "help": ""
         }
       },
       "ops": {},
