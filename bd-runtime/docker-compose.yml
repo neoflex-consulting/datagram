@@ -58,6 +58,7 @@ services:
       # webhdfs
       - 51070:50070
     volumes:
+      - dfs_name:/dfs/name
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
@@ -96,7 +97,7 @@ services:
       - 8081:8081
       - 8042:8042
     volumes:
-#      - dfs1_data:/dfs/data
+      - dfs_data_1:/dfs/data
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
@@ -136,7 +137,7 @@ services:
       - 8082:8082
       - 8043:8042
     volumes:
-#      - dfs2_data:/dfs/data
+      - dfs_data_2:/dfs/data
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
@@ -235,5 +236,6 @@ networks:
 
 volumes:
   postgres_data:
-  dfs1_data:
-  dfs2_data:
+  dfs_name:
+  dfs_data_1:
+  dfs_data_2:

@@ -6,7 +6,7 @@ if [ -n "${HADOOP_DATANODE_UI_PORT}" ]; then
 fi
 if [ "${HADOOP_NODE}" == "namenode" ]; then
   echo "Starting Hadoop name node..."
-  yes | hdfs namenode -format
+  [[ ! -f /dfs/name/current/VERSION ]] &&  hdfs namenode -format
   hdfs --daemon start namenode
   hdfs --daemon start secondarynamenode
   yarn --daemon start resourcemanager
