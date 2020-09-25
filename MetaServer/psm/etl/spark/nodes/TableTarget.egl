@@ -89,7 +89,7 @@ operation src!TableTarget define(){
           [%}%]
           [%if (self.targetType == src!TableTargetType#UPDATE) {%]
           val sqlText = "update " + context._schema + s"""."[%=getCorrectName(self.tableName)%]" set [%for (feature in self.inputFieldsMapping.select(f|f.keyField <> true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%], [%}%][%}%] """ +
-          s"""where [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%], [%}}%]"""
+          s"""where [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%] and [%}}%]"""
           [%}%]
           [%if (self.targetType == src!TableTargetType#DELETE) {%]
           val sqlText = "delete from " + context._schema + s"""."[%=getCorrectName(self.tableName)%]" """ +
