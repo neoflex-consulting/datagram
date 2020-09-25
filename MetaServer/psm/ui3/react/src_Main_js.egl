@@ -1,0 +1,64 @@
+[%    
+import "ui3_utils.eol";
+%]
+import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.css'
+import {Glyphicon, Jumbotron, Grid, Row, Col} from 'react-bootstrap'
+import {withRouter} from 'react-router-dom'
+import { translate } from 'react-i18next'
+
+class Main extends Component {
+    render() {
+        const {t} = this.props
+        return (
+            <Grid>
+                <Row>
+                [%
+                var count = 0;
+                for (link in application.links) {
+                %]
+                [%=link.declare(count)%]                
+                [%
+                count = count + link.count();
+                }%]
+                </Row>
+            </Grid>
+        );
+    }
+}
+
+export default translate()(withRouter(Main));
+[%
+@template
+operation Link declare(count) {
+if (count <> 0 and count.mod(3) == 0) {%]
+</Row>
+<Row>
+[%}%]
+<Col md={4}>
+    <Jumbotron>
+        <h4>
+        	<a href="[%=self.hRef%]"[%if (self.blank) {%] target="_blank"[%}%]>
+                [%if (self.glyph <> '' and self.glyph <> null) {%]<Glyphicon glyph="[%=self.glyph%]"/>&nbsp;[%}%]{t('[%=self.name%].caption', {ns: 'links'})}
+        	</a>
+        </h4>
+        <p style={{fontSize: "small"}}>{t('[%=self.name%].description', {ns: 'links'})}</p>
+    </Jumbotron>
+</Col>
+[%}
+@template
+operation LinkCollection declare(count) {
+var i = 0;
+for (link in self.links) {%]
+[%=link.declare(count + i)%]
+[%
+i = i + 1;
+}%]
+[%}
+operation LinkCollection count() {
+	return self.links.collect(l|l.count()).sum();
+}
+operation Link count() {
+	return 1;
+}
+%]

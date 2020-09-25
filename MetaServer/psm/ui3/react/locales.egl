@@ -1,0 +1,32 @@
+[%=ns.declareBody(language)%]
+[%
+@template
+operation LocNS declareBody(language) {%]
+{
+    [%for (string in self.strings.select(s|s.get(language) <> null)) {%]
+    "[%=string.name%]": "[%=string.get(language)%]"[%if (hasMore) {%],[%}%]
+    
+    [%}%][%if (self.strings.size() > 0 and self.embedded.size() > 0) {%],[%}%]
+    
+    [%for (ns in self.embedded) {%]
+    [%=ns.declare(language)%][%if (hasMore) {%],[%}%]
+    
+    [%}%]
+}
+[%}
+
+@template
+operation LocNS declare(language) {%]
+"[%=self.name%]": 
+[%=self.declareBody(language)%] 
+[%}
+
+operation LocString get(language) {
+    for (translation in self.translations) {
+        if (translation.language == language) {
+            return translation.name;
+        }
+    }
+    return null;
+}
+%]

@@ -1,0 +1,78 @@
+[%    
+import "ui3_utils.eol";
+%]
+import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.css'
+import '../App.css'
+import {Grid, Row, Nav, NavItem} from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import {withRouter} from 'react-router-dom'
+import { translate } from 'react-i18next'
+[%for (eClass in module.eClasses.collect(c|application.getClass(c))) {%]
+import [%=eClass.getCName()%]List from '../classes/[%=eClass.getCName()%]List.js'
+[%for (subType in eClass.getSubTypes()) {%]
+import [%=subType.getCName()%]Edit from '../classes/[%=subType.getCName()%]Edit.js'
+[%}%]
+[%}%]
+import Main from '../Main'
+
+class [%=module.name%]Module extends Component {
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    }
+    constructor() {
+        super()
+        this.state = {}
+    }
+
+    onPropsSetOrChange(props) {
+        const {module, e_package, e_class, e_operation, e_id} = props.match.params
+        const className = (e_package && e_class && `${e_package}.${e_class}`) || undefined
+        this.setState({module, e_package, e_class, className, e_operation, e_id})
+    }
+
+    componentDidMount() {
+        this.onPropsSetOrChange(this.props)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.onPropsSetOrChange(nextProps);
+    }
+
+    push(url) {
+        this.props.history.push(url);
+    }
+    
+    render() {
+        const {t} = this.props
+        return (
+	        <Grid fluid>
+	            <Row>
+                    <Nav pullLeft={true} activeKey={this.state.className} bsStyle="pills" stacked={true} className="fadein">
+                        [%for (eClass in module.eClasses) {%]
+                        <NavItem href="#" eventKey='[%=eClass.getQName()%]' onClick={()=>this.push('/[%=module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/list')}>{t('[%=eClass.getQName()%].caption', {ns: 'classes'})}</NavItem>
+                        [%}%]
+                    </Nav>
+                    <div style={{overflow:'hidden'}}>
+                        <div style={{marginLeft: 30, marginRight: 20}}>
+	                    {
+				            [%for (eClass in module.eClasses.collect(c|application.getClass(c))) {%]
+				            (this.state.className === "[%=eClass.getQName()%]" && this.state.e_operation === 'list' && <[%=eClass.getCName()%]List/>) ||
+							[%for (subType in eClass.getSubTypes()) {%]
+	                        (this.state.className === "[%=subType.getQName()%]" && ['new', 'view', 'edit', 'copy', 'delete'].includes(this.state.e_operation) && <[%=subType.getCName()%]Edit/>) ||
+							[%}%]
+				            [%}%]
+                            (this.state.className === undefined && <Main/>) ||
+				            false
+				        }
+                        </div>
+                    </div>
+	            </Row>
+	        </Grid>
+        );
+    }
+}
+
+export default translate()(withRouter([%=module.name%]Module));

@@ -1,0 +1,209 @@
+import React, { Component } from 'react';
+import logo from './logo.png'
+import 'bootstrap/dist/css/bootstrap.css'
+import './Application.css'
+import {Modal, FormControl, FormGroup, ControlLabel, Button, NavDropdown, MenuItem, Glyphicon, Navbar, Nav, NavItem} from 'react-bootstrap'
+import { translate } from 'react-i18next'
+import i18n from './i18n'
+import resource from './Resource.js'
+import {AlertList} from "react-bs-notifier"
+[%for (module in application.modules) {%]
+import [%=module.name%]Module from './modules/[%=module.name%]Module'
+[%}%]
+import Main from './Main'
+
+class Application extends Component {
+    constructor() {
+        super()
+        this.state = {user: undefined, lang: 'en', fetchCount: 0, alerts: [], log: [], stompConnected: false}
+    }
+
+    onPropsSetOrChange(props) {
+        const {module, e_package, e_class, e_operation, e_id} = props.match.params
+        this.setState({module, e_package, e_class, e_operation, e_id})
+    }
+
+    componentDidMount() {
+        this.onPropsSetOrChange(this.props)
+        resource.setStompConnectedCB((stompConnected)=>{
+            if (!stompConnected && resource.stompReconnect && resource.stompReconnectCount === 0) {
+                resource.logLog("Server connection lost. Reconnecting...")
+            }
+            this.setState({stompConnected})
+        })
+        resource.setFetchCountCB((fetchCount)=>{this.setState({fetchCount})})
+        resource.setLogCB((info)=>{
+            var newLog = [...this.state.log, {
+                id: (new Date()).getTime(),
+                type: "info",
+                undefined,
+                message: info
+            }]
+            while (newLog.length > 10) {
+                newLog = newLog.slice(1)
+            }
+            this.setState({log: newLog})
+        })
+        resource.setAlertCB((info, headline)=>{
+            this.setState({alerts: [...this.state.alerts, {
+	            id: (new Date()).getTime(),
+	            type: "info",
+	            headline,
+	            message: info
+	        }]})
+        }, (error, headline)=>{
+            this.setState({alerts: [...this.state.alerts, {
+                id: (new Date()).getTime(),
+                type: "danger",
+                headline,
+                message: error
+            }]})
+        })
+        resource.loginCB = (show)=>{
+            this.login(show)
+        }
+        resource.loginSuccessCB = (user)=>{
+            this.setState({user, showLogin: false})
+        }
+        resource.authenticate()
+    }
+
+    login(show) {
+        this.setState({showLogin: show})
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.onPropsSetOrChange(nextProps);
+    }
+
+    setLang(lang) {
+        i18n.changeLanguage(lang)
+    }
+
+    push(url) {
+        this.props.history.push(url);
+    }
+    
+    render() {
+        const {t} = this.props
+        return (
+            <div>
+                {this.state.fetchCount > 0 &&
+                <div className="loading">Loading...</div>
+                }
+                <AlertList
+                    position="top-left"
+                    alerts={this.state.log}
+                    timeout={5000}
+                    dismissTitle="Dismiss"
+                    onDismiss={(alert)=>{
+                        const idx = this.state.log.indexOf(alert)
+                        if (idx >= 0) {
+                            this.setState({log: [
+                                    ...this.state.log.slice(0, idx),
+                                    ...this.state.log.slice(idx + 1)
+                                ]})
+                        }
+                    }}
+                />
+                <AlertList
+                    position="top-right"
+                    alerts={this.state.alerts}
+                    //timeout={300000}
+                    dismissTitle="Dismiss"
+                    onDismiss={(alert)=>{
+                        const idx = this.state.alerts.indexOf(alert)
+                        if (idx >= 0) {
+                            this.setState({alerts: [
+                                ...this.state.alerts.slice(0, idx), 
+                                ...this.state.alerts.slice(idx + 1)
+                            ]})
+                        }
+                    }}
+                />              
+                <Modal show={this.state.showLogin} onHide={()=>{resource.cancel()}}>
+                    <form onSubmit={(e) => {
+                        e.preventDefault()
+                    }}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{t('login')}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <FormGroup controlId="userName">
+                                <ControlLabel>{t('username')}</ControlLabel>
+                                <FormControl
+                                    autoFocus
+                                    type="text"
+                                    value={this.state.userName}
+                                    onChange={e=>{this.setState({userName: e.target.value})}}
+                                />
+                            </FormGroup>
+                            <FormGroup controlId="password">
+                                <ControlLabel>{t('password')}</ControlLabel>
+                                <FormControl
+                                    type="password"
+                                    value={this.state.password}
+                                    onChange={e=>{this.setState({password: e.target.value})}}
+                                />
+                            </FormGroup>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button bsStyle="primary" type="submit" onClick={(e)=>{
+                                resource.authenticate(this.state.userName, this.state.password)
+                            }}>{t('login')}</Button>
+                        </Modal.Footer>
+                    </form>
+                </Modal>
+                <Navbar inverse fluid={true}>
+                    <Navbar.Header>
+                        <a href="/"><img className="App-logo" src={logo} alt="rserver"/></a>
+                    </Navbar.Header>
+                    <Nav>
+                        [%for (module in application.modules) {%]
+                        <NavItem active={this.state.module === '[%=module.name%]'} onClick={()=>this.push('/[%=module.name%]')}>{t("[%=module.name%].name", {ns: "modules"})}</NavItem>
+                        [%}%]
+                    </Nav>
+                    <Nav pullRight>
+                        [%for (link in application.links) {%]
+                        [%=link.declare()%]
+                        [%}%]
+                        <NavDropdown id="user" title={<span><Glyphicon glyph="user" style={this.state.stompConnected?{color:"white"}:{color:"grey"}} />&nbsp;{this.state.user}</span>}>
+                            <NavDropdown id="lang" title={<span><Glyphicon glyph="globe"/>&nbsp;{t('lang')}</span>}>
+                                [%for (lang in application.languages) {%]
+                                <MenuItem id="lang_[%=lang%]" onSelect={()=>{this.setLang('[%=lang%]')}}><span>[%=lang%]&nbsp;{i18n.language==='[%=lang%]' && <Glyphicon glyph="ok"/>}</span></MenuItem>
+                                [%}%]
+                            </NavDropdown>
+                            {!this.state.user && <MenuItem id="login" onClick={()=>this.login(true)}><Glyphicon glyph="log-in"/>&nbsp;{t('login')}</MenuItem>}
+                            {this.state.user && <MenuItem id="logout" onClick={()=>resource.logout()}><Glyphicon glyph="log-out"/>&nbsp;{t('logout')}</MenuItem>}
+                        </NavDropdown>
+                    </Nav>
+                </Navbar>
+                [%for (module in application.modules) {%]
+                {this.state.module === '[%=module.name%]' && <[%=module.name%]Module/>}
+                [%}%]
+                {this.state.module === undefined && <Main/>}
+                <div id="footer" style={{marginTop: 20}}>
+                    <div className="container text-center">
+                        <p className="text-muted credit">Neoflex, 2017</p>
+                    </div>
+                </div>
+            </div>
+    );
+    }
+}
+
+export default translate()(Application)
+[%
+@template
+operation Link declare() {%]
+<NavItem id="[%=self.name%]" href="[%=self.hRef%]"[%if (self.blank) {%] target="_blank"[%}%]>[%if (self.glyph <> '' and self.glyph <> null) {%]<Glyphicon glyph="[%=self.glyph%]"/>&nbsp;[%}%]{t('[%=self.name%].caption', {ns: 'links'})}</NavItem>
+[%}
+@template
+operation LinkCollection declare() {%]
+<NavDropdown id="[%=self.name%]" title={<span>[%if (self.glyph <> '' and self.glyph <> null) {%]<Glyphicon glyph="[%=self.glyph%]"/>&nbsp;[%}%]{t('[%=self.name%].caption', {ns: 'links'})}</span>}>
+    [%for (link in self.links) {%]
+    <MenuItem id="[%=link.name%]" href="[%=link.hRef%]"[%if (link.blank) {%] target="_blank"[%}%]>[%if (link.glyph <> '' and link.glyph <> null) {%]<Glyphicon glyph="[%=link.glyph%]"/>&nbsp;[%}%]{t('[%=link.name%].caption', {ns: 'links'})}</MenuItem>
+    [%}%]
+</NavDropdown>
+[%}
+%]

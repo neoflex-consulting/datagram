@@ -1,0 +1,119 @@
+[%    
+import "ui3_utils.eol";
+import "ui3_fields.egl";
+%]
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap-theme.css'
+import 'react-table/react-table.css'
+import 'react-select/dist/react-select.css'
+import 'react-datetime/css/react-datetime.css'
+import React, { Component } from 'react';
+// eslint-disable-next-line
+import OptsTable from '../OptsTable.js'
+// eslint-disable-next-line
+import {Checkbox, Panel, FormGroup, ControlLabel, FormControl, HelpBlock, Row, Button, ButtonGroup, OverlayTrigger, Tooltip, DropdownButton, Glyphicon, MenuItem} from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import {withRouter} from 'react-router-dom'
+import { translate } from 'react-i18next'
+// eslint-disable-next-line
+import Select from 'react-select'
+// eslint-disable-next-line
+import resource from '../Resource.js'
+// eslint-disable-next-line
+import _ from 'lodash'
+// eslint-disable-next-line
+import update from 'immutability-helper'
+// eslint-disable-next-line
+import Datetime from 'react-datetime'
+// eslint-disable-next-line
+import moment from 'moment'
+[%for (cName in eClass.getEAllReferences().select(r|r.isContainment()).collect(r|application.getClass(r.getEReferenceType())).collect(c|c.getSubTypes()).flatten().select(c|c.isDefined()).collect(c|c.getCName()).asSet()) {%]
+import [%=cName%]Form from './[%=cName%]Form.js'
+[%}%]
+
+class [%=eClass.getCName()%]Form extends Component {
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    }
+    constructor() {
+        super()
+        this.state = {entity: {}, mode: 'view', refs: {}}
+    }
+
+    onPropsSetOrChange(props, cb = undefined) {
+        const {module, e_package, e_class, e_operation, e_id} = props.match.params
+        const {entity, mode} = props;
+        this.setState({module, e_package, e_class, e_operation, e_id, entity, mode}, ()=>{cb && cb()})
+    }
+
+    init() {
+	    [%for (ref in eClass.getEAllReferences().select(r|not r.isContainment() and not r.isContainer())) {
+	    var filter = ref.getAnnotation("mspace.ui", "filter", null);
+	    var expr = null;
+	    var dataModel = null;
+	    if (filter.isDefined()) {
+	       if (filter == "auto") {
+			  var from = ref.eContainingClass;
+			  var fromPath = Sequence{};
+			  var to = ref.eReferenceType;
+			  var toPath = Sequence{};
+			  if (from.findCommon(fromPath, toPath, to)) {
+			    expr = toPath.invert().concat('.') + '.e_id';
+			    dataModel = fromPath.invert().concat('.') + '.e_id';
+			  }
+	       }
+	       else {
+	         expr = filter;
+	         dataModel = ref.getAnnotation("mspace.ui", "ds", null);
+	       }
+	    }
+	    if (expr.isDefined()) {%]
+	    if (this.state.entity.e_id) {
+	        resource.getEntityAttribute("[%=ref.eContainingClass.getQName()%]", '[%=dataModel%]', this.state.entity.e_id).then(e_id=>{
+	            return resource.getSimpleSelect("[%=ref.getEReferenceType().getQName()%]", [[%=ref.getEReferenceType().attNamesStr()%]], {'[%=expr%]': e_id})
+	        }).then(list=>{
+	           this.setState(update(this.state, {refs:{[%=ref.name%]: {$set: list}}}))
+	        })
+        }
+	    [%}
+	    else {%]
+        resource.getSimpleSelect("[%=ref.getEReferenceType().getQName()%]", [[%=ref.getEReferenceType().attNamesStr()%]]).then(list=>{
+           this.setState(update(this.state, {refs:{[%=ref.name%]: {$set: list}}}))
+        })
+	    [%}%]
+	    [%}%]
+    }
+
+    componentDidMount() {
+        this.onPropsSetOrChange(this.props, ()=>{this.init()})
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.onPropsSetOrChange(nextProps);
+    }
+
+    push(url) {
+        this.props.history.push(url);
+    }
+    
+    setAttrs(attrs) {
+        this.props.update(attrs)
+    }
+    
+    render() {
+// eslint-disable-next-line
+        const {t} = this.props
+        return (
+            <Panel style={{border: 0}}>
+                [%for (field in eClass.~form.fields) {%]
+                [%=field.declare(eClass.~form, null)%]
+                [%}%]
+            </Panel>
+        );
+    }
+}
+
+export default withRouter(translate()([%=eClass.getCName()%]Form));
+

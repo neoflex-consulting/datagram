@@ -1,0 +1,43 @@
+{
+  "name": "[%=application.name%]",
+  "version": "1.0.0",
+  "private": true,
+  "proxy": {
+    "/*": {
+      "target": "http://localhost:8080",
+      "ws": true
+    }
+  },
+  "homepage": "/cim/[%=application.name%]/pim/ui3/psm/react/WEB/build",
+  "devDependencies": {
+    "react-scripts": "1.1.0"
+  },
+  "dependencies": {
+    "babel-cli": "^6.14.0",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "i18next": "^8.4.3",
+    "i18next-browser-languagedetector": "^2.0.0",
+    "immutability-helper": "^2.2.2",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "react": "^15.5.4",
+    "react-bootstrap": "^0.31.0",
+    "react-bs-notifier": "^4.3.2",
+    "react-datetime": "^2.8.10",
+    "react-dom": "^15.5.4",
+    "react-i18next": "latest",
+    "react-router-dom": "latest",
+    "react-select": "^1.0.0-rc.5",
+    "react-table": "^6.0.5",
+    "sockjs": "^0.3.19",
+    "stompjs": "^2.3.3",
+    "url-search-params-polyfill": "^1.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

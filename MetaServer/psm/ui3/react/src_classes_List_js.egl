@@ -1,0 +1,114 @@
+[%    
+import "ui3_utils.eol";
+import "ui3_fields.egl";
+%]
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap-theme.css'
+import 'react-table/react-table.css'
+import React, { Component } from 'react';
+// eslint-disable-next-line
+import {Checkbox, Nav, DropdownButton, OverlayTrigger, Tooltip, Glyphicon, Row, Col, Button, ButtonGroup, MenuItem} from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import {withRouter} from 'react-router-dom'
+import { translate } from 'react-i18next'
+import resource from '../Resource.js'
+// eslint-disable-next-line
+import _ from 'lodash'
+import OptsTable from '../OptsTable.js'
+// eslint-disable-next-line
+import moment from 'moment'
+
+class [%=eClass.getCName()%]List extends Component {
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    }
+    constructor() {
+        super()
+        this.state = {list: []}
+    }
+
+    onPropsSetOrChange(props, cb = undefined) {
+        const {module, e_package, e_class, e_operation, e_id} = props.match.params
+        this.setState({module, e_package, e_class, e_operation, e_id}, ()=>{cb && cb()})
+    }
+
+    init() {
+        resource.getList("[%=eClass.getQName()%]").then(list=>{this.setState({list})})
+    }
+
+    componentDidMount() {
+        this.onPropsSetOrChange(this.props, ()=>{this.init()})
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.onPropsSetOrChange(nextProps);
+    }
+
+    push(url) {
+        this.props.history.push(url);
+    }
+    
+    render() {
+        const {t} = this.props
+        return (
+            <div>
+                <Row>
+                    <ButtonGroup>
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="refresh">{t("refresh")}</Tooltip>}>
+                            <Button bsStyle="info" id="new.[%=eClass.getQName()%]" onClick={()=>{this.init()}}>
+                                <Glyphicon glyph="refresh"/>
+                            </Button>
+                        </OverlayTrigger>
+                    </ButtonGroup>
+                    <ButtonGroup className="pull-right">
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="new">{t("new")}</Tooltip>}>
+                            <DropdownButton bsStyle="primary" id="new.[%=eClass.getQName()%]" title={<Glyphicon glyph="unchecked"/>} pullRight>
+                                [%for (subType in eClass.getSubTypes()) {%]
+                                <MenuItem id="new.[%=subType.getQName()%]" onClick={()=>{this.push('/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/new')}}>{t('[%=eClass.getQName()%].caption', {ns: 'classes'})}</MenuItem>
+                                [%}%]
+                            </DropdownButton>
+                        </OverlayTrigger>
+                    </ButtonGroup>
+                </Row>
+                <Row>
+                    <Col>
+                        <OptsTable
+                            storageId="[%=eClass.getQName()%]"                            
+                            columns={[
+                                [%=eClass.declareTableColumns()%]
+                            ]}
+                            data={this.state.list}
+                            controlColumn={{
+                                Header: '',
+                                accessor: 'e_id',
+                                Cell: row=>(
+                                    <ButtonGroup>
+                                        <OverlayTrigger placement="top" overlay={<Tooltip id="view">{t("view")}</Tooltip>}>
+                                            <Button bsStyle="info" bsSize="xsmall" onClick={()=>{this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/view/${row.row.e_id}`)}}><Glyphicon glyph="zoom-in"/></Button>
+                                        </OverlayTrigger>
+                                        <OverlayTrigger placement="top" overlay={<Tooltip id="edit">{t("edit")}</Tooltip>}>
+                                            <Button bsStyle="primary" bsSize="xsmall" onClick={()=>{this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/edit/${row.row.e_id}`)}}><Glyphicon glyph="edit"/></Button>
+                                        </OverlayTrigger>
+                                        <OverlayTrigger placement="top" overlay={<Tooltip id="copy">{t("copy")}</Tooltip>}>
+                                            <Button bsStyle="primary" bsSize="xsmall" onClick={()=>{this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/copy/${row.row.e_id}`)}}><Glyphicon glyph="duplicate"/></Button>
+                                        </OverlayTrigger>
+                                        <OverlayTrigger placement="top" overlay={<Tooltip id="delete">{t("delete")}</Tooltip>}>
+                                            <Button bsStyle="danger" bsSize="xsmall" onClick={()=>{this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/delete/${row.row.e_id}`)}}><Glyphicon glyph="remove"/></Button>
+                                        </OverlayTrigger>
+                                    </ButtonGroup>),
+                                filterable: false,
+                                sortable: false,
+                                minWidth: 70
+                            }}
+                        />
+                    </Col>
+                </Row>
+            </div>
+        );
+    }
+}
+
+export default withRouter(translate()([%=eClass.getCName()%]List));
+

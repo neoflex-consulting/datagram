@@ -1,0 +1,67 @@
+[%
+    import "ui3_utils.eol";
+    
+    "ui3_Application.egl: generation parameters".println();
+    mspaceRoot.println("mspaceRoot: ");
+    
+
+    TemplateFactory.setTemplateRoot("file:///" + mspaceRoot + "/psm/ui3/react/");
+    
+    var pom_xml: Template = TemplateFactory.load("pom_xml.egl");
+    var package_json: Template = TemplateFactory.load("package_json.egl");
+    var public_index_html: Template = TemplateFactory.load("public_index_html.egl");
+    var src_App_js: Template = TemplateFactory.load("src_App_js.egl");
+    var src_Application_js: Template = TemplateFactory.load("src_Application_js.egl");
+    var src_Main_js: Template = TemplateFactory.load("src_Main_js.egl");
+    var src_Module_js: Template = TemplateFactory.load("src_Module_js.egl");
+    var src_i18n_js: Template = TemplateFactory.load("src_i18n_js.egl");
+    var src_classes_List_js: Template = TemplateFactory.load("src_classes_List_js.egl");
+    var src_classes_edit_js: Template = TemplateFactory.load("src_classes_edit_js.egl");
+    var src_classes_form_js: Template = TemplateFactory.load("src_classes_form_js.egl");
+    var locales_json: Template = TemplateFactory.load("locales.egl");
+    var webDir = mspaceRoot + "/psm/ui3/react/WEB/";
+    
+    for (application in Application) {
+        var aDir = mspaceRoot + "/cim/" + application.name + "/pim/ui3/psm/react/WEB/";
+        copyPath(webDir, aDir);
+        application.populateClasses();
+        pom_xml.run(Map{"application" = application}, aDir + "pom.xml");
+        package_json.run(Map{"application" = application}, aDir + "package.json");
+        public_index_html.run(Map{"application" = application}, aDir + "public/index.html");
+        src_App_js.run(Map{"application" = application}, aDir + "src/App.js");
+        src_Application_js.run(Map{"application" = application}, aDir + "src/Application.js");
+        src_Main_js.run(Map{"application" = application}, aDir + "src/Main.js");
+        src_i18n_js.run(Map{"application" = application}, aDir + "src/i18n.js");
+        for (eClass in application.~topClasses.values()) {
+            src_classes_List_js.run(Map{"application" = application, "eClass" = eClass}, aDir + "src/classes/" + eClass.getCName() + "List.js");
+            src_classes_edit_js.run(Map{"application" = application, "eClass" = eClass}, aDir + "src/classes/" + eClass.getCName() + "Edit.js");
+            for (subType in eClass.getSubTypes()) {
+                src_classes_edit_js.run(Map{"application" = application, "eClass" = subType}, aDir + "src/classes/" + subType.getCName() + "Edit.js");
+            }
+        }
+        for (eClass in application.~eClasses.values()) {
+            src_classes_form_js.run(Map{"application" = application, "eClass" = eClass}, aDir + "src/classes/" + eClass.getCName() + "Form.js");
+        }
+        for (module in application.modules) {
+            src_Module_js.run(Map{"application" = application, "module" = module}, aDir + "src/modules/" + module.name + "Module.js");
+        }
+        for (locale in application.locales) {
+            for (language in application.languages) {
+                locale.generate(locales_json, aDir, language);
+            }
+        }
+    }
+
+operation LocNS generate(template, aDir, language) {
+    var lDir = aDir + "src/locales/" + language + "/";
+    template.run(Map{"ns" = self, "language" = language}, lDir + self.name + ".json");
+}
+    
+operation Template run(m, o) {
+    self.reset();
+    for (k in m.keySet) {
+        self.populate(k, m.get(k));
+    }
+    self.generate(o);
+}   
+%]

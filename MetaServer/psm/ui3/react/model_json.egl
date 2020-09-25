@@ -1,0 +1,256 @@
+[%
+import "ui3_utils.eol";
+%]
+{
+  "eClasses": 
+  {
+    "ui3.Application": 
+    {
+      "containerName": "ApplicationContainer",
+      "instances": [
+        {"name": "Datagram", "_type_": "ui3.Application"}
+      ],
+      "icon": "datagram.svg"
+    },
+    "ui3.ApplicationInfo":
+    {
+	  "containerName": "ApplicationInfo",
+	  "instances": [
+		  {"name": "Datagram", "_type_": "ui3.ApplicationInfo"}
+	  ],
+	  "icon": "info.svg"
+    },
+    "ui3.Module": 
+    {
+      "containerName": "ApplicationContainer",
+      "instances": [
+		[%for (module in application.modules) {%]
+        {"name": "[%=module.name%]", "_type_": "ui3.Module", "icon": "[%=module.icon%]", "classes": [
+	      [%=module.eClasses.collect(eClass|'"' + eClass.getQName() + '"').concat(", ")%]
+        ]}[%if (hasMore) {%],[%}%]
+        
+		[%}%]
+      ],
+      "icon": "etl.svg"
+    },
+    "ecore.EClass": 
+    {
+      "containerName": "GridContainer",
+      "instances": [
+        {"name": "ecore.EClass", "_type_": "ecore.EClass"},
+        {"name": "ui3.Application", "_type_": "ecore.EClass"},
+        {"name": "ui3.Module", "_type_": "ecore.EClass"},
+		[%for (eClass in application.~topClasses.values()) {%]
+        {"name": "[%=eClass.getQName()%]", "_type_": "ecore.EClass"}[%if (hasMore) {%],[%}%]
+        
+		[%}%]
+      ],
+      "icon": "sub-right.svg"
+    },
+	[%for (eClass in application.~eClasses.values().select(it | it.getName() <> "EClass")) {%]
+    "[%=eClass.getQName()%]": 
+    {
+      "ancestors": [[%=eClass.getESuperTypes().collect(eClass|'"' + eClass.getQName() + '"').concat(", ")%]],
+      "successors": [[%=eClass.getSubTypes().collect(eClass|'"' + eClass.getQName() + '"').concat(", ")%]],
+      "containerName": "ViewContainer",
+      [%if (eClass.getAnnotation("mspace.ui", "readOnly", "false") == "true") {%]
+      "readOnly": true,
+      [%}%]
+      "views": ["FormView"],
+      "actions": [
+      [%for (eOperation in eClass.getEAllOperations().select(o|o.getAnnotation("mspace.ui", "deprecated", "false") <> "true")) { %]
+          {
+              "name": "[%=eOperation.name%]",
+              [%if (eOperation.getAnnotation("mspace.ui", "file", "false") == "true") {%]
+              "file": true,
+              [%}%]
+              "parameters": [
+              [%for (parameter in eOperation.getEParameters()) {
+              var fieldType = parameter.getFieldType();%]
+                  {
+				      "name": "[%=parameter.name%]",
+				      "type": "[%=fieldType%]"[%if (fieldType == "enum") {%],	      
+				      "options": [[%=parameter.eType.eLiterals.collect(eLiteral|'"' + eLiteral.name + '"').concat(", ")%]]
+				      [%}%]
+				      
+                  }[%if (hasMore) {%],[%}%]
+                  
+              [%}%]
+              ]
+          }[%if (hasMore) {%],[%}%]
+                
+      [%}%]
+      ],
+      "columns": [
+		[%
+		var columnCount = 0;
+	    for (sf in eClass.getEAllStructuralFeatures().select(sf|(sf.getUpperBound() == 1) and (not sf.isKindOf(EReference) or not sf.isContainer())).select(sf|sf.getAnnotation("mspace.ui", "password", "false") == "false").select(sf|sf.getAnnotation("mspace.ui", "multiline", "false") == "false" or sf.getAnnotation("mspace.ui", "isColumn", "false") == "true")) {
+	        if (sf.isKindOf(EReference) and sf.isContainment()) {
+	            var refClass = sf.getEReferenceType();
+	            for (sf2 in refClass.getEAllAttributes().select(sf|(sf.getUpperBound() == 1)).select(sf|sf.getAnnotation("mspace.ui", "password", "false") == "false")) {
+	        	%][%if (columnCount > 0) {%],[%}%]
+	        	 
+	    {
+		  "Header": "[%=refClass.getQName()%].attrs.[%=sf2.name%].caption",
+		  "accessor": "[%=sf.name + '.' + sf2.name%]",
+		  "sortable": true,
+		  "show": [%=columnCount <= 5%]
+		}[%
+		            columnCount = columnCount + 1;
+	            }
+	        }
+	        else {
+	        	%][%if (columnCount > 0) {%],[%}%]
+	        	 
+	    {
+		  "Header": "[%=eClass.getQName()%].attrs.[%=sf.name%].caption",
+		  "accessor": "[%=sf.getAccessor()%]",
+		  "show": [%=columnCount <= 5%]
+		}[%
+			    columnCount = columnCount + 1;
+	        }
+	    }
+		
+		%]
+      
+      ],
+      "fields": [
+      [%for (sf in eClass.getEAllStructuralFeatures().select(sf|not sf.isKindOf(EReference) or not sf.isContainer())) {
+      var fieldType = sf.getFieldType();
+      var defaultValue = sf.getDefaultValueLiteral();%]
+	  {
+	      "name": "[%=sf.name%]",
+	      "type": "[%=fieldType%]"[%if (defaultValue.isDefined()) {%],
+	      "defaultValue": "[%=defaultValue.replace('\n', '\\\\n')%]"[%}%][%if (fieldType == "enum") {%],	      
+	      "options": [[%=sf.eType.eLiterals.collect(eLiteral|'"' + eLiteral.name + '"').concat(", ")%]][%}%][%if (sf.getAnnotation("mspace.ui", "readOnly", "false") == "true") {%],
+	      "readOnly": true[%}%][%if (sf.getAnnotation("mspace.ui", "hidden", "false") == "true") {%],
+	      "hidden": true
+	      [%}%][%if (sf.getAnnotation("mspace.ui", "url", "false") == "true") {%],
+	      "isURL": true
+	      [%}%]
+	      [%if (sf.isKindOf(EReference) or sf.getAnnotation("mspace.ui", "entityType", null) <> null) {
+	        var entityType = sf.getAnnotation("mspace.ui", "entityType", null);
+	        if (not entityType.isDefined() and sf.isKindOf(EReference)) {
+	        	entityType = sf.getEReferenceType().getQName();
+	        }
+	      %],
+	      "entityType": "[%=entityType%]"[%}%][%if (sf.getAnnotation("mspace.ui", "listeval", null) <> null) {%],
+		  "listeval": "[%=sf.getAnnotation("mspace.ui", "listeval", "")%]"[%}%][%if (Sequence{"select", "multi"}.contains(fieldType)) {%],
+	      "displayField": "[%=sf.getEReferenceType().getDisplayFieldName()%]"
+	      [%} else if (sf.getAnnotation("mspace.ui", "displayField", null) <> null) {%],
+	      "displayField": "[%=sf.getAnnotation("mspace.ui", "displayField", null)%]"
+	      [%}%]
+	      [%
+	  	    var filter = sf.getAnnotation("mspace.ui", "filter", null);
+		    var expr = null;
+		    var dataModel = null;
+		    if (filter.isDefined()) {
+		       if (filter == "auto") {
+				  var from = sf.eContainingClass;
+				  var fromPath = Sequence{};
+				  var to = sf.eReferenceType;
+				  var toPath = Sequence{};
+				  if (from.findCommon(fromPath, toPath, to)) {
+				    expr = toPath.invert().concat('.') + '.e_id';
+				    dataModel = fromPath.invert().concat('.') + '.e_id';
+				  }
+		       }
+		       else {
+		         expr = filter;
+		         dataModel = sf.getAnnotation("mspace.ui", "ds", null);
+		       }
+		    } if (expr.isDefined()) {%],
+		  "filter": "[%=expr%]",
+		  "dataModel": "[%=dataModel%]"
+	      [%}%]
+	      
+      }[%if (hasMore) {%],[%}%]
+      
+      [%}%]
+      ]
+    }[%if (hasMore) {%],[%}%]
+    
+	[%}%]
+  }	
+}
+[%
+
+operation EStructuralFeature getAccessor() {
+	if (self.isKindOf(EAttribute)) {
+		return self.name;
+	}
+	return self.name + '.' + self.getEReferenceType().getDisplayFieldName();
+}
+
+operation ETypedElement getFieldType() {
+	if (self.isKindOf(EReference)) {
+		if (self.isContainment()) {
+			if (self.getUpperBound() == 1) {
+				return "form";
+			}
+			else {
+				return "table";
+			}
+		}
+		else {
+			if (self.getUpperBound() == 1) {
+				return "select";
+			}
+			else {
+				return "multi";
+			}
+		}
+	}
+	else {
+		if (self.getUpperBound() > 1 or self.upperBound == -1) {
+			if (self.eType.name == "EString") {
+				if (self.getAnnotation("mspace.ui", "filter", "") <> "" or self.getAnnotation("mspace.ui", "listeval", "") <> "") {
+		            return "multiString";
+				}
+				else {
+		            return "stringList";
+				}	            
+			}
+			else {
+				return "json";
+			}
+		}
+		else if(self.eType.isKindOf(EEnum)) {
+			return "enum";
+		} 
+	    else if (self.eType.name == "EString") {
+            if (self.getAnnotation("mspace.ui", "multiline", "false") == "true") {
+               return "text";
+            }
+            else if (self.getAnnotation("mspace.ui", "password", "false") == "true") {
+               return "password";
+            }
+            else if (self.getAnnotation("mspace.ui", "file", "false") == "true") {
+               return "file";
+            }
+            else if (self.getAnnotation("mspace.ui", "filter", "") <> "" or self.getAnnotation("mspace.ui", "listeval", "") <> "") {
+               return "selectString";
+            }
+            else {
+               return "string";
+            }
+	    }
+	    else if (Sequence{"EShort", "EInt", "ELong", "EFloat", "EDouble", "EDoubleObject", "EFloatObject", 
+	        "ELongObject", "EIntegerObject", "EBigDecimal"}.contains(self.getEType().name)) {
+	        return "number";
+	    }
+	    else if (self.eType.name == "EDate") {
+	        if (self.getAnnotation("mspace.ui", "timestamp", "false") == "true")
+		        return "datetime";
+	        else
+		        return "date";
+	    }
+	    else if (self.eType.name == "EBoolean" or self.eType.name == "EBooleanObject") {
+		    return "boolean";
+	    }
+	    else {
+		    return "json";
+	    }
+	}
+}    
+%]

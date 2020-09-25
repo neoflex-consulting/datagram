@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <properties>
+    <global.version>1.0-SNAPSHOT</global.version>
+  </properties>
+
+  <version>${global.version}</version>
+   
+  <groupId>ru.neoflex.mspace</groupId>
+  <artifactId>[%=application.name%]</artifactId>
+ 
+  <build>
+<!--    <finalName>${artifactId}-${version}</finalName> -->
+    <resources>     
+        <resource>
+            <directory>.</directory>            
+            <targetPath>cim/[%=application.name%]/pim/ui3/psm/react/WEB</targetPath>
+            <excludes>
+              <exclude>**/*.xml</exclude>
+          <exclude>node_modules/**</exclude>
+          <exclude>src/**</exclude>
+            </excludes>         
+        </resource>
+     </resources>   
+  </build>
+</project>

@@ -1,0 +1,27 @@
+import React, { Component } from 'react';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.css'
+import Application from './Application.js'
+import {BrowserRouter as Router, Route } from 'react-router-dom'
+
+class App extends Component {
+    getBasename(pathname) {
+        const part = 'index.html'
+        const index = pathname.indexOf(part)
+        if (index >= 0) {
+            return pathname.substr(0, index + part.length)
+        }
+        else {
+            return '/'
+        }
+    }
+    render() {
+        return (
+            <Router basename={this.getBasename(window.location.pathname)}>
+                <Route exact path={'/:module?/:e_package?/:e_class?/:e_operation?/:e_id?/'} component={Application}/>
+            </Router>
+        );
+    }
+}
+
+export default App;

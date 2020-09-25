@@ -1,0 +1,210 @@
+[%    
+import "ui3_utils.eol";
+%]
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap-theme.css'
+import 'react-table/react-table.css'
+import React, { Component } from 'react';
+// eslint-disable-next-line
+import {DropdownButton, Nav, OverlayTrigger, Tooltip, Glyphicon, Row, Col, Button, ButtonGroup, MenuItem} from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import {withRouter} from 'react-router-dom'
+import { translate } from 'react-i18next'
+import resource from '../Resource.js'
+// eslint-disable-next-line
+import update from 'immutability-helper'
+// eslint-disable-next-line
+import _ from 'lodash'
+import { Prompt } from 'react-router'
+// eslint-disable-next-line
+import InputParameters from '../InputParameters'
+import [%=eClass.getCName()%]Form from './[%=eClass.getCName()%]Form.js'
+
+class [%=eClass.getCName()%]Edit extends Component {
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    }
+    constructor() {
+        super()
+        this.state = {entity: {}, entity_old: {}, showDialog: {}}
+    }
+
+    onPropsSetOrChange(props, cb = undefined) {
+        const {module, e_package, e_class, e_operation, e_id} = props.match.params
+        this.setState({module, e_package, e_class, e_operation, e_id}, 
+            (module !== this.state.module || e_package !== this.state.e_package || e_class !== this.state.e_class || e_operation !== this.state.e_operation || e_id !== this.state.e_id) && cb
+        )
+    }
+
+    init() {
+        const {t} = this.props
+        if (this.state.e_operation === "new") {
+            const entity = {_type_: '[%=eClass.getQName()%]'}
+            this.setState({entity, entity_old: entity})
+        }
+        else if (this.state.e_operation === "copy") {
+            resource.getEntityAttribute("[%=eClass.getQName()%]", "[%=eClass.getDisplayFieldName()%]", this.state.e_id).then(name=>{
+                const newName = prompt(t('copyof'), `Copy_of_${name}`)
+                if (newName) {
+		            resource.copyEntity("[%=eClass.getQName()%]", this.state.e_id, newName).then(entity=>{
+		                this.setState({entity, entity_old: entity, e_id: entity.e_id}, ()=>{
+		                    this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/edit/${this.state.e_id}`)
+		                })
+		            })
+                }
+                else {
+                    this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/view/${this.state.e_id}`)
+                }
+            })
+        }
+        else {
+            resource.getEntity("[%=eClass.getQName()%]", this.state.e_id).then(entity=>{this.setState({entity, entity_old: entity})})
+        }
+    }
+
+    isEntityChanged() {
+        return !_.isEqual(this.state.entity_old, this.state.entity)
+    }
+
+    componentDidMount() {
+        this.onPropsSetOrChange(this.props, ()=>{this.init()})
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!_.isEqual(nextProps, this.props)) {
+            this.onPropsSetOrChange(nextProps, ()=>{this.init()});
+        }
+    }
+
+    push(url) {
+        this.props.history.push(url);
+    }
+    
+    render() {
+        const {t} = this.props
+        return (
+            <div>
+                <Prompt when={this.isEntityChanged()} message={t("cancelchanges")}/>
+                [%for (action in eClass.~form.actions) {
+                var op = eClass.getEAllOperations().selectOne(o|o.name == action.name);
+                if (op.isDefined() and op.getEParameters().size() > 0) {%]
+                <InputParameters
+                    className="[%=eClass.getQName()%]"
+                    opName="[%=action.name%]"
+                    showDialog={this.state.showDialog.[%=action.name%] === true}
+                    params={[
+                    	[%for (parameter in op.getEParameters()) {%]
+                        {name: "[%=parameter.name%]", type: "[%=parameter.getInputType()%]", value: ""},
+                        [%}%]
+                    ]}
+                    onSubmit={(args)=>{
+                        this.setState({showDialog: update(this.state.showDialog, {$merge: {[%=action.name%]: false}})})
+                        [%if (op.getAnnotation("mspace.ui", "file", "false") == "true") {%]
+                        	resource.downloadByName(this.state.entity, '[%=action.name%]', args)
+                        [%} else {%]
+                        resource.callByName(this.state.entity, '[%=action.name%]', args).then(json=>{
+                            resource.logInfo(JSON.stringify(json, null, 2))
+                        })
+                        [%}%]
+                    }}
+                    onCancel={()=>this.setState({showDialog: update(this.state.showDialog, {$merge: {[%=action.name%]: false}})})}
+                />
+                [%}}%]
+                <Row>
+                    <ButtonGroup>
+                        {!['new', 'copy'].includes(this.state.e_operation) &&
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="refresh">{t("refresh")}</Tooltip>}>
+                            <Button bsStyle="info" id="new.[%=eClass.getQName()%]" onClick={()=>{this.init()}}>
+                                <Glyphicon glyph="refresh"/>
+                            </Button>
+                        </OverlayTrigger>}
+                        {this.state.e_operation === 'edit' &&
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="view">{t("view")}</Tooltip>}>
+                            <Button bsStyle="info" onClick={()=>{
+                                this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/view/${this.state.e_id}`)
+                            }}><Glyphicon glyph="zoom-in"/></Button>
+                        </OverlayTrigger>}
+                        {this.state.e_operation === 'view' &&
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="edit">{t("edit")}</Tooltip>}>
+                            <Button bsStyle="primary" onClick={()=>{
+                                this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/edit/${this.state.e_id}`)
+                            }}><Glyphicon glyph="edit"/></Button>
+                        </OverlayTrigger>}
+                        {['edit', 'new', 'copy'].includes(this.state.e_operation) &&
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="save">{t("save")}</Tooltip>}>
+                            <Button bsStyle="primary" onClick={()=>{
+                                resource.saveEntity(this.state.entity).then(entity=>{
+                                    this.setState({entity, entity_old: entity}, ()=>{
+	                                    if (this.state.e_operation !== 'edit') {
+	                                        this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/edit/${entity.e_id}`)
+	                                    }
+                                    })
+                                })
+                            }}><Glyphicon glyph="save"/></Button>
+                        </OverlayTrigger>}
+                        {['edit', 'new', 'copy'].includes(this.state.e_operation) &&
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="saveexit">{t("saveexit")}</Tooltip>}>
+                            <Button bsStyle="primary" onClick={()=>{
+                                resource.saveEntity(this.state.entity).then(entity=>{
+                                    this.setState({entity, entity_old: entity}, ()=>{
+                                        this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/list`)
+                                    })
+                                })
+                            }}><Glyphicon glyph="saved"/></Button>
+                        </OverlayTrigger>}
+                        {['edit', 'view'].includes(this.state.e_operation) &&
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="copy">{t("copy")}</Tooltip>}>
+                            <Button bsStyle="primary" onClick={()=>{
+                                this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/copy/${this.state.e_id}`)
+                            }}><Glyphicon glyph="duplicate"/></Button>
+                        </OverlayTrigger>}
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="cancel">{t("cancel")}</Tooltip>}>
+                            <Button bsStyle="info" onClick={()=>{this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/list`)}}><Glyphicon glyph="arrow-left"/></Button>
+                        </OverlayTrigger>
+                        {this.state.e_operation === 'delete' &&
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="delete">{t("delete")}</Tooltip>}>
+                            <Button bsStyle="danger" onClick={()=>{
+                                resource.deleteEntity(this.state.entity).then(entity=>{
+                                    this.push(`/[%=eClass.~module.name%]/[%=eClass.ePackage.name%]/[%=eClass.name%]/list`)
+                                })
+                            }}><Glyphicon glyph="remove"/></Button>
+                        </OverlayTrigger>}
+                    </ButtonGroup>
+                    [%if (eClass.~form.actions.size() > 0) {%]
+                    <ButtonGroup className="pull-right">
+                        <OverlayTrigger placement="top" overlay={<Tooltip id="new">{t("run")}</Tooltip>}>
+                            <DropdownButton bsStyle="primary" id="exec.[%=eClass.getQName()%]" title={<Glyphicon glyph="cog"/>} pullRight>
+                                [%for (action in eClass.~form.actions) {
+                                var op = eClass.getEAllOperations().selectOne(o|o.name == action.name);
+                				if (op.isDefined() and op.getEParameters().size() > 0) {%]
+                                <MenuItem id="exec.[%=action.name%]"
+                                    onClick={()=>this.setState({showDialog: update(this.state.showDialog, {$merge: {[%=action.name%]: true}})})}
+                                >{t('[%=eClass.getQName()%].ops.[%=action.name%].caption', {ns: 'classes'})}</MenuItem>
+                				[%} else {%]
+                                <MenuItem id="exec.[%=action.name%]" onClick={()=>{
+			                        [%if (op.getAnnotation("mspace.ui", "file", "false") == "true") {%]
+		                        	resource.download(this.state.entity, '[%=action.name%]', {})
+			                        [%} else {%]
+                                    resource.call(this.state.entity, '[%=action.name%]').then(json=>{
+                                        resource.logInfo(JSON.stringify(json, null, 2))
+                                    })
+			                        [%}%]
+                                }}>{t('[%=eClass.getQName()%].ops.[%=action.name%].caption', {ns: 'classes'})}</MenuItem>
+                                [%}}%]
+                            </DropdownButton>
+                        </OverlayTrigger>
+                    </ButtonGroup>
+                    [%}%]
+                </Row>
+                <Row>
+                    <[%=eClass.getCName()%]Form entity={this.state.entity} mode={this.state.e_operation} update={(entity)=>{this.setState({entity: update(this.state.entity, {$merge: entity})})}}/>
+                </Row>
+            </div>
+        );
+    }
+}
+
+export default withRouter(translate()([%=eClass.getCName()%]Edit));
+
