@@ -89,7 +89,7 @@ operation src!TableTarget define(){
           [%}%]
           [%if (self.targetType == src!TableTargetType#UPDATE) {%]
           val sqlText = "update " + context._schema + s"""."[%=getCorrectName(self.tableName)%]" set [%for (feature in self.inputFieldsMapping.select(f|f.keyField <> true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%], [%}%][%}%] """ +
-          s"""where [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%], [%}}%]"""
+          s"""where [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { %]"[%=feature.targetColumnName%]" = ?[%if (hasMore){%] and [%}}%]"""
           [%}%]
           [%if (self.targetType == src!TableTargetType#DELETE) {%]
           val sqlText = "delete from " + context._schema + s"""."[%=getCorrectName(self.tableName)%]" """ +
@@ -129,8 +129,9 @@ operation src!TableTarget define(){
               [%if (self.targetType == src!TableTargetType#UPDATE or self.targetType == src!TableTargetType#DELETE) {%]
                 [%for (feature in self.inputFieldsMapping.select(f|f.keyField == true)) { 
                    var inputField = self.inputPort.fields.selectOne(fld|fld.name=feature.inputFieldName);
+                   alreadyCounted = alreadyCounted + 1;
                    %]
-                stmt.set[%=inputField.getJavaClassName()%]([%=loopCount%], row.[%=toJavaName(inputField.name)%].asInstanceOf[[%=inputField.getFullJavaClassName()%]])
+                stmt.set[%=inputField.getJavaClassName()%]([%=alreadyCounted%], row.[%=toJavaName(inputField.name)%].asInstanceOf[[%=inputField.getFullJavaClassName()%]])
                 [%}%]
               [%}%]
               },(successRowCount:Int) =>{
