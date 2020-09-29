@@ -203,17 +203,29 @@ class LivyServer {
     }
 
     static Object listFiles(Map entity, Map params = null) {
+
         def path = params.path
+
         return getFileStatus(entity, path)
     }
 
+
+    private static String getLivyUser(Map livyServer){
+        if(livyServer.user == null || livyServer.user == ""){
+            return "hdfs";
+        }
+        return livyServer.user;
+    }
+
     private static Map getFileStatus(Map livyServer, String path) {
+
         def http = REST.getHTTPClient(livyServer.webhdfs + "/", livyServer)
+        def user = getLivyUser(livyServer)
         def fileStatus = http.get([
                 path              : path.substring(1),
                 requestContentType: ContentType.ANY,
                 contentType       : MediaType.APPLICATION_JSON_UTF8_VALUE,
-                query             : ['user.name': livyServer.user, 'op': "GETFILESTATUS"]
+                query             : ['user.name': user, 'op': "GETFILESTATUS"]
         ]).reader.FileStatus
         fileStatus.children = []
         if (fileStatus.type == "DIRECTORY") {
@@ -221,7 +233,7 @@ class LivyServer {
                     path              : path.substring(1),
                     requestContentType: ContentType.ANY,
                     contentType       : MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    query             : ['user.name': livyServer.user, 'op': "LISTSTATUS"]
+                    query             : ['user.name': user, 'op': "LISTSTATUS"]
             ]).reader.FileStatuses.FileStatus.collect({
                 it.name = it.pathSuffix
                 it
@@ -290,11 +302,12 @@ class LivyServer {
     private static InputStream getFileInputStream(Map livyServer, String path) {
         Map entity
         def http = REST.getSimpleHTTPClient(livyServer.webhdfs + "/", livyServer)
+        def user = getLivyUser(livyServer)
         def response = http.get([
                 path              : path.substring(1),
                 requestContentType: ContentType.ANY,
                 contentType       : ContentType.ANY,
-                query             : ['user.name': livyServer.user, 'op': "OPEN"]
+                query             : ['user.name': user , 'op': "OPEN"]
         ])
         def inputStream = response.data as InputStream
         inputStream
@@ -309,9 +322,10 @@ class LivyServer {
 
     private static void uploadInputStream(Map livyServer, String newFileName, InputStream inputStream) {
         def http = REST.getHTTPClient(livyServer.webhdfs + "/", livyServer)
+        def user = getLivyUser(livyServer)
         def put1 = http.put(
                 path: newFileName.substring(1),
-                query: ['user.name': livyServer.user, 'op': "CREATE", 'overwrite': 'true']
+                query: ['user.name': user, 'op': "CREATE", 'overwrite': 'true']
         )
         def put2 = http.put(
                 uri: put1.resp.headers.location,
