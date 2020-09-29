@@ -15,8 +15,9 @@ operation src!KafkaTarget define(){
   
     import spark.implicits._
     import org.apache.avro.Schema
-    import org.apache.avro.io.{DecoderFactory, EncoderFactory}
-    import org.apache.avro.generic.{GenericData, GenericDatumReader, GenericDatumWriter, GenericRecord}
+    import org.apache.avro.io.EncoderFactory
+    import org.apache.avro.generic.{GenericData, GenericRecord}
+    import org.apache.avro.reflect.ReflectDatumWriter
     import java.io.ByteArrayOutputStream
 
     val props = new Properties()
@@ -53,7 +54,7 @@ operation src!KafkaTarget define(){
         val producer = new KafkaProducer[[% if (keyField.dataTypeDomain == src!DataTypeDomain#BINARY) {%]Array[Byte][%} else {%]String[%}%], [% if (self.valueScheme <> null or (valueField <> null and valueField.dataTypeDomain == src!DataTypeDomain#BINARY)) {%]Array[Byte][%} else {%]String[%}%]](props)
         [%if(self.valueScheme <> null and self.valueScheme.schemeType = SchemeType#AVRO and self.valueType = ValueType#AVRO) {%]
         val schema = new Schema.Parser().parse(s"""[%=self.valueScheme.schemeString%]""")   
-        val writer = new GenericDatumWriter[GenericRecord](schema)
+        val writer = new ReflectDatumWriter[GenericRecord](schema)
         
         def serialize(row: [%=inputNode.getSchemaName()%]): Array[Byte] = {
             val out = new ByteArrayOutputStream()
