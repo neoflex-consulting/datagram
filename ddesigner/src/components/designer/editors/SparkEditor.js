@@ -98,7 +98,7 @@ class SparkEditor extends Component {
     }
 
     isSimpleType(type){
-        var res = !type.type || (!type instanceof Object && this.convertFieldType(type) != "STRUCT");
+        var res = !type.type;
         console.log(type);
         console.log("isSimple: " + res);
         return res;
@@ -117,8 +117,8 @@ class SparkEditor extends Component {
                 head = ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field', domainStructure: {_type_: 'dataset.StructType', internalStructure: {_type_: 'dataset.Structure', fields: []}} })
                 head.domainStructure.internalStructure.fields = fl.type.fields.map(c=>this.sparkToChildField(c));
             }else{
-                head = ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field', domainStructure: {_type_: 'dataset.ArrayType', elementType: {_type_: 'dataset.FieldType', fields: []}} })
-                head.domainStructure.elementType.fields = fl.type.fields.map(c=>this.sparkToChildField(c));
+                head = ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field', domainStructure: {_type_: 'dataset.ArrayType', elementType: {_type_: 'dataset.Structure', fields: []}} })
+                head.domainStructure.elementType.fields = fl.type.elementType.fields.map(c=>this.sparkToChildField(c));
             }
             console.log("Returning head");
             console.log(head);
@@ -137,8 +137,8 @@ class SparkEditor extends Component {
              child = ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field', domainStructure: {_type_: 'dataset.StructType', internalStructure: {_type_: 'dataset.Structure', fields: []}} })
              child.domainStructure.internalStructure.fields = fl.type.fields.map(c=>this.sparkToChildField(c));
          }else{
-            child = ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field', domainStructure: {_type_: 'dataset.ArrayType', elementType: {_type_: 'dataset.FieldType', fields: []}} })
-            child.domainStructure.elementType.fields = fl.type.fields.map(c=>this.sparkToChildField(c));
+            child = ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field', domainStructure: {_type_: 'dataset.ArrayType', elementType: {_type_: 'dataset.Structure', fields: []}} })
+            child.domainStructure.elementType.fields = fl.type.elementType.fields.map(c=>this.sparkToChildField(c));
          }
          return child;
      }
