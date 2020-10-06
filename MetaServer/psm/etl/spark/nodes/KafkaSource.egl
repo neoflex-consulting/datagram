@@ -12,8 +12,8 @@ operation src!KafkaSource define(){
     import org.apache.avro.Schema
     import org.apache.avro.io.{DecoderFactory, EncoderFactory}
     import org.apache.avro.file.{DataFileReader, SeekableByteArrayInput}
-    import org.apache.avro.generic.{GenericData, GenericDatumReader, GenericDatumWriter, GenericRecord}    
-    
+    import org.apache.avro.generic.{GenericData, GenericDatumReader, GenericDatumWriter, GenericRecord}
+
     [%
     var consumeType;
     switch (self.kafkaConsumeType) {
@@ -50,14 +50,9 @@ operation src!KafkaSource define(){
                  throw new NullPointerException("[%=f.get("name")%]")
             }
             
-            [%}%]            
-    
-            [%=self.getSchemaName()%](
-                [%for(f in self.outputPort.fields) {%]
-                record.get("[%=f.get("name")%]")[%if(f.dataTypeDomain = src!DataTypeDomain#STRING ){%].toString[%}%].asInstanceOf[[%=f.getFullJavaClassName()%]][%if (hasMore) {%], [%}%]
-                
-                [%}%]
-            )
+            [%}%]
+
+            [%=self.outputStructure(self.getSchemaName(), 'record', self.outputPort)%]
         }
         [%}%]
         [%if(self.valueType = ValueType#AVROFILE) {%]
@@ -83,5 +78,29 @@ operation src!KafkaSource define(){
     .as[[%=self.getSchemaName()%]]
   }
     [%
+}
+
+@template
+operation src!KafkaSource outputStructure(schemaName, recordExpr, dataset) {
+  var className;
+  if (schemaName.endsWith('Schema')) {
+    className = schemaName.substring(0, schemaName.length() - 6);
+  }
+  else {
+    className = schemaName;  
+  }
+%][%=schemaName%](
+  [%for(f in dataset.fields) {
+  if (f.domainStructure.isDefined() and f.domainStructure.isKindOf(src!StructType)) {%]
+    {
+      val _[%=className + '_' + f.name%] = [%=recordExpr%].get("[%=f.get("name")%]").asInstanceOf[GenericRecord];
+      [%=self.outputStructure(className + '_' + f.name, '_' + className + '_' + f.name, f.domainStructure.internalStructure)%]
+    }[%} else {%]
+    [%=recordExpr%].get("[%=f.get("name")%]")[%if(f.dataTypeDomain = src!DataTypeDomain#STRING ){%].toString[%}%].asInstanceOf[[%=f.getFullJavaClassName()%]][%}%][%if (hasMore) {%], [%}%]
+
+  [%}%]
+)
+
+[%
 }
 %]
