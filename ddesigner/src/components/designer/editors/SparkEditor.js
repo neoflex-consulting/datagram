@@ -92,12 +92,63 @@ class SparkEditor extends Component {
     }
 
     applySql() {
-        const newFields = this.state.queryResult.schema.fields.map(fl => ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field' }))
+        const newFields = this.state.queryResult.schema.fields.map(fl => this.sparkToField(fl));
         const outputPort = update(this.props.cellEntity.outputPort, { $merge: { fields: newFields } })
         this.props.updateNodeEntity(update(this.props.cellEntity, { $merge: { outputPort } }), this.props.cellEntity)
     }
 
+    isSimpleType(type){
+        var res = !type.type || (!type instanceof Object && this.convertFieldType(type) != "STRUCT");
+        console.log(type);
+        console.log("isSimple: " + res);
+        return res;
+
+    }
+    sparkToField(fl){
+            console.log("Spark to field");
+            console.log(fl);
+            if(this.isSimpleType(fl.type)){
+                return ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field' });
+            }
+
+            var intType = this.convertFieldType(fl.type);
+            var head;
+            if("STRUCT" === intType){
+                head = ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field', domainStructure: {_type_: 'dataset.StructType', internalStructure: {_type_: 'dataset.Structure', fields: []}} })
+                head.domainStructure.internalStructure.fields = fl.type.fields.map(c=>this.sparkToChildField(c));
+            }else{
+                head = ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field', domainStructure: {_type_: 'dataset.ArrayType', elementType: {_type_: 'dataset.FieldType', fields: []}} })
+                head.domainStructure.elementType.fields = fl.type.fields.map(c=>this.sparkToChildField(c));
+            }
+            console.log("Returning head");
+            console.log(head);
+            return head;
+     }
+
+     sparkToChildField(fl){
+         console.log("Spark to child field");
+         console.log(fl);
+         if(this.isSimpleType(fl.type)){
+            return ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field' });
+         }
+         var child;
+         var intType = this.convertFieldType(fl.type);
+         if("STRUCT" === intType){
+             child = ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field', domainStructure: {_type_: 'dataset.StructType', internalStructure: {_type_: 'dataset.Structure', fields: []}} })
+             child.domainStructure.internalStructure.fields = fl.type.fields.map(c=>this.sparkToChildField(c));
+         }else{
+            child = ({ name: fl.name, dataTypeDomain: this.convertFieldType(fl.type), _type_: 'dataset.Field', domainStructure: {_type_: 'dataset.ArrayType', elementType: {_type_: 'dataset.FieldType', fields: []}} })
+            child.domainStructure.elementType.fields = fl.type.fields.map(c=>this.sparkToChildField(c));
+         }
+         return child;
+     }
+
     convertFieldType(type) {
+
+        if(type instanceof Object){
+            return type.type.toUpperCase();
+        }
+
         if (type.indexOf('decimal') + 1) {
             return 'DECIMAL'
         }
