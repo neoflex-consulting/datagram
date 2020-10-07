@@ -168,9 +168,9 @@ services:
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
-#      - ./bd-base/extralib/postgresql-42.2.12.jre6.jar:/usr/livy/repl_2.12-jars/postgresql-42.2.12.jre6.jar
-#      - ./bd-base/extralib/ojdbc8.jar:/usr/livy/repl_2.12-jars/ojdbc8.jar
-#      - ./bd-base/extralib/HiveJDBC4.jar:/usr/livy/repl_2.12-jars/HiveJDBC4.jar
+    #      - ./bd-base/extralib/postgresql-42.2.12.jre6.jar:/usr/livy/repl_2.12-jars/postgresql-42.2.12.jre6.jar
+    #      - ./bd-base/extralib/ojdbc8.jar:/usr/livy/repl_2.12-jars/ojdbc8.jar
+    #      - ./bd-base/extralib/HiveJDBC4.jar:/usr/livy/repl_2.12-jars/HiveJDBC4.jar
     environment:
       - SPARK_MASTER=yarn
       # Intentionally not specified - if it's set here, then we can't override it
@@ -196,6 +196,33 @@ services:
       - "worker2:172.20.1.3"
       - "hivemetastore:172.20.1.4"
       - "livy:172.20.1.6"
+
+  oozie:
+    image: neoflexdatagram/bd-oozie
+    build: ./bd-oozie
+    hostname: oozie
+    depends_on:
+      - master
+      - worker1
+      - worker2
+    volumes:
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl.spark.runtime-2.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark3lib-2.0-SNAPSHOT.jar
+    expose:
+      - 1-65535
+    ports:
+      - 11000:11000
+    networks:
+      bd_net:
+        ipv4_address: 172.20.1.8
+    extra_hosts:
+      - "master:172.20.1.1"
+      - "worker1:172.20.1.2"
+      - "worker2:172.20.1.3"
+      - "hivemetastore:172.20.1.4"
+      - "livy:172.20.1.6"
+      - "oozie:172.20.1.8"
 
   datagram:
     image: neoflexdatagram/datagram
@@ -225,6 +252,7 @@ services:
       - "worker2:172.20.1.3"
       - "hivemetastore:172.20.1.4"
       - "livy:172.20.1.6"
+      - "oozie:172.20.1.8"
 
 ###
 networks:

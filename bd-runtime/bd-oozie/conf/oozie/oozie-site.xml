@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<configuration>
+    <property>
+        <name>oozie.service.ProxyUserService.proxyuser.root.hosts</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>oozie.service.ProxyUserService.proxyuser.root.groups</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>oozie.service.HadoopAccessorService.hadoop.configurations</name>
+        <value>*=/usr/hadoop/etc/hadoop</value>
+        <description>
+            Comma separated AUTHORITY=HADOOP_CONF_DIR, where AUTHORITY is the HOST:PORT of
+            the Hadoop service (JobTracker, YARN, HDFS). The wildcard '*' configuration is
+            used when there is no exact match for an authority. The HADOOP_CONF_DIR contains
+            the relevant Hadoop *-site.xml files. If the path is relative is looked within
+            the Oozie configuration directory; though the path can be absolute (i.e. to point
+            to Hadoop client conf/ directories in the local filesystem.
+        </description>
+    </property>
+
+    <property>
+        <name>oozie.service.SparkConfigurationService.spark.configurations</name>
+        <value>*=/usr/spark/conf</value>
+        <description>
+            Comma separated AUTHORITY=SPARK_CONF_DIR, where AUTHORITY is the HOST:PORT of
+            the ResourceManager of a YARN cluster. The wildcard '*' configuration is used when
+            there is no exact match for an authority. The SPARK_CONF_DIR contains the relevant
+            spark-defaults.conf properties file. If the path is relative is looked within the
+            Oozie configuration directory; though the path can be absolute.
+            This is only used when the Spark master is set to either "yarn-client" or "yarn-cluster".
+        </description>
+    </property>
+
+
+    <property>
+        <name>oozie.service.JPAService.jdbc.driver</name>
+        <value>org.postgresql.Driver</value>
+    </property>
+    <property>
+        <name>oozie.service.JPAService.jdbc.url</name>
+        <value>jdbc:postgresql://hivemetastore:5432/oozie_metastore</value>
+    </property>
+    <property>
+        <name>oozie.service.JPAService.jdbc.username</name>
+        <value>postgres</value>
+    </property>
+
+    <property>
+        <name>oozie.service.JPAService.jdbc.password</name>
+        <value>new_password</value>
+    </property>
+
+    <property>
+        <name>oozie.processing.timezone</name>
+        <value>GMT+0300</value>
+    </property>
+</configuration>
