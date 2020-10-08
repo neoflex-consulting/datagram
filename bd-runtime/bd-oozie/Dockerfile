@@ -1,5 +1,6 @@
 FROM neoflexdatagram/bd-base
 
+ENV HADOOP_VERSION   3.2.0
 ENV OOZIE_VERSION   5.2.0
 ENV OOZIE_HOME      /usr/oozie
 RUN apk add --no-cache git maven \
@@ -8,27 +9,28 @@ RUN apk add --no-cache git maven \
   | gunzip \
   | tar -x -C /usr/ \
  && cd "/usr/oozie-${OOZIE_VERSION}" \
- && bin/mkdistro.sh -DskipTests
-RUN tar -zxvf "/usr/oozie-${OOZIE_VERSION}/distro/target/oozie-${OOZIE_VERSION}-distro.tar.gz" \
+ && bin/mkdistro.sh -Dhadoop.version=$HADOOP_VERSION -DskipTests \
  && mv "/usr/oozie-${OOZIE_VERSION}/distro/target/oozie-${OOZIE_VERSION}-distro/oozie-${OOZIE_VERSION}/" "${OOZIE_HOME}" \
- && cd / && rm -R "/usr/oozie-${OOZIE_VERSION}"
-RUN chown -R root:root "${OOZIE_HOME}"
-RUN mkdir "${OOZIE_HOME}/libext" && cd "${OOZIE_HOME}/libext" \
+ && rm -rf "/usr/oozie-${OOZIE_VERSION}" \
+ && chown -R root:root "${OOZIE_HOME}" \
+ && mkdir "${OOZIE_HOME}/libext" && cd "${OOZIE_HOME}/libext" \
  && curl --progress-bar -L --retry 3 -O "https://jdbc.postgresql.org/download/postgresql-42.2.16.jar" \
- && curl --progress-bar -L --retry 3 -O "http://archive.cloudera.com/gplextras/misc/ext-2.2.zip"
+ && curl --progress-bar -L --retry 3 -O "http://archive.cloudera.com/gplextras/misc/ext-2.2.zip" \
+ && cp $HADOOP_HOME/share/hadoop/common/*.jar $OOZIE_HOME/libext/ \
+ && cp $HADOOP_HOME/share/hadoop/common/lib/*.jar $OOZIE_HOME/libext/ \
+ && cp $HADOOP_HOME/share/hadoop/hdfs/*.jar $OOZIE_HOME/libext/ \
+ && cp $HADOOP_HOME/share/hadoop/hdfs/lib/*.jar $OOZIE_HOME/libext/ \
+ && cp $HADOOP_HOME/share/hadoop/mapreduce/*.jar $OOZIE_HOME/libext/ \
+ && cp $HADOOP_HOME/share/hadoop/mapreduce/lib/*.jar $OOZIE_HOME/libext/ \
+ && cp $HADOOP_HOME/share/hadoop/yarn/*.jar $OOZIE_HOME/libext/ \
+ && cp $HADOOP_HOME/share/hadoop/yarn/lib/*.jar $OOZIE_HOME/libext/ \
+ && $OOZIE_HOME/bin/oozie-setup.sh \
+ && cd /tmp && tar xzf "$OOZIE_HOME/oozie-sharelib-${OOZIE_VERSION}.tar.gz" \
+ && mv /tmp/share "${OOZIE_HOME}/sharelib" \
+ && mkdir "${OOZIE_HOME}/sharelib/lib/spark2" && cp  $SPARK_HOME/jars/*.jar "${OOZIE_HOME}/sharelib/lib/spark2/" \
+ && rm -rf /root/.m2/repository/ \
+ && rm "/usr/oozie/oozie-sharelib-${OOZIE_VERSION}.tar.gz"
 ADD conf/oozie/oozie-site.xml $OOZIE_HOME/conf/.
-RUN cp $HADOOP_HOME/share/hadoop/common/*.jar $OOZIE_HOME/libext/ && \
-    cp $HADOOP_HOME/share/hadoop/common/lib/*.jar $OOZIE_HOME/libext/ && \
-    cp $HADOOP_HOME/share/hadoop/hdfs/*.jar $OOZIE_HOME/libext/ && \
-    cp $HADOOP_HOME/share/hadoop/hdfs/lib/*.jar $OOZIE_HOME/libext/ && \
-    cp $HADOOP_HOME/share/hadoop/mapreduce/*.jar $OOZIE_HOME/libext/ && \
-    cp $HADOOP_HOME/share/hadoop/mapreduce/lib/*.jar $OOZIE_HOME/libext/ && \
-    cp $HADOOP_HOME/share/hadoop/yarn/*.jar $OOZIE_HOME/libext/ && \
-    cp $HADOOP_HOME/share/hadoop/yarn/lib/*.jar $OOZIE_HOME/libext/
-RUN $OOZIE_HOME/bin/oozie-setup.sh
-RUN cd /tmp && tar xzf "$OOZIE_HOME/oozie-sharelib-${OOZIE_VERSION}.tar.gz" \
-  && mv /tmp/share "${OOZIE_HOME}/sharelib"
-RUN mkdir "${OOZIE_HOME}/sharelib/lib/spark2" && cp  $SPARK_HOME/jars/*.jar "${OOZIE_HOME}/sharelib/lib/spark2/"
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 WORKDIR $OOZIE_HOME
