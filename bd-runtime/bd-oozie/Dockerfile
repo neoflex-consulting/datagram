@@ -8,7 +8,7 @@ RUN apk add --no-cache git maven \
   | gunzip \
   | tar -x -C /usr/ \
  && cd "/usr/oozie-${OOZIE_VERSION}" \
- && bin/mkdistro.sh -Phadoop-3 -Dhadoop.version=$HADOOP_VERSION -Dmaven.test.skip=true -DskipTests \
+ && bin/mkdistro.sh -Phadoop-3 -Dhadoop.version=$HADOOP_VERSION -DskipTests \
  && mv "/usr/oozie-${OOZIE_VERSION}/distro/target/oozie-${OOZIE_VERSION}-distro/oozie-${OOZIE_VERSION}/" "${OOZIE_HOME}" \
  && rm -rf "/usr/oozie-${OOZIE_VERSION}" \
  && chown -R root:root "${OOZIE_HOME}" \
