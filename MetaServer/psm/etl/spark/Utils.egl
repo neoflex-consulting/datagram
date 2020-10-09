@@ -298,7 +298,7 @@ operation src!ScalarType getTypeName(): String {
 }
 
 operation src!ArrayType getTypeName(): String {
-    return "Seq[" + self.elementType.getTypeName() + "]";
+    return "Array[" + self.elementType.getTypeName() + "]";
 }
 
 operation src!StructType getTypeName(): String {
