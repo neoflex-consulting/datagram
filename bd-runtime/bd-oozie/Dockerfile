@@ -1,6 +1,5 @@
 FROM neoflexdatagram/bd-base
 
-ENV HADOOP_VERSION   3.2.0
 ENV OOZIE_VERSION   5.2.0
 ENV OOZIE_HOME      /usr/oozie
 RUN apk add --no-cache git maven \
@@ -9,7 +8,7 @@ RUN apk add --no-cache git maven \
   | gunzip \
   | tar -x -C /usr/ \
  && cd "/usr/oozie-${OOZIE_VERSION}" \
- && bin/mkdistro.sh -Dhadoop.version=$HADOOP_VERSION -DskipTests \
+ && bin/mkdistro.sh -Phadoop-3 -Dhadoop.version=$HADOOP_VERSION -Dmaven.test.skip=true -DskipTests \
  && mv "/usr/oozie-${OOZIE_VERSION}/distro/target/oozie-${OOZIE_VERSION}-distro/oozie-${OOZIE_VERSION}/" "${OOZIE_HOME}" \
  && rm -rf "/usr/oozie-${OOZIE_VERSION}" \
  && chown -R root:root "${OOZIE_HOME}" \
