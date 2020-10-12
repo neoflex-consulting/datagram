@@ -24,6 +24,7 @@
                 <excludes>
                     <exclude>**/*.xml</exclude>
                     <exclude>node_modules/**</exclude>
+                    <exclude>**/*.exe</exclude>
                     <exclude>src/**</exclude>
                 </excludes>
             </resource>
