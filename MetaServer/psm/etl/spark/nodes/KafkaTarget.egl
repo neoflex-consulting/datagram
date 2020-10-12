@@ -16,8 +16,7 @@ operation src!KafkaTarget define(){
     import spark.implicits._
     import org.apache.avro.Schema
     import org.apache.avro.io.EncoderFactory
-    import org.apache.avro.generic.{GenericData, GenericRecord}
-    import org.apache.avro.reflect.ReflectDatumWriter
+    import org.apache.avro.generic.{GenericData, GenericDatumWriter}
     import java.io.ByteArrayOutputStream
 
     val props = new Properties()
@@ -54,16 +53,21 @@ operation src!KafkaTarget define(){
         val producer = new KafkaProducer[[% if (keyField.dataTypeDomain == src!DataTypeDomain#BINARY) {%]Array[Byte][%} else {%]String[%}%], [% if (self.valueScheme <> null or (valueField <> null and valueField.dataTypeDomain == src!DataTypeDomain#BINARY)) {%]Array[Byte][%} else {%]String[%}%]](props)
         [%if(self.valueScheme <> null and self.valueScheme.schemeType = SchemeType#AVRO and self.valueType = ValueType#AVRO) {%]
         val schema = new Schema.Parser().parse(s"""[%=self.valueScheme.schemeString%]""")   
-        val writer = new ReflectDatumWriter[GenericRecord](schema)
+        val writer = GenericDatumWriter[GenericData.Record](schema)
         
+	    def getSchema(s: Schema): Schema = {
+	      import scala.collection.JavaConverters._
+	      s.getType match {
+	        case Schema.Type.UNION => s.getTypes.asScala.find(t => !t.getType.equals(Schema.Type.NULL)).orNull
+	        case _ => s
+	      }
+	    }
+
         def serialize(row: [%=inputNode.getSchemaName()%]): Array[Byte] = {
             val out = new ByteArrayOutputStream()
             val encoder = EncoderFactory.get.binaryEncoder(out, null)
 
-            val avroRecord = new GenericData.Record(schema)
-            [%for(f in self.valueScheme.schemeDataset.fields) {%]
-            avroRecord.put("[%=f.get("name")%]", row.[%=f.get("name")%])
-            [%}%] 
+            val avroRecord = [%=self.outputDataset("row", self.valueScheme.schemeDataset, "schema")%]
             writer.write(avroRecord, encoder)
             encoder.flush
             out.close
@@ -118,5 +122,54 @@ operation src!KafkaTarget define(){
 
   }
     [%
+}
+
+@template
+operation src!KafkaTarget outputDataset(expr, dataset, schema) {
+%]{
+  val [%=expr%]_record = new GenericData.Record([%=schema%])
+  [%for(f in dataset.fields) {%]
+  val [%=expr%]_[%=f.name%] = [%=expr%].[%=f.name%] 
+  [%=expr%]_record.put("[%=f.name%]", if ([%=expr%]_[%=f.name%] == null) null else [%=self.outputField(expr + "_" + f.name, f, schema)%])
+
+  [%}%]
+  [%=expr%]_record
+}
+[%}
+
+
+@template
+operation src!KafkaTarget outputArray(expr, elementType, schema) {
+%]{
+  util.Arrays.asList([%=expr%].map(v => 
+  [%if (not elementType.isDefined() or elementType.isKindOf(src!ScalarType)) {%]
+    v
+  [%} else if (elementType.isKindOf(src!StructType)) {%]
+    [%=self.outputDataset('v', elementType.internalStructure, expr + "_schema")%]
+  [%} else if (elementType.isKindOf(src!ArrayType)) {%]
+    [%=self.outputArray('v', elementType.elementType, expr + "_schema")%]
+  [%}%]
+  ): _*)
+}
+[%}
+
+
+@template
+operation src!KafkaTarget outputField(expr, field, schema) {
+  if (not field.domainStructure.isDefined() or field.domainStructure.isKindOf(src!ScalarType)) {
+    %][%=expr%][%
+  }
+  else if (field.domainStructure.isKindOf(src!StructType)) {
+    %]{
+  val [%=expr%]_schema = getSchema([%=schema%].getField("[%=field.name%]").schema())
+  [%=self.outputDataset(expr, field.domainStructure.internalStructure, expr + "_schema")%]
+}[%
+  }
+  else if (field.domainStructure.isKindOf(src!ArrayType)) {
+    %]{
+  val [%=expr%]_schema = getSchema([%=schema%].getField("[%=field.name%]").schema()).getElementType
+  [%=self.outputArray(expr, field.domainStructure.elementType, expr + "_schema")%]
+}[%
+  }
 }
 %]
