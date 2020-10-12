@@ -144,7 +144,7 @@ operation src!KafkaTarget outputDataset(expr, dataset, schema) {
 @template
 operation src!KafkaTarget outputArray(expr, elementType, schema) {
 %]{
-  util.Arrays.asList([%=expr%].map(v => 
+  java.util.Arrays.asList([%=expr%].map(v =>
   [%if (not elementType.isDefined() or elementType.isKindOf(src!ScalarType)) {%]
     v
   [%} else if (elementType.isKindOf(src!StructType)) {%]
