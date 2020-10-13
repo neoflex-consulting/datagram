@@ -160,7 +160,12 @@ operation src!KafkaTarget outputArray(expr, elementType, schema) {
 @template
 operation src!KafkaTarget outputField(expr, field, schema) {
   if (not field.domainStructure.isDefined() or field.domainStructure.isKindOf(src!ScalarType)) {
-    %][%=expr%][%
+  	if (field.dataTypeDomain == src!DataTypeDomain#BINARY) {
+      %]java.nio.ByteBuffer.wrap([%=expr%])[%
+  	}
+  	else {
+      %][%=expr%][%
+  	}
   }
   else if (field.domainStructure.isKindOf(src!StructType)) {
     %]{
