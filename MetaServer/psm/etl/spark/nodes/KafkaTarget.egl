@@ -68,7 +68,7 @@ operation src!KafkaTarget define(){
             val encoder = EncoderFactory.get.binaryEncoder(out, null)
 
             val avroRecord = 
-              [%=self.outputDataset("row", self.valueScheme.schemeDataset, "schema")%]
+              [%=self.outputDataset("row", self.inputPort, "schema")%]
             writer.write(avroRecord, encoder)
             encoder.flush
             out.close
