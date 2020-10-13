@@ -68,7 +68,7 @@ operation src!KafkaTarget define(){
             val encoder = EncoderFactory.get.binaryEncoder(out, null)
 
             val avroRecord = 
-              [%=self.outputDataset("row", self.inputPort, "schema")%]
+              [%=self.outputDataset("row", self.inputPort, "schema", self.messageKey)%]
             writer.write(avroRecord, encoder)
             encoder.flush
             out.close
@@ -126,16 +126,16 @@ operation src!KafkaTarget define(){
 }
 
 @template
-operation src!KafkaTarget outputDataset(expr, dataset, schema) {
+operation src!KafkaTarget outputDataset(expr, dataset, schema, keyField) {
 %]{
   val [%=expr%]_record = new GenericData.Record([%=schema%])
-  [%for(f in dataset.fields) {%]
+  [%for(f in dataset.fields) { if (f.name <> keyField) {%]
   val [%=expr%]_[%=f.name%] = [%=expr%].[%=f.name%] 
   [%=expr%]_record.put("[%=f.name%]", if ([%=expr%]_[%=f.name%] == null) null else
     [%=self.outputField(expr + "_" + f.name, f, schema)%]
   )
 
-  [%}%]
+  [%}}%]
   [%=expr%]_record
 }
 [%}
@@ -148,7 +148,7 @@ operation src!KafkaTarget outputArray(expr, elementType, schema) {
   [%if (not elementType.isDefined() or elementType.isKindOf(src!ScalarType)) {%]
     v
   [%} else if (elementType.isKindOf(src!StructType)) {%]
-    [%=self.outputDataset('v', elementType.internalStructure, expr + "_schema")%]
+    [%=self.outputDataset('v', elementType.internalStructure, expr + "_schema", null)%]
   [%} else if (elementType.isKindOf(src!ArrayType)) {%]
     [%=self.outputArray('v', elementType.elementType, expr + "_schema")%]
   [%}%]
@@ -170,7 +170,7 @@ operation src!KafkaTarget outputField(expr, field, schema) {
   else if (field.domainStructure.isKindOf(src!StructType)) {
     %]{
   val [%=expr%]_schema = getSchema([%=schema%].getField("[%=field.name%]").schema());
-  [%=self.outputDataset(expr, field.domainStructure.internalStructure, expr + "_schema")%]
+  [%=self.outputDataset(expr, field.domainStructure.internalStructure, expr + "_schema", null)%]
 }[%
   }
   else if (field.domainStructure.isKindOf(src!ArrayType)) {
