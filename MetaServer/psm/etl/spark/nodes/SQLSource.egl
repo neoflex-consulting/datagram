@@ -47,8 +47,9 @@ operation src!SQLSource define(){
 		    [%if (self.isParallel == true) {%]
 		        
 	if (numPartitions.length > 0 && partitionColumn.length > 0) {
-            ds.option("lowerBound", s"""${minMaxRow(0)}""")
-            ds.option("upperBound", s"""${minMaxRow(1)}""")
+
+            ds.option("lowerBound", BigDecimal(s"${minMaxRow(0)}").toLongExact.toString)
+            ds.option("upperBound", BigDecimal(s"${minMaxRow(1)}").toLongExact.toString)
             ds.option("numPartitions", numPartitions)
             ds.option("partitionColumn", partitionColumn)
 	} 
