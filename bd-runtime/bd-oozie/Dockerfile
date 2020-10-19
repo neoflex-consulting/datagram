@@ -41,10 +41,10 @@ RUN apk add --no-cache git maven \
  && cp $HADOOP_HOME/share/hadoop/yarn/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
  && cp $HADOOP_HOME/share/hadoop/yarn/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
  && cp $HADOOP_HOME/share/hadoop/yarn/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp "${HADOOP_CONF_DIR}/core-site.xml" $OOZIE_HOME/sharelib/lib/spark2/
- && cp "${HADOOP_CONF_DIR}/hdfs-site.xml" $OOZIE_HOME/sharelib/lib/spark2/
- && cp "${HADOOP_CONF_DIR}/mapred-site.xml" $OOZIE_HOME/sharelib/lib/spark2/
- && cp "${HADOOP_CONF_DIR}/yarn-site.xml" $OOZIE_HOME/sharelib/lib/spark2/
+ && cp "${HADOOP_CONF_DIR}/core-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
+ && cp "${HADOOP_CONF_DIR}/hdfs-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
+ && cp "${HADOOP_CONF_DIR}/mapred-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
+ && cp "${HADOOP_CONF_DIR}/yarn-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
  && rm -rf /root/.m2/repository/ \
  && rm "/usr/oozie/oozie-sharelib-${OOZIE_VERSION}.tar.gz"
 ADD conf/oozie/oozie-site.xml $OOZIE_HOME/conf/.
