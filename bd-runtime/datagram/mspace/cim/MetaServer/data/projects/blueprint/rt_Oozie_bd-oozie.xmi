@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rt:Oozie xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:rt="http://www.neoflex.ru/meta/rt" name="bd-oozie" jobTracker="master:8032" nameNode="hdfs://master:9000" master="yarn" mode="cluster" numExecutors="2" executorCores="2" driverMemory="4G" executorMemory="4G" queue="default" retryMax="1" retryInterval="1" sftp=" " http="http://localhost:11000/" webhdfs="http://master:9870/webhdfs/v1" home="/user" user="root" filesBrowserUtilUrl="http://localhost:9870/explorer.html#/" isDefault="true" spark2="true"/>
