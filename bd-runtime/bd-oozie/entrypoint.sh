@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export LD_BIND_NOW=1
+
 hdfs dfs -test -e /user/root/share/lib
 if [ $? -ne 0 ]
 then

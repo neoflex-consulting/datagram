@@ -13,6 +13,12 @@
         <value>master</value>
     </property>
 
+<!--    For oozie-->
+    <property>
+        <name>yarn.resourcemanager.address</name>
+        <value>master:8032</value>
+    </property>
+
     <!-- Shuffle service that needs to be set for Map Reduce applications. -->
     <property>
         <name>yarn.nodemanager.aux-services</name>

@@ -249,5 +249,5 @@
   <transitions name="7331ff47-5396-432a-8c2e-dc60404bc137" start="//@sources.5/@outputPort" finish="//@transformationSteps.0/@sqlPorts.5"/>
   <transitions name="eccccb23-0475-4980-8f0b-ae473b63be19" start="//@sources.6/@outputPort" finish="//@transformationSteps.0/@sqlPorts.6"/>
   <transitions name="cf1018a1-b6f4-4e0d-b9d6-4b19dede3159" start="//@transformationSteps.0/@outputPort" finish="//@targets.0/@inputPort"/>
-  <auditInfo changeUser="admin" changeDateTime="2020-09-23T16:08:10.879+0000" createUser="admin" createDateTime="2020-09-22T13:04:00.225+0000"/>
+  <auditInfo changeUser="admin" changeDateTime="2020-09-23T23:29:03.279+0000" createUser="admin" createDateTime="2020-09-22T16:04:00.225+0000"/>
 </etl:Transformation>

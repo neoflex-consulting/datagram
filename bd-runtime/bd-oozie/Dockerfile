@@ -12,6 +12,7 @@ RUN apk add --no-cache git maven \
  && touch /usr/oozie-${OOZIE_VERSION}/core/target/oozie-core-${OOZIE_VERSION}-tests.jar \
  && mvn package assembly:single -Phadoop-3 -Dhadoop.version=$HADOOP_VERSION -Dmaven.test.skip=true -DskipTests \
  && mv "/usr/oozie-${OOZIE_VERSION}/distro/target/oozie-${OOZIE_VERSION}-distro/oozie-${OOZIE_VERSION}/" "${OOZIE_HOME}" \
+ && rm -rf $OOZIE_HOME/lib/jackson-*2.6.5* \
  && rm -rf "/usr/oozie-${OOZIE_VERSION}" \
  && chown -R root:root "${OOZIE_HOME}" \
  && mkdir "${OOZIE_HOME}/libext" && cd "${OOZIE_HOME}/libext" \
@@ -28,7 +29,17 @@ RUN apk add --no-cache git maven \
  && $OOZIE_HOME/bin/oozie-setup.sh \
  && cd /tmp && tar xzf "$OOZIE_HOME/oozie-sharelib-${OOZIE_VERSION}.tar.gz" \
  && mv /tmp/share "${OOZIE_HOME}/sharelib" \
- && mkdir "${OOZIE_HOME}/sharelib/lib/spark2" && cp  $SPARK_HOME/jars/*.jar "${OOZIE_HOME}/sharelib/lib/spark2/" \
+ && mkdir "${OOZIE_HOME}/sharelib/lib/spark2" \
+ && cp  $SPARK_HOME/jars/*.jar "${OOZIE_HOME}/sharelib/lib/spark2/" \
+ && cp "${OOZIE_HOME}/sharelib/lib/spark/oozie-sharelib-spark-5.2.0.jar" "${OOZIE_HOME}/sharelib/lib/spark2/" \
+ && cp $HADOOP_HOME/share/hadoop/common/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+ && cp $HADOOP_HOME/share/hadoop/common/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+ && cp $HADOOP_HOME/share/hadoop/hdfs/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+ && cp $HADOOP_HOME/share/hadoop/hdfs/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+ && cp $HADOOP_HOME/share/hadoop/mapreduce/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+ && cp $HADOOP_HOME/share/hadoop/mapreduce/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+ && cp $HADOOP_HOME/share/hadoop/yarn/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+ && cp $HADOOP_HOME/share/hadoop/yarn/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
  && rm -rf /root/.m2/repository/ \
  && rm "/usr/oozie/oozie-sharelib-${OOZIE_VERSION}.tar.gz"
 ADD conf/oozie/oozie-site.xml $OOZIE_HOME/conf/.
