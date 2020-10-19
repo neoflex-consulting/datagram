@@ -143,10 +143,10 @@ class WorkflowDeployment extends GenerationBase {
                         def transformationGenerateDate = gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/Transformation/${transformation.name}/pom.xml"))
                         def buildVersion = transformation.buildVersion ? transformation.buildVersion : "1.0-SNAPSHOT"
                         def transformationBuildDate = gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/Transformation/${transformation.name}/target/ru.neoflex.meta.etl2.spark.${transformation.name}-${buildVersion}.jar"))
-                        return transformationGenerateDate == null || transformationBuildDate == null ||
-                                transformationGenerateDate.before(changeDateTime) || transformationGenerateDate.before(changeDateTime)
+                        return changeDateTime != null && (transformationGenerateDate == null || transformationBuildDate == null ||
+                                transformationGenerateDate.before(changeDateTime) || transformationGenerateDate.before(changeDateTime))
                     }
-                })
+                });
                 if(needRebuild) {
                     def result = chain([
                             MetaServer.etl.Transformation.&generate,
@@ -199,10 +199,13 @@ class WorkflowDeployment extends GenerationBase {
                     def changeDateTime = auditInfo.changeDateTime
                     def transformationGenerateDate = gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/Transformation/${transformation.name}/pom.xml"))
                     def transformationBuildDate = gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/Transformation/${transformation.name}/target/ru.neoflex.meta.etl2.spark.${transformation.name}-${buildVersion}.jar"))
-                    return transformationGenerateDate == null || transformationBuildDate == null ||
-                            transformationGenerateDate.before(changeDateTime) || transformationBuildDate.before(changeDateTime)
+                    return changeDateTime != null && (
+                            transformationGenerateDate == null || transformationBuildDate == null ||
+                                    transformationGenerateDate.before(changeDateTime) ||
+                                    transformationBuildDate.before(changeDateTime)
+                    )
                 }
-            })
+            });
             if(needRebuild) {
                 def result = chain([
                         MetaServer.etl.Transformation.&generate,

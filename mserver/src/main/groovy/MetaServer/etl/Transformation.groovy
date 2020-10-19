@@ -95,10 +95,12 @@ class Transformation extends GenerationBase {
                 def isRegularFile = Files.isRegularFile(pomPath)
                 def changed = changeDateTime != null
                 def transformationDateIsNotNull = transformationDate != null
-                use (groovy.time.TimeCategory) {
-                    changeDateTime = changeDateTime + 3.seconds;
+                if (changeDateTime != null) {
+                    use (groovy.time.TimeCategory) {
+                        changeDateTime = changeDateTime + 3.seconds;
+                    }
                 }
-             
+
                 if(isRegularFile && changed && transformationDateIsNotNull && transformationDate.after(changeDateTime)) {
                     return [result: true, fileContent: "Don't need to be generated. All is up to date"]
                 }
