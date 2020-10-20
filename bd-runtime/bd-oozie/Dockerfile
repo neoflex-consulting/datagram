@@ -26,7 +26,6 @@ RUN apk add --no-cache git maven \
  && cp $HADOOP_HOME/share/hadoop/yarn/*.jar $OOZIE_HOME/libext/ \
  && cp $HADOOP_HOME/share/hadoop/yarn/lib/*.jar $OOZIE_HOME/libext/ \
  && $OOZIE_HOME/bin/oozie-setup.sh \
- && rm -rf $OOZIE_HOME/lib/jackson-*2.6.5* \
  && cd /tmp && tar xzf "$OOZIE_HOME/oozie-sharelib-${OOZIE_VERSION}.tar.gz" \
  && mv /tmp/share "${OOZIE_HOME}/sharelib" \
  && mkdir "${OOZIE_HOME}/sharelib/lib/spark2" \
