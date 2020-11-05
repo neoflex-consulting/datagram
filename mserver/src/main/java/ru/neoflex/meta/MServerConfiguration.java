@@ -33,6 +33,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -161,8 +162,12 @@ public class MServerConfiguration {
 
             @Override
             public void sessionDestroyed(HttpSessionEvent se) {
-                UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                Integer userSessionsCount = this.sessionCount.get(principal.getUsername()) == null ? 0 : this.sessionCount.get(principal.getUsername());                
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                if (authentication == null) {
+                    return;
+                }
+                UserDetails principal = (UserDetails) authentication.getPrincipal();
+                Integer userSessionsCount = this.sessionCount.get(principal.getUsername()) == null ? 0 : this.sessionCount.get(principal.getUsername());
                 this.sessionCount.put(principal.getUsername(), --userSessionsCount);
                 
                 Integer sum = this.sessionCount.values().stream().reduce(0, (left, right) -> left + right);
