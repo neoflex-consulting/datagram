@@ -73,6 +73,7 @@ git reset --hard
 Datagram|http://localhost:8089/
 Yarn|http://localhost:8088/
 Livy|http://localhost:8998/
+Oozie|http://localhost:11000/
 Spark|http://localhost:8080/
 Name Node|http://localhost:9870/
 
