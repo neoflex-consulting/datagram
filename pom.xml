@@ -12,31 +12,42 @@
     <artifactId>parent</artifactId>
     <version>2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>MSpace Parent Project</name>
+    <name>MSpace Parent Project 3</name>
 
     <modules>
         <module>runtime</module>
         <module>spark2lib</module>
-        <module>pim</module>        
+        <module>pim</module>
         <module>livyjobserver</module>
         <module>jobserver-runner</module>
-        <module>MetaServer</module> 
+        <module>MetaServer</module>
         <module>mserver</module>
         <module>ddesigner</module>
     </modules>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
-        <configuration>
-            <autoVersionSubmodules>true</autoVersionSubmodules>
-            <updateWorkingCopyVersions>false</updateWorkingCopyVersions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+
+    <profiles>
+        <profile>
+            <id>spark3</id>
+        </profile>
+        <profile>
+            <id>spark2</id>
+        </profile>
+    </profiles>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <updateWorkingCopyVersions>false</updateWorkingCopyVersions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

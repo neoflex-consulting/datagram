@@ -20,7 +20,8 @@ git config --global core.autocrlf false
 ```
 git clone https://github.com/neoflex-consulting/datagram.git
 cd datagram
-mvn -f pom3.xml clean install
+mvn clean install 
+По умолчанию используется профайл для spark3, если нужна сборка для spark2 добавить к строке запуска -Pspark2
 docker-compose -f bd-runtime/docker-compose.yml pull
 docker-compose -f bd-runtime/docker-compose.yml up -d
 ```

@@ -146,7 +146,7 @@
 		    <groupId>com.databricks</groupId>
 		    <artifactId>spark-avro_2.10</artifactId>
 		    <version>3.2.0</version>
-		</dependency>        
+		</dependency>
         <dependency>
             <groupId>net.alchim31.maven</groupId>
             <artifactId>scala-maven-plugin</artifactId>

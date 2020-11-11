@@ -169,7 +169,7 @@ public class MServerConfiguration {
                 UserDetails principal = (UserDetails) authentication.getPrincipal();
                 Integer userSessionsCount = this.sessionCount.get(principal.getUsername()) == null ? 0 : this.sessionCount.get(principal.getUsername());
                 this.sessionCount.put(principal.getUsername(), --userSessionsCount);
-                
+
                 Integer sum = this.sessionCount.values().stream().reduce(0, (left, right) -> left + right);
                 
                 /*if(licenseService.isLogRestriction(userSessionsCount, sum)) {
