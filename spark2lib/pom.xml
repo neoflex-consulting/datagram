@@ -16,6 +16,9 @@
     <profiles>
         <profile>
             <id>spark3</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>

@@ -43,8 +43,8 @@ Started MServerConfiguration in 80.091 seconds (JVM running for 91.57)
 
 __Логин__/__пароль__: admin/admin
 
-В интерфейсе программы перейдите в проект blueprint `ETL/ Project/ blueprint`,
-и выполните команду (молния вверху) Import Repo.
+В интерфейсе программы перейдите в пункт `ETL/ Project/' создайте (кнопка __+__) проект __blueprint__
+сохраните его и выполните команду (молния вверху) Import Repo.
 
 Откройте трансформацию  `ETL/ Transformation/ tr_load_datagram_transformations`,
 эта тестовая трансформация делает выгрузку списка трансформаций из BD метаданных datagram.
