@@ -17,6 +17,12 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8</version>
+            </plugin>
+
         </plugins>
     </build>
     <properties>
@@ -47,8 +53,7 @@
             <artifactId>ru.neoflex.meta.etl2.spark.spark2lib</artifactId>
             <version>2.0-SNAPSHOT</version>
         </dependency>
-  </dependencies>
-
+    </dependencies>
 
 
 </project>
