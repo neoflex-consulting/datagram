@@ -28,9 +28,13 @@
 
     <repositories>
         <!--repository>
-            <id>wso2</id>
-            <url>http://dist.wso2.org/maven2/</url>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
         </repository-->
+        <repository>
+            <id>bintray</id>
+            <url>https://dl.bintray.com/subclipse/maven/</url>
+        </repository>
         <repository>
             <id>emf</id>
             <url>https://dl.bintray.com/epsilonlabs/epsilon-standalone/</url>
@@ -391,7 +395,16 @@
             <groupId>org.tigris.svnclientadapter</groupId>
             <artifactId>adapter-base</artifactId>
             <version>1.12.0</version>
-            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.tigris.svnclientadapter</groupId>
+            <artifactId>adapter-cli</artifactId>
+            <version>1.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.tigris.svnclientadapter</groupId>
+            <artifactId>adapter-javahl</artifactId>
+            <version>1.12.0</version>
         </dependency>
 
 
