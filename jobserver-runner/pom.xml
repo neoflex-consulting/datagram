@@ -47,7 +47,7 @@
             <version>2.9.2</version>
         </dependency>
         <dependency>
-            <groupId>ru.neoflex.mspase</groupId>
+            <groupId>ru.neoflex.mspace</groupId>
             <artifactId>livyjobserver</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

@@ -39,7 +39,7 @@ public class EntityController {
 
     @RequestMapping(value="/{dbtype}/{entity:[a-z,A-Z,0-9,\\.]+}/{id}", method=RequestMethod.GET, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Map get(@PathVariable("dbtype") final String dbtype, @PathVariable("entity") final String entity, @PathVariable("id") final Serializable id, @RequestParam final Map<String,Object> requestParams) {
         final Map[] result = new Map[1];
         final List[] audit = new List[1];
@@ -56,7 +56,7 @@ public class EntityController {
 
     @RequestMapping(value="/deep/{entity:[a-z,A-Z,0-9,\\.]+}/{id}", method=RequestMethod.GET, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Map getDeep(@PathVariable("entity") final String entity, @PathVariable("id") final Serializable id) {
         final Map[] result = new Map[1];
         contextSvc.inContext(new Runnable() {
@@ -70,7 +70,7 @@ public class EntityController {
 
     @RequestMapping(value="/fast/{entity:[a-z,A-Z,0-9,\\.]+}/{id}", method=RequestMethod.GET, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Map getFast(@PathVariable("entity") final String entity, @PathVariable("id") final Serializable id) {
         final Map[] result = new Map[1];
         contextSvc.inContext(new Runnable() {
@@ -87,7 +87,7 @@ public class EntityController {
 
     @RequestMapping(value="/fast/{entity:[a-z,A-Z,0-9,\\.]+}", method=RequestMethod.GET, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public List listFast(@PathVariable("entity") final String entity, @RequestParam final Map<String,Object> requestParams) {
         final List[] result = new List[1];
         contextSvc.inContext(new Runnable() {
@@ -101,7 +101,7 @@ public class EntityController {
 
     @RequestMapping(value="/{dbtype}/copy/{entity:[a-z,A-Z,0-9,\\.]+}/{id}", method=RequestMethod.GET, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Map copy(@PathVariable("dbtype") final String dbtype, @PathVariable("entity") final String entity, @PathVariable("id") final Serializable id, @RequestParam final Map<String,Object> requestParams) {
         final Map[] result = new Map[1];
         contextSvc.inContext(new Runnable() {
@@ -122,7 +122,7 @@ public class EntityController {
 
     @RequestMapping(value="/{dbtype}/{entity:[a-z,A-Z,0-9,\\.]+}/{id}", method=RequestMethod.DELETE, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Object remove(@PathVariable("dbtype") final String dbtype, @PathVariable("entity") final String entity, @PathVariable("id") final Serializable id) {
         contextSvc.inContext(new Runnable() {
             @Override
@@ -140,7 +140,7 @@ public class EntityController {
 
     @RequestMapping(value="/{dbtype}/select/{sql:.+}", method=RequestMethod.GET, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    ////@Transactional
     public Object select(@PathVariable("dbtype") final String dbtype, @PathVariable("sql") final String sql, @RequestParam final Map<String,Object> requestParams) {
         final Object[] result =  new Object[1];
         contextSvc.inContext(new Runnable() {
@@ -155,7 +155,7 @@ public class EntityController {
 
     @RequestMapping(value="/{dbtype}/{entity:[a-z,A-Z,0-9,\\.]+}", method=RequestMethod.GET, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    ////@Transactional
     public List<Map> list(@PathVariable("dbtype") final String dbtype, @PathVariable("entity") final String entity, @RequestParam final Map<String,Object> requestParams) {
         final List[] result = new List[1];
         contextSvc.inContext(new Runnable() {
@@ -169,7 +169,7 @@ public class EntityController {
 
     @RequestMapping(value="/{dbtype}/dml", method=RequestMethod.GET, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Map get(@PathVariable("dbtype") final String dbtype, @RequestParam final Map<String,Object> requestParams) {
         final Map result = new HashMap();
         contextSvc.inContext(new Runnable() {
@@ -199,7 +199,7 @@ public class EntityController {
     @RequestMapping(value="/{dbtype}/{entity:.+}", method=RequestMethod.POST, produces={"application/json"}, consumes={"application/json"})
     @ResponseBody
     @RolesAllowed(value="ROLE_USER")
-    @Transactional
+    //@Transactional
     public Map saveOrUpdate(@PathVariable("dbtype") final String dbtype, @PathVariable("entity") final String entity, @RequestBody final Map metaEntity, final Principal principal) {
         final Map[] result = new Map[1];
         contextSvc.inContext(new Runnable() {
@@ -220,7 +220,7 @@ public class EntityController {
 
     @RequestMapping(value="/operation/{application}/{uiPackage}/{uiClass}/{name}/{method}", method=RequestMethod.GET, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Object callByName(@PathVariable("application") final String application, @PathVariable("uiPackage") final String uiPackage, @PathVariable("uiClass") final String uiClass, @PathVariable("name") final String name, @PathVariable("method") final String method, @RequestParam final Map<String,Object> requestParams) {
         final Object[] result = new Object[1];
         contextSvc.inContext(new Runnable() {
@@ -239,7 +239,7 @@ public class EntityController {
 
     @RequestMapping(value="/operation/{application}/{uiPackage}/{uiClass}/{name}/{method}", method=RequestMethod.POST, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Object callByName2(@PathVariable("application") final String application, @PathVariable("uiPackage") final String uiPackage, @PathVariable("uiClass") final String uiClass, @PathVariable("name") final String name, @PathVariable("method") final String method, @RequestParam final Map<String,Object> requestParams, @RequestParam(value = "file", required = false) final MultipartFile file) {
         final Object[] result = new Object[1];
         contextSvc.inContext(new Runnable() {
@@ -259,7 +259,7 @@ public class EntityController {
 
     @RequestMapping(value="/operation/{application}/{uiPackage}/{uiClass}/{name}/json/{method}", method=RequestMethod.POST, produces={"application/json"}, consumes={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Object callByName3(@PathVariable("application") final String application, @PathVariable("uiPackage") final String uiPackage, @PathVariable("uiClass") final String uiClass, @PathVariable("name") final String name, @PathVariable("method") final String method, @RequestParam final Map<String,Object> requestParams, @RequestBody final String body) {
         final Object[] result = new Object[1];
         contextSvc.inContext(new Runnable() {
@@ -279,7 +279,7 @@ public class EntityController {
 
     @RequestMapping(value="/operation/{application}/{uiPackage}/{uiClass}/{method}", method=RequestMethod.POST, produces={"application/json"}, consumes={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Object callOperation(@PathVariable("application") final String application, @PathVariable("uiPackage") final String uiPackage, @PathVariable("uiClass") final String uiClass, @PathVariable("method") final String method, @RequestBody final Map metaEntity, @RequestParam final Map<String,Object> requestParams) {
         final Object[] result = new Object[1];
         contextSvc.inContext(new Runnable() {
@@ -293,7 +293,7 @@ public class EntityController {
 
     @RequestMapping(value="/operation/{application}/{uiPackage}/{uiClass}/{method}", method=RequestMethod.GET, produces={"application/json"})
     @ResponseBody
-    @Transactional
+    //@Transactional
     public Object getOperation(@PathVariable("application") final String application, @PathVariable("uiPackage") final String uiPackage, @PathVariable("uiClass") final String uiClass, @PathVariable("method") final String method, @RequestParam final Map<String,Object> requestParams) {
         final Object[] result = new Object[1];
         contextSvc.inContext(new Runnable() {

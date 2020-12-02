@@ -38,9 +38,6 @@
         </profile>
         <profile>
             <id>spark2</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <projectVersion>spark2-2.0-SNAPSHOT</projectVersion>
             </properties>

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ru.neoflex.mspase</groupId>
+    <groupId>ru.neoflex.mspace</groupId>
     <artifactId>livyjobserver</artifactId>
     <version>1.0-SNAPSHOT</version>
     <build>
@@ -51,9 +51,25 @@
         <dependency>
             <groupId>ru.neoflex.meta.etl2</groupId>
             <artifactId>ru.neoflex.meta.etl2.spark.spark2lib</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>${sparkVersion}-2.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
+    <profiles>
+        <profile>
+            <id>spark3</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <sparkVersion>spark3</sparkVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>spark2</id>
+            <properties>
+                <sparkVersion>spark2</sparkVersion>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>
