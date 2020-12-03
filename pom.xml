@@ -14,6 +14,12 @@
     <packaging>pom</packaging>
     <name>MSpace Parent Project 3</name>
 
+    <scm>
+        <connection>scm:git:git@github.com:neoflex-consulting/datagram.git</connection>
+        <developerConnection>scm:git:git@github.com:neoflex-consulting/datagram.git</developerConnection>
+        <url>https://github.com/neoflex-consulting/datagram</url>
+    </scm>
+
     <modules>
         <module>runtime</module>
         <module>spark2lib</module>
