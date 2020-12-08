@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>livyjobserver</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <build>
         <plugins>
             <plugin>
@@ -51,7 +49,7 @@
         <dependency>
             <groupId>ru.neoflex.meta.etl2</groupId>
             <artifactId>ru.neoflex.meta.etl2.spark.spark2lib</artifactId>
-            <version>${sparkVersion}-2.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <profiles>
@@ -61,13 +59,13 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <sparkVersion>spark3</sparkVersion>
+                <revision>spark3-2.0-SNAPSHOT</revision>
             </properties>
         </profile>
         <profile>
             <id>spark2</id>
             <properties>
-                <sparkVersion>spark2</sparkVersion>
+                <revision>spark2-2.0-SNAPSHOT</revision>
             </properties>
         </profile>
     </profiles>

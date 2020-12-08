@@ -1,8 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <version>${projectVersion}</version>
+    <version>1.0</version>
 
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>ddesigner</artifactId>
@@ -14,13 +13,13 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <projectVersion>spark3-2.0-SNAPSHOT</projectVersion>
+                <revision>spark3-2.0-SNAPSHOT</revision>
             </properties>
         </profile>
         <profile>
             <id>spark2</id>
             <properties>
-                <projectVersion>spark2-2.0-SNAPSHOT</projectVersion>
+                <revision>spark2-2.0-SNAPSHOT</revision>
             </properties>
         </profile>
     </profiles>
@@ -54,7 +53,7 @@
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.10.0</version>
                 <configuration>
-                    <workingDirectory></workingDirectory>
+                    <workingDirectory />
                     <installDirectory>target</installDirectory>
                 </configuration>
                 <executions>
@@ -98,7 +97,7 @@
                         <configuration>
                             <target>
                                 <copy todir="${project.build.directory}/classes/public">
-                                    <fileset dir="${project.basedir}/build"/>
+                                    <fileset dir="${project.basedir}/build" />
                                 </copy>
                             </target>
                         </configuration>
