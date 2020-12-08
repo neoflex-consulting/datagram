@@ -8,8 +8,13 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-    <version>${projectVersion}</version>
+    <version>${revision}</version>
     <groupId>ru.neoflex.meta.etl2</groupId>
     <artifactId>ru.neoflex.meta.etl2.spark.spark2lib</artifactId>
 
@@ -30,7 +35,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <projectVersion>spark3-2.0-SNAPSHOT</projectVersion>
+                <revision>${revision}</revision>
             </properties>
             <build>
                 <plugins>
@@ -239,7 +244,7 @@
         <profile>
             <id>spark2</id>
             <properties>
-                <projectVersion>spark2-2.0-SNAPSHOT</projectVersion>
+                <revision>${revision}</revision>
             </properties>
             <build>
                 <plugins>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
@@ -8,10 +7,14 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>${revision}</version>
+    </parent>
     <groupId>ru.neoflex.meta</groupId>
     <artifactId>mserver</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <dependencyManagement>
         <dependencies>
@@ -33,13 +36,13 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <projectVersion>spark3-2.0-SNAPSHOT</projectVersion>
+                <revision>spark3-2.0-SNAPSHOT</revision>
             </properties>
         </profile>
         <profile>
             <id>spark2</id>
             <properties>
-                <projectVersion>spark2-2.0-SNAPSHOT</projectVersion>
+                <revision>spark2-2.0-SNAPSHOT</revision>
             </properties>
         </profile>
     </profiles>
@@ -430,7 +433,7 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>MetaServer</artifactId>
-            <version>${projectVersion}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -479,7 +482,7 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>livyjobserver</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <!--Livy job server-->
 

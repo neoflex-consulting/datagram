@@ -7,11 +7,15 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>${revision}</version>
+    </parent>
 
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>MetaServer</artifactId>
-    <version>${projectVersion}</version>
+    <version>${revision}</version>
 
 
     <dependencies>
@@ -172,18 +176,18 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>ddesigner</artifactId>
-            <version>${projectVersion}</version>
+            <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>metaserver.pim</artifactId>
-            <version>${projectVersion}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.meta.etl</groupId>
             <artifactId>ru.neoflex.meta.etl.spark.runtime</artifactId>
-            <version>${projectVersion}</version>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>
@@ -195,13 +199,13 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <projectVersion>spark3-2.0-SNAPSHOT</projectVersion>
+                <revision>spark3-2.0-SNAPSHOT</revision>
             </properties>
         </profile>
         <profile>
             <id>spark2</id>
             <properties>
-                <projectVersion>spark2-2.0-SNAPSHOT</projectVersion>
+                <revision>spark2-2.0-SNAPSHOT</revision>
             </properties>
         </profile>
     </profiles>
