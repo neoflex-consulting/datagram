@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
@@ -10,7 +11,7 @@
 
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>MetaServer</artifactId>
-    <version>1.0</version>
+    <version>${projectVersion}</version>
 
 
     <dependencies>
@@ -171,18 +172,18 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>ddesigner</artifactId>
-            <version>${project.version}</version>
+            <version>${projectVersion}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>metaserver.pim</artifactId>
-            <version>${project.version}</version>
+            <version>${projectVersion}</version>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.meta.etl</groupId>
             <artifactId>ru.neoflex.meta.etl.spark.runtime</artifactId>
-            <version>${project.version}</version>
+            <version>${projectVersion}</version>
         </dependency>
 
     </dependencies>
@@ -194,13 +195,13 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <revision>spark3-2.0-SNAPSHOT</revision>
+                <projectVersion>spark3-2.0-SNAPSHOT</projectVersion>
             </properties>
         </profile>
         <profile>
             <id>spark2</id>
             <properties>
-                <revision>spark2-2.0-SNAPSHOT</revision>
+                <projectVersion>spark2-2.0-SNAPSHOT</projectVersion>
             </properties>
         </profile>
     </profiles>
@@ -223,7 +224,8 @@
                                 <ant antfile="${basedir}/build.xml" target="generate-all" inheritAll="true">
                                   <property name="file.encoding" value="UTF-8" />
                                 </ant>
-                                <java classname="org.apache.tools.ant.launch.Launcher" fork="true" failonerror="true" dir="${basedir}" timeout="4000000" taskname="startAnt">
+                                <java classname="org.apache.tools.ant.launch.Launcher" fork="true" failonerror="true"
+                                      dir="${basedir}" timeout="4000000" taskname="startAnt">
                                     <classpath>
                                         <pathelement path="${classpath}"/>
                                     </classpath>
