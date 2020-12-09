@@ -35,7 +35,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <revision>${revision}</revision>
+                <revision>spark3-2.0-SNAPSHOT</revision>
             </properties>
             <build>
                 <plugins>
@@ -244,7 +244,7 @@
         <profile>
             <id>spark2</id>
             <properties>
-                <revision>${revision}</revision>
+                <revision>spark2-2.0-SNAPSHOT</revision>
             </properties>
             <build>
                 <plugins>

@@ -65,13 +65,13 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <revision>spark3</revision>
+                <revision>spark3-2.0-SNAPSHOT</revision>
             </properties>
         </profile>
         <profile>
             <id>spark2</id>
             <properties>
-                <revision>spark2</revision>
+                <revision>spark2-2.0-SNAPSHOT</revision>
             </properties>
         </profile>
     </profiles>
