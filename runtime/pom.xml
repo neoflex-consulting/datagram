@@ -11,10 +11,10 @@
     <parent>
         <groupId>ru.neoflex</groupId>
         <artifactId>parent</artifactId>
-        <version>2.0.0</version>
+        <version>spark3-2.0-SNAPSHOT</version>
     </parent>
 
-    <version>2.0.0</version>
+    <version>spark3-2.0-SNAPSHOT</version>
     <groupId>ru.neoflex.meta.etl</groupId>
     <artifactId>ru.neoflex.meta.etl.spark.runtime</artifactId>
 
