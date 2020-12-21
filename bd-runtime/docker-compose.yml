@@ -234,7 +234,7 @@ services:
       - ./datagram/gitflow:/opt/datagram/gitflow
       - ./datagram/logs:/opt/datagram/logs
       - ./datagram/mspace:/opt/datagram/mspace
-      - ../mserver/target/mserver-2.0-SNAPSHOT.jar:/opt/datagram/mserver-2.0-SNAPSHOT.jar
+      - ../mserver/target/mserver-spark3-2.0-SNAPSHOT.jar:/opt/datagram/mserver-spark3-2.0-SNAPSHOT.jar
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0-SNAPSHOT.jar:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/spark3-2.0-SNAPSHOT/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0-SNAPSHOT.jar
       - ../spark2lib/pom.xml:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/spark3-2.0-SNAPSHOT/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0-SNAPSHOT.pom
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT.jar:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/spark3-2.0-SNAPSHOT/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT.jar
