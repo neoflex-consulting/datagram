@@ -128,7 +128,7 @@ function targetInputPortHasChanged(transformation, target, inputPort, oldFields)
 
     if(mappingType === "etl.TableTargetFeature"){
         target.inputFieldsMapping.forEach(m=>{
-            if(!m.inputFieldName || m.inputFieldName == ""){
+            if(!m.inputFieldName || m.inputFieldName === ""){
                 m.inputFieldName = "";
             }
         });
