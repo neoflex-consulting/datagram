@@ -23,8 +23,13 @@
                     <url>https://maven.pkg.github.com/neoflex-consulting/datagram</url>
                 </repository>
             </repositories>
+            <properties>
+                <altSnapshotDeploymentRepository>snapshots::default::https://maven.pkg.github.com/neoflex-consulting/datagram/snapshots</altSnapshotDeploymentRepository>
+                <altReleaseDeploymentRepository>releases::default::https://maven.pkg.github.com/neoflex-consulting/datagram/releases</altReleaseDeploymentRepository>
+            </properties>
         </profile>
     </profiles>
+
 
     <servers>
         <server>
