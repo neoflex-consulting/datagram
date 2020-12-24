@@ -93,4 +93,11 @@
     <developerConnection>scm:git:git@github.com:neoflex-consulting/datagram.git</developerConnection>
     <url>https://github.com/neoflex-consulting/datagram</url>
   </scm>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Neoflex Consulting Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/neoflex-consulting/datagram</url>
+        </repository>
+    </distributionManagement>
 </project>
