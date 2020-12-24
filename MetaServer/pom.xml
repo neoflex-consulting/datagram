@@ -13,7 +13,7 @@
     </parent>
 
     <groupId>ru.neoflex.mspace</groupId>
-    <artifactId>MetaServer</artifactId>
+    <artifactId>metaserver</artifactId>
     <version>spark3-2.0-SNAPSHOT</version>
 
 

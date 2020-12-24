@@ -432,7 +432,7 @@
         <!-- business dependensies. do not include for embedding -->
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>MetaServer</artifactId>
+            <artifactId>metaserver</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

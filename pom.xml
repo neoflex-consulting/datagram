@@ -27,7 +27,7 @@
         <module>pim</module>
         <module>livyjobserver</module>
         <module>jobserver-runner</module>
-        <module>MetaServer</module>
+        <module>metaserver</module>
         <module>mserver</module>
         <module>ddesigner</module>
     </modules>
