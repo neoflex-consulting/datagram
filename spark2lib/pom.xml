@@ -430,7 +430,6 @@
             <id>Java_Net_LEGACY</id>
             <name>Java.Net legacy</name>
             <url>http://download.java.net/maven/1/</url>
-            <layout>legacy</layout>
         </repository>
     </repositories>
 
