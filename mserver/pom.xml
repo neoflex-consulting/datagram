@@ -433,7 +433,7 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>metaserver</artifactId>
-            <version>${project.version}</version>
+            <version>spark3-2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -482,7 +482,7 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>livyjobserver</artifactId>
-            <version>${project.version}</version>
+            <version>spark3-2.0-SNAPSHOT</version>
         </dependency>
         <!--Livy job server-->
 
