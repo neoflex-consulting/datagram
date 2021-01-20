@@ -18,7 +18,7 @@
         <connection>scm:git:https://github.com/neoflex-consulting/datagram.git</connection>
         <developerConnection>scm:git:git@github.com:neoflex-consulting/datagram.git</developerConnection>
         <url>https://github.com/neoflex-consulting/datagram</url>
-        <tag>spark2-2.0.0</tag>
+        <tag>2.0.0</tag>
     </scm>
 
     <modules>
