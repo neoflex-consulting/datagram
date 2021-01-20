@@ -3,7 +3,7 @@
     <parent>
         <groupId>ru.neoflex</groupId>
         <artifactId>parent</artifactId>
-        <version>${revision}</version>
+        <version>spark2-2.0-SNAPSHOT</version>
     </parent>
 
     <properties>
