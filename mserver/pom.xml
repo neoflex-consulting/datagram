@@ -7,14 +7,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    <parent>
-        <groupId>ru.neoflex</groupId>
-        <artifactId>parent</artifactId>
-        <version>spark3-2.0-SNAPSHOT</version>
-    </parent>
     <groupId>ru.neoflex.meta</groupId>
     <artifactId>mserver</artifactId>
-    <version>spark3-2.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <dependencyManagement>
         <dependencies>
@@ -556,13 +551,13 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
+                <!--dependencies>
                     <dependency>
                         <groupId>org.springframework.boot.experimental</groupId>
                         <artifactId>spring-boot-thin-layout</artifactId>
                         <version>1.0.25.RELEASE</version>
                     </dependency>
-                </dependencies>
+                </dependencies-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

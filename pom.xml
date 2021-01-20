@@ -61,6 +61,8 @@
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <updateWorkingCopyVersions>false</updateWorkingCopyVersions>
+                    <preparationGoals>clean install</preparationGoals>
+                    <goals>deploy</goals>
                 </configuration>
             </plugin>
             <plugin>
