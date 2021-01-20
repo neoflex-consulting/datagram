@@ -3,7 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>livyjobserver</artifactId>
-    <version>${project.version}</version>
+
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+
     <build>
         <plugins>
             <plugin>
@@ -49,7 +55,7 @@
         <dependency>
             <groupId>ru.neoflex.meta.etl2</groupId>
             <artifactId>ru.neoflex.meta.etl2.spark.spark2lib</artifactId>
-            <version>${project.version}</version>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
     <profiles>

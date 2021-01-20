@@ -9,7 +9,11 @@
     </properties>
     <groupId>ru.neoflex.meta</groupId>
     <artifactId>mserver</artifactId>
-    <version>${project.version}</version>
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>${revision}</version>
+    </parent>
 
     <dependencyManagement>
         <dependencies>

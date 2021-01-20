@@ -7,10 +7,17 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-    <version>${project.version}</version>
+
+
     <groupId>ru.neoflex.meta.etl2</groupId>
     <artifactId>ru.neoflex.meta.etl2.spark.spark2lib</artifactId>
+
 
     <build>
         <plugins>

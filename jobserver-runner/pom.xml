@@ -11,8 +11,6 @@
 
     <groupId>ru.neoflex.mspace.livy</groupId>
     <artifactId>jobserver-runner</artifactId>
-    <version>${project.version}</version>
-
     <name>jobserver-runner</name>
     <description>Livy Job Server</description>
 
@@ -51,7 +49,7 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>livyjobserver</artifactId>
-            <version>${project.version}</version>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 

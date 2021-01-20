@@ -9,8 +9,11 @@
 
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>metaserver</artifactId>
-    <version>${project.version}</version>
-
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>${revision}</version>
+    </parent>
 
     <dependencies>
         <!-- Eclipse EMF -->
@@ -170,18 +173,18 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>ddesigner</artifactId>
-            <version>${project.version}</version>
+            <version>LATEST</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>metaserver.pim</artifactId>
-            <version>${project.version}</version>
+            <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.meta.etl</groupId>
             <artifactId>ru.neoflex.meta.etl.spark.runtime</artifactId>
-            <version>${project.version}</version>
+            <version>LATEST</version>
         </dependency>
 
     </dependencies>

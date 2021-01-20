@@ -8,8 +8,13 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-    <version>${project.version}</version>
+
     <groupId>ru.neoflex.meta.etl</groupId>
     <artifactId>ru.neoflex.meta.etl.spark.runtime</artifactId>
 
