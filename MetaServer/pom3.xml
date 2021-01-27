@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <groupId>ru.neoflex.mspace</groupId>
+    <artifactId>metaserver</artifactId>
+
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>spark3-2.0.0-SNAPSHOT</version>
+        <relativePath>../pom3.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <!-- Eclipse EMF -->
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.common -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.common</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore.xmi -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
+            <version>2.16.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore.change -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore.change</artifactId>
+            <version>2.14.0</version>
+        </dependency>
+
+
+        <!-- Eclipse Epsilon -->
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-core</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-emf</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-hutn</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit.http.server</artifactId>
+            <version>5.3.0.201903130848-r</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>runtime</artifactId>
+            <version>3.10.0-v20140318-2214</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-graphml</artifactId>
+            <version>1.4.0</version>
+            <!-- avoid icu4j 2.6.1 : erroneous jar -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.ibm.icu</groupId>
+                    <artifactId>icu4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- use a newer version of icu4j -->
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>3.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-workflow</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.epsilon/epsilon-workflow-emf -->
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-workflow-emf</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.teneo.hibernate.mapper</artifactId>
+            <version>2.1.0-v201501071531</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.teneo.hibernate</artifactId>
+            <version>2.1.0-v201501071531</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.teneo.annotations</artifactId>
+            <version>2.1.0-v201501071531</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.teneo</artifactId>
+            <version>2.1.0-v201501071531</version>
+            <!--<version>2.1.0.v201505242010</version>-->
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emfatic/org.eclipse.emf.emfatic -->
+        <!--dependency>
+            <groupId>org.eclipse.emfatic</groupId>
+            <artifactId>org.eclipse.emf.emfatic</artifactId>
+            <version>0.8.0</version>
+        </dependency-->
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.core/org.eclipse.core.resources -->
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>org.eclipse.core.resources</artifactId>
+            <version>3.7.100</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.equinox/org.eclipse.equinox.common -->
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+
+        <!--dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>org.eclipse.gymnast.runtime.core</artifactId>
+            <version>0.8.0.201302100848</version>
+        </dependency-->
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.equinox.registry -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.registry</artifactId>
+            <version>3.8.800</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+        <!--
+        -->
+        <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <version>1.0b3</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.neoflex.mspace</groupId>
+            <artifactId>ddesigner</artifactId>
+            <version>2.0-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.neoflex.mspace</groupId>
+            <artifactId>metaserver.pim</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.neoflex.meta.etl</groupId>
+            <artifactId>ru.neoflex.meta.etl.spark.runtime</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <!--<plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target>
+                                <property name="classpath" refid="maven.compile.classpath"/>
+                                <property environment="env"/>
+                                <echo message="${classpath}"/>
+                                <echo message="${env.JAVA_HOME}"/>
+                                <ant antfile="${basedir}/build.xml" target="generate-all" inheritAll="true">
+                                  <property name="file.encoding" value="UTF-8" />
+                                </ant>
+                                <java classname="org.apache.tools.ant.launch.Launcher" fork="true" failonerror="true" dir="${basedir}" timeout="4000000" taskname="startAnt">
+                                    <classpath>
+                                        <pathelement path="${classpath}"/>
+                                    </classpath>
+                                    <jvmarg value="-Dfile.encoding=UTF-8"/>
+                                    <arg value="-buildfile"/>
+                                    <arg file="${basedir}/build.xml"/>
+                                    <arg value="-Dbasedir=${basedir}"/>
+                                    <arg value="-Dclasspath=${classpath}"/>
+                                    <arg value="generate-all"/>
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8</version>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>pim</directory>
+                <targetPath>cim/MetaServer/pim</targetPath>
+            </resource>
+            <resource>
+                <directory>psm</directory>
+                <targetPath>psm</targetPath>
+            </resource>
+        </resources>
+    </build>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Neoflex Consulting Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/neoflex-consulting/datagram</url>
+        </repository>
+    </distributionManagement>
+</project>
