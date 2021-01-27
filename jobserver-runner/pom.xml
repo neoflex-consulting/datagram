@@ -49,7 +49,7 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>livyjobserver</artifactId>
-            <version>LATEST</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

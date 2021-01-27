@@ -2,26 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>ddesigner</artifactId>
-
-
-    <parent>
-        <groupId>ru.neoflex</groupId>
-        <artifactId>parent</artifactId>
-        <version>spark2-2.0-SNAPSHOT</version>
-    </parent>
-
-    <profiles>
-        <profile>
-            <id>spark3</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>spark2</id>
-        </profile>
-    </profiles>
-
+    <version>2.0-SNAPSHOT</version>
 
     <properties>
         <java.version>1.8</java.version>

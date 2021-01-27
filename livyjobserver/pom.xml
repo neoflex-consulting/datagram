@@ -55,7 +55,7 @@
         <dependency>
             <groupId>ru.neoflex.meta.etl2</groupId>
             <artifactId>ru.neoflex.meta.etl2.spark.spark2lib</artifactId>
-            <version>LATEST</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <profiles>

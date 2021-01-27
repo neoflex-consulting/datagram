@@ -173,18 +173,18 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>ddesigner</artifactId>
-            <version>LATEST</version>
+            <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>metaserver.pim</artifactId>
-            <version>LATEST</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.meta.etl</groupId>
             <artifactId>ru.neoflex.meta.etl.spark.runtime</artifactId>
-            <version>LATEST</version>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>
