@@ -17,6 +17,7 @@
         <connection>scm:git:https://github.com/neoflex-consulting/datagram.git</connection>
         <developerConnection>scm:git:git@github.com:neoflex-consulting/datagram.git</developerConnection>
         <url>https://github.com/neoflex-consulting/datagram</url>
+    <tag>HEAD</tag>
   </scm>
 
 
