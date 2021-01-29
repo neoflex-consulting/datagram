@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
@@ -8,11 +7,13 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
-
     <groupId>ru.neoflex.mspace</groupId>
-    <artifactId>MetaServer</artifactId>
-    <version>${projectVersion}</version>
-
+    <artifactId>metaserver</artifactId>
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>spark2-2.0-SNAPSHOT</version>
+    </parent>
 
     <dependencies>
         <!-- Eclipse EMF -->
@@ -172,18 +173,18 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>ddesigner</artifactId>
-            <version>${projectVersion}</version>
+            <version>LATEST</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>metaserver.pim</artifactId>
-            <version>${projectVersion}</version>
+            <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>ru.neoflex.meta.etl</groupId>
             <artifactId>ru.neoflex.meta.etl.spark.runtime</artifactId>
-            <version>${projectVersion}</version>
+            <version>LATEST</version>
         </dependency>
 
     </dependencies>
@@ -194,15 +195,9 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <projectVersion>spark3-2.0-SNAPSHOT</projectVersion>
-            </properties>
         </profile>
         <profile>
             <id>spark2</id>
-            <properties>
-                <projectVersion>spark2-2.0-SNAPSHOT</projectVersion>
-            </properties>
         </profile>
     </profiles>
 
@@ -224,8 +219,7 @@
                                 <ant antfile="${basedir}/build.xml" target="generate-all" inheritAll="true">
                                   <property name="file.encoding" value="UTF-8" />
                                 </ant>
-                                <java classname="org.apache.tools.ant.launch.Launcher" fork="true" failonerror="true"
-                                      dir="${basedir}" timeout="4000000" taskname="startAnt">
+                                <java classname="org.apache.tools.ant.launch.Launcher" fork="true" failonerror="true" dir="${basedir}" timeout="4000000" taskname="startAnt">
                                     <classpath>
                                         <pathelement path="${classpath}"/>
                                     </classpath>
@@ -261,4 +255,11 @@
             </resource>
         </resources>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Neoflex Consulting Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/neoflex-consulting/datagram</url>
+        </repository>
+    </distributionManagement>
 </project>

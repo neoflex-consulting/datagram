@@ -78,6 +78,7 @@ Oozie|http://localhost:11000/
 Spark|http://localhost:8080/
 Name Node|http://localhost:9870/
 
+
 Для просмотра логов кластера, в файл `C:\Windows\System32\drivers\etc\hosts ` (или `/etc/hosts`) нужно добавить следующие строки:
 ```
 127.0.0.1 master

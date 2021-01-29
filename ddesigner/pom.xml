@@ -1,11 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <version>${projectVersion}</version>
-
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>ddesigner</artifactId>
+
+
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>spark2-2.0-SNAPSHOT</version>
+    </parent>
 
     <profiles>
         <profile>
@@ -13,15 +16,9 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <projectVersion>spark3-2.0-SNAPSHOT</projectVersion>
-            </properties>
         </profile>
         <profile>
             <id>spark2</id>
-            <properties>
-                <projectVersion>spark2-2.0-SNAPSHOT</projectVersion>
-            </properties>
         </profile>
     </profiles>
 
@@ -54,7 +51,7 @@
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.10.0</version>
                 <configuration>
-                    <workingDirectory></workingDirectory>
+                    <workingDirectory />
                     <installDirectory>target</installDirectory>
                 </configuration>
                 <executions>
@@ -98,7 +95,7 @@
                         <configuration>
                             <target>
                                 <copy todir="${project.build.directory}/classes/public">
-                                    <fileset dir="${project.basedir}/build"/>
+                                    <fileset dir="${project.basedir}/build" />
                                 </copy>
                             </target>
                         </configuration>
@@ -115,4 +112,11 @@
             </plugin>
         </plugins>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Neoflex Consulting Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/neoflex-consulting/datagram</url>
+        </repository>
+    </distributionManagement>
 </project>

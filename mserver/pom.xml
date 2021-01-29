@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
@@ -8,10 +7,13 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-
     <groupId>ru.neoflex.meta</groupId>
     <artifactId>mserver</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <parent>
+        <groupId>ru.neoflex</groupId>
+        <artifactId>parent</artifactId>
+        <version>spark2-2.0-SNAPSHOT</version>
+    </parent>
 
     <dependencyManagement>
         <dependencies>
@@ -32,15 +34,9 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <projectVersion>spark3-2.0-SNAPSHOT</projectVersion>
-            </properties>
         </profile>
         <profile>
             <id>spark2</id>
-            <properties>
-                <projectVersion>spark2-2.0-SNAPSHOT</projectVersion>
-            </properties>
         </profile>
     </profiles>
 
@@ -429,8 +425,8 @@
         <!-- business dependensies. do not include for embedding -->
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
-            <artifactId>MetaServer</artifactId>
-            <version>${projectVersion}</version>
+            <artifactId>metaserver</artifactId>
+            <version>spark3-2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -479,7 +475,7 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>livyjobserver</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>spark3-2.0-SNAPSHOT</version>
         </dependency>
         <!--Livy job server-->
 
@@ -553,6 +549,13 @@
                         </goals>
                     </execution>
                 </executions>
+                <!--dependencies>
+                    <dependency>
+                        <groupId>org.springframework.boot.experimental</groupId>
+                        <artifactId>spring-boot-thin-layout</artifactId>
+                        <version>1.0.25.RELEASE</version>
+                    </dependency>
+                </dependencies-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -582,6 +585,52 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.8</version>
             </plugin>
+            <!--plugin>
+                <groupId>org.springframework.boot.experimental</groupId>
+                <artifactId>spring-boot-thin-maven-plugin</artifactId>
+                <version>1.0.25.RELEASE</version>
+                <executions>
+                    <execution>
+                        <id>resolve</id>
+                        <goals>
+                            <goal>resolve</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>ru.neoflex.meta.etl</groupId>
+                        <artifactId>ru.neoflex.meta.etl.spark.runtime</artifactId>
+                        <version>spark3-2.0-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ru.neoflex.meta.etl2</groupId>
+                        <artifactId>ru.neoflex.meta.etl2.spark.spark2lib</artifactId>
+                        <version>spark3-2.0-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ru.neoflex.mspace</groupId>
+                        <artifactId>ddesigner</artifactId>
+                        <version>spark3-2.0-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ru.neoflex.mspace</groupId>
+                        <artifactId>livyjobserver</artifactId>
+                        <version>spark3-2.0-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ru.neoflex.mspace</groupId>
+                        <artifactId>metaserver</artifactId>
+                        <version>spark3-2.0-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ru.neoflex.mspace</groupId>
+                        <artifactId>metaserver.pim</artifactId>
+                        <version>spark3-2.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+            </plugin-->
         </plugins>
         <resources>
             <resource>
@@ -593,5 +642,13 @@
             </resource>
         </resources>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Neoflex Consulting Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/neoflex-consulting/datagram</url>
+        </repository>
+    </distributionManagement>
 
 </project>
