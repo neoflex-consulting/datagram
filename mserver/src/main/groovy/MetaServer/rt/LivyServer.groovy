@@ -15,6 +15,7 @@ import org.springframework.http.MediaType
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.util.UriUtils
 import ru.neoflex.meta.model.Database
 import ru.neoflex.meta.utils.Context
 import ru.neoflex.meta.utils.ZipUtils
@@ -222,7 +223,7 @@ class LivyServer {
         def http = REST.getHTTPClient(livyServer.webhdfs + "/", livyServer)
         def user = getLivyUser(livyServer)
         def fileStatus = http.get([
-                path              : java.net.URLEncoder.encode(path.substring(1), "UTF-8"),
+                path              : UriUtils.encodePath(path, "UTF-8").substring(1),
                 requestContentType: ContentType.ANY,
                 contentType       : MediaType.APPLICATION_JSON_UTF8_VALUE,
                 query             : ['user.name': user, 'op': "GETFILESTATUS"]
@@ -304,7 +305,7 @@ class LivyServer {
         def http = REST.getSimpleHTTPClient(livyServer.webhdfs + "/", livyServer)
         def user = getLivyUser(livyServer)
         def response = http.get([
-                path              : URLEncoder.encode(path.substring(1), "UTF-8"),
+                path              : UriUtils.encodePath(path, "UTF-8").substring(1),
                 requestContentType: ContentType.ANY,
                 contentType       : ContentType.ANY,
                 query             : ['user.name': user , 'op': "OPEN"]
@@ -324,7 +325,7 @@ class LivyServer {
         def http = REST.getHTTPClient(livyServer.webhdfs + "/", livyServer)
         def user = getLivyUser(livyServer)
         def put1 = http.put(
-                path: java.net.URLEncoder.encode(newFileName.substring(1), "UTF-8"),
+                path: UriUtils.encodePath(newFileName, "UTF-8").substring(1),
                 query: ['user.name': user, 'op': "CREATE", 'overwrite': 'true']
         )
         def put2 = http.put(
@@ -337,10 +338,9 @@ class LivyServer {
 
     static Object deleteFile(Map entity, Map params = null) {
         def path = params.path as String
-        path = path.split("/").collect { URLEncoder.encode(it, "UTF-8")}.join("/")
         def http = REST.getHTTPClient(entity.webhdfs + "/", entity)
         def resp = http.delete(
-                path: path.substring(1),
+                path: UriUtils.encodePath(path, "UTF-8").substring(1),
                 query: ['user.name': entity.user, 'op': "DELETE", 'recursive': 'true']
         )
         return resp.reader
