@@ -9,7 +9,8 @@ operation src!Drools imports(){
         "import org.drools.compiler.compiler.io.memory.MemoryFileSystem",
         "import org.kie.internal.builder.KnowledgeBuilderFactory",
         "import org.kie.internal.builder.DecisionTableConfiguration",
-        "import org.kie.internal.builder.DecisionTableInputType"
+        "import org.kie.internal.builder.DecisionTableInputType",
+        "import org.apache.commons.io.IOUtils"
     };
 } 
 
@@ -84,9 +85,10 @@ operation src!Drools defineImpl(){
             [%if (ruleFile.hdfs == true) {%]
             val fileUrl = s"""[%=ruleFile.fileUrl%]"""      
             val ins = fs.open(new Path(fileUrl))
-            val res = kieServices.getResources().newInputStreamResource(ins)
-            [%=loadResource(ruleFile)%]
+            var buffer = IOUtils.toByteArray(ins)
             ins.close()
+            val res = kieServices.getResources().newByteArrayResource(buffer)
+            [%=loadResource(ruleFile)%]
             [%} else {%]
             val res = kieServices.getResources().newUrlResource(new java.net.URL("file://[%=ruleFile.fileUrl%]"))
             [%=loadResource(ruleFile)%]

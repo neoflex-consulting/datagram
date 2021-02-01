@@ -12,6 +12,7 @@
     <groupId>ru.neoflex</groupId>
     <artifactId>parent</artifactId>
     <version>${revision}</version>
+
     <packaging>pom</packaging>
     <name>MSpace Parent Project</name>
 
