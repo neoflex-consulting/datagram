@@ -206,7 +206,7 @@ class LivyServer {
 
         def path = params.path
 
-        return getFileStatus(entity, path)
+        return getFileStatus(entity, path as String)
     }
 
 
@@ -222,7 +222,7 @@ class LivyServer {
         def http = REST.getHTTPClient(livyServer.webhdfs + "/", livyServer)
         def user = getLivyUser(livyServer)
         def fileStatus = http.get([
-                path              : path.substring(1),
+                path              : java.net.URLEncoder.encode(path.substring(1), "UTF-8"),
                 requestContentType: ContentType.ANY,
                 contentType       : MediaType.APPLICATION_JSON_UTF8_VALUE,
                 query             : ['user.name': user, 'op': "GETFILESTATUS"]
@@ -304,7 +304,7 @@ class LivyServer {
         def http = REST.getSimpleHTTPClient(livyServer.webhdfs + "/", livyServer)
         def user = getLivyUser(livyServer)
         def response = http.get([
-                path              : path.substring(1),
+                path              : URLEncoder.encode(path.substring(1), "UTF-8"),
                 requestContentType: ContentType.ANY,
                 contentType       : ContentType.ANY,
                 query             : ['user.name': user , 'op': "OPEN"]
@@ -324,7 +324,7 @@ class LivyServer {
         def http = REST.getHTTPClient(livyServer.webhdfs + "/", livyServer)
         def user = getLivyUser(livyServer)
         def put1 = http.put(
-                path: newFileName.substring(1),
+                path: java.net.URLEncoder.encode(newFileName.substring(1), "UTF-8"),
                 query: ['user.name': user, 'op': "CREATE", 'overwrite': 'true']
         )
         def put2 = http.put(
@@ -336,7 +336,8 @@ class LivyServer {
     }
 
     static Object deleteFile(Map entity, Map params = null) {
-        def path = params.path
+        def path = params.path as String
+        path = path.split("/").collect { URLEncoder.encode(it, "UTF-8")}.join("/")
         def http = REST.getHTTPClient(entity.webhdfs + "/", entity)
         def resp = http.delete(
                 path: path.substring(1),
