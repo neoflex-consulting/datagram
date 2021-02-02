@@ -201,9 +201,7 @@ services:
     image: neoflexdatagram/bd-samples
     build: ./bd-samples
     depends_on:
-      - master
-      - worker1
-      - worker2
+      - datagram
     networks:
       bd_net:
         ipv4_address: 172.20.1.9
@@ -219,7 +217,9 @@ services:
     build: ./bd-oozie
     hostname: oozie
     depends_on:
-      - datagram
+      - master
+      - worker1
+      - worker2
     volumes:
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT.jar
