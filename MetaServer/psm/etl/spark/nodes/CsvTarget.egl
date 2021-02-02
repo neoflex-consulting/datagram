@@ -17,9 +17,10 @@ var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == se
     
     ds.write
       [%if (self.csvFormat == src!CSVFormat#EXCEL) {/* EXCEL */%]
-      .format("com.crealytics.spark.excel") [%if (self.header.isDefined()) {%]
-      .option("useHeader", """[%=self.header%]""")
-      [%}%] [%if (self.saveMode.isDefined()) {%]
+      .format("com.crealytics.spark.excel")
+      .option("useHeader", """[%=self.header == true%]""")
+      .option("header", """[%=self.header == true%]""")
+      [%if (self.saveMode.isDefined()) {%]
       .mode("[%if (self.saveMode==SaveMode#APPEND) {%]append[%}else{%]overwrite[%}%]")
       [%}%] [%if (self.dataAddress.isDefined() and self.dataAddress.trim().length() > 0) {%]
       .option("dataAddress", """[%=self.dataAddress%]""")
