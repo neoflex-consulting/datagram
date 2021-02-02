@@ -219,9 +219,7 @@ services:
     build: ./bd-oozie
     hostname: oozie
     depends_on:
-      - master
-      - worker1
-      - worker2
+      - datagram
     volumes:
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT.jar
