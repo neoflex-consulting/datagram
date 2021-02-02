@@ -1,0 +1,14 @@
+package ru.neoflex.rules;
+dialect  "mvel"
+
+declare Record
+   id : java.math.BigDecimal
+   debit : String
+   credit : String
+   amount : java.math.BigDecimal
+   charter : String
+end
+
+query "getResult"
+  result : Record()
+end

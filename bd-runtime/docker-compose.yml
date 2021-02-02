@@ -197,6 +197,23 @@ services:
       - "hivemetastore:172.20.1.4"
       - "livy:172.20.1.6"
 
+  samples:
+    image: neoflexdatagram/bd-samples
+    build: ./bd-samples
+    depends_on:
+      - master
+      - worker1
+      - worker2
+    networks:
+      bd_net:
+        ipv4_address: 172.20.1.9
+    extra_hosts:
+      - "master:172.20.1.1"
+      - "worker1:172.20.1.2"
+      - "worker2:172.20.1.3"
+      - "hivemetastore:172.20.1.4"
+      - "livy:172.20.1.6"
+
   oozie:
     image: neoflexdatagram/bd-oozie
     build: ./bd-oozie
