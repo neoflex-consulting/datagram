@@ -19,6 +19,7 @@ rule Transformation2POM transform transformation: Transformation {
   parameters {
     var params : new Map;
     params.put("packagePrefix",  "ru.neoflex.meta.etl2.spark");
+    params.put("version", version);
     return params;
   }
   template : MetaResource.getURL("/psm/etl/spark/pom3.egl")
