@@ -3,6 +3,7 @@ package ru.neoflex.meta.svc;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
@@ -63,6 +64,8 @@ public class ContextSvc extends BaseSvc {
     private AppCacheSvc appCacheSvc;
     @Autowired
     private GitflowSvc gitflowSvc;
+    @Autowired
+    private BuildProperties buildInfo;
 
     public MavenSvc getMavenSvc() {
 		return mavenSvc;
@@ -207,6 +210,14 @@ public class ContextSvc extends BaseSvc {
 
     public AppCacheSvc getAppCacheSvc() {
         return appCacheSvc;
+    }
+
+    public BuildProperties getBuildInfo() {
+        return buildInfo;
+    }
+
+    public void setBuildInfo(BuildProperties buildInfo) {
+        this.buildInfo = buildInfo;
     }
 
     public void setAppCacheSvc(AppCacheSvc appCacheSvc) {
