@@ -5,11 +5,11 @@
   <parent>
     <groupId>ru.neoflex</groupId>
     <artifactId>parent</artifactId>
-    <version>spark2-2.0.0-SNAPSHOT</version>
+    <version>spark3-2.0.0-SNAPSHOT</version>
   </parent>
   <groupId>ru.neoflex.meta.etl</groupId>
   <artifactId>ru.neoflex.meta.etl.spark.runtime</artifactId>
-  <version>spark2-2.0.0-SNAPSHOT</version>
+  <version>spark3-2.0.0-SNAPSHOT</version>
   <distributionManagement>
     <repository>
       <id>github</id>
@@ -55,6 +55,30 @@
           <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.3</version>
+            <executions>
+              <execution>
+                <id>default-compile</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>compile</goal>
+                </goals>
+                <configuration>
+                  <source>1.8</source>
+                  <target>1.8</target>
+                </configuration>
+              </execution>
+              <execution>
+                <id>default-testCompile</id>
+                <phase>test-compile</phase>
+                <goals>
+                  <goal>testCompile</goal>
+                </goals>
+                <configuration>
+                  <source>1.8</source>
+                  <target>1.8</target>
+                </configuration>
+              </execution>
+            </executions>
             <configuration>
               <source>1.8</source>
               <target>1.8</target>
@@ -72,6 +96,15 @@
                   <goal>add-source</goal>
                   <goal>compile</goal>
                 </goals>
+                <configuration>
+                  <scalaVersion>2.12.10</scalaVersion>
+                  <javacArgs>
+                    <javacArg>-source</javacArg>
+                    <javacArg>1.8</javacArg>
+                    <javacArg>-target</javacArg>
+                    <javacArg>1.8</javacArg>
+                  </javacArgs>
+                </configuration>
               </execution>
               <execution>
                 <id>scala-test-compile</id>
@@ -79,15 +112,24 @@
                 <goals>
                   <goal>testCompile</goal>
                 </goals>
+                <configuration>
+                  <scalaVersion>2.12.10</scalaVersion>
+                  <javacArgs>
+                    <javacArg>-source</javacArg>
+                    <javacArg>1.8</javacArg>
+                    <javacArg>-target</javacArg>
+                    <javacArg>1.8</javacArg>
+                  </javacArgs>
+                </configuration>
               </execution>
             </executions>
             <configuration>
               <scalaVersion>2.12.10</scalaVersion>
               <javacArgs>
                 <javacArg>-source</javacArg>
-                <javacArg>${java.version}</javacArg>
+                <javacArg>1.8</javacArg>
                 <javacArg>-target</javacArg>
-                <javacArg>${java.version}</javacArg>
+                <javacArg>1.8</javacArg>
               </javacArgs>
             </configuration>
           </plugin>
@@ -108,10 +150,15 @@
                 <goals>
                   <goal>test</goal>
                 </goals>
+                <configuration>
+                  <reportsDirectory>C:\workspace\datagram\runtime\target/surefire-reports</reportsDirectory>
+                  <junitxml>.</junitxml>
+                  <filereports>WDF TestSuite.txt</filereports>
+                </configuration>
               </execution>
             </executions>
             <configuration>
-              <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+              <reportsDirectory>C:\workspace\datagram\runtime\target/surefire-reports</reportsDirectory>
               <junitxml>.</junitxml>
               <filereports>WDF TestSuite.txt</filereports>
             </configuration>
@@ -139,30 +186,6 @@
           <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.3</version>
-            <executions>
-              <execution>
-                <id>default-compile</id>
-                <phase>compile</phase>
-                <goals>
-                  <goal>compile</goal>
-                </goals>
-                <configuration>
-                  <source>1.7</source>
-                  <target>1.7</target>
-                </configuration>
-              </execution>
-              <execution>
-                <id>default-testCompile</id>
-                <phase>test-compile</phase>
-                <goals>
-                  <goal>testCompile</goal>
-                </goals>
-                <configuration>
-                  <source>1.7</source>
-                  <target>1.7</target>
-                </configuration>
-              </execution>
-            </executions>
             <configuration>
               <source>1.7</source>
               <target>1.7</target>
@@ -176,7 +199,6 @@
                 <groupId>org.apache.maven.surefire</groupId>
                 <artifactId>surefire-junit47</artifactId>
                 <version>2.18.1</version>
-                <scope>compile</scope>
               </dependency>
             </dependencies>
             <goals />
@@ -193,15 +215,6 @@
                   <goal>add-source</goal>
                   <goal>compile</goal>
                 </goals>
-                <configuration>
-                  <scalaVersion>2.11.8</scalaVersion>
-                  <javacArgs>
-                    <javacArg>-source</javacArg>
-                    <javacArg>1.8</javacArg>
-                    <javacArg>-target</javacArg>
-                    <javacArg>1.8</javacArg>
-                  </javacArgs>
-                </configuration>
               </execution>
               <execution>
                 <id>scala-test-compile</id>
@@ -209,24 +222,15 @@
                 <goals>
                   <goal>testCompile</goal>
                 </goals>
-                <configuration>
-                  <scalaVersion>2.11.8</scalaVersion>
-                  <javacArgs>
-                    <javacArg>-source</javacArg>
-                    <javacArg>1.8</javacArg>
-                    <javacArg>-target</javacArg>
-                    <javacArg>1.8</javacArg>
-                  </javacArgs>
-                </configuration>
               </execution>
             </executions>
             <configuration>
               <scalaVersion>2.11.8</scalaVersion>
               <javacArgs>
                 <javacArg>-source</javacArg>
-                <javacArg>1.8</javacArg>
+                <javacArg>${java.version}</javacArg>
                 <javacArg>-target</javacArg>
-                <javacArg>1.8</javacArg>
+                <javacArg>${java.version}</javacArg>
               </javacArgs>
             </configuration>
           </plugin>
@@ -240,15 +244,10 @@
                 <goals>
                   <goal>test</goal>
                 </goals>
-                <configuration>
-                  <reportsDirectory>C:\workspace\datagram\runtime\target/surefire-reports</reportsDirectory>
-                  <junitxml>.</junitxml>
-                  <filereports>WDF TestSuite.txt</filereports>
-                </configuration>
               </execution>
             </executions>
             <configuration>
-              <reportsDirectory>C:\workspace\datagram\runtime\target/surefire-reports</reportsDirectory>
+              <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
               <junitxml>.</junitxml>
               <filereports>WDF TestSuite.txt</filereports>
             </configuration>
