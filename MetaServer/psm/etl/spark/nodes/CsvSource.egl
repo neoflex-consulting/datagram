@@ -14,9 +14,10 @@ operation src!CSVSource define(){%]
       spark.read
       [%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%].schema(schema)
       [%} else {%].option("inferSchema", true)[%}%] [%if (self.csvFormat == src!CSVFormat#EXCEL) {/* EXCEL */%]
-      .format("com.crealytics.spark.excel") [%if (self.header.isDefined()) {%]
-      .option("useHeader", """[%=self.header%]""") 
-      [%}%] [%if (self.dataAddress.isDefined() and self.dataAddress.trim().length() > 0) {%]
+      .format("com.crealytics.spark.excel")
+      .option("useHeader", """[%=self.header == true%]""")
+      .option("header", """[%=self.header == true%]""")
+      [%if (self.dataAddress.isDefined() and self.dataAddress.trim().length() > 0) {%]
       .option("dataAddress", """[%=self.dataAddress%]""")
       [%}%] [%if (self.treatEmptyValuesAsNulls.isDefined()) {%] 
       .option("treatEmptyValuesAsNulls", """[%=self.treatEmptyValuesAsNulls%]""") 

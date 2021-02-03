@@ -63,7 +63,8 @@ class CSVTarget {
         }
         else if (entity.target.csvFormat == "EXCEL") {
             format = 'com.crealytics.spark.excel'
-            if (entity.target.header != null && entity.target.header != '') 			options.add([key:'useHeader',value: entity.target.header])
+            options.add([key:'useHeader',value: entity.target.header != null && entity.target.header != ''])
+            options.add([key:'header',value: entity.target.header != null && entity.target.header != ''])
             if (entity.target.timestampFormat != null && entity.target.timestampFormat != '') 	options.add([key:'timestampFormat',value: entity.target.timestampFormat])
             if (entity.target.dataAddress != null && entity.target.dataAddress != '') 		options.add([key:'dataAddress', value:entity.target.dataAddress])
         }
