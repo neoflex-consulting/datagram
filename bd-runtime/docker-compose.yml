@@ -197,6 +197,21 @@ services:
       - "hivemetastore:172.20.1.4"
       - "livy:172.20.1.6"
 
+  samples:
+    image: neoflexdatagram/bd-samples
+    build: ./bd-samples
+    depends_on:
+      - datagram
+    networks:
+      bd_net:
+        ipv4_address: 172.20.1.9
+    extra_hosts:
+      - "master:172.20.1.1"
+      - "worker1:172.20.1.2"
+      - "worker2:172.20.1.3"
+      - "hivemetastore:172.20.1.4"
+      - "livy:172.20.1.6"
+
   oozie:
     image: neoflexdatagram/bd-oozie
     build: ./bd-oozie
@@ -239,6 +254,7 @@ services:
       - ../spark2lib/pom.xml:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/spark3-2.0-SNAPSHOT/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0-SNAPSHOT.pom
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT.jar:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/spark3-2.0-SNAPSHOT/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT.jar
       - ../runtime/pom.xml:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/spark3-2.0-SNAPSHOT/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT.pom
+      - ../pom.xml:/root/.m2/repository/ru/neoflex/parent/spark3-2.0-SNAPSHOT/parent-spark3-2.0-SNAPSHOT.pom
     expose:
       - 1-65535
     ports:
