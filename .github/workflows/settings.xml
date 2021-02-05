@@ -4,12 +4,12 @@
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
     <activeProfiles>
-        <activeProfile>github</activeProfile>
+        <activeProfile>ossrh</activeProfile>
     </activeProfiles>
 
     <profiles>
         <profile>
-            <id>github</id>
+            <id>ossrh</id>
             <repositories>
                 <repository>
                     <id>central</id>
@@ -18,14 +18,14 @@
                     <snapshots><enabled>true</enabled></snapshots>
                 </repository>
                 <repository>
-                    <id>github</id>
-                    <name>GitHub Neoflex Consulting Apache Maven Packages</name>
+                    <id>ossrh</id>
+                    <name>Maven Central Neoflex Consulting Packages</name>
                     <url>https://maven.pkg.github.com/neoflex-consulting/datagram</url>
                 </repository>
             </repositories>
             <properties>
-                <altSnapshotDeploymentRepository>snapshots::default::https://maven.pkg.github.com/neoflex-consulting/datagram/snapshots</altSnapshotDeploymentRepository>
-                <altReleaseDeploymentRepository>releases::default::https://maven.pkg.github.com/neoflex-consulting/datagram/releases</altReleaseDeploymentRepository>
+                <altSnapshotDeploymentRepository>snapshots::default::https://oss.sonatype.org/content/repositories/snapshots/</altSnapshotDeploymentRepository>
+                <altReleaseDeploymentRepository>releases::default::https://oss.sonatype.org/service/local/staging/deploy/maven2/</altReleaseDeploymentRepository>
             </properties>
         </profile>
     </profiles>
@@ -33,9 +33,9 @@
 
     <servers>
         <server>
-            <id>github</id>
-            <username>neoflex-consulting</username>
-            <password>${{secrets.GITHUB_TOKEN}}</password>
+            <id>ossrh</id>
+            <username>${{secrets.OSSRH_USERNAME}}</username>
+            <password>${{secrets.OSSRH_TOKEN}}</password>
         </server>
     </servers>
 </settings>

@@ -69,12 +69,12 @@
             <id>spark2</id>
         </profile>
     </profiles>
-    <distributionManagement>
+    <!--distributionManagement>
         <repository>
-            <id>github</id>
-            <name>GitHub Neoflex Consulting Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/neoflex-consulting/datagram</url>
+            <id>ossrh</id>
+            <name>Central Repository OSSRH</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement-->
 
 </project>
