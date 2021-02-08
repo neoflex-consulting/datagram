@@ -255,11 +255,5 @@
             </resource>
         </resources>
     </build>
-    <!--distributionManagement>
-         <repository>
-             <id>ossrh</id>
-             <name>Central Repository OSSRH</name>
-             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-         </repository>
-     </distributionManagement-->
+
 </project>
