@@ -19,11 +19,11 @@ jobs:
           server-password: MAVEN_PASSWORD
 
       - name: Cache Maven Packages
-          uses: actions/cache@v2
-          with:
-            path: ~/.m2
-            key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-            restore-keys: ${{ runner.os }}-m2
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
             
       - name: Publish package
         run: mvn --batch-mode deploy -Pspark2
