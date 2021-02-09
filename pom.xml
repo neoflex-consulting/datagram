@@ -5,7 +5,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <revision>spark3-2.0.0-SNAPSHOT</revision>
+        <revision>spark2-2.0.0-SNAPSHOT</revision>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
@@ -38,11 +38,11 @@
     <profiles>
         <profile>
             <id>spark3</id>
+        </profile>
+        <profile>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-        </profile>
-        <profile>
             <id>spark2</id>
         </profile>
     </profiles>
