@@ -7,7 +7,7 @@ export MAVEN_HOME=/usr/share/maven
 PATH_TO_JAR=/opt/datagram/mserver-spark2-2.0.0-SNAPSHOT.jar
  
 PID_PATH_NAME=/opt/datagram/datagram.pid 
-SYS_PARAMS="-Xmx12000m -XX:MaxPermSize=1024m -Dfile.encoding=UTF-8 -Dmspace.dir=/opt/datagram/mspace -Ddeploy.dir=/opt/datagram/mspace -Dteneo.url=jdbc:postgresql://dgdev.do.neoflex.ru:5432/datagram -Dteneo.user=datagram -Dteneo.password=datagram -Dcust.code=dev -Dmserver.port=8080 -Dldap.enabled=true"
+SYS_PARAMS="-Xmx12000m -XX:MaxPermSize=1024m -Dfile.encoding=UTF-8 -Dmspace.dir=/opt/datagram/mspace -Ddeploy.dir=/opt/datagram/mspace -Dteneo.url=jdbc:postgresql://datagram_base_server:5432/db -Dteneo.user=user -Dteneo.password=password -Dcust.code=dev -Dmserver.port=8080 -Dldap.enabled=true"
 case $1 in 
 start)
        echo "Starting $SERVICE_NAME ..."
