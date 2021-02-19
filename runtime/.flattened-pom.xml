@@ -151,14 +151,14 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <reportsDirectory>C:\workspace\datagram\runtime\target/surefire-reports</reportsDirectory>
+                  <reportsDirectory>C:\Users\orlov\github\arch7tect\datagram\runtime\target/surefire-reports</reportsDirectory>
                   <junitxml>.</junitxml>
                   <filereports>WDF TestSuite.txt</filereports>
                 </configuration>
               </execution>
             </executions>
             <configuration>
-              <reportsDirectory>C:\workspace\datagram\runtime\target/surefire-reports</reportsDirectory>
+              <reportsDirectory>C:\Users\orlov\github\arch7tect\datagram\runtime\target/surefire-reports</reportsDirectory>
               <junitxml>.</junitxml>
               <filereports>WDF TestSuite.txt</filereports>
             </configuration>

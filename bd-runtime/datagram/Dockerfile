@@ -1,6 +1,20 @@
-FROM alpine:3.10.4
-RUN apk add --no-cache git maven 'openjdk8=~8.252' 'bash=~5.0'
+FROM openjdk:8-jdk-alpine
 
-COPY entrypoint.sh /opt/datagram/
-RUN chmod +x /opt/datagram/entrypoint.sh
-ENTRYPOINT ["/opt/datagram/entrypoint.sh"]
+ENV MAVEN_HOME=/usr/share/maven
+ENV MEM_MAX=6g
+ENV TENEO_URL jdbc:postgresql://hivemetastore:5432/teneo
+ENV TENEO_USER postgres
+ENV TENEO_PASSWORD new_password
+
+RUN apk --no-cache add git bash
+
+RUN cd /tmp \
+   && wget https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz \
+   && tar zxf apache-maven-3.3.9-bin.tar.gz \
+   && rm -rf apache-maven-3.3.9-bin.tar.gz \
+   && mv ./apache-maven-3.3.9 /usr/share/maven \
+   && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+
+COPY entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
