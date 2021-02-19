@@ -11,7 +11,7 @@ FROM alpine:3.10.4
 RUN apk add --no-cache \
     'curl=~7.66' \
     'unzip=~6.0' \
-    'openjdk8=~8.252' \
+    'openjdk8=~8.275' \
     'bash=~5.0' \
     'coreutils=~8.31' \
     'procps=~3.3' \
