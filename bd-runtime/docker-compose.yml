@@ -61,8 +61,8 @@ services:
       - dfs_name:/dfs/name
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
     networks:
       bd_net:
         ipv4_address: 172.20.1.1
@@ -100,8 +100,8 @@ services:
       - dfs_data_1:/dfs/data
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
     networks:
       bd_net:
         ipv4_address: 172.20.1.2
@@ -140,8 +140,8 @@ services:
       - dfs_data_2:/dfs/data
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
     networks:
       bd_net:
         ipv4_address: 172.20.1.3
@@ -164,10 +164,10 @@ services:
       - ./livy_batches:/livy_batches
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
     #      - ./bd-base/extralib/postgresql-42.2.12.jre6.jar:/usr/livy/repl_2.12-jars/postgresql-42.2.12.jre6.jar
     #      - ./bd-base/extralib/ojdbc8.jar:/usr/livy/repl_2.12-jars/ojdbc8.jar
     #      - ./bd-base/extralib/HiveJDBC4.jar:/usr/livy/repl_2.12-jars/HiveJDBC4.jar
@@ -221,9 +221,9 @@ services:
       - worker1
       - worker2
     volumes:
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0.0-SNAPSHOT.jar
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
     expose:
       - 1-65535
     ports:
@@ -249,12 +249,15 @@ services:
       - ./datagram/gitflow:/opt/datagram/gitflow
       - ./datagram/logs:/opt/datagram/logs
       - ./datagram/mspace:/opt/datagram/mspace
-      - ../mserver/target/mserver-spark3-2.0.0-SNAPSHOT.jar:/opt/datagram/mserver-spark3-2.0.0-SNAPSHOT.jar
+      - ./datagram/application.properties:/opt/datagram/application.properties
+      - ./datagram/ldap.properties:/opt/datagram/ldap.properties
+      - ../mserver/target/mserver-spark3-2.0.0-SNAPSHOT.jar:/opt/datagram/mserver.jar
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/spark3-2.0.0-SNAPSHOT/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
       - ../spark2lib/.flattened-pom.xml:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/spark3-2.0.0-SNAPSHOT/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.pom
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/spark3-2.0.0-SNAPSHOT/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
       - ../runtime/.flattened-pom.xml:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/spark3-2.0.0-SNAPSHOT/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.pom
       - ../.flattened-pom.xml:/root/.m2/repository/ru/neoflex/parent/spark3-2.0.0-SNAPSHOT/parent-spark3-2.0.0-SNAPSHOT.pom
+    env_file: env.properties
     expose:
       - 1-65535
     ports:

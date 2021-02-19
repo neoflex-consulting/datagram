@@ -1,0 +1,16 @@
+[Unit]
+ Description = Datagram Service
+
+[Service]
+ Type = forking
+ Restart=always
+ RestartSec=1
+ SuccessExitStatus=143 
+ ExecStart = /opt/datagram/datagram.sh start
+ ExecStop = /opt/datagram/datagram.sh stop
+ ExecReload = /opt/datagram/datagram.sh restart
+ WorkingDirectory = /opt/datagram
+ 
+[Install]
+ WantedBy=multi-user.target
+
