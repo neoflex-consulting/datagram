@@ -5,16 +5,18 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <revision>spark2-2.0.0-SNAPSHOT</revision>
+        <revision>spark3-2.0.0-SNAPSHOT</revision>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>ru.neoflex</groupId>
     <artifactId>parent</artifactId>
-    <version>spark2-2.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <packaging>pom</packaging>
     <name>MSpace Parent Project</name>
+    <description>Datagram Application</description>
+    <url>https://github.com/neoflex-consulting/datagram</url>
 
     <scm>
         <connection>scm:git:https://github.com/neoflex-consulting/datagram.git</connection>
@@ -39,12 +41,30 @@
     <profiles>
         <profile>
             <id>spark3</id>
-        </profile>
-        <profile>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
             <id>spark2</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
@@ -92,6 +112,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
     <distributionManagement>

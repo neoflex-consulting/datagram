@@ -5,11 +5,11 @@
   <parent>
     <groupId>ru.neoflex</groupId>
     <artifactId>parent</artifactId>
-    <version>spark2-2.0.0-SNAPSHOT</version>
+    <version>spark3-2.0.0-SNAPSHOT</version>
   </parent>
   <groupId>ru.neoflex.meta.etl2</groupId>
   <artifactId>ru.neoflex.meta.etl2.spark.spark2lib</artifactId>
-  <version>spark2-2.0.0-SNAPSHOT</version>
+  <version>spark3-2.0.0-SNAPSHOT</version>
   <properties>
     <java.version>1.8</java.version>
     <maven.compiler.source>1.8</maven.compiler.source>
