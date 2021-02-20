@@ -44,6 +44,7 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <build>
+        <finalName>${project.name}</finalName>
         <plugins>
           <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
@@ -144,14 +145,14 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <reportsDirectory>C:\Users\orlov\github\arch7tect\datagram\runtime\target/surefire-reports</reportsDirectory>
+                  <reportsDirectory>C:\workspace\datagram\runtime\target/surefire-reports</reportsDirectory>
                   <junitxml>.</junitxml>
                   <filereports>WDF TestSuite.txt</filereports>
                 </configuration>
               </execution>
             </executions>
             <configuration>
-              <reportsDirectory>C:\Users\orlov\github\arch7tect\datagram\runtime\target/surefire-reports</reportsDirectory>
+              <reportsDirectory>C:\workspace\datagram\runtime\target/surefire-reports</reportsDirectory>
               <junitxml>.</junitxml>
               <filereports>WDF TestSuite.txt</filereports>
             </configuration>

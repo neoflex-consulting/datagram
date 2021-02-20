@@ -15,7 +15,6 @@
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>metaserver.pim</artifactId>
     <build>
-        <!--    <finalName>${artifactId}-${version}</finalName> -->
         <resources>
             <resource>
                 <directory>./dataset</directory>
