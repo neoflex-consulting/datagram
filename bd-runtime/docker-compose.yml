@@ -201,7 +201,7 @@ services:
     image: neoflexdatagram/bd-samples
     build: ./bd-samples
     depends_on:
-      - datagram
+      - livy
     networks:
       bd_net:
         ipv4_address: 172.20.1.9

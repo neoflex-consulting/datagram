@@ -20,4 +20,4 @@ then
 fi
 
 
-tail -f /dev/null
+#tail -f /dev/null
