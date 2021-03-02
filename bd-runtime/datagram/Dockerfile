@@ -5,6 +5,7 @@ ENV MEM_MAX=6g
 ENV TENEO_URL jdbc:postgresql://hivemetastore:5432/teneo
 ENV TENEO_USER postgres
 ENV TENEO_PASSWORD new_password
+ENV DEPLOY_DIR /opt/datagram/mspace
 
 RUN apk --no-cache add git bash
 
