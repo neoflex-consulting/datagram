@@ -6,7 +6,7 @@ then
   hdfs dfs -put /data/samples /
 fi
 
-export cnt=`psql -h hivemetastore -U postgres -c "SELECT datname FROM pg_database WHERE datname='Adventureworks'" -qt | wc -l`
+cnt=`psql -h hivemetastore -U postgres -c "SELECT datname FROM pg_database WHERE datname='Adventureworks'" -qt | wc -l`
 if [ $cnt -le 1 ]
 then
   git clone https://github.com/lorint/AdventureWorks-for-Postgres.git && \
@@ -19,5 +19,13 @@ then
     psql -h hivemetastore -d Adventureworks -U postgres <install.sql
 fi
 
+projectsLength=`curl -s --user admin:admin http://datagram:8089/api/teneo/etl.Project | jq 'length'`
+if [ $projectsLength -eq 0 ];
+then
+  project_id=`curl -s --user admin:admin --request POST --header "Content-Type: application/json" --data '{"_type_":"etl.Project", "name":"blueprint"}' http://datagram:8089/api/teneo/etl.Project | jq '.e_id'`;
+  echo "New project: $project_id";
+  imported=`curl -s --user admin:admin http://datagram:8089/api/operation/MetaServer/etl/Project/blueprint/importProject | jq 'length'`;
+  echo "Imported objects: $imported";
+fi
 
-#tail -f /dev/null
+tail -f /dev/null

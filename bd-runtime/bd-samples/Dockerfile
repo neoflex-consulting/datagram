@@ -2,7 +2,7 @@ FROM neoflexdatagram/bd-base
 
 ENV PGPASSWORD=new_password
 
-RUN apk add --no-cache postgresql-client git ruby
+RUN apk add --no-cache postgresql-client git ruby jq
 
 COPY data /data
 COPY entrypoint.sh /

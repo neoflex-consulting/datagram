@@ -210,7 +210,7 @@ services:
       - livy
     networks:
       bd_net:
-        ipv4_address: 172.20.1.9
+        ipv4_address: 172.20.1.11
     extra_hosts:
       - "master:172.20.1.1"
       - "worker1:172.20.1.2"
