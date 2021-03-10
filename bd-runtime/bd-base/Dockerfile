@@ -50,7 +50,7 @@ RUN curl --progress-bar -L \
   && chmod 777 "${HIVE_HOME}/var/log"
 
 # Spark
-ENV SPARK_VERSION=3.0.0
+ENV SPARK_VERSION=3.1.1
 ENV SPARK_PACKAGE "spark-${SPARK_VERSION}-bin-without-hadoop"
 ENV SPARK_HOME /usr/spark
 RUN curl --progress-bar -L --retry 3 \
