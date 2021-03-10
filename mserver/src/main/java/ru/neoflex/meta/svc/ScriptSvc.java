@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import ru.neoflex.meta.utils.MetaResource;
@@ -21,6 +22,11 @@ import java.util.*;
  * Created by orlov on 14.04.2015.
  */
 @Service
+@DependsOn({
+        "ru.neoflex.meta.svc.MSpaceSvc",
+        "ru.neoflex.meta.svc.TeneoSvc",
+        "ru.neoflex.meta.svc.ContextSvc"
+})
 public class ScriptSvc extends BaseSvc {
     private final static Log logger = LogFactory.getLog(ScriptSvc.class);
     public static final String SCRIPT_DIR = "cim/MetaServer/pim/scripts/psm/groovy";

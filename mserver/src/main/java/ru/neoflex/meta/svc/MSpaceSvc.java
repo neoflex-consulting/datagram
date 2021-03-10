@@ -37,7 +37,7 @@ import ru.neoflex.meta.utils.MetaResource;
 /**
  * Created by orlov on 08.06.2015.
  */
-@Service
+@Service("ru.neoflex.meta.svc.MSpaceSvc")
 public class MSpaceSvc extends BaseSvc {
 
     public static final String MSPACE_META_SERVER_MODEL = "cim/MetaServer/pim/models/MetaServer.model";
