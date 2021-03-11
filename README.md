@@ -26,7 +26,7 @@ mvn clean install
 docker-compose -f bd-runtime/docker-compose.yml pull
 docker-compose -f bd-runtime/docker-compose.yml up -d datagram
 # Загрузка тестовых данных для проверки работоспособности
-docker-compose -f bd-runtime/docker-compose.yml up samples
+docker-compose -f bd-runtime/docker-compose.yml up -d samples
 ```
 
 ### Проверка работоспособности
