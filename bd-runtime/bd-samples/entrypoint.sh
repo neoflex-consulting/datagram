@@ -19,9 +19,9 @@ then
     psql -h hivemetastore -d Adventureworks -U postgres <install.sql
 fi
 
-projectsLength=`curl -s --user admin:admin http://datagram:8089/api/teneo/etl.Project | jq 'length'`
-echo "$projectsLength projects found"
-if [ $projectsLength -eq 0 ]
+projectsFound=`curl -s --user admin:admin http://datagram:8089/api/teneo/etl.Project | jq 'length>0'`
+echo "Projects found: $projectsFound"
+if [ $projectsFound != 'true' ]
 then
   project_id=`curl -s --user admin:admin --request POST --header "Content-Type: application/json" --data '{"_type_":"etl.Project", "name":"blueprint"}' http://datagram:8089/api/teneo/etl.Project | jq '.e_id'`;
   echo "New project: $project_id";
