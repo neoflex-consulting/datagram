@@ -20,7 +20,7 @@ services:
       retries: 5
     networks:
       bd_net:
-        ipv4_address: 172.20.1.4
+        ipv4_address: 10.20.1.4
 
   master:
     image: neoflexdatagram/bd-base
@@ -32,8 +32,8 @@ services:
       HADOOP_NODE: namenode
       HIVE_CONFIGURE: yes, please
       SPARK_PUBLIC_DNS: localhost
-      SPARK_LOCAL_IP: 172.20.1.1
-      SPARK_MASTER_HOST: 172.20.1.1
+      SPARK_LOCAL_IP: 10.20.1.1
+      SPARK_MASTER_HOST: 10.20.1.1
       SPARK_LOCAL_HOSTNAME: master
     expose:
       - 1-65535
@@ -65,15 +65,15 @@ services:
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
     networks:
       bd_net:
-        ipv4_address: 172.20.1.1
+        ipv4_address: 10.20.1.1
     extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
-      - "zookeeper:172.20.1.9"
-      - "kafka:172.20.1.10"
+      - "master:10.20.1.1"
+      - "worker1:10.20.1.2"
+      - "worker2:10.20.1.3"
+      - "hivemetastore:10.20.1.4"
+      - "livy:10.20.1.6"
+      - "zookeeper:10.20.1.9"
+      - "kafka:10.20.1.10"
 
   worker1:
     image: neoflexdatagram/bd-base
@@ -87,8 +87,8 @@ services:
       SPARK_WORKER_WEBUI_PORT: 8081
       SPARK_PUBLIC_DNS: localhost
       SPARK_LOCAL_HOSTNAME: worker1
-      SPARK_LOCAL_IP: 172.20.1.2
-      SPARK_MASTER_HOST: 172.20.1.1
+      SPARK_LOCAL_IP: 10.20.1.2
+      SPARK_MASTER_HOST: 10.20.1.1
       HADOOP_NODE: datanode
     expose:
       - 1-65535
@@ -106,15 +106,15 @@ services:
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
     networks:
       bd_net:
-        ipv4_address: 172.20.1.2
+        ipv4_address: 10.20.1.2
     extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
-      - "zookeeper:172.20.1.9"
-      - "kafka:172.20.1.10"
+      - "master:10.20.1.1"
+      - "worker1:10.20.1.2"
+      - "worker2:10.20.1.3"
+      - "hivemetastore:10.20.1.4"
+      - "livy:10.20.1.6"
+      - "zookeeper:10.20.1.9"
+      - "kafka:10.20.1.10"
 
   worker2:
     image: neoflexdatagram/bd-base
@@ -128,8 +128,8 @@ services:
       SPARK_WORKER_WEBUI_PORT: 8082
       SPARK_PUBLIC_DNS: localhost
       SPARK_LOCAL_HOSTNAME: worker2
-      SPARK_LOCAL_IP: 172.20.1.3
-      SPARK_MASTER_HOST: 172.20.1.1
+      SPARK_LOCAL_IP: 10.20.1.3
+      SPARK_MASTER_HOST: 10.20.1.1
       HADOOP_NODE: datanode
       HADOOP_DATANODE_UI_PORT: 9865
     expose:
@@ -148,15 +148,15 @@ services:
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
     networks:
       bd_net:
-        ipv4_address: 172.20.1.3
+        ipv4_address: 10.20.1.3
     extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
-      - "zookeeper:172.20.1.9"
-      - "kafka:172.20.1.10"
+      - "master:10.20.1.1"
+      - "worker1:10.20.1.2"
+      - "worker2:10.20.1.3"
+      - "hivemetastore:10.20.1.4"
+      - "livy:10.20.1.6"
+      - "zookeeper:10.20.1.9"
+      - "kafka:10.20.1.10"
 
   livy:
     image: neoflexdatagram/bd-livy
@@ -195,13 +195,13 @@ services:
       - 8998:8998
     networks:
       bd_net:
-        ipv4_address: 172.20.1.6
+        ipv4_address: 10.20.1.6
     extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
+      - "master:10.20.1.1"
+      - "worker1:10.20.1.2"
+      - "worker2:10.20.1.3"
+      - "hivemetastore:10.20.1.4"
+      - "livy:10.20.1.6"
 
   samples:
     image: neoflexdatagram/bd-samples
@@ -210,13 +210,13 @@ services:
       - livy
     networks:
       bd_net:
-        ipv4_address: 172.20.1.11
+        ipv4_address: 10.20.1.11
     extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
+      - "master:10.20.1.1"
+      - "worker1:10.20.1.2"
+      - "worker2:10.20.1.3"
+      - "hivemetastore:10.20.1.4"
+      - "livy:10.20.1.6"
 
   oozie:
     image: neoflexdatagram/bd-oozie
@@ -236,14 +236,14 @@ services:
       - 11000:11000
     networks:
       bd_net:
-        ipv4_address: 172.20.1.8
+        ipv4_address: 10.20.1.8
     extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
-      - "oozie:172.20.1.8"
+      - "master:10.20.1.1"
+      - "worker1:10.20.1.2"
+      - "worker2:10.20.1.3"
+      - "hivemetastore:10.20.1.4"
+      - "livy:10.20.1.6"
+      - "oozie:10.20.1.8"
 
   datagram:
     image: neoflexdatagram/datagram
@@ -252,6 +252,7 @@ services:
     depends_on:
       - livy
     volumes:
+      - ./datagram/keystore.jks:/opt/datagram/keystore.jks
       - ./datagram/gitflow:/opt/datagram/gitflow
       - ./datagram/logs:/opt/datagram/logs
       - ./datagram/mspace:/opt/datagram/mspace
@@ -270,14 +271,14 @@ services:
       - 8089:8089
     networks:
       bd_net:
-        ipv4_address: 172.20.1.7
+        ipv4_address: 10.20.1.7
     extra_hosts:
-      - "master:172.20.1.1"
-      - "worker1:172.20.1.2"
-      - "worker2:172.20.1.3"
-      - "hivemetastore:172.20.1.4"
-      - "livy:172.20.1.6"
-      - "oozie:172.20.1.8"
+      - "master:10.20.1.1"
+      - "worker1:10.20.1.2"
+      - "worker2:10.20.1.3"
+      - "hivemetastore:10.20.1.4"
+      - "livy:10.20.1.6"
+      - "oozie:10.20.1.8"
 
   zookeeper:
     image: strimzi/zookeeper:0.11.4-kafka-2.1.0
@@ -291,7 +292,7 @@ services:
       LOG_DIR: /tmp/logs
     networks:
       bd_net:
-        ipv4_address: 172.20.1.9
+        ipv4_address: 10.20.1.9
 
   kafka:
     image: strimzi/kafka:0.18.0-kafka-2.5.0
@@ -310,9 +311,9 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     networks:
       bd_net:
-        ipv4_address: 172.20.1.10
+        ipv4_address: 10.20.1.10
     extra_hosts:
-      - "zookeeper:172.20.1.9"
+      - "zookeeper:10.20.1.9"
 
 ###
 networks:
@@ -320,7 +321,7 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 10.20.0.0/16
 
 volumes:
   postgres_data:
