@@ -20,7 +20,8 @@ then
 fi
 
 projectsLength=`curl -s --user admin:admin http://datagram:8089/api/teneo/etl.Project | jq 'length'`
-if [ $projectsLength -eq 0 ];
+echo "$projectsLength projects found"
+if [ $projectsLength -eq 0 ]
 then
   project_id=`curl -s --user admin:admin --request POST --header "Content-Type: application/json" --data '{"_type_":"etl.Project", "name":"blueprint"}' http://datagram:8089/api/teneo/etl.Project | jq '.e_id'`;
   echo "New project: $project_id";
