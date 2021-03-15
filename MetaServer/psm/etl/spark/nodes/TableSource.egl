@@ -8,7 +8,7 @@ operation src!TableSource define(){
           
           val context: JdbcETLContext = getContext("[%=self.context.name%]").asInstanceOf[JdbcETLContext]
 
-          val sqlText = s"""SELECT [%for (field in self.outputPort.fields) { %] "[%=getCorrectName(field.name)%]" as "[%=getCorrectName(field.name)%]" [%if (hasMore){%], [%}}%] FROM """ + context._schema + s"""."[%=self.tableName%]" """
+          val sqlText = s"""SELECT [%for (field in self.outputPort.fields) { %] "[%=field.name%]" as "[%=getCorrectName(field.name)%]" [%if (hasMore){%], [%}}%] FROM """ + context._schema + s"""."[%=self.tableName%]" """
 
           logger.logInfo(s"TableSource [%=self.name%] query: ${sqlText}")
               
