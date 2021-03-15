@@ -19,6 +19,14 @@ then
     psql -h hivemetastore -d Adventureworks -U postgres <install.sql
 fi
 
+curl -s --user admin:admin http://datagram:8089/status
+while [ $? -ne 0 ]
+do
+  echo "Waiting for datagram..."
+  sleep 1
+  curl -s --user admin:admin http://datagram:8089/status
+done
+
 projectsFound=`curl -s --user admin:admin http://datagram:8089/api/teneo/etl.Project | jq 'length>0'`
 echo "Projects found: $projectsFound"
 if [ $projectsFound != 'true' ]
@@ -27,6 +35,21 @@ then
   echo "New project: $project_id";
   imported=`curl -s --user admin:admin http://datagram:8089/api/operation/MetaServer/etl/Project/blueprint/importProject | jq 'length'`;
   echo "Imported objects: $imported";
+fi
+
+cd /kafka
+ping -c1 kafka
+if [ $? -eq 0 ]
+then
+  topicCount=`bin/kafka-topics.sh --list --bootstrap-server kafka:9092 | grep '^events$' | wc -l`
+  if [ $topicCount -eq 0 ]
+  then
+    bin/kafka-console-producer.sh --topic events --bootstrap-server kafka:9092 <<EOF
+{"name":"Oleg"}
+{"name":"Maksim"}
+{"name":"Anna"}
+EOF
+  fi
 fi
 
 tail -f /dev/null
