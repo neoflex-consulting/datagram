@@ -19,13 +19,9 @@ operation src!TableSource define(){
                "user" -> context._user,
                "password" -> context._password,
                "fetchSize" -> _fetchSize.toString
-          )).load()
-          [%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%]			.map{ row => [%=self.getSchemaName()%](
-               [%for (field in self.outputPort.fields) {%]
-                     row.getAs[[%=field.getFullJavaClassName()%]]("[%=getCorrectName(field.name)%]")[%if (hasMore){%],[%}%]
-                     
-               [%}%]
-	      )}[%}%]
+          )).load() [%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%]
+          .as[[%=self.getSchemaName()%]]
+          [%}%]
      }
 [%}
 %]

@@ -55,12 +55,8 @@ operation src!SQLSource define(){
 	} 
 		    [%}%]
 		    
-    ds.load()[%if ((self.schemaOnRead <> true) and (self.~makeDataset <> false)) {%].map{ row => [%=self.getSchemaName()%](
-	[%for (field in self.outputPort.fields) {%]
-	  	row.getAs[[%=field.getFullJavaClassName()%]]("[%=field.name%]")[%if (hasMore){%],[%}%]
-	        
-	[%}%]
-	)}
+    ds.load()[%if ((self.schemaOnRead <> true) and (self.~makeDataset <> false)) {%]
+    .as[[%=self.getSchemaName()%]]
 	[%}%]
   }
     [%
