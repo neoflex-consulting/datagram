@@ -405,6 +405,7 @@ if (not node.outputPort.debugList.selectOne(d|d.active).isDefined()) return;%]
 [%}
 
 operation interpolareParameters(sql: String) {
+    if (sql == null) return null;
     var pattern = Native("java.util.regex.Pattern");
     var matcher = pattern.compile("[&][a-zA-Z_][a-zA-Z\\d_]*").matcher(sql);
     var params = Sequence{};

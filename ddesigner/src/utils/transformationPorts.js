@@ -181,7 +181,7 @@ function stepInputPortHasChanged(transformation, transformationStep, inputPort, 
             if (field) {
                 if (fieldType === "etl.ProjectionField") {
                     field.sourceFields.push(newField)
-                    field.fieldOperationType = "SQL"
+                    field.fieldOperationType = "ADD"
                 }
                 if (fieldType === "etl.UnionField") {
                     field.inputPortField = newField
@@ -229,7 +229,7 @@ function stepJoineePortHasChanged(transformation, transformationStep, inputPort,
             const field = transformationStep.outputPort.fields.find(f => f.name === newField.name)
             if (field) {
                 field.sourceFields.push(newField)
-                field.fieldOperationType = "SQL"
+                field.fieldOperationType = "ADD"
             }
             else {
                 transformationStep.outputPort.fields.push({
