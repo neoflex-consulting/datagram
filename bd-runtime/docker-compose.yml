@@ -3,6 +3,7 @@ services:
   hivemetastore:
     image: postgres:11.5
     restart: always
+    command: postgres -c max_connections=500
     hostname: hivemetastore
     environment:
       POSTGRES_PASSWORD: new_password
@@ -179,6 +180,7 @@ services:
     #      - ./bd-base/extralib/HiveJDBC4.jar:/usr/livy/repl_2.12-jars/HiveJDBC4.jar
     environment:
       - SPARK_MASTER=yarn
+      - SPARK_DEPLOY_MODE=cluster
       # Intentionally not specified - if it's set here, then we can't override it
       # via REST API ("conf"={} map)
       # Can be client or cluster

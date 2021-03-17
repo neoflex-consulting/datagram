@@ -570,6 +570,9 @@
     <columns name="modifieddate">
       <dataType xsi:type="rel:DATETIME"/>
     </columns>
+    <columns name="name" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
     <primaryKey name="store_pk">
       <keyFeatures column="//@tables.18/@columns.0"/>
     </primaryKey>

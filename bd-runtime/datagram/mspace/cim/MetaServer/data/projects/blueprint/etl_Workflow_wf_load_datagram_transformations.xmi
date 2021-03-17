@@ -4,5 +4,5 @@
   <nodes xsi:type="etl:WFEnd" name="End_1" label="End_1"/>
   <nodes xsi:type="etl:WFKill" name="Kill_2" label="Kill_2"/>
   <nodes xsi:type="etl:WFTransformation" name="Transformation_3" label="Transformation_3" ok="//@nodes.1" error="//@nodes.2"/>
-  <auditInfo changeUser="admin" changeDateTime="2021-03-10T13:09:45.267+0000" createUser="admin" createDateTime="2020-10-08T08:43:14.760+0000"/>
+  <auditInfo changeUser="admin" changeDateTime="2021-03-12T12:00:44.351+0300" createUser="admin" createDateTime="2020-10-08T08:43:14.760+0300"/>
 </etl:Workflow>

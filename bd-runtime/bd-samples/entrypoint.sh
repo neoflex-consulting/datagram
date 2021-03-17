@@ -31,8 +31,9 @@ projectsFound=`curl -s --user admin:admin http://datagram:8089/api/teneo/etl.Pro
 echo "Projects found: $projectsFound"
 if [ $projectsFound != 'true' ]
 then
+  echo "No projects found. Creating blueprint"
   project_id=`curl -s --user admin:admin --request POST --header "Content-Type: application/json" --data '{"_type_":"etl.Project", "name":"blueprint"}' http://datagram:8089/api/teneo/etl.Project | jq '.e_id'`;
-  echo "New project: $project_id";
+  echo "New project: $project_id. Import project.";
   imported=`curl -s --user admin:admin http://datagram:8089/api/operation/MetaServer/etl/Project/blueprint/importProject | jq 'length'`;
   echo "Imported objects: $imported";
 fi
@@ -41,15 +42,19 @@ cd /kafka
 ping -c1 kafka
 if [ $? -eq 0 ]
 then
+  echo "Kafka found. Check for topics"
   topicCount=`bin/kafka-topics.sh --list --bootstrap-server kafka:9092 | grep '^events$' | wc -l`
   if [ $topicCount -eq 0 ]
   then
+    echo "No topics found. Create topic 'events' and send some data"
+    bin/kafka-topics.sh --create --topic events --bootstrap-server kafka:9092
     bin/kafka-console-producer.sh --topic events --bootstrap-server kafka:9092 <<EOF
-{"name":"Oleg"}
-{"name":"Maksim"}
-{"name":"Anna"}
+{"id": 1, "name":"Oleg"}
+{"id": 2, "name":"Maksim"}
+{"id": 3, "name":"Anna"}
 EOF
   fi
 fi
 
+echo "All done. Waiting forever to allow exec command."
 tail -f /dev/null
