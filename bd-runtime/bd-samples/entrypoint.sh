@@ -19,12 +19,12 @@ then
     psql -h hivemetastore -d Adventureworks -U postgres <install.sql
 fi
 
-curl -s --user admin:admin http://datagram:8089/status
+curl -s --user admin:admin http://datagram:8089/info
 while [ $? -ne 0 ]
 do
   echo "Waiting for datagram..."
   sleep 1
-  curl -s --user admin:admin http://datagram:8089/status
+  curl -s --user admin:admin http://datagram:8089/info
 done
 
 projectsFound=`curl -s --user admin:admin http://datagram:8089/api/teneo/etl.Project | jq 'length>0'`
