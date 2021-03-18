@@ -27,8 +27,9 @@ do
   curl -s --user admin:admin http://datagram:8089/info
 done
 
+echo "\nCheck for projects"
 projectsFound=`curl -s --user admin:admin http://datagram:8089/api/teneo/etl.Project | jq 'length>0'`
-echo "Projects found: $projectsFound"
+echo "\nProjects found: $projectsFound"
 if [ $projectsFound != 'true' ]
 then
   echo "No projects found. Creating blueprint"
