@@ -4,5 +4,5 @@
   <nodes xsi:type="etl:WFTransformation" name="Create_Salary_Table" label="Create Salary Table" ok="//@nodes.2" error="//@nodes.3"/>
   <nodes xsi:type="etl:WFEnd" name="Success" label="Success"/>
   <nodes xsi:type="etl:WFKill" name="Failed" label="Failed" message="Workflow Salary Failed"/>
-  <auditInfo changeUser="admin" changeDateTime="2021-03-18T11:52:16.730+0000" createUser="admin" createDateTime="2021-03-18T11:50:10.448+0000"/>
+  <auditInfo changeUser="admin" changeDateTime="2021-03-19T07:37:40.803+0000" createUser="admin" createDateTime="2021-03-18T11:50:10.448+0000"/>
 </etl:Workflow>
