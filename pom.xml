@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <properties>
         <java.version>1.8</java.version>
@@ -15,13 +16,14 @@
 
     <packaging>pom</packaging>
     <name>MSpace Parent Project</name>
+    <description>Datagram Application</description>
+    <url>https://github.com/neoflex-consulting/datagram</url>
 
     <scm>
         <connection>scm:git:https://github.com/neoflex-consulting/datagram.git</connection>
         <developerConnection>scm:git:git@github.com:neoflex-consulting/datagram.git</developerConnection>
         <url>https://github.com/neoflex-consulting/datagram</url>
     </scm>
-
 
 
     <modules>
@@ -44,12 +46,48 @@
         </profile>
         <profile>
             <id>spark2</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <replaceregexp file="./.env" match="VERSION=(.*)" replace="VERSION=${project.version}" byline="true"/>
+                                <replaceregexp file="./bd-runtime/.env" match="VERSION=(.*)" replace="VERSION=${project.version}" byline="true"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
@@ -94,11 +132,31 @@
         </plugins>
     </build>
     <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <name>Central Repository OSSRH</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
         <repository>
-            <id>github</id>
-            <name>GitHub Neoflex Consulting Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/neoflex-consulting/datagram</url>
+            <id>ossrh-release</id>
+            <name>Central Repository OSSRH for Releases</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>20.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.core</groupId>
+                <artifactId>jersey-common</artifactId>
+                <version>2.26</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

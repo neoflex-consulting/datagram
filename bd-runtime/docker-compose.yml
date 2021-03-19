@@ -62,8 +62,9 @@ services:
       - dfs_name:/dfs/name
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
     networks:
       bd_net:
         ipv4_address: 10.20.1.1
@@ -103,8 +104,9 @@ services:
       - dfs_data_1:/dfs/data
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
     networks:
       bd_net:
         ipv4_address: 10.20.1.2
@@ -145,8 +147,9 @@ services:
       - dfs_data_2:/dfs/data
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
     networks:
       bd_net:
         ipv4_address: 10.20.1.3
@@ -171,10 +174,10 @@ services:
       - ./livy_batches:/livy_batches
       - ./bd-base/data:/data
       - ./bd-base/extralib:/extralib
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
     #      - ./bd-base/extralib/postgresql-42.2.12.jre6.jar:/usr/livy/repl_2.12-jars/postgresql-42.2.12.jre6.jar
     #      - ./bd-base/extralib/ojdbc8.jar:/usr/livy/repl_2.12-jars/ojdbc8.jar
     #      - ./bd-base/extralib/HiveJDBC4.jar:/usr/livy/repl_2.12-jars/HiveJDBC4.jar
@@ -230,13 +233,16 @@ services:
       - worker1
       - worker2
     volumes:
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/usr/oozie/sharelib/lib/spark2/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ./bd-oozie/conf/oozie/oozie-site.xml:/usr/oozie/conf/oozie-site.xml
     expose:
       - 1-65535
     ports:
       - 11000:11000
+    environment:
+      OOZIE_URL: http://oozie:11000/oozie
     networks:
       bd_net:
         ipv4_address: 10.20.1.8
@@ -261,13 +267,12 @@ services:
       - ./datagram/mspace:/opt/datagram/mspace
       - ./datagram/application.properties:/opt/datagram/application.properties
       - ./datagram/ldap.properties:/opt/datagram/ldap.properties
-      - ../mserver/target/mserver-spark3-2.0.0-SNAPSHOT.jar:/opt/datagram/mserver.jar
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/spark3-2.0.0-SNAPSHOT/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
-      - ../spark2lib/.flattened-pom.xml:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/spark3-2.0.0-SNAPSHOT/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.pom
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/spark3-2.0.0-SNAPSHOT/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
-      - ../runtime/.flattened-pom.xml:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/spark3-2.0.0-SNAPSHOT/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.pom
-      - ../.flattened-pom.xml:/root/.m2/repository/ru/neoflex/parent/spark3-2.0.0-SNAPSHOT/parent-spark3-2.0.0-SNAPSHOT.pom
-    env_file: env.properties
+      - ../mserver/target/mserver-$VERSION.jar:/opt/datagram/mserver.jar
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/$VERSION/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../spark2lib/.flattened-pom.xml:/root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/$VERSION/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.pom
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/$VERSION/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ../runtime/.flattened-pom.xml:/root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/$VERSION/ru.neoflex.meta.etl.spark.runtime-$VERSION.pom
+      - ../.flattened-pom.xml:/root/.m2/repository/ru/neoflex/parent/$VERSION/parent-$VERSION.pom
     expose:
       - 1-65535
     ports:
@@ -317,6 +322,21 @@ services:
         ipv4_address: 10.20.1.10
     extra_hosts:
       - "zookeeper:10.20.1.9"
+
+  hue:
+    image: gethue/hue:latest
+    hostname: hue
+    container_name: hue
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
+    depends_on:
+      - livy
+      - hivemetastore
+    networks:
+      bd_net:
+        ipv4_address: 10.20.1.12
 
 ###
 networks:

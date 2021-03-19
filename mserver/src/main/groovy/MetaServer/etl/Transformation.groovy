@@ -1,40 +1,37 @@
 package MetaServer.etl
 
-
+import MetaServer.rt.TransformationDeployment
 import MetaServer.utils.ECoreHelper
 import MetaServer.utils.GenerationBase
+import MetaServer.utils.MetaInfo
+import MetaServer.utils.SparkSQL
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.eclipse.emf.ecore.EObject
-import ru.neoflex.meta.utils.Context
-/* protected region MetaServer.etlTransformation.inport on begin */
 import org.eclipse.epsilon.common.util.StringProperties
 import org.eclipse.epsilon.emc.emf.EmfModel
 import ru.neoflex.meta.model.Database
-import MetaServer.utils.MetaInfo
-import MetaServer.utils.SparkSQL
-import MetaServer.rt.TransformationDeployment
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import ru.neoflex.meta.utils.Context
+
+/* protected region MetaServer.etlTransformation.inport on begin */
 
 import java.nio.file.Files
 import java.nio.file.Path
 import java.text.SimpleDateFormat
-import java.util.concurrent.Callable
-import java.util.function.BiConsumer
 import java.util.function.BiFunction
 import java.util.function.Consumer
-import java.util.function.Predicate
-import groovy.time.TimeCategory
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 
 /* protected region MetaServer.etlTransformation.inport end */
+
 class Transformation extends GenerationBase {
     /* protected region MetaServer.etlTransformation.statics on begin */
     private final static Log logger = LogFactory.getLog(Transformation.class)
     private static SimpleDateFormat jsonTimestampFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
 
     static List collectTrDeployments(Map tr, List collected) {
-        (tr.sources.collect {it} + tr.targets.collect {it}).findAll { it.context != null }.collect {
+        (tr.sources.collect { it } + tr.targets.collect { it }).findAll { it.context != null }.collect {
             def ssname = it.context.name
             def ss = Context.current.session.createQuery("from rt.SoftwareSystem where name = :name").setParameter("name", ssname).uniqueResult()
             if (ss == null) {
@@ -97,12 +94,12 @@ class Transformation extends GenerationBase {
                 def changed = changeDateTime != null
                 def transformationDateIsNotNull = transformationDate != null
                 if (changeDateTime != null) {
-                    use (groovy.time.TimeCategory) {
+                    use(groovy.time.TimeCategory) {
                         changeDateTime = changeDateTime + 3.seconds;
                     }
                 }
 
-                if(isRegularFile && changed && transformationDateIsNotNull && transformationDate.after(changeDateTime)) {
+                if (isRegularFile && changed && transformationDateIsNotNull && transformationDate.after(changeDateTime)) {
                     return [result: true, fileContent: "Don't need to be generated. All is up to date"]
                 }
                 def emfModel = new EmfModel()
@@ -114,13 +111,20 @@ class Transformation extends GenerationBase {
                 emfModel.load(properties, "")
 
                 def transformationGenerator = "/psm/etl/spark/Transformation2.egx";
-                if(transformation.sparkVersion == null ||  transformation.sparkVersion.name == "SPARK3"){
+                if (transformation.sparkVersion == null) {
+                    if (version.toLowerCase().contains("spark3")) {
+                        transformationGenerator = "/psm/etl/spark/Transformation3.egx";
+                    }else{
+                        transformationGenerator = "/psm/etl/spark/Transformation2.egx";
+                    }
+                }
+                if(transformation.sparkVersion.name  == "SPARK3"){
                     transformationGenerator = "/psm/etl/spark/Transformation3.egx";
                 }
-                Context.current.getContextSvc().epsilonSvc.executeEgx(transformationGenerator, [mspaceRoot: tmp.toUri().toString(),  nodeName: params.nodeName, outputType: params.outputType, version: version], [emfModel])
+                Context.current.getContextSvc().epsilonSvc.executeEgx(transformationGenerator, [mspaceRoot: tmp.toUri().toString(), nodeName: params.nodeName, outputType: params.outputType, version: version], [emfModel])
                 def tests = Database.new.session.createQuery("from etl.TransformationTest where transformation.e_id=${entity.e_id}").list()
-                for(t in tests) {
-                    if(!t.enabled){
+                for (t in tests) {
+                    if (!t.enabled) {
                         continue
                     }
                     EmfModel testModel = new EmfModel()
@@ -139,25 +143,25 @@ class Transformation extends GenerationBase {
         })
     }
 
-    static Object build(Map entity, Map params){
+    static Object build(Map entity, Map params) {
         logger.info("Run Transformation build")
         def database = new Database("teneo")
         def transformation = database.get("etl.Transformation", (Long) entity.e_id)
         def tests = database.session.createQuery("from etl.TransformationTest where transformation.e_id=${entity.e_id}").list()
         def enabledTestsList = new ArrayList()
         def packagePrefix = "ru.neoflex.meta.etl2.spark"
-        for(t in tests){
-            if(t.enabled){
+        for (t in tests) {
+            if (t.enabled) {
                 enabledTestsList.add(packagePrefix + "." + transformation.name + t.name + "Test")
             }
         }
         def haveEnabledTests = enabledTestsList.size() > 0
 
         Map map = new HashMap()
-        if(haveEnabledTests){
+        if (haveEnabledTests) {
             def testInclString = "" + enabledTestsList.join(",")
             map.put("suites", testInclString)
-        }else{
+        } else {
             map.put("maven.test.skip", "true")
         }
         def gitFlow = Context.current.getContextSvc().getGitflowSvc()
@@ -197,8 +201,8 @@ class Transformation extends GenerationBase {
         return gitFlow.inDir(gitFlow.SOURCES + "/Transformation", "generate tests", new BiFunction<Path, Path, Map>() {
             @Override
             Map apply(Path tmp, Path sourcesPath) {
-                for(t in tests) {
-                    if(!t.enabled){
+                for (t in tests) {
+                    if (!t.enabled) {
                         continue
                     }
                     EmfModel testModel = new EmfModel()
@@ -208,7 +212,7 @@ class Transformation extends GenerationBase {
                     testProperties.put(EmfModel.PROPERTY_METAMODEL_URI, "http://www.neoflex.ru/meta/etl")
                     testProperties.put(EmfModel.PROPERTY_READONLOAD, "true")
                     testModel.load(testProperties, "")
-                    Context.current.getContextSvc().epsilonSvc.executeEgx("/psm/etl/spark/TransformationTest.egx", [mspaceRoot: tmp.toUri().toString(), nodeName: params.nodeName, outputType: params.outputType, version : version], [testModel])
+                    Context.current.getContextSvc().epsilonSvc.executeEgx("/psm/etl/spark/TransformationTest.egx", [mspaceRoot: tmp.toUri().toString(), nodeName: params.nodeName, outputType: params.outputType, version: version], [testModel])
                 }
                 def source = tmp.resolve(transformation.name)
                 if (Files.isDirectory(source)) {
@@ -237,15 +241,17 @@ class Transformation extends GenerationBase {
         def db = Database.new
         def trdList
         trdList = db.session.createQuery("from rt.TransformationDeployment where transformation.e_id=${transformation.e_id}").list()
-        if (trdList.size() == 1) {return adjustTRD(trdList.get(0))}
+        if (trdList.size() == 1) {
+            return adjustTRD(trdList.get(0))
+        }
         if (trdList.size() > 1) {
-            def defaultTRDs = trdList.findAll {it.isDefault == true}
+            def defaultTRDs = trdList.findAll { it.isDefault == true }
             if (defaultTRDs.size() > 1) throw new RuntimeException("Multiple default TransformationDeployments for Transformation ${transformation.name} found")
             if (defaultTRDs.size() == 0) throw new RuntimeException("Multiple TransformationDeployments for Transformation ${transformation.name} found. Set default TransformationDeployment")
             return defaultTRDs.get(0)
         }
         if (trdList.size() == 0) {
-           return createTRD(name, transformation)
+            return createTRD(name, transformation)
         }
     }
 
@@ -253,8 +259,8 @@ class Transformation extends GenerationBase {
         def deployments = []
         def count = 0
         collectTrDeployments(trd.transformation, deployments)
-        deployments.each { d->
-            if (!trd.deployments.any {it.name == d.name}) {
+        deployments.each { d ->
+            if (!trd.deployments.any { it.name == d.name }) {
                 trd.deployments.add(d)
                 count += 1
             }
@@ -275,7 +281,7 @@ class Transformation extends GenerationBase {
         if (livyServer == null) {
             livyServer = Context.current.session.createQuery("from rt.LivyServer where isDefault=true").uniqueResult()
         }
-        if (livyServer == null)  {
+        if (livyServer == null) {
             throw new RuntimeException("Default LivyServer and LivyServer for project ${project?.name} not found")
         }
         if (project == null) {
@@ -284,11 +290,11 @@ class Transformation extends GenerationBase {
         def deployments = []
         collectTrDeployments(transformation, deployments)
         def db = Database.new
-        def props = [name: name, project: project, livyServer: livyServer, transformation: transformation,
-                     deployments: deployments.unique {"${it._type_}|${it.e_id}"}, debug: true, slideSize: 400,
-                     rejectSize: 1000, fetchSize: 1000, partitionNum: 1, persistOnDisk: true,
-                     master: "yarn", mode: "cluster", isDefault: true,
-                     driverMemory: livyServer.driverMemory, executorMemory: livyServer.executorMemory,
+        def props = [name         : name, project: project, livyServer: livyServer, transformation: transformation,
+                     deployments  : deployments.unique { "${it._type_}|${it.e_id}" }, debug: true, slideSize: 400,
+                     rejectSize   : 1000, fetchSize: 1000, partitionNum: 1, persistOnDisk: true,
+                     master       : "yarn", mode: "cluster", isDefault: true,
+                     driverMemory : livyServer.driverMemory, executorMemory: livyServer.executorMemory,
                      executorCores: livyServer.executorCores, numExecutors: livyServer.numExecutors]
         def trd = db.instantiate("rt.TransformationDeployment", props)
         db.save(trd)
@@ -303,14 +309,14 @@ class Transformation extends GenerationBase {
         properties.put(EmfModel.PROPERTY_MODEL_URI, "hibernate://?dsname=teneo&query1=from etl.Transformation where e_id=${entity.e_id}")
         properties.put(EmfModel.PROPERTY_METAMODEL_URI, "http://www.neoflex.ru/meta/etl")
         properties.put(EmfModel.PROPERTY_READONLOAD, "true")
-        emfModel.load(properties, "" )
+        emfModel.load(properties, "")
         def problems = []
         Context.current.getContextSvc().epsilonSvc.executeEvl(fileName, [:], [emfModel], problems)
-        return [result: !problems.any{it.isCritique == false}, problems: problems]
+        return [result: !problems.any { it.isCritique == false }, problems: problems]
     }
 
     static Object validateScripts(Map entity) {
-        def loaded = new Database("teneo").get("etl.Transformation", (Long)entity.e_id)
+        def loaded = new Database("teneo").get("etl.Transformation", (Long) entity.e_id)
         Database.new.refresh(loaded)
         loaded.values()
         def problems = []
@@ -320,7 +326,7 @@ class Transformation extends GenerationBase {
         validateExpressionSources(loaded, problems)
         validateAggregation(loaded, problems)
         validateOutputPorts(loaded, problems)
-        return [result: (problems.find {it.isCritique == false} == null), problems: problems]
+        return [result: (problems.find { it.isCritique == false } == null), problems: problems]
     }
 
     private static boolean validateProjections(Map entity, List problems) {
@@ -332,13 +338,13 @@ class Transformation extends GenerationBase {
                         //def testResult = [result: true]
                         def testResult = ProjectionField.test(field)
                         if (testResult.result != true) {
-                            problems.add( [
-                                    message: testResult.message,
+                            problems.add([
+                                    message   : testResult.message,
                                     isCritique: false,
-                                    context: "ProjectionField.${step.name}.${field.name}".toString(),
+                                    context   : "ProjectionField.${step.name}.${field.name}".toString(),
                                     constraint: "CheckScript",
-                                    _type_: step._type_,
-                                    e_id: step.e_id
+                                    _type_    : step._type_,
+                                    e_id      : step.e_id
                             ])
                             errors += 1
                         }
@@ -351,18 +357,18 @@ class Transformation extends GenerationBase {
 
     private static boolean validateOutputPorts(Map entity, List problems) {
         int errors = 0
-        def steps = entity.transformationSteps.collect {it} + entity.sources.collect {it}
+        def steps = entity.transformationSteps.collect { it } + entity.sources.collect { it }
         for (step in steps) {
             for (debug in step.outputPort.debugList) {
                 def testResult = DebugOutput.test(debug)
                 if (testResult.result != true) {
-                    problems.add( [
-                            message: testResult.message,
+                    problems.add([
+                            message   : testResult.message,
                             isCritique: false,
-                            context: "DebugOutput(${entity.name}.${step.name}.${debug.name})".toString(),
+                            context   : "DebugOutput(${entity.name}.${step.name}.${debug.name})".toString(),
                             constraint: "CheckScript",
-                            _type_: step._type_,
-                            e_id: step.e_id
+                            _type_    : step._type_,
+                            e_id      : step.e_id
                     ])
                     errors += 1
                 }
@@ -379,13 +385,13 @@ class Transformation extends GenerationBase {
                     if ("TRANSFORM" == field.fieldOperationType.toString()) {
                         def testResult = ProjectionField.test(field)
                         if (testResult.result != true) {
-                            problems.add( [
-                                    message: testResult.message,
+                            problems.add([
+                                    message   : testResult.message,
                                     isCritique: false,
-                                    context: "ProjectionField.${entity.name}.${field.name}".toString(),
+                                    context   : "ProjectionField.${entity.name}.${field.name}".toString(),
                                     constraint: "CheckScript",
-                                    _type_: step._type_,
-                                    e_id: step.e_id
+                                    _type_    : step._type_,
+                                    e_id      : step.e_id
                             ])
                             errors += 1
                         }
@@ -402,13 +408,13 @@ class Transformation extends GenerationBase {
             if (step._type_ == "etl.Selection") {
                 def testResult = Selection.test(step)
                 if (testResult.result != true) {
-                    problems.add( [
-                            message: testResult.message,
+                    problems.add([
+                            message   : testResult.message,
                             isCritique: false,
-                            context: "Selection.${entity.name}".toString(),
+                            context   : "Selection.${entity.name}".toString(),
                             constraint: "CheckScript",
-                            _type_: step._type_,
-                            e_id: step.e_id
+                            _type_    : step._type_,
+                            e_id      : step.e_id
                     ])
                     errors += 1
                 }
@@ -423,13 +429,13 @@ class Transformation extends GenerationBase {
             if (step._type_ == "etl.ExpressionSource") {
                 def testResult = ExpressionSource.test(step)
                 if (testResult.result != true) {
-                    problems.add( [
-                            message: testResult.message,
+                    problems.add([
+                            message   : testResult.message,
                             isCritique: false,
-                            context: "ExpressionSource.${entity.name}".toString(),
+                            context   : "ExpressionSource.${entity.name}".toString(),
                             constraint: "CheckScript",
-                            _type_: step._type_,
-                            e_id: step.e_id
+                            _type_    : step._type_,
+                            e_id      : step.e_id
                     ])
                     errors += 1
                 }
@@ -444,37 +450,37 @@ class Transformation extends GenerationBase {
             if (step._type_ == "etl.Aggregation" && step.aggregationFunction.toString() == "USER_DEF") {
                 def testResult = Aggregation.testExpression(step)
                 if (testResult.result != true) {
-                    problems.add( [
-                            message: testResult.message,
+                    problems.add([
+                            message   : testResult.message,
                             isCritique: false,
-                            context: "ExpressionSource.${entity.name}".toString(),
+                            context   : "ExpressionSource.${entity.name}".toString(),
                             constraint: "CheckExpression",
-                            _type_: step._type_,
-                            e_id: step.e_id
+                            _type_    : step._type_,
+                            e_id      : step.e_id
                     ])
                     errors += 1
                 }
                 testResult = Aggregation.testInitExpression(step)
                 if (testResult.result != true) {
-                    problems.add( [
-                            message: testResult.message,
+                    problems.add([
+                            message   : testResult.message,
                             isCritique: false,
-                            context: "ExpressionSource.${entity.name}".toString(),
+                            context   : "ExpressionSource.${entity.name}".toString(),
                             constraint: "CheckInitExpression",
-                            _type_: step._type_,
-                            e_id: step.e_id
+                            _type_    : step._type_,
+                            e_id      : step.e_id
                     ])
                     errors += 1
                 }
                 testResult = Aggregation.testFinalExpression(step)
                 if (testResult.result != true) {
-                    problems.add( [
-                            message: testResult.message,
+                    problems.add([
+                            message   : testResult.message,
                             isCritique: false,
-                            context: "ExpressionSource.${entity.name}".toString(),
+                            context   : "ExpressionSource.${entity.name}".toString(),
                             constraint: "CheckFinalExpression",
-                            _type_: step._type_,
-                            e_id: step.e_id
+                            _type_    : step._type_,
+                            e_id      : step.e_id
                     ])
                     errors += 1
                 }
@@ -484,30 +490,30 @@ class Transformation extends GenerationBase {
     }
 
 
-    static Object validateTests(Map transformation, Map params =null) {
+    static Object validateTests(Map transformation, Map params = null) {
         def fileName = "/pim/etl/etl.evl"
 
         def db = Database.new
         def testList
         testList = db.session.createQuery("from etl.TransformationTest where transformation.e_id=${transformation.e_id}").list()
         def problems = []
-        for(t in testList){
+        for (t in testList) {
             def emfModel = new EmfModel()
             def properties = new StringProperties()
             properties.put(EmfModel.PROPERTY_NAME, "src")
             properties.put(EmfModel.PROPERTY_MODEL_URI, "hibernate://?dsname=teneo&query1=from etl.TransformationTest where e_id=${t.e_id}")
             properties.put(EmfModel.PROPERTY_METAMODEL_URI, "http://www.neoflex.ru/meta/etl")
             properties.put(EmfModel.PROPERTY_READONLOAD, "true")
-            emfModel.load(properties, "" )
+            emfModel.load(properties, "")
             Context.current.getContextSvc().epsilonSvc.executeEvl(fileName, [:], [emfModel], problems)
         }
-        return [result: !problems.any{it.isCritique == false}, problems: problems]
+        return [result: !problems.any { it.isCritique == false }, problems: problems]
     }
 
     private static Map inputFieldDependencies(Map transformation, Map field) {
         def outputPort = findOutputPortByInputPort(transformation, field.dataSet)
         def innode = findNodeByOutputPort(transformation, outputPort)
-        fieldDependencies(transformation, innode, innode.outputPort.fields.find {it.name == field.name})
+        fieldDependencies(transformation, innode, innode.outputPort.fields.find { it.name == field.name })
     }
 
     private static List getInputPorts(Map node) {
@@ -520,7 +526,7 @@ class Transformation extends GenerationBase {
     }
 
     private static Map outputFieldFollowers(Map transformation, Map node, Map field) {
-        def result = [fieldName: field.name, fieldType: field.dataTypeDomain.toString() , nodeName: node.name, followers: []]
+        def result = [fieldName: field.name, fieldType: field.dataTypeDomain.toString(), nodeName: node.name, followers: []]
         findInputPortsByOutputPort(transformation, field.dataSet).each {
             def outnode = findNodeByInputPort(transformation, it)
             def planDep = null
@@ -532,10 +538,10 @@ class Transformation extends GenerationBase {
                     println("error parsing SparkSQL: " + th.toString())
                 }
             }
-            def infield = it.fields.find {it.name == field.name}
+            def infield = it.fields.find { it.name == field.name }
             if (outnode.outputPort != null) {
                 if (planDep != null) {
-                    result.followers.addAll(outnode.outputPort.fields.findAll {outField->
+                    result.followers.addAll(outnode.outputPort.fields.findAll { outField ->
                         (planDep[outField.name] ?: []).any {
                             it.name.equalsIgnoreCase(infield.name) && it.alias.equalsIgnoreCase(infield.dataSet.alias)
                         } || (planDep["*"] ?: []).any {
@@ -544,34 +550,32 @@ class Transformation extends GenerationBase {
                     }.collect {
                         outputFieldFollowers(transformation, outnode, it)
                     })
+                } else {
+                    result.followers.addAll(outnode.outputPort.fields.findAll { it._type_ == 'dataset.Field' && it.name == infield.name }.collect {
+                        outputFieldFollowers(transformation, outnode, it)
+                    })
+                    result.followers.addAll(outnode.outputPort.fields.findAll { it._type_ == 'etl.ProjectionField' && it.sourceFields.any { it.name == infield.name } }.collect {
+                        outputFieldFollowers(transformation, outnode, it)
+                    })
+                    result.followers.addAll(outnode.outputPort.fields.findAll { it._type_ == 'etl.UnionField' && it.inputPortField?.e_id == infield.e_id }.collect {
+                        outputFieldFollowers(transformation, outnode, it)
+                    })
+                    result.followers.addAll(outnode.outputPort.fields.findAll { it._type_ == 'etl.UnionField' && it.unionPortField?.e_id == infield.e_id }.collect {
+                        outputFieldFollowers(transformation, outnode, it)
+                    })
                 }
-                else {
-                    result.followers.addAll(outnode.outputPort.fields.findAll {it._type_ == 'dataset.Field' && it.name == infield.name}.collect {
-                        outputFieldFollowers(transformation, outnode, it)
-                    })
-                    result.followers.addAll(outnode.outputPort.fields.findAll {it._type_ == 'etl.ProjectionField' && it.sourceFields.any {it.name == infield.name}}.collect {
-                        outputFieldFollowers(transformation, outnode, it)
-                    })
-                    result.followers.addAll(outnode.outputPort.fields.findAll {it._type_ == 'etl.UnionField' && it.inputPortField?.e_id == infield.e_id}.collect {
-                        outputFieldFollowers(transformation, outnode, it)
-                    })
-                    result.followers.addAll(outnode.outputPort.fields.findAll {it._type_ == 'etl.UnionField' && it.unionPortField?.e_id == infield.e_id}.collect {
-                        outputFieldFollowers(transformation, outnode, it)
-                    })
-                }
-            }
-            else {
-                result.followers.add([fieldName: infield.name, fieldType: infield.dataTypeDomain.toString() , nodeName: outnode.name, followers: []])
+            } else {
+                result.followers.add([fieldName: infield.name, fieldType: infield.dataTypeDomain.toString(), nodeName: outnode.name, followers: []])
             }
         }
         return result
     }
 
     private static Map fieldDependencies(Map transformation, Map node, Map field) {
-        def result = [fieldName: field.name, fieldType:field.dataTypeDomain.toString() , nodeName: node.name, dependencies: []]
+        def result = [fieldName: field.name, fieldType: field.dataTypeDomain.toString(), nodeName: node.name, dependencies: []]
         if (field._type_ == "dataset.Field") {
             if (node.inputPort != null) {
-                def inputFields = node.inputPort.fields.findAll {it.name == field.name}
+                def inputFields = node.inputPort.fields.findAll { it.name == field.name }
                 result.dependencies.addAll(inputFields.collect {
                     inputFieldDependencies(transformation, it)
                 })
@@ -582,13 +586,13 @@ class Transformation extends GenerationBase {
                     def deps = planDeps[field.name] ?: []
                     def starDeps = planDeps["*"]
                     if (starDeps != null) {
-                        deps.addAll(starDeps.collect {[alias: it.alias, name: field.name]})
+                        deps.addAll(starDeps.collect { [alias: it.alias, name: field.name] })
                     }
-                    deps.each {dep->
-                        node.sqlPorts.findAll {sqlPort->
+                    deps.each { dep ->
+                        node.sqlPorts.findAll { sqlPort ->
                             sqlPort.alias.equalsIgnoreCase(dep.alias)
-                        }.each {sqlPort->
-                            result.dependencies.addAll(sqlPort.fields.findAll {it.name.equalsIgnoreCase(dep.name)}.collect {
+                        }.each { sqlPort ->
+                            result.dependencies.addAll(sqlPort.fields.findAll { it.name.equalsIgnoreCase(dep.name) }.collect {
                                 inputFieldDependencies(transformation, it)
                             })
                         }
@@ -598,20 +602,18 @@ class Transformation extends GenerationBase {
                 catch (th) {
                     println("error parsing sql - compare field names")
                     for (sqlPort in node.sqlPorts) {
-                        def inputFields = sqlPort.fields.findAll {it.name == field.name}
+                        def inputFields = sqlPort.fields.findAll { it.name == field.name }
                         result.dependencies.addAll(inputFields.collect {
                             inputFieldDependencies(transformation, it)
                         })
                     }
                 }
             }
-        }
-        else if (field._type_ == "etl.ProjectionField") {
+        } else if (field._type_ == "etl.ProjectionField") {
             result.dependencies.addAll(field.sourceFields.collect {
                 inputFieldDependencies(transformation, it)
             })
-        }
-        else if (field._type_ == "etl.UnionField") {
+        } else if (field._type_ == "etl.UnionField") {
             if (field.inputPortField != null) {
                 result.dependencies.add(inputFieldDependencies(transformation, field.inputPortField))
             }
@@ -623,39 +625,39 @@ class Transformation extends GenerationBase {
     }
 
     private static Map findNodeByOutputPort(Map transformation, Map outputPort) {
-        return ([] + transformation.sources + transformation.transformationSteps).find {it.outputPort.e_id == outputPort.e_id}
+        return ([] + transformation.sources + transformation.transformationSteps).find { it.outputPort.e_id == outputPort.e_id }
     }
 
     private static Map findNodeByInputPort(Map transformation, Map inputPort) {
-        return ([] + transformation.transformationSteps + transformation.targets).find {getInputPorts(it).contains(inputPort)}
+        return ([] + transformation.transformationSteps + transformation.targets).find { getInputPorts(it).contains(inputPort) }
     }
 
     private static Map findOutputPortByInputPort(Map transformation, Map inputPort) {
-        return transformation.transitions.findAll {it.finish.e_id == inputPort.e_id}.collect{it.start}.first()
+        return transformation.transitions.findAll { it.finish.e_id == inputPort.e_id }.collect { it.start }.first()
     }
 
     private static List findInputPortsByOutputPort(Map transformation, Map outputPort) {
-        return transformation.transitions.findAll {it.start.e_id == outputPort.e_id}.collect{it.finish}
+        return transformation.transitions.findAll { it.start.e_id == outputPort.e_id }.collect { it.finish }
     }
 
     static Object expandXMLFile(Map entity, Map params = null) {
-      def result = []
-      def tr = Database.new.get(entity)
-      def trd = findOrCreateTRD(tr)
-      Context.current.commit()
+        def result = []
+        def tr = Database.new.get(entity)
+        def trd = findOrCreateTRD(tr)
+        Context.current.commit()
 
-      def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SourceStructureExpand.egl", [format: "xml", fileName: entity.fileName, rowTag: entity.rowTag, sampleSize: entity.sampleSize, dontExplode: entity.dontExplode], [])
-      return TransformationDeployment.runPart(trd, [code: code, outputType: 'json', sessionId: entity.sessionId])
+        def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SourceStructureExpand.egl", [format: "xml", fileName: entity.fileName, rowTag: entity.rowTag, sampleSize: entity.sampleSize, dontExplode: entity.dontExplode], [])
+        return TransformationDeployment.runPart(trd, [code: code, outputType: 'json', sessionId: entity.sessionId])
     }
 
     static Object expandAvroFile(Map entity, Map params = null) {
-      def result = []
-      def tr = Database.new.get(entity)
-      def trd = findOrCreateTRD(tr)
-      Context.current.commit()
+        def result = []
+        def tr = Database.new.get(entity)
+        def trd = findOrCreateTRD(tr)
+        Context.current.commit()
 
-      def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SourceStructureExpand.egl", [format: "avro", fileName: entity.fileName, rowTag: entity.rowTag, sampleSize: entity.sampleSize, dontExplode: entity.dontExplode], [])
-      return TransformationDeployment.runPart(trd, [code: code, outputType: 'json', sessionId: entity.sessionId])
+        def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SourceStructureExpand.egl", [format: "avro", fileName: entity.fileName, rowTag: entity.rowTag, sampleSize: entity.sampleSize, dontExplode: entity.dontExplode], [])
+        return TransformationDeployment.runPart(trd, [code: code, outputType: 'json', sessionId: entity.sessionId])
     }
 
     static Object importTransformation(Map entity, Map params = null) {
@@ -663,7 +665,7 @@ class Transformation extends GenerationBase {
         def project = transformation.project
         if (project != null && project.svnEnabled) {
             MetaServer.etl.Project.importProjectEntity(project, transformation)
-        }else{
+        } else {
             return Context.current.getContextSvc().getGitflowSvc().importEntityByName(entity)
         }
     }
@@ -684,9 +686,9 @@ class Transformation extends GenerationBase {
         def files = new ArrayList<File>()
         def filesDeps = eCoreHelper.getAllDependentObjectsOfEntity(entity)
         def gitFlow = Context.current.getContextSvc().getGitflowSvc()
-        for(Object e : filesDeps){
-            def ent= Database.new.get(e)
-            List<File> res  = gitFlow.exportEObject((EObject)ent, svnCommitMessage)
+        for (Object e : filesDeps) {
+            def ent = Database.new.get(e)
+            List<File> res = gitFlow.exportEObject((EObject) ent, svnCommitMessage)
             files.addAll(res)
         }
         generate(entity, params, svnCommitMessage)
@@ -695,7 +697,7 @@ class Transformation extends GenerationBase {
     /* protected region MetaServer.etlTransformation.statics end */
 
     static Object validate(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.validate on begin */
+        /* protected region MetaServer.etlTransformation.validate on begin */
         def retModel = validateModel(entity)
         def retScripts = validateScripts(entity)
         def ret = [result: retModel.result && retScripts.result, problems: retModel.problems + retScripts.problems]
@@ -703,123 +705,122 @@ class Transformation extends GenerationBase {
             logger.warn(problem)
         }
         return ret
-    /* protected region MetaServer.etlTransformation.validate end */
+        /* protected region MetaServer.etlTransformation.validate end */
     }
 
     static Object dependencies(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.dependencies on begin */
-        def deps = MetaInfo.getAllDeps(entity).collect {[_type_: it._type_, name: it.name, e_id: it.e_id]}
+        /* protected region MetaServer.etlTransformation.dependencies on begin */
+        def deps = MetaInfo.getAllDeps(entity).collect { [_type_: it._type_, name: it.name, e_id: it.e_id] }
         println(deps)
         return deps
-    /* protected region MetaServer.etlTransformation.dependencies end */
+        /* protected region MetaServer.etlTransformation.dependencies end */
     }
 
     static Object setJsonView(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.setJsonView on begin */
+        /* protected region MetaServer.etlTransformation.setJsonView on begin */
         Project.setEntityJsonView(entity._type_, entity.e_id, true)
         return ["Hello from MetaServer.etl.Transformation.setJsonView"]
-    /* protected region MetaServer.etlTransformation.setJsonView end */
+        /* protected region MetaServer.etlTransformation.setJsonView end */
     }
 
     static Object install(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.install on begin */
+        /* protected region MetaServer.etlTransformation.install on begin */
         def tr = Database.new.get(entity)
         def trd = findOrCreateTRD(tr)
         Context.current.commit()
         return TransformationDeployment.install(trd, params)
-    /* protected region MetaServer.etlTransformation.install end */
+        /* protected region MetaServer.etlTransformation.install end */
     }
 
     static Object runit(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.runit on begin */
+        /* protected region MetaServer.etlTransformation.runit on begin */
         def trd = entity.trd ? Database.new.get(entity.trd) : findOrCreateTRD(Database.new.get(entity))
         Context.current.commit()
         def allParams = entity.params ?: [:] as Map
         allParams.putAll(params ?: [:])
         return TransformationDeployment.generateAndRun(trd, allParams)
-    /* protected region MetaServer.etlTransformation.runit end */
+        /* protected region MetaServer.etlTransformation.runit end */
     }
 
     static Object runPart(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.runit on begin */
+        /* protected region MetaServer.etlTransformation.runit on begin */
         def tr = Database.new.get(entity)
         def trd = findOrCreateTRD(tr)
         Context.current.commit()
         def outputType
         if (entity.outputType == null) outputType = 'text' else outputType = entity.outputType
         return TransformationDeployment.runPart(trd, [livyServer: entity.server, code: entity.fileContent, sessionId: entity.sessionId, outputType: outputType])
-    /* protected region MetaServer.etlTransformation.runit end */
+        /* protected region MetaServer.etlTransformation.runit end */
     }
 
     static Object partJobFile(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.runit on begin */
-      def result = []
-      def tr = Database.new.get(entity)
-      def trd = findOrCreateTRD(tr)
-      Context.current.commit()
-      def outputType
-      if (entity.outputType == null) outputType = 'text' else outputType = entity.outputType
-      return TransformationDeployment.generatePart(trd, [nodeName: entity.nodeName, outputType: outputType, sampleSize: entity.sampleSize])
-    /* protected region MetaServer.etlTransformation.runit end */
+        /* protected region MetaServer.etlTransformation.runit on begin */
+        def result = []
+        def tr = Database.new.get(entity)
+        def trd = findOrCreateTRD(tr)
+        Context.current.commit()
+        def outputType
+        if (entity.outputType == null) outputType = 'text' else outputType = entity.outputType
+        return TransformationDeployment.generatePart(trd, [nodeName: entity.nodeName, outputType: outputType, sampleSize: entity.sampleSize])
+        /* protected region MetaServer.etlTransformation.runit end */
     }
 
     static Object generateAndRunPart(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.runit on begin */
-      def result = []
-      def tr = Database.new.get(entity)
-      def trd = findOrCreateTRD(tr)
-      Context.current.commit()
-      def outputType
-      if (entity.outputType == null) outputType = 'text' else outputType = entity.outputType
-      def fileContent = TransformationDeployment.generatePart(trd, [nodeName: entity.nodeName, outputType: outputType, sampleSize: entity.sampleSize, statement: entity.statement]).fileContent
-      return TransformationDeployment.runPart(trd, [code: fileContent, outputType: outputType, sessionId: entity.sessionId])
-    /* protected region MetaServer.etlTransformation.runit end */
+        /* protected region MetaServer.etlTransformation.runit on begin */
+        def result = []
+        def tr = Database.new.get(entity)
+        def trd = findOrCreateTRD(tr)
+        Context.current.commit()
+        def outputType
+        if (entity.outputType == null) outputType = 'text' else outputType = entity.outputType
+        def fileContent = TransformationDeployment.generatePart(trd, [nodeName: entity.nodeName, outputType: outputType, sampleSize: entity.sampleSize, statement: entity.statement]).fileContent
+        return TransformationDeployment.runPart(trd, [code: fileContent, outputType: outputType, sessionId: entity.sessionId])
+        /* protected region MetaServer.etlTransformation.runit end */
     }
 
     static Object mainJobFile(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.runit on begin */
-    	def result = []
-      def tr = Database.new.get(entity)
-      def trd = findOrCreateTRD(tr)
-      Context.current.commit()
-      return TransformationDeployment.readFile(trd, params)
-    /* protected region MetaServer.etlTransformation.runit end */
+        /* protected region MetaServer.etlTransformation.runit on begin */
+        def result = []
+        def tr = Database.new.get(entity)
+        def trd = findOrCreateTRD(tr)
+        Context.current.commit()
+        return TransformationDeployment.readFile(trd, params)
+        /* protected region MetaServer.etlTransformation.runit end */
     }
 
     static Object writeMainJobFile(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.runit on begin */
-    	def result = []
+        /* protected region MetaServer.etlTransformation.runit on begin */
+        def result = []
 
-      def tr = Database.new.get(entity)
-      def trd = findOrCreateTRD(tr)
-      Context.current.commit()
-      return TransformationDeployment.writeFile(trd, params, entity.fileContent)
-    /* protected region MetaServer.etlTransformation.runit end */
+        def tr = Database.new.get(entity)
+        def trd = findOrCreateTRD(tr)
+        Context.current.commit()
+        return TransformationDeployment.writeFile(trd, params, entity.fileContent)
+        /* protected region MetaServer.etlTransformation.runit end */
     }
 
     static Object nodeDependencies(Map entity, Map params = null) {
-    /* protected region MetaServer.etlTransformation.nodeDependencies on begin */
+        /* protected region MetaServer.etlTransformation.nodeDependencies on begin */
         def transformation_Id = entity?.transformation_Id ?: entity?.e_id ?: params?.transformation_Id
         def node_name = entity?.node_name ?: params?.node_name
-        def transformation = Database.new.get([_type_:"etl.Transformation", e_id: transformation_Id])
+        def transformation = Database.new.get([_type_: "etl.Transformation", e_id: transformation_Id])
         def dependencies = []
         def followers = []
-        def node = ([] + transformation.sources + transformation.transformationSteps).find {it.name == node_name}
+        def node = ([] + transformation.sources + transformation.transformationSteps).find { it.name == node_name }
         if (node == null) {
-            node = transformation.targets.find {it.name == node_name}
+            node = transformation.targets.find { it.name == node_name }
             if (node == null) {
                 throw new RuntimeException("${node_name} not found")
             }
-            dependencies = node.inputPort.fields.collect{fieldDependencies(transformation, node, it)}
-            followers = node.inputPort.fields.collect{outputFieldFollowers(transformation, node, it)}
-        }
-        else {
-            dependencies = node.outputPort.fields.collect{fieldDependencies(transformation, node, it)}
-            followers = node.outputPort.fields.collect{outputFieldFollowers(transformation, node, it)}
+            dependencies = node.inputPort.fields.collect { fieldDependencies(transformation, node, it) }
+            followers = node.inputPort.fields.collect { outputFieldFollowers(transformation, node, it) }
+        } else {
+            dependencies = node.outputPort.fields.collect { fieldDependencies(transformation, node, it) }
+            followers = node.outputPort.fields.collect { outputFieldFollowers(transformation, node, it) }
         }
         SparkSQL.clearPlanCache()
         return [dependencies: dependencies, followers: followers]
-    /* protected region MetaServer.etlTransformation.nodeDependencies end */
+        /* protected region MetaServer.etlTransformation.nodeDependencies end */
     }
 
     static Object svnProps(Map entity, Map params = null) {

@@ -9,6 +9,14 @@
         <value>*</value>
     </property>
     <property>
+        <name>oozie.service.ProxyUserService.proxyuser.hue.hosts</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>oozie.service.ProxyUserService.proxyuser.hue.groups</name>
+        <value>*</value>
+    </property>
+    <property>
         <name>oozie.service.HadoopAccessorService.hadoop.configurations</name>
         <value>*=/usr/hadoop/etc/hadoop</value>
         <description>
