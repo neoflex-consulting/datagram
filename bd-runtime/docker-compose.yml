@@ -64,6 +64,7 @@ services:
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
+      - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
     networks:
       bd_net:
         ipv4_address: 10.20.1.1
@@ -105,6 +106,7 @@ services:
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
+      - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
     networks:
       bd_net:
         ipv4_address: 10.20.1.2
@@ -147,6 +149,7 @@ services:
       - ./bd-base/extralib:/extralib
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
+      - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
     networks:
       bd_net:
         ipv4_address: 10.20.1.3
@@ -233,10 +236,13 @@ services:
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl.spark.runtime-spark3-2.0.0-SNAPSHOT.jar
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar:/usr/oozie/sharelib/lib/spark2/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0.0-SNAPSHOT.jar
+      - ./bd-oozie/conf/oozie/oozie-site.xml:/usr/oozie/conf/oozie-site.xml
     expose:
       - 1-65535
     ports:
       - 11000:11000
+    environment:
+      OOZIE_URL: http://oozie:11000/oozie
     networks:
       bd_net:
         ipv4_address: 10.20.1.8
@@ -317,6 +323,21 @@ services:
         ipv4_address: 10.20.1.10
     extra_hosts:
       - "zookeeper:10.20.1.9"
+
+  hue:
+    image: gethue/hue:latest
+    hostname: hue
+    container_name: hue
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
+    depends_on:
+      - livy
+      - hivemetastore
+    networks:
+      bd_net:
+        ipv4_address: 10.20.1.12
 
 ###
 networks:
