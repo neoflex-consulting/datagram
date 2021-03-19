@@ -173,7 +173,7 @@
         <dependency>
             <groupId>ru.neoflex.mspace</groupId>
             <artifactId>ddesigner</artifactId>
-            <version>spark2-2.0.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>

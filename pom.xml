@@ -6,7 +6,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <revision>spark3-2.0.0-SNAPSHOT</revision>
+        <revision>spark2-2.0.0-SNAPSHOT</revision>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
@@ -128,7 +128,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
     <distributionManagement>
@@ -143,5 +142,20 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>20.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.core</groupId>
+                <artifactId>jersey-common</artifactId>
+                <version>2.26</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

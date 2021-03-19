@@ -208,7 +208,7 @@ public class EntityController {
                 Map merged = ECoreUtils.merge(null, metaEntity);
                 Context.getCurrent().savepoint();
                 try {
-                    contextSvc.getGitflowSvc().exportEObject((EObject) merged, null);
+                    contextSvc.getGitflowSvc().exportEObject((EObject) merged, "");
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

@@ -97,9 +97,30 @@ function targetInputPortHasChanged(transformation, target, inputPort, oldFields)
     const nameAttr = mappingType === "etl.StoredProcedureParamFeature" ? "paramName" : (
         mappingType === "etl.HBaseTargetFeature" ? "column" : "targetColumnName"
     )
+    target.inputFieldsMapping = [];
+    inputPort.fields.forEach(f=>{
+                console.log("Adding field: " + f.name);
+                target.inputFieldsMapping.push({
+                       _type_: mappingType,
+                       inputFieldName: f.name,
+                       [nameAttr]: f.name
+                });
+    });
+
+    /*if(true){
+        return;
+    }
+
+
     target.inputFieldsMapping = target.inputFieldsMapping || []
     diffPorts(inputPort.fields, oldFields).forEach(diff => {
+        console.log(diff);
         const {oldField, newField} = diff
+        var index = inputPort.fields.indexOf(newField);
+        if(index === -1){
+            index = target.inputFieldsMapping.length-1;
+        }
+        console.log("INDEX: " + index);
         if (oldField) {
             if (newField) {
                 const mapping = target.inputFieldsMapping.find(m => m.inputFieldName === oldField.name)
@@ -115,6 +136,13 @@ function targetInputPortHasChanged(transformation, target, inputPort, oldFields)
                 const mapping = target.inputFieldsMapping.find(m => m.targetColumnName.toLowerCase() === newField.name.toLowerCase())
                 if(mapping){
                     mapping.inputFieldName = newField.name
+                }else{
+                    target.inputFieldsMapping.push({
+                       _type_: mappingType,
+                       inputFieldName: newField.name,
+                       [nameAttr]: newField.name
+                    })
+                    console.log("Spliced into"  + index + ", " + newField.name);
                 }
             }else{
                 target.inputFieldsMapping.push({
@@ -122,9 +150,10 @@ function targetInputPortHasChanged(transformation, target, inputPort, oldFields)
                     inputFieldName: newField.name,
                     [nameAttr]: newField.name
                 })
+                console.log("Spliced 2 into"  + index + ", " + newField.name);
             }
         }
-    })
+    })*/
 
     if(mappingType === "etl.TableTargetFeature"){
         target.inputFieldsMapping.forEach(m=>{
