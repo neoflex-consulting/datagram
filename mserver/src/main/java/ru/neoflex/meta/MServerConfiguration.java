@@ -42,11 +42,17 @@ import ru.neoflex.meta.license.LicenseService;
 import ru.neoflex.meta.svc.BaseSvc;
 import ru.neoflex.meta.utils.FileSystem;
 import ru.neoflex.meta.utils.MetaResource;
+//import springfox.documentation.builders.PathSelectors;
+//import springfox.documentation.builders.RequestHandlerSelectors;
+//import springfox.documentation.spi.DocumentationType;
+//import springfox.documentation.spring.web.plugins.Docket;
+//import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @SpringBootApplication
 @ImportResource("application-context.xml")
 @PropertySource(value="classpath:license.properties", ignoreResourceNotFound=true)
+//@EnableSwagger2
 public class MServerConfiguration {
     @Value("${gitflow.root:${user.dir}/gitflow}")
     String gitflowRoot;
@@ -87,7 +93,9 @@ public class MServerConfiguration {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-    }private static boolean endsWithAnyIgnoreCase(String path, String ...suffixes) {
+    }
+
+    private static boolean endsWithAnyIgnoreCase(String path, String ...suffixes) {
         String pathlc = path.toLowerCase();
         for (String suffix: suffixes) {
             if (pathlc.endsWith(suffix.toLowerCase())) {
@@ -111,14 +119,14 @@ public class MServerConfiguration {
     @Autowired
     private ApplicationContext appContext;
 
-    /*@Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
-    }*/
+//    @Bean
+//    public Docket api() {
+//        return new Docket(DocumentationType.SWAGGER_2)
+//                .select()
+//                .apis(RequestHandlerSelectors.any())
+//                .paths(PathSelectors.any())
+//                .build();
+//    }
     
     @Bean
     public HttpSessionListener httpSessionListener() {

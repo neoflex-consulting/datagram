@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="ASCII"?>
+<etl:Transformation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:etl="http://www.neoflex.ru/meta/etl" name="tr_aw_long_time_no_sale" label="tr_aw_long_time_no_sale" sparkVersion="SPARK3" description="&#x417;&#x430;&#x434;&#x430;&#x447;&#x430;: &#xA;&#x43d;&#x430;&#x439;&#x442;&#x438; &#x432;&#x441;&#x435; &#x43c;&#x430;&#x433;&#x430;&#x437;&#x438;&#x43d;&#x44b;, &#x432; &#x43a;&#x43e;&#x442;&#x43e;&#x440;&#x44b;&#x445; &#x43f;&#x43e;&#x441;&#x43b;&#x435;&#x434;&#x43d;&#x438;&#x439; &#x437;&#x430;&#x43a;&#x430;&#x437; &#xA;&#x431;&#x44b;&#x43b; &#x441;&#x434;&#x435;&#x43b;&#x430;&#x43d; &#x43f;&#x43e; &#x43a;&#x440;&#x430;&#x439;&#x43d;&#x435;&#x439; &#x43c;&#x435;&#x440;&#x435; 12 &#x43c;&#x435;&#x441;&#x44f;&#x446;&#x435;&#x432; &#x43d;&#x430;&#x437;&#x430;&#x434;.&#xA;&#xA;&#x422;&#x435;&#x43a;&#x443;&#x449;&#x430;&#x44f; &#x434;&#x430;&#x442;&#x430; &#x437;&#x430;&#x434;&#x430;&#x451;&#x442;&#x441;&#x44f; &#x43f;&#x430;&#x440;&#x430;&#x43c;&#x435;&#x442;&#x440;&#x43e;&#x43c; &#x442;&#x440;&#x430;&#x43d;&#x441;&#x444;&#x43e;&#x440;&#x43c;&#x430;&#x446;&#x438;&#x438; &#xA;&quot;today&quot;&#x438; &#x438;&#x441;&#x43f;&#x43e;&#x43b;&#x44c;&#x437;&#x443;&#x435;&#x442;&#x441;&#x44f; &#x432; &#x432;&#x438;&#x434;&#x435; ${jobParameters(&quot;today&quot;)} &#xA;&#x432; &#x443;&#x437;&#x43b;&#x435; Spark_SQL_9.&#xA;&#xA;&#x420;&#x435;&#x437;&#x443;&#x43b;&#x44c;&#x442;&#x438;&#x440;&#x443;&#x44e;&#x449;&#x438;&#x435; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x435; &#x437;&#x430;&#x43f;&#x438;&#x441;&#x44b;&#x432;&#x430;&#x44e;&#x442;&#x441;&#x44f; &#x432; &#x444;&#x430;&#x439;&#x43b; &#x444;&#x43e;&#x440;&#x43c;&#x430;&#x442;&#x430; ORC &#xA;&#x438; &#x440;&#x435;&#x433;&#x438;&#x441;&#x442;&#x440;&#x438;&#x440;&#x443;&#x44e;&#x442;&#x441;&#x44f; &#x432; &#x43a;&#x430;&#x447;&#x435;&#x441;&#x442;&#x432;&#x435; &#x432;&#x43d;&#x435;&#x448;&#x43d;&#x435;&#x439; &#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x44b; &#x432; Hive.&#xA;&#xA;&#x414;&#x43b;&#x44f; &#x43f;&#x440;&#x43e;&#x441;&#x43c;&#x43e;&#x442;&#x440;&#x430; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445; &#x43c;&#x43e;&#x436;&#x43d;&#x43e; &#x43f;&#x43e;&#x434;&#x43a;&#x43b;&#x44e;&#x447;&#x438;&#x442;&#x44c;&#x441;&#x44f; &#x43a; &#xA;Hive &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x443; (jdbc:hive2://localhost:10000)&#xA;&#x438; &#x432;&#x44b;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x44c; &#x437;&#x430;&#x43f;&#x440;&#x43e;&#x441;:&#xA;select * from dm_long_time_no_sale&#xA;&#xA;" jsonView="{&quot;cells&quot;:[{&quot;type&quot;:&quot;devs.transformation.TableSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:90,&quot;y&quot;:90},&quot;angle&quot;:0,&quot;id&quot;:&quot;21a45d32-d8b1-4690-897e-6397683c8064&quot;,&quot;name&quot;:&quot;SalesOrderHeader&quot;,&quot;z&quot;:1,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;SalesOrderHeader&quot;}}},{&quot;type&quot;:&quot;devs.transformation.TableSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:76,&quot;y&quot;:233},&quot;angle&quot;:0,&quot;id&quot;:&quot;36880bb5-1a92-49ca-b5cf-a9f723f70b9a&quot;,&quot;name&quot;:&quot;Customer&quot;,&quot;z&quot;:2,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Customer&quot;}}},{&quot;type&quot;:&quot;devs.transformation.TableSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:210,&quot;y&quot;:360},&quot;angle&quot;:0,&quot;id&quot;:&quot;06f234ab-641e-493a-a8a1-5585245184da&quot;,&quot;name&quot;:&quot;Store&quot;,&quot;z&quot;:3,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Store&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Join&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;,&quot;join&quot;],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}},{&quot;id&quot;:&quot;join&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;join&quot;}}},{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:247,&quot;y&quot;:185},&quot;angle&quot;:0,&quot;id&quot;:&quot;27861d5b-44f9-417d-bca2-9c44adab11e3&quot;,&quot;name&quot;:&quot;Join_2&quot;,&quot;z&quot;:4,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Join_2&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Join&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;,&quot;join&quot;],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}},{&quot;id&quot;:&quot;join&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;join&quot;}}},{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:393,&quot;y&quot;:286},&quot;angle&quot;:0,&quot;id&quot;:&quot;24360f3b-0f81-4974-ba9d-b1617d250554&quot;,&quot;name&quot;:&quot;Join_6&quot;,&quot;z&quot;:5,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Join_6&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SparkSQL&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;sqlin&quot;],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}},{&quot;id&quot;:&quot;0&quot;,&quot;multiple&quot;:true,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;Sales&quot;,&quot;visibility&quot;:&quot;visible&quot;},&quot;circle&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}]},&quot;position&quot;:{&quot;x&quot;:510,&quot;y&quot;:240},&quot;angle&quot;:0,&quot;id&quot;:&quot;43abc93f-8232-4ed2-9c23-1d8910655baa&quot;,&quot;name&quot;:&quot;Spark_SQL_9&quot;,&quot;z&quot;:6,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Spark_SQL_9&quot;}}},{&quot;type&quot;:&quot;devs.transformation.SparkSQL&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;sqlin&quot;],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}},{&quot;id&quot;:&quot;0&quot;,&quot;multiple&quot;:true,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;Sales2&quot;,&quot;visibility&quot;:&quot;visible&quot;},&quot;circle&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}]},&quot;position&quot;:{&quot;x&quot;:630,&quot;y&quot;:300},&quot;angle&quot;:0,&quot;id&quot;:&quot;f6a21a3b-72c9-446a-ab24-a334528276c6&quot;,&quot;name&quot;:&quot;Spark_SQL_13&quot;,&quot;z&quot;:7,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Spark_SQL_13&quot;}}},{&quot;type&quot;:&quot;devs.transformation.LocalTarget&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;],&quot;outPorts&quot;:[],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:780,&quot;y&quot;:210},&quot;angle&quot;:0,&quot;id&quot;:&quot;040d46f2-6c13-4caf-894d-166da19b6de1&quot;,&quot;name&quot;:&quot;Local_ORC&quot;,&quot;z&quot;:8,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Local_ORC&quot;}}},{&quot;type&quot;:&quot;devs.transformation.LocalTarget&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;],&quot;outPorts&quot;:[],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:780,&quot;y&quot;:390},&quot;angle&quot;:0,&quot;id&quot;:&quot;84ce6c91-058d-460c-9ed7-e203ab1bed29&quot;,&quot;name&quot;:&quot;Local_PARQUET&quot;,&quot;z&quot;:9,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;Local_PARQUET&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;24360f3b-0f81-4974-ba9d-b1617d250554&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;43abc93f-8232-4ed2-9c23-1d8910655baa&quot;,&quot;port&quot;:&quot;0&quot;},&quot;id&quot;:&quot;24fd2f3b-d783-4854-b123-a2e350877bc9&quot;,&quot;z&quot;:10,&quot;name&quot;:&quot;729af401-aba8-4fc1-8593-4a5fd8a4f63f&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;729af401-aba8-4fc1-8593-4a5fd8a4f63f&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;43abc93f-8232-4ed2-9c23-1d8910655baa&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;f6a21a3b-72c9-446a-ab24-a334528276c6&quot;,&quot;port&quot;:&quot;0&quot;},&quot;id&quot;:&quot;324c4247-fc6a-4d58-8d59-3ae7f52856fe&quot;,&quot;z&quot;:11,&quot;name&quot;:&quot;3f1af257-d938-4931-baf4-06140c1a7853&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;3f1af257-d938-4931-baf4-06140c1a7853&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;f6a21a3b-72c9-446a-ab24-a334528276c6&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;040d46f2-6c13-4caf-894d-166da19b6de1&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;5557c8e4-ff56-4e20-b1f7-76b932bf2719&quot;,&quot;z&quot;:12,&quot;name&quot;:&quot;b6b3a5e6-32c1-4d58-9ba1-04cd77b55de6&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;b6b3a5e6-32c1-4d58-9ba1-04cd77b55de6&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;f6a21a3b-72c9-446a-ab24-a334528276c6&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;84ce6c91-058d-460c-9ed7-e203ab1bed29&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;2cbb6122-7595-496f-8d7d-63ba5d1fd35c&quot;,&quot;z&quot;:13,&quot;name&quot;:&quot;774e5a70-c59e-4a0f-8620-9f19dc5e9d94&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;774e5a70-c59e-4a0f-8620-9f19dc5e9d94&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;36880bb5-1a92-49ca-b5cf-a9f723f70b9a&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;27861d5b-44f9-417d-bca2-9c44adab11e3&quot;,&quot;port&quot;:&quot;join&quot;},&quot;id&quot;:&quot;ae67dabc-1026-49e8-baa4-781202abd089&quot;,&quot;z&quot;:14,&quot;name&quot;:&quot;e0345021-e519-475f-acc5-adc7ae248438&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;e0345021-e519-475f-acc5-adc7ae248438&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;21a45d32-d8b1-4690-897e-6397683c8064&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;27861d5b-44f9-417d-bca2-9c44adab11e3&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;ebb1e684-0aac-4109-a653-a7f30900292b&quot;,&quot;z&quot;:15,&quot;name&quot;:&quot;b71eed50-636e-4cf6-aa32-cc9f88903390&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;b71eed50-636e-4cf6-aa32-cc9f88903390&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;06f234ab-641e-493a-a8a1-5585245184da&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;24360f3b-0f81-4974-ba9d-b1617d250554&quot;,&quot;port&quot;:&quot;join&quot;},&quot;id&quot;:&quot;6c612918-0999-4e67-abc8-6c2f6691d811&quot;,&quot;z&quot;:16,&quot;name&quot;:&quot;a524f667-3eef-4260-81a9-a1e579ea4b5d&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;a524f667-3eef-4260-81a9-a1e579ea4b5d&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;27861d5b-44f9-417d-bca2-9c44adab11e3&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;24360f3b-0f81-4974-ba9d-b1617d250554&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;193a7216-a10e-446b-a245-7439a41ac1b8&quot;,&quot;z&quot;:17,&quot;name&quot;:&quot;f994ae6d-e601-4495-a5c5-e2f18d71fda2&quot;,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;f994ae6d-e601-4495-a5c5-e2f18d71fda2&quot;}}}]}">
+  <targets xsi:type="etl:LocalTarget" name="Local_ORC" label="Local_ORC" localFileName="/tmp/long_time_no_sale" localFileFormat="ORC" saveMode="OVERWRITE" registerTable="true" hiveTableName="dm_long_time_no_sale">
+    <inputPort name="Local_11in">
+      <fields name="businessentityid" dataTypeDomain="INTEGER"/>
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="storeid" dataTypeDomain="INTEGER"/>
+      <fields name="storename" dataTypeDomain="STRING"/>
+      <fields name="lastorderdate" dataTypeDomain="DATETIME"/>
+      <fields name="monthssincelastorder" dataTypeDomain="DOUBLE"/>
+    </inputPort>
+  </targets>
+  <targets xsi:type="etl:LocalTarget" name="Local_PARQUET" label="Local_PARQUET" localFileName="/tmp/long_time_no_sale_parquet" localFileFormat="PARQUET" saveMode="OVERWRITE" registerTable="true" hiveTableName="dm_long_time_no_sale_parquet">
+    <inputPort name="Local_15in">
+      <fields name="businessentityid" dataTypeDomain="INTEGER"/>
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="storeid" dataTypeDomain="INTEGER"/>
+      <fields name="storename" dataTypeDomain="STRING"/>
+      <fields name="lastorderdate" dataTypeDomain="DATETIME"/>
+      <fields name="monthssincelastorder" dataTypeDomain="DOUBLE"/>
+    </inputPort>
+    <options key="compression" value="gzip"/>
+  </targets>
+  <transformationSteps xsi:type="etl:Join" name="Join_2" label="Join_2">
+    <outputPort name="Join_2out">
+      <fields xsi:type="etl:ProjectionField" name="customerid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@joineePort/@fields.0"/>
+      <fields xsi:type="etl:ProjectionField" name="modifieddate" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.0/@joineePort/@fields.1"/>
+      <fields xsi:type="etl:ProjectionField" name="rowguid" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@joineePort/@fields.3"/>
+      <fields xsi:type="etl:ProjectionField" name="territoryid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@joineePort/@fields.5"/>
+      <fields xsi:type="etl:ProjectionField" name="personid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@joineePort/@fields.2"/>
+      <fields xsi:type="etl:ProjectionField" name="storeid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@joineePort/@fields.4"/>
+      <fields xsi:type="etl:ProjectionField" name="billtoaddressid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@inputPort/@fields.0"/>
+      <fields xsi:type="etl:ProjectionField" name="comment" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.1"/>
+      <fields xsi:type="etl:ProjectionField" name="creditcardapprovalcode" dataTypeDomain="STRING" sourceFields="//@transformationSteps.0/@inputPort/@fields.2"/>
+      <fields xsi:type="etl:ProjectionField" name="creditcardid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@inputPort/@fields.3"/>
+      <fields xsi:type="etl:ProjectionField" name="currencyrateid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@inputPort/@fields.4"/>
+      <fields xsi:type="etl:ProjectionField" name="duedate" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.0/@inputPort/@fields.6"/>
+      <fields xsi:type="etl:ProjectionField" name="freight" dataTypeDomain="DECIMAL" sourceFields="//@transformationSteps.0/@inputPort/@fields.7"/>
+      <fields xsi:type="etl:ProjectionField" name="orderdate" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.0/@inputPort/@fields.9"/>
+      <fields xsi:type="etl:ProjectionField" name="revisionnumber" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@inputPort/@fields.10"/>
+      <fields xsi:type="etl:ProjectionField" name="salesorderid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@inputPort/@fields.12"/>
+      <fields xsi:type="etl:ProjectionField" name="salespersonid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@inputPort/@fields.13"/>
+      <fields xsi:type="etl:ProjectionField" name="shipdate" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.0/@inputPort/@fields.14"/>
+      <fields xsi:type="etl:ProjectionField" name="shipmethodid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@inputPort/@fields.15"/>
+      <fields xsi:type="etl:ProjectionField" name="shiptoaddressid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@inputPort/@fields.16"/>
+      <fields xsi:type="etl:ProjectionField" name="status" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.0/@inputPort/@fields.17"/>
+      <fields xsi:type="etl:ProjectionField" name="subtotal" dataTypeDomain="DECIMAL" sourceFields="//@transformationSteps.0/@inputPort/@fields.18"/>
+      <fields xsi:type="etl:ProjectionField" name="taxamt" dataTypeDomain="DECIMAL" sourceFields="//@transformationSteps.0/@inputPort/@fields.19"/>
+      <fields xsi:type="etl:ProjectionField" name="totaldue" dataTypeDomain="DECIMAL" sourceFields="//@transformationSteps.0/@inputPort/@fields.21"/>
+    </outputPort>
+    <inputPort name="Join_2in">
+      <fields name="billtoaddressid" dataTypeDomain="INTEGER"/>
+      <fields name="comment" dataTypeDomain="STRING"/>
+      <fields name="creditcardapprovalcode" dataTypeDomain="STRING"/>
+      <fields name="creditcardid" dataTypeDomain="INTEGER"/>
+      <fields name="currencyrateid" dataTypeDomain="INTEGER"/>
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="duedate" dataTypeDomain="DATETIME"/>
+      <fields name="freight" dataTypeDomain="DECIMAL"/>
+      <fields name="modifieddate" dataTypeDomain="DATETIME"/>
+      <fields name="orderdate" dataTypeDomain="DATETIME"/>
+      <fields name="revisionnumber" dataTypeDomain="INTEGER"/>
+      <fields name="rowguid" dataTypeDomain="STRING"/>
+      <fields name="salesorderid" dataTypeDomain="INTEGER"/>
+      <fields name="salespersonid" dataTypeDomain="INTEGER"/>
+      <fields name="shipdate" dataTypeDomain="DATETIME"/>
+      <fields name="shipmethodid" dataTypeDomain="INTEGER"/>
+      <fields name="shiptoaddressid" dataTypeDomain="INTEGER"/>
+      <fields name="status" dataTypeDomain="INTEGER"/>
+      <fields name="subtotal" dataTypeDomain="DECIMAL"/>
+      <fields name="taxamt" dataTypeDomain="DECIMAL"/>
+      <fields name="territoryid" dataTypeDomain="INTEGER"/>
+      <fields name="totaldue" dataTypeDomain="DECIMAL"/>
+    </inputPort>
+    <joineePort name="Join_2join">
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="modifieddate" dataTypeDomain="DATETIME"/>
+      <fields name="personid" dataTypeDomain="INTEGER"/>
+      <fields name="rowguid" dataTypeDomain="STRING"/>
+      <fields name="storeid" dataTypeDomain="INTEGER"/>
+      <fields name="territoryid" dataTypeDomain="INTEGER"/>
+    </joineePort>
+    <keyFields>customerid</keyFields>
+    <joineeKeyFields>customerid</joineeKeyFields>
+  </transformationSteps>
+  <transformationSteps xsi:type="etl:Join" name="Join_6" label="Join_6">
+    <outputPort name="Join_6out">
+      <fields xsi:type="etl:ProjectionField" name="customerid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.5"/>
+      <fields xsi:type="etl:ProjectionField" name="territoryid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.20"/>
+      <fields xsi:type="etl:ProjectionField" name="storeid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.5"/>
+      <fields xsi:type="etl:ProjectionField" name="salespersonid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.16"/>
+      <fields xsi:type="etl:ProjectionField" name="businessentityid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@joineePort/@fields.0"/>
+      <fields xsi:type="etl:ProjectionField" name="demographics" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@joineePort/@fields.1"/>
+      <fields xsi:type="etl:ProjectionField" name="name" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@joineePort/@fields.3"/>
+      <fields xsi:type="etl:ProjectionField" name="modifieddate" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.1/@inputPort/@fields.1"/>
+      <fields xsi:type="etl:ProjectionField" name="rowguid" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@inputPort/@fields.2"/>
+      <fields xsi:type="etl:ProjectionField" name="personid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.4"/>
+      <fields xsi:type="etl:ProjectionField" name="billtoaddressid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.6"/>
+      <fields xsi:type="etl:ProjectionField" name="comment" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@inputPort/@fields.7"/>
+      <fields xsi:type="etl:ProjectionField" name="creditcardapprovalcode" dataTypeDomain="STRING" sourceFields="//@transformationSteps.1/@inputPort/@fields.8"/>
+      <fields xsi:type="etl:ProjectionField" name="creditcardid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.9"/>
+      <fields xsi:type="etl:ProjectionField" name="currencyrateid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.10"/>
+      <fields xsi:type="etl:ProjectionField" name="duedate" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.1/@inputPort/@fields.11"/>
+      <fields xsi:type="etl:ProjectionField" name="freight" dataTypeDomain="DECIMAL" sourceFields="//@transformationSteps.1/@inputPort/@fields.12"/>
+      <fields xsi:type="etl:ProjectionField" name="orderdate" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.1/@inputPort/@fields.13"/>
+      <fields xsi:type="etl:ProjectionField" name="revisionnumber" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.14"/>
+      <fields xsi:type="etl:ProjectionField" name="salesorderid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.15"/>
+      <fields xsi:type="etl:ProjectionField" name="shipdate" dataTypeDomain="DATETIME" sourceFields="//@transformationSteps.1/@inputPort/@fields.17"/>
+      <fields xsi:type="etl:ProjectionField" name="shipmethodid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.18"/>
+      <fields xsi:type="etl:ProjectionField" name="shiptoaddressid" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.19"/>
+      <fields xsi:type="etl:ProjectionField" name="status" dataTypeDomain="INTEGER" sourceFields="//@transformationSteps.1/@inputPort/@fields.20"/>
+      <fields xsi:type="etl:ProjectionField" name="subtotal" dataTypeDomain="DECIMAL" sourceFields="//@transformationSteps.1/@inputPort/@fields.21"/>
+      <fields xsi:type="etl:ProjectionField" name="taxamt" dataTypeDomain="DECIMAL" sourceFields="//@transformationSteps.1/@inputPort/@fields.22"/>
+      <fields xsi:type="etl:ProjectionField" name="totaldue" dataTypeDomain="DECIMAL" sourceFields="//@transformationSteps.1/@inputPort/@fields.23"/>
+    </outputPort>
+    <inputPort name="Join_6in">
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="modifieddate" dataTypeDomain="DATETIME"/>
+      <fields name="rowguid" dataTypeDomain="STRING"/>
+      <fields name="territoryid" dataTypeDomain="INTEGER"/>
+      <fields name="personid" dataTypeDomain="INTEGER"/>
+      <fields name="storeid" dataTypeDomain="INTEGER"/>
+      <fields name="billtoaddressid" dataTypeDomain="INTEGER"/>
+      <fields name="comment" dataTypeDomain="STRING"/>
+      <fields name="creditcardapprovalcode" dataTypeDomain="STRING"/>
+      <fields name="creditcardid" dataTypeDomain="INTEGER"/>
+      <fields name="currencyrateid" dataTypeDomain="INTEGER"/>
+      <fields name="duedate" dataTypeDomain="DATETIME"/>
+      <fields name="freight" dataTypeDomain="DECIMAL"/>
+      <fields name="orderdate" dataTypeDomain="DATETIME"/>
+      <fields name="revisionnumber" dataTypeDomain="INTEGER"/>
+      <fields name="salesorderid" dataTypeDomain="INTEGER"/>
+      <fields name="salespersonid" dataTypeDomain="INTEGER"/>
+      <fields name="shipdate" dataTypeDomain="DATETIME"/>
+      <fields name="shipmethodid" dataTypeDomain="INTEGER"/>
+      <fields name="shiptoaddressid" dataTypeDomain="INTEGER"/>
+      <fields name="status" dataTypeDomain="INTEGER"/>
+      <fields name="subtotal" dataTypeDomain="DECIMAL"/>
+      <fields name="taxamt" dataTypeDomain="DECIMAL"/>
+      <fields name="totaldue" dataTypeDomain="DECIMAL"/>
+    </inputPort>
+    <joineePort name="Join_6join">
+      <fields name="businessentityid" dataTypeDomain="INTEGER"/>
+      <fields name="demographics" dataTypeDomain="STRING"/>
+      <fields name="modifieddate" dataTypeDomain="DATETIME"/>
+      <fields name="name" dataTypeDomain="STRING"/>
+      <fields name="rowguid" dataTypeDomain="STRING"/>
+      <fields name="salespersonid" dataTypeDomain="INTEGER"/>
+    </joineePort>
+    <keyFields>storeid</keyFields>
+    <joineeKeyFields>businessentityid</joineeKeyFields>
+  </transformationSteps>
+  <transformationSteps xsi:type="etl:SparkSQL" name="Spark_SQL_9" label="Spark_SQL_9" statement="select businessentityid, customerid, storeid, name as storename, max(orderdate) as lastorderdate,&#xA;months_between(cast('${jobParameters(&quot;today&quot;)}' as date), MAX(orderdate), true) as monthssincelastorder&#xA;from Sales&#xA;group by businessentityid, customerid, storeid, name&#xA;">
+    <outputPort name="Spark_SQL_9out">
+      <fields name="businessentityid" dataTypeDomain="INTEGER"/>
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="storeid" dataTypeDomain="INTEGER"/>
+      <fields name="storename" dataTypeDomain="STRING"/>
+      <fields name="lastorderdate" dataTypeDomain="DATETIME"/>
+      <fields name="monthssincelastorder" dataTypeDomain="DOUBLE"/>
+    </outputPort>
+    <sqlPorts name="Sales" alias="Sales">
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="territoryid" dataTypeDomain="INTEGER"/>
+      <fields name="storeid" dataTypeDomain="INTEGER"/>
+      <fields name="salespersonid" dataTypeDomain="INTEGER"/>
+      <fields name="businessentityid" dataTypeDomain="INTEGER"/>
+      <fields name="demographics" dataTypeDomain="STRING"/>
+      <fields name="name" dataTypeDomain="STRING"/>
+      <fields name="modifieddate" dataTypeDomain="DATETIME"/>
+      <fields name="rowguid" dataTypeDomain="STRING"/>
+      <fields name="personid" dataTypeDomain="INTEGER"/>
+      <fields name="billtoaddressid" dataTypeDomain="INTEGER"/>
+      <fields name="comment" dataTypeDomain="STRING"/>
+      <fields name="creditcardapprovalcode" dataTypeDomain="STRING"/>
+      <fields name="creditcardid" dataTypeDomain="INTEGER"/>
+      <fields name="currencyrateid" dataTypeDomain="INTEGER"/>
+      <fields name="duedate" dataTypeDomain="DATETIME"/>
+      <fields name="freight" dataTypeDomain="DECIMAL"/>
+      <fields name="orderdate" dataTypeDomain="DATETIME"/>
+      <fields name="revisionnumber" dataTypeDomain="INTEGER"/>
+      <fields name="salesorderid" dataTypeDomain="INTEGER"/>
+      <fields name="shipdate" dataTypeDomain="DATETIME"/>
+      <fields name="shipmethodid" dataTypeDomain="INTEGER"/>
+      <fields name="shiptoaddressid" dataTypeDomain="INTEGER"/>
+      <fields name="status" dataTypeDomain="INTEGER"/>
+      <fields name="subtotal" dataTypeDomain="DECIMAL"/>
+      <fields name="taxamt" dataTypeDomain="DECIMAL"/>
+      <fields name="totaldue" dataTypeDomain="DECIMAL"/>
+    </sqlPorts>
+  </transformationSteps>
+  <transformationSteps xsi:type="etl:SparkSQL" name="Spark_SQL_13" label="Spark_SQL_13" checkpoint="true" statement="select * &#xA;from Sales2&#xA;WHERE monthssincelastorder >= 12&#xA;ORDER BY monthssincelastorder DESC&#xA;">
+    <outputPort name="Spark_SQL_13out">
+      <fields name="businessentityid" dataTypeDomain="INTEGER"/>
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="storeid" dataTypeDomain="INTEGER"/>
+      <fields name="storename" dataTypeDomain="STRING"/>
+      <fields name="lastorderdate" dataTypeDomain="DATETIME"/>
+      <fields name="monthssincelastorder" dataTypeDomain="DOUBLE"/>
+    </outputPort>
+    <sqlPorts name="Sales2" alias="Sales2">
+      <fields name="businessentityid" dataTypeDomain="INTEGER"/>
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="storeid" dataTypeDomain="INTEGER"/>
+      <fields name="storename" dataTypeDomain="STRING"/>
+      <fields name="lastorderdate" dataTypeDomain="DATETIME"/>
+      <fields name="monthssincelastorder" dataTypeDomain="DOUBLE"/>
+    </sqlPorts>
+  </transformationSteps>
+  <sources xsi:type="etl:TableSource" name="SalesOrderHeader" label="SalesOrderHeader" tableName="salesorderheader">
+    <outputPort name="Table_0out">
+      <fields name="billtoaddressid" dataTypeDomain="INTEGER"/>
+      <fields name="comment" dataTypeDomain="STRING"/>
+      <fields name="creditcardapprovalcode" dataTypeDomain="STRING"/>
+      <fields name="creditcardid" dataTypeDomain="INTEGER"/>
+      <fields name="currencyrateid" dataTypeDomain="INTEGER"/>
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="duedate" dataTypeDomain="DATETIME"/>
+      <fields name="freight" dataTypeDomain="DECIMAL"/>
+      <fields name="modifieddate" dataTypeDomain="DATETIME"/>
+      <fields name="orderdate" dataTypeDomain="DATETIME"/>
+      <fields name="revisionnumber" dataTypeDomain="INTEGER"/>
+      <fields name="rowguid" dataTypeDomain="STRING"/>
+      <fields name="salesorderid" dataTypeDomain="INTEGER"/>
+      <fields name="salespersonid" dataTypeDomain="INTEGER"/>
+      <fields name="shipdate" dataTypeDomain="DATETIME"/>
+      <fields name="shipmethodid" dataTypeDomain="INTEGER"/>
+      <fields name="shiptoaddressid" dataTypeDomain="INTEGER"/>
+      <fields name="status" dataTypeDomain="INTEGER"/>
+      <fields name="subtotal" dataTypeDomain="DECIMAL"/>
+      <fields name="taxamt" dataTypeDomain="DECIMAL"/>
+      <fields name="territoryid" dataTypeDomain="INTEGER"/>
+      <fields name="totaldue" dataTypeDomain="DECIMAL"/>
+    </outputPort>
+  </sources>
+  <sources xsi:type="etl:TableSource" name="Customer" label="Customer" tableName="customer">
+    <outputPort name="Table_1out">
+      <fields name="customerid" dataTypeDomain="INTEGER"/>
+      <fields name="modifieddate" dataTypeDomain="DATETIME"/>
+      <fields name="personid" dataTypeDomain="INTEGER"/>
+      <fields name="rowguid" dataTypeDomain="STRING"/>
+      <fields name="storeid" dataTypeDomain="INTEGER"/>
+      <fields name="territoryid" dataTypeDomain="INTEGER"/>
+    </outputPort>
+  </sources>
+  <sources xsi:type="etl:TableSource" name="Store" label="Store" tableName="store">
+    <outputPort name="Table_5out">
+      <fields name="businessentityid" dataTypeDomain="INTEGER"/>
+      <fields name="demographics" dataTypeDomain="STRING"/>
+      <fields name="modifieddate" dataTypeDomain="DATETIME"/>
+      <fields name="name" dataTypeDomain="STRING"/>
+      <fields name="rowguid" dataTypeDomain="STRING"/>
+      <fields name="salespersonid" dataTypeDomain="INTEGER"/>
+    </outputPort>
+  </sources>
+  <transitions name="729af401-aba8-4fc1-8593-4a5fd8a4f63f" start="//@transformationSteps.1/@outputPort" finish="//@transformationSteps.2/@sqlPorts.0"/>
+  <transitions name="3f1af257-d938-4931-baf4-06140c1a7853" start="//@transformationSteps.2/@outputPort" finish="//@transformationSteps.3/@sqlPorts.0"/>
+  <transitions name="b6b3a5e6-32c1-4d58-9ba1-04cd77b55de6" start="//@transformationSteps.3/@outputPort" finish="//@targets.0/@inputPort"/>
+  <transitions name="774e5a70-c59e-4a0f-8620-9f19dc5e9d94" start="//@transformationSteps.3/@outputPort" finish="//@targets.1/@inputPort"/>
+  <transitions name="e0345021-e519-475f-acc5-adc7ae248438" start="//@sources.1/@outputPort" finish="//@transformationSteps.0/@joineePort"/>
+  <transitions name="b71eed50-636e-4cf6-aa32-cc9f88903390" start="//@sources.0/@outputPort" finish="//@transformationSteps.0/@inputPort"/>
+  <transitions name="a524f667-3eef-4260-81a9-a1e579ea4b5d" start="//@sources.2/@outputPort" finish="//@transformationSteps.1/@joineePort"/>
+  <transitions name="f994ae6d-e601-4495-a5c5-e2f18d71fda2" start="//@transformationSteps.0/@outputPort" finish="//@transformationSteps.1/@inputPort"/>
+  <auditInfo changeUser="admin" changeDateTime="2021-03-17T15:50:53.556+0000" createUser="admin" createDateTime="2021-03-15T11:37:12.578+0000"/>
+</etl:Transformation>

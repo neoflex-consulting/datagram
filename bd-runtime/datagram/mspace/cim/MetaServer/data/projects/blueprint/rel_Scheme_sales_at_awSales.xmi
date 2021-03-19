@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rel:Scheme xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rel="http://www.neoflex.ru/meta/relational" name="sales_at_awSales">
+  <tables name="countryregioncurrency" description="Cross-reference table mapping ISO currency codes to a country or region.">
+    <columns name="countryregioncode" description="ISO code for countries and regions. Foreign key to CountryRegion.CountryRegionCode.">
+      <dataType xsi:type="rel:VARCHAR" length="3"/>
+    </columns>
+    <columns name="currencycode" description="ISO standard currency code. Foreign key to Currency.CurrencyCode.">
+      <dataType xsi:type="rel:CHAR" length="3"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="countryregioncurrency_pk">
+      <keyFeatures column="//@tables.0/@columns.0"/>
+      <keyFeatures column="//@tables.0/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_CountryRegionCurrency_CountryRegion_CountryRegionCode">
+      <keyFeatures column="//@tables.0/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_CountryRegionCurrency_Currency_CurrencyCode" target="//@tables.2">
+      <keyFeatures column="//@tables.0/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="creditcard" description="Customer credit card information.">
+    <columns name="creditcardid" description="Primary key for CreditCard records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="cardtype" description="Credit card name.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="cardnumber" description="Credit card number.">
+      <dataType xsi:type="rel:VARCHAR" length="25"/>
+    </columns>
+    <columns name="expmonth" description="Credit card expiration month.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="expyear" description="Credit card expiration year.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="creditcard_pk">
+      <keyFeatures column="//@tables.1/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="currency" description="Lookup table containing standard ISO currencies.">
+    <columns name="currencycode" description="The ISO code for the Currency.">
+      <dataType xsi:type="rel:CHAR" length="3"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="currency_pk">
+      <keyFeatures column="//@tables.2/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="currencyrate" description="Currency exchange rates.">
+    <columns name="currencyrateid" description="Primary key for CurrencyRate records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="currencyratedate" description="Date and time the exchange rate was obtained.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="fromcurrencycode" description="Exchange rate was converted from this currency code.">
+      <dataType xsi:type="rel:CHAR" length="3"/>
+    </columns>
+    <columns name="tocurrencycode" description="Exchange rate was converted to this currency code.">
+      <dataType xsi:type="rel:CHAR" length="3"/>
+    </columns>
+    <columns name="averagerate" description="Average exchange rate for the day.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="endofdayrate" description="Final exchange rate for the day.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="currencyrate_pk">
+      <keyFeatures column="//@tables.3/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_CurrencyRate_Currency_FromCurrencyCode" target="//@tables.2">
+      <keyFeatures column="//@tables.3/@columns.2"/>
+    </foreignKeys>
+    <foreignKeys name="FK_CurrencyRate_Currency_ToCurrencyCode" target="//@tables.2">
+      <keyFeatures column="//@tables.3/@columns.3"/>
+    </foreignKeys>
+  </tables>
+  <tables name="customer" description="Current customer information. Also see the Person and Store tables.">
+    <columns name="customerid" description="Primary key.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="personid" nullable="true" description="Foreign key to Person.BusinessEntityID">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="storeid" nullable="true" description="Foreign key to Store.BusinessEntityID">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="territoryid" nullable="true" description="ID of the territory in which the customer is located. Foreign key to SalesTerritory.SalesTerritoryID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="customer_pk">
+      <keyFeatures column="//@tables.4/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_Customer_Person_PersonID">
+      <keyFeatures column="//@tables.4/@columns.1"/>
+    </foreignKeys>
+    <foreignKeys name="FK_Customer_SalesTerritory_TerritoryID" target="//@tables.13">
+      <keyFeatures column="//@tables.4/@columns.3"/>
+    </foreignKeys>
+    <foreignKeys name="FK_Customer_Store_StoreID" target="//@tables.18">
+      <keyFeatures column="//@tables.4/@columns.2"/>
+    </foreignKeys>
+  </tables>
+  <tables name="personcreditcard" description="Cross-reference table mapping people to their credit card information in the CreditCard table.">
+    <columns name="businessentityid" description="Business entity identification number. Foreign key to Person.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="creditcardid" description="Credit card identification number. Foreign key to CreditCard.CreditCardID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="personcreditcard_pk">
+      <keyFeatures column="//@tables.5/@columns.0"/>
+      <keyFeatures column="//@tables.5/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_PersonCreditCard_Person_BusinessEntityID">
+      <keyFeatures column="//@tables.5/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_PersonCreditCard_CreditCard_CreditCardID" target="//@tables.1">
+      <keyFeatures column="//@tables.5/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="salesorderdetail" description="Individual products associated with a specific sales order. See SalesOrderHeader.">
+    <columns name="salesorderid" description="Primary key. Foreign key to SalesOrderHeader.SalesOrderID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="salesorderdetailid" description="Primary key. One incremental unique number per product sold.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="carriertrackingnumber" nullable="true" description="Shipment tracking number supplied by the shipper.">
+      <dataType xsi:type="rel:VARCHAR" length="25"/>
+    </columns>
+    <columns name="orderqty" description="Quantity ordered per product.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productid" description="Product sold to customer. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="specialofferid" description="Promotional code. Foreign key to SpecialOffer.SpecialOfferID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="unitprice" description="Selling price of a single product.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="unitpricediscount" description="Discount amount.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="salesorderdetail_pk">
+      <keyFeatures column="//@tables.6/@columns.0"/>
+      <keyFeatures column="//@tables.6/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_SalesOrderDetail_SalesOrderHeader_SalesOrderID" target="//@tables.7">
+      <keyFeatures column="//@tables.6/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesOrderDetail_SpecialOfferProduct_SpecialOfferIDProductID" target="//@tables.17">
+      <keyFeatures column="//@tables.6/@columns.5"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesOrderDetail_SpecialOfferProduct_SpecialOfferIDProductID" target="//@tables.17">
+      <keyFeatures column="//@tables.6/@columns.4"/>
+    </foreignKeys>
+  </tables>
+  <tables name="salesorderheader" description="General sales order information.">
+    <columns name="salesorderid" description="Primary key.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="revisionnumber" description="Incremental number to track changes to the sales order over time.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="orderdate" description="Dates the sales order was created.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="duedate" description="Date the order is due to the customer.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="shipdate" nullable="true" description="Date the order was shipped to the customer.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="status" description="Order current status. 1 = In process; 2 = Approved; 3 = Backordered; 4 = Rejected; 5 = Shipped; 6 = Cancelled">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="customerid" description="Customer identification number. Foreign key to Customer.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="salespersonid" nullable="true" description="Sales person who created the sales order. Foreign key to SalesPerson.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="territoryid" nullable="true" description="Territory in which the sale was made. Foreign key to SalesTerritory.SalesTerritoryID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="billtoaddressid" description="Customer billing address. Foreign key to Address.AddressID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="shiptoaddressid" description="Customer shipping address. Foreign key to Address.AddressID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="shipmethodid" description="Shipping method. Foreign key to ShipMethod.ShipMethodID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="creditcardid" nullable="true" description="Credit card identification number. Foreign key to CreditCard.CreditCardID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="creditcardapprovalcode" nullable="true" description="Approval code provided by the credit card company.">
+      <dataType xsi:type="rel:VARCHAR" length="15"/>
+    </columns>
+    <columns name="currencyrateid" nullable="true" description="Currency exchange rate used. Foreign key to CurrencyRate.CurrencyRateID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="subtotal" description="Sales subtotal. Computed as SUM(SalesOrderDetail.LineTotal)for the appropriate SalesOrderID.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="taxamt" description="Tax amount.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="freight" description="Shipping cost.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="totaldue" nullable="true" description="Total due from customer. Computed as Subtotal + TaxAmt + Freight.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="comment" nullable="true" description="Sales representative comments.">
+      <dataType xsi:type="rel:VARCHAR" length="128"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="salesorderheader_pk">
+      <keyFeatures column="//@tables.7/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_SalesOrderHeader_Address_BillToAddressID">
+      <keyFeatures column="//@tables.7/@columns.9"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesOrderHeader_Address_ShipToAddressID">
+      <keyFeatures column="//@tables.7/@columns.10"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesOrderHeader_ShipMethod_ShipMethodID">
+      <keyFeatures column="//@tables.7/@columns.11"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesOrderHeader_CreditCard_CreditCardID" target="//@tables.1">
+      <keyFeatures column="//@tables.7/@columns.12"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesOrderHeader_CurrencyRate_CurrencyRateID" target="//@tables.3">
+      <keyFeatures column="//@tables.7/@columns.14"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesOrderHeader_Customer_CustomerID" target="//@tables.4">
+      <keyFeatures column="//@tables.7/@columns.6"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesOrderHeader_SalesPerson_SalesPersonID" target="//@tables.9">
+      <keyFeatures column="//@tables.7/@columns.7"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesOrderHeader_SalesTerritory_TerritoryID" target="//@tables.13">
+      <keyFeatures column="//@tables.7/@columns.8"/>
+    </foreignKeys>
+  </tables>
+  <tables name="salesorderheadersalesreason" description="Cross-reference table mapping sales orders to sales reason codes.">
+    <columns name="salesorderid" description="Primary key. Foreign key to SalesOrderHeader.SalesOrderID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="salesreasonid" description="Primary key. Foreign key to SalesReason.SalesReasonID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="salesorderheadersalesreason_pk">
+      <keyFeatures column="//@tables.8/@columns.0"/>
+      <keyFeatures column="//@tables.8/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_SalesOrderHeaderSalesReason_SalesOrderHeader_SalesOrderID" target="//@tables.7">
+      <keyFeatures column="//@tables.8/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesOrderHeaderSalesReason_SalesReason_SalesReasonID" target="//@tables.11">
+      <keyFeatures column="//@tables.8/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="salesperson" description="Sales representative current information.">
+    <columns name="businessentityid" description="Primary key for SalesPerson records. Foreign key to Employee.BusinessEntityID">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="territoryid" nullable="true" description="Territory currently assigned to. Foreign key to SalesTerritory.SalesTerritoryID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="salesquota" nullable="true" description="Projected yearly sales.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="bonus" description="Bonus due if quota is met.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="commissionpct" description="Commision percent received per sale.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="salesytd" description="Sales total year to date.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="saleslastyear" description="Sales total of previous year.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="salesperson_pk">
+      <keyFeatures column="//@tables.9/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_SalesPerson_Employee_BusinessEntityID">
+      <keyFeatures column="//@tables.9/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesPerson_SalesTerritory_TerritoryID" target="//@tables.13">
+      <keyFeatures column="//@tables.9/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="salespersonquotahistory" description="Sales performance tracking.">
+    <columns name="businessentityid" description="Sales person identification number. Foreign key to SalesPerson.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="quotadate" description="Sales quota date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="salesquota" description="Sales quota amount.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="salespersonquotahistory_pk">
+      <keyFeatures column="//@tables.10/@columns.0"/>
+      <keyFeatures column="//@tables.10/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_SalesPersonQuotaHistory_SalesPerson_BusinessEntityID" target="//@tables.9">
+      <keyFeatures column="//@tables.10/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="salesreason" description="Lookup table of customer purchase reasons.">
+    <columns name="salesreasonid" description="Primary key for SalesReason records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="salesreason_pk">
+      <keyFeatures column="//@tables.11/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="salestaxrate" description="Tax rate lookup table.">
+    <columns name="salestaxrateid" description="Primary key for SalesTaxRate records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="stateprovinceid" description="State, province, or country/region the sales tax applies to.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="taxtype" description="1 = Tax applied to retail transactions, 2 = Tax applied to wholesale transactions, 3 = Tax applied to all sales (retail and wholesale) transactions.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="taxrate" description="Tax rate amount.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="salestaxrate_pk">
+      <keyFeatures column="//@tables.12/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_SalesTaxRate_StateProvince_StateProvinceID">
+      <keyFeatures column="//@tables.12/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="salesterritory" description="Sales territory lookup table.">
+    <columns name="territoryid" description="Primary key for SalesTerritory records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="countryregioncode" description="ISO standard country or region code. Foreign key to CountryRegion.CountryRegionCode.">
+      <dataType xsi:type="rel:VARCHAR" length="3"/>
+    </columns>
+    <columns name="group" description="Geographic area to which the sales territory belong.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="salesytd" description="Sales in the territory year to date.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="saleslastyear" description="Sales in the territory the previous year.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="costytd" description="Business costs in the territory year to date.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="costlastyear" description="Business costs in the territory the previous year.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="salesterritory_pk">
+      <keyFeatures column="//@tables.13/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_SalesTerritory_CountryRegion_CountryRegionCode">
+      <keyFeatures column="//@tables.13/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="salesterritoryhistory" description="Sales representative transfers to other sales territories.">
+    <columns name="businessentityid" description="Primary key. The sales rep.  Foreign key to SalesPerson.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="territoryid" description="Primary key. Territory identification number. Foreign key to SalesTerritory.SalesTerritoryID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="startdate" description="Primary key. Date the sales representive started work in the territory.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="enddate" nullable="true" description="Date the sales representative left work in the territory.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="salesterritoryhistory_pk">
+      <keyFeatures column="//@tables.14/@columns.0"/>
+      <keyFeatures column="//@tables.14/@columns.2"/>
+      <keyFeatures column="//@tables.14/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_SalesTerritoryHistory_SalesPerson_BusinessEntityID" target="//@tables.9">
+      <keyFeatures column="//@tables.14/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SalesTerritoryHistory_SalesTerritory_TerritoryID" target="//@tables.13">
+      <keyFeatures column="//@tables.14/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="shoppingcartitem" description="Contains online customer orders until the order is submitted or cancelled.">
+    <columns name="shoppingcartitemid" description="Primary key for ShoppingCartItem records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="shoppingcartid" description="Shopping cart identification number.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="quantity" description="Product quantity ordered.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productid" description="Product ordered. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="datecreated" description="Date the time the record was created.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="shoppingcartitem_pk">
+      <keyFeatures column="//@tables.15/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_ShoppingCartItem_Product_ProductID">
+      <keyFeatures column="//@tables.15/@columns.3"/>
+    </foreignKeys>
+  </tables>
+  <tables name="specialoffer" description="Sale discounts lookup table.">
+    <columns name="specialofferid" description="Primary key for SpecialOffer records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="description" description="Discount description.">
+      <dataType xsi:type="rel:VARCHAR" length="255"/>
+    </columns>
+    <columns name="discountpct" description="Discount precentage.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="type" description="Discount type category.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="category" description="Group the discount applies to such as Reseller or Customer.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="startdate" description="Discount start date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="enddate" description="Discount end date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="minqty" description="Minimum discount percent allowed.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="maxqty" nullable="true" description="Maximum discount percent allowed.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="specialoffer_pk">
+      <keyFeatures column="//@tables.16/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="specialofferproduct" description="Cross-reference table mapping products to special offer discounts.">
+    <columns name="specialofferid" description="Primary key for SpecialOfferProduct records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productid" description="Product identification number. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="specialofferproduct_pk">
+      <keyFeatures column="//@tables.17/@columns.0"/>
+      <keyFeatures column="//@tables.17/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_SpecialOfferProduct_Product_ProductID">
+      <keyFeatures column="//@tables.17/@columns.1"/>
+    </foreignKeys>
+    <foreignKeys name="FK_SpecialOfferProduct_SpecialOffer_SpecialOfferID" target="//@tables.16">
+      <keyFeatures column="//@tables.17/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="store" description="Customers (resellers) of Adventure Works products.">
+    <columns name="businessentityid" description="Primary key. Foreign key to Customer.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="salespersonid" nullable="true" description="ID of the sales person assigned to the customer. Foreign key to SalesPerson.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="demographics" nullable="true" description="Demographic informationg about the store such as the number of employees, annual sales and store type.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="name" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <primaryKey name="store_pk">
+      <keyFeatures column="//@tables.18/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_Store_BusinessEntity_BusinessEntityID">
+      <keyFeatures column="//@tables.18/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_Store_SalesPerson_SalesPersonID" target="//@tables.9">
+      <keyFeatures column="//@tables.18/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <views name="vindividualcustomer">
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="title" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="8"/>
+    </columns>
+    <columns name="suffix" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="10"/>
+    </columns>
+    <columns name="emailaddress" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="emailpromotion" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="addressline1" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <columns name="addressline2" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <columns name="city" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="postalcode" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="15"/>
+    </columns>
+    <columns name="demographics" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+  </views>
+  <views name="vpersondemographics">
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="totalpurchaseytd" nullable="true">
+      <dataType xsi:type="rel:DOUBLE"/>
+    </columns>
+    <columns name="datefirstpurchase" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="birthdate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="maritalstatus" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="1"/>
+    </columns>
+    <columns name="yearlyincome" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="gender" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="1"/>
+    </columns>
+    <columns name="totalchildren" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="numberchildrenathome" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="education" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="occupation" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="homeownerflag" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="numbercarsowned" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+  </views>
+  <views name="vsalesperson">
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="title" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="8"/>
+    </columns>
+    <columns name="suffix" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="10"/>
+    </columns>
+    <columns name="jobtitle" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="emailaddress" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="emailpromotion" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="addressline1" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <columns name="addressline2" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <columns name="city" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="postalcode" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="15"/>
+    </columns>
+    <columns name="territorygroup" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="salesquota" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="salesytd" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="saleslastyear" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+  </views>
+  <views name="vsalespersonsalesbyfiscalyears">
+    <columns name="SalesPersonID" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="FullName" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="JobTitle" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="SalesTerritory" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="2012" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="12" precision="4"/>
+    </columns>
+    <columns name="2013" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="12" precision="4"/>
+    </columns>
+    <columns name="2014" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="12" precision="4"/>
+    </columns>
+  </views>
+  <views name="vsalespersonsalesbyfiscalyearsdata">
+    <columns name="salespersonid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="fullname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="jobtitle" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="salestotal" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="fiscalyear" nullable="true">
+      <dataType xsi:type="rel:DOUBLE"/>
+    </columns>
+  </views>
+  <views name="vstorewithaddresses">
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="addressline1" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <columns name="addressline2" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <columns name="city" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="postalcode" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="15"/>
+    </columns>
+  </views>
+  <views name="vstorewithcontacts">
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="title" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="8"/>
+    </columns>
+    <columns name="suffix" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="10"/>
+    </columns>
+    <columns name="emailaddress" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="emailpromotion" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+  </views>
+  <views name="vstorewithdemographics">
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="AnnualSales" nullable="true">
+      <dataType xsi:type="rel:DOUBLE"/>
+    </columns>
+    <columns name="AnnualRevenue" nullable="true">
+      <dataType xsi:type="rel:DOUBLE"/>
+    </columns>
+    <columns name="BankName" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="BusinessType" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="5"/>
+    </columns>
+    <columns name="YearOpened" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="Specialty" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="SquareFeet" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="Brands" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="Internet" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="NumberEmployees" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+  </views>
+</rel:Scheme>

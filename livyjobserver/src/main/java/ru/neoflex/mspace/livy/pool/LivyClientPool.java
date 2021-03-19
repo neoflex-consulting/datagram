@@ -35,19 +35,21 @@ public class LivyClientPool extends GenericObjectPool<LivyClient> {
         super(factory);
         try {
             GenericObjectPoolConfig<LivyClient> config = new GenericObjectPoolConfig<LivyClient>();
-            Enumeration names = properties.propertyNames();
-            while (names.hasMoreElements()) {
-                Object key = names.nextElement();
-                Field field_ = config.getClass().getDeclaredField((String) key);
-                field_.setAccessible(true);
-                Object value = null;
-                if(field_.getType().equals(Integer.class)){
-                    value = Integer.valueOf(properties.getProperty((String)key));
+            if (properties != null) {
+                Enumeration names = properties.propertyNames();
+                while (names.hasMoreElements()) {
+                    Object key = names.nextElement();
+                    Field field_ = config.getClass().getDeclaredField((String) key);
+                    field_.setAccessible(true);
+                    Object value = null;
+                    if(field_.getType().equals(Integer.class)){
+                        value = Integer.valueOf(properties.getProperty((String)key));
+                    }
+                    if(field_.getType().equals(Long.class)){
+                        value = Long.valueOf(properties.getProperty((String)key));
+                    }
+                    field_.set(config, value);
                 }
-                if(field_.getType().equals(Long.class)){
-                    value = Long.valueOf(properties.getProperty((String)key));
-                }
-                field_.set(config, value);
             }
         }catch (Exception e){
             System.err.println("Error setting properties");

@@ -11,6 +11,8 @@ import org.eclipse.epsilon.egl.EgxModule;
 import org.eclipse.epsilon.emc.emf.CachedResourceSet;
 import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.IEolExecutableModule;
+import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
+import org.eclipse.epsilon.eol.exceptions.flowcontrol.EolAbortTransactionException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.IModel;
@@ -60,6 +62,12 @@ public class EpsilonSvc extends BaseSvc {
             return result;
         }
         catch (Exception e) {
+            if (e instanceof EolRuntimeException) {
+                EolRuntimeException ee = (EolRuntimeException) e;
+                if (ee.getAst() != null) {
+                    logger.error(String.format("Error in %c at %s", ee.getAst().getFile().toString(), ee.getAst().getRegion().toString()));
+                }
+            }
             throw new RuntimeException(e);
         }
         finally {

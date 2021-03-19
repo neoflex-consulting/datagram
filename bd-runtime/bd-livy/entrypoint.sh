@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Configure Livy based on environment variables
+echo "" > "${LIVY_CONF_DIR}/livy.conf"
 if [[ -n "${SPARK_MASTER}" ]]; then
   echo "livy.spark.master=${SPARK_MASTER}" >> "${LIVY_CONF_DIR}/livy.conf"
 fi
