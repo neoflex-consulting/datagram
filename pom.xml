@@ -6,7 +6,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <revision>spark2-2.0.0-SNAPSHOT</revision>
+        <revision>spark3-2.0.0-SNAPSHOT</revision>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
@@ -82,6 +82,7 @@
                         <configuration>
                             <target>
                                 <replaceregexp file="./.env" match="VERSION=(.*)" replace="VERSION=${project.version}" byline="true"/>
+                                <replaceregexp file="./bd-runtime/.env" match="VERSION=(.*)" replace="VERSION=${project.version}" byline="true"/>
                             </target>
                         </configuration>
                     </execution>

@@ -26,7 +26,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <build>
-                <finalName>${project.name}</finalName>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
