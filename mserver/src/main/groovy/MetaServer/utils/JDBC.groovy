@@ -69,7 +69,8 @@ class JDBC {
             case Types.NCLOB:
             case Types.SQLXML:
             case Types.CLOB:
-            case  Types.ROWID:
+            case Types.ROWID:
+            case Types.DISTINCT:
                 return db.instantiate("rel.VARCHAR", [length:(charOctetLength == 0 ? 255 : charOctetLength)])
                 break
             case Types.CHAR:
@@ -104,6 +105,7 @@ class JDBC {
                 return db.instantiate("rel.BOOLEAN")
                 break
             case Types.OTHER:
+                if (typeName.equals("uuid")) return db.instantiate("rel.VARCHAR", [length:(charOctetLength == 0 ? 255 : charOctetLength)])
                 return db.instantiate("rel.DATETIME")
                 break
             case Types.ARRAY:
@@ -111,6 +113,7 @@ class JDBC {
                 break
             case Types.NULL:
             default:
+                logger.warn(String.format("Skipping unknown datatype %d, %s", dataType, typeName))
                 return null
         }
     }
