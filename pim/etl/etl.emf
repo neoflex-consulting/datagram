@@ -448,6 +448,7 @@ class LocalTarget extends Target {
   attr boolean repartitionNumFromString;
   attr String repartitionNumString;
   attr String repartitionExpression;
+  @teneo.jpa(value="@Column(length=2048)")
   attr String localFileName;
   attr LocalFileFormat[1] localFileFormat = "JSON";
   attr boolean deleteBeforeSave = false;
@@ -1020,6 +1021,7 @@ enum HiveTargetType {
 }
 
 enum SparkVersion {
+  DEFAULT = 0;
   SPARK2 = 2;
   SPARK3 = 3;
 }

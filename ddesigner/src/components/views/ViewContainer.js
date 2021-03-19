@@ -349,8 +349,8 @@ class ViewContainer extends Component {
                                 var editors = transient.editors || []
                                 var found = editors.find(e => e.component === action.component)
                                 if (!found) {
-                                    var udatedEditors = update(editors, { $push: [action] })
-                                    this.updateNodeEntity({ transient: { editors: udatedEditors } }, cellEntity)
+                                    var updatedEditors = update(editors, { $push: [action] })
+                                    this.updateNodeEntity({ transient: { editors: updatedEditors, selected: true }}, cellEntity)
                                 }
                                 this.setActiveComponent(cellEntity.name + action.component)
                             },

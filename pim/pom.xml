@@ -15,7 +15,6 @@
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>metaserver.pim</artifactId>
     <build>
-        <!--    <finalName>${artifactId}-${version}</finalName> -->
         <resources>
             <resource>
                 <directory>./dataset</directory>
@@ -142,11 +141,5 @@
             <id>spark2</id>
         </profile>
     </profiles>
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Neoflex Consulting Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/neoflex-consulting/datagram</url>
-        </repository>
-    </distributionManagement>
+
 </project>

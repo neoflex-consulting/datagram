@@ -110,8 +110,8 @@ public class MServerConfiguration {
         return new HttpSessionEventPublisher();
     }
     
-    @Value("${logging.file}")
-    private String loggingFile;
+    /*@Value("${logging.file}")
+    private String loggingFile;*/
     
     //@Autowired
     //LicenseService licenseService;
