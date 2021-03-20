@@ -37,5 +37,5 @@
   </sources>
   <transitions name="46997632-2151-4677-ab70-a302b8dbbbd6" start="//@sources.0/@outputPort" finish="//@transformationSteps.0/@inputPort"/>
   <transitions name="defa7d65-c64f-4f6d-8108-146954fa3891" start="//@sources.1/@outputPort" finish="//@transformationSteps.0/@joineePort"/>
-  <auditInfo changeUser="admin" changeDateTime="2021-03-19T07:37:40.481+0000" createUser="admin" createDateTime="2021-03-18T13:50:52.649+0000"/>
+  <auditInfo changeUser="admin" changeDateTime="2021-03-19T22:21:16.463+0000" createUser="admin" createDateTime="2021-03-18T13:50:52.649+0000"/>
 </etl:Transformation>

@@ -25,7 +25,25 @@ class Workflow {
             def oozie = Oozie.findByProject(project)
             def deployments = []
             collectWfTransformations(workflow, []).each {Transformation.collectTrDeployments(it, deployments)}
-            wfd = db.instantiate("rt.WorkflowDeployment", [name: name, project: Project.findOrCreateProject(), oozie: oozie, start: workflow, deployments: deployments.unique {"${it._type_}|${it.e_id}"}, debug: true, slideSize: 400, rejectSize: 1000, fetchSize: 1000, partitionNum: 1, persistOnDisk: true, master: "local", numExecutors: 1, executorCores: 1])
+            wfd = db.instantiate("rt.WorkflowDeployment", [
+                    name: name,
+                    project: Project.findOrCreateProject(),
+                    oozie: oozie,
+                    start: workflow,
+                    deployments: deployments.unique {"${it._type_}|${it.e_id}"},
+                    debug: true,
+                    slideSize: 400,
+                    rejectSize: 1000,
+                    fetchSize: 1000,
+                    partitionNum: 1,
+                    persistOnDisk: true,
+                    master: oozie.master,
+                    mode: oozie.mode,
+                    numExecutors: oozie.numExecutors,
+                    executorCores: oozie.executorCores,
+                    executorMemory: oozie.executorMemory,
+                    driverMemory: oozie.driverMemory
+            ])
             db.save(wfd)
         }
         else {
