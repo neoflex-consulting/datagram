@@ -22,7 +22,7 @@ RUN apk add --no-cache \
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Hadoop
-ENV HADOOP_VERSION=3.2.0
+ENV HADOOP_VERSION=3.3.0
 ENV HADOOP_HOME /usr/hadoop
 RUN curl --progress-bar -L --retry 3 \
   "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \

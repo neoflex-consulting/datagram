@@ -13,7 +13,7 @@ executorCores=[%=deploymentAttribute(jobDeployment, "executorCores")%]
 queueName=default
 oozie.use.system.libpath=true
 oozie.wf.validate.ForkJoin=false
-oozie.action.sharelib.for.spark=spark2
+oozie.action.sharelib.for.spark=spark2,hive
 [%if (jobDeployment.isTypeOf(src!WorkflowDeployment)) {%]
 oozie.wf.application.path=[%=jobDeployment.get("oozie").get("nameNode")%][%=jobDeployment.get("oozie").get("home")%]/[%=jobDeployment.get("oozie").get("user")%]/deployments/[%=jobDeployment.get("name")%]/[%=jobDeployment.get("start").get("name")%].xml
 [%} else if (jobDeployment.isTypeOf(src!CoordinatorDeployment)){%] 

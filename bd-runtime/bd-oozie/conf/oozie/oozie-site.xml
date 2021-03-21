@@ -69,4 +69,9 @@
         <name>oozie.processing.timezone</name>
         <value>GMT+0300</value>
     </property>
+
+    <property>
+        <name>oozie.action.sharelib.for.spark</name>
+        <value>spark2,hive2</value>
+    </property>
 </configuration>

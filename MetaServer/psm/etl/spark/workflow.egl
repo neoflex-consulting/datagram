@@ -125,6 +125,10 @@ if (workflowDeployment.get("oozie").get("spark2") == true) sparkVer = "2";
             <name>oozie.launcher.mapreduce.map.java.opts</name>
             <value>[%=jvmOpts.trim()%]</value>
         </property>
+        <property>
+            <name>oozie.action.sharelib.for.spark</name>
+            <value>spark2,hive</value>
+        </property>
     </configuration>
     [%}%]
     <master>${master}</master>
