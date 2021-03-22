@@ -76,7 +76,7 @@ git reset --hard
 ```
 docker-compose -f bd-runtime/docker-compose.yml up -d hue
 ```
-Интерфейс доступен по ссылке: http://localhost:8089/.
+Интерфейс доступен по ссылке: http://localhost:8888/.
 При первом входе введите user/password: root/root.
 
 ## Ссылки на WEB UI
