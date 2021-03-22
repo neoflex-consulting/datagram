@@ -18,4 +18,5 @@ RUN cd /tmp \
 
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
+WORKDIR /opt/datagram
 ENTRYPOINT ["/entrypoint.sh"]

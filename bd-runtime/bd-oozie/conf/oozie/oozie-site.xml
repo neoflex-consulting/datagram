@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <configuration>
     <property>
+        <name>oozie.base.url</name>
+        <value>http://oozie:11000/oozie</value>
+    </property>
+    <property>
         <name>oozie.service.ProxyUserService.proxyuser.root.hosts</name>
         <value>*</value>
     </property>
