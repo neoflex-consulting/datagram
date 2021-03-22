@@ -209,7 +209,7 @@ function stepInputPortHasChanged(transformation, transformationStep, inputPort, 
             const field = transformationStep.outputPort.fields.find(f => f.name === newField.name)
             if (field) {
                 if (fieldType === "etl.ProjectionField") {
-                    if (field.sourceFields.length == 0) {
+                    if (field.sourceFields.length === 0) {
                         field.sourceFields.push(newField)
                     }
                 }
@@ -258,7 +258,7 @@ function stepJoineePortHasChanged(transformation, transformationStep, inputPort,
         } else {
             const field = transformationStep.outputPort.fields.find(f => f.name === newField.name)
             if (field) {
-                if (field.sourceFields.length == 0) {
+                if (field.sourceFields.length === 0) {
                     field.sourceFields.push(newField)
                 }
             }
