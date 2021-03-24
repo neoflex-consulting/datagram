@@ -13,11 +13,7 @@ if __name__ == "__main__":
                     head = match[1]
                     version = match[2]
                     tail = match.group(match.lastindex)
-                else:
-                    head = name
-                    version = None
-                    tail = None
-                jars.append((head, list(map(int, version.split('.'))), os.path.join(dir, file), name))
+                    jars.append((head, list(map(int, version.split('.'))), os.path.join(dir, file), name))
     grouped = [(k, sorted((ll[1], ll[2], ll[3]) for ll in l))
                for k, l in itertools.groupby(sorted(jars, key=itemgetter(0)), itemgetter(0))]
     for k, l in grouped:
