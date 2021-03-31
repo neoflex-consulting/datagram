@@ -591,6 +591,7 @@ class Workflow {
   ref Project project;
   attr String label;
   val WFNode[*]#workflow nodes;
+  attr String description;
 
   @mspace.ui(multiline="true")
   @teneo.jpa(value="@Column(length=10485760)")
