@@ -152,6 +152,8 @@ RUN apk add --no-cache 'linux-headers=~4.19' \
  && gcc /scripts/watchdir.c -o /scripts/watchdir \
  && chmod +x /scripts/parallel_commands.sh
 
+COPY jarhell.py /
+
 # Entry point: start all services and applications.
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh

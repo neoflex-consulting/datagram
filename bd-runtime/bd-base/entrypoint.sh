@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# the only way to start hive coz hive-exec.jar contains old guava repackaged
+cp /usr/hadoop/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib
+#python3 /jarhell.py "${HADOOP_HOME}/share/hadoop/common/lib:${HADOOP_HOME}/share/hadoop/common:${HADOOP_HOME}/share/hadoop/hdfs:${HADOOP_HOME}/share/hadoop/hdfs/lib:${HADOOP_HOME}/share/hadoop/hdfs:${HADOOP_HOME}/share/hadoop/mapreduce/lib:${HADOOP_HOME}/share/hadoop/mapreduce:$HIVE_HOME/lib"
+python3 /jarhell.py "$HIVE_HOME/lib"
+
+
 if [ -n "${HADOOP_DATANODE_UI_PORT}" ]; then
   echo "Replacing default datanode UI port 9864 with ${HADOOP_DATANODE_UI_PORT}"
   sed -i "$ i\<property><name>dfs.datanode.http.address</name><value>0.0.0.0:${HADOOP_DATANODE_UI_PORT}</value></property>" ${HADOOP_CONF_DIR}/hdfs-site.xml
