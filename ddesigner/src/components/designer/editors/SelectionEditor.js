@@ -25,7 +25,6 @@ class SelectionEditor extends Component {
         super(...args);
         this.aceEditor = React.createRef();
         this.state = {
-            expression: "",
             sessionId: null,
             queryResult: ""
         }
@@ -40,7 +39,7 @@ class SelectionEditor extends Component {
             theme={'sqlserver'}
             fontSize={15}
             editorProps={{ $blockScrolling: Infinity }}
-            value={this.state.expression}
+            value={this.props.cellEntity.expression}
             onChange={newValue => this.editorOnChange(newValue)}
             showPrintMargin={false}
             debounceChangePeriod={500}
@@ -48,11 +47,6 @@ class SelectionEditor extends Component {
     }
 
     editorOnChange(newValue) {
-        this.setState({ expression: newValue })
-    }
-
-    saveExpression() {
-        const newValue = this.state.expression
         this.props.updateNodeEntity(update(this.props.cellEntity, { $merge: { expression: newValue } }), this.props.cellEntity)
     }
 
@@ -78,7 +72,7 @@ class SelectionEditor extends Component {
     }
 
     runValidation() {
-        const { sessionId, expression } = this.state
+        const { sessionId } = this.state
         const { entity, cellEntity } = this.props
         const newFields = this.props.cellEntity.inputPort.fields.map(fl =>
             ({ name: fl.name, dataTypeDomain: fl.dataTypeDomain, javaDomain: fullJavaClassName[fl.dataTypeDomain] }))
@@ -87,7 +81,7 @@ class SelectionEditor extends Component {
         resource.call({
             session: sessionId,
             checkpoint: false,
-            expression: expression,
+            expression: this.props.cellEntity.expression,
             inputPort: inputPort,
             outputPort: cellEntity.outputPort,
             label: cellEntity.label,
@@ -108,10 +102,6 @@ class SelectionEditor extends Component {
     }
 
     componentDidMount() {
-        const { cellEntity } = this.props
-        if (cellEntity.expression) {
-            this.setState({ expression: cellEntity.expression })
-        }
     }
 
     render() {
@@ -132,14 +122,6 @@ class SelectionEditor extends Component {
                         <Row >
                             <Col span={20}>
                             <Form layout={"inline"}>
-                                {queryResult === 'OK' && <Form.Item wrapperCol={{ span: 2, push: 14 }}>
-                                    <Tooltip placement="top" title={t("save")}>
-                                        <Button id="save" shape="circle" style={{ border: 0 }} onClick={() => {
-                                            this.saveExpression()
-                                        }}><Avatar className="avatar-button-tool-panel" src={"images/icon-core/save-modern.svg"} />
-                                        </Button>
-                                    </Tooltip>
-                                </Form.Item>}
                                 <Form.Item wrapperCol={{ span: 2, push: 14 }}>
                                     <Tooltip placement="top" title={t("check")}>
                                         <Button id="check" shape="circle" style={{ border: 0 }} onClick={() => {

@@ -21,9 +21,10 @@ class Selection {
     private final static Log logger = LogFactory.getLog(Transformation.class);
 
     public static Object test(Map entity, Map params = null) {
-        def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SelectionValidate.egl", [step: entity], [])
         def transformation = entity.parent ? Database.new.get(entity.parent) : entity.transformation
-        def livyServer = LivyServer.findCurrentLivyServer(Transformation.findOrCreateTRD(transformation), params)
+        def trd = Transformation.findOrCreateTRD(transformation)
+        def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SelectionValidate.egl", [step: entity, parameters: trd.parameters], [])
+        def livyServer = LivyServer.findCurrentLivyServer(trd, params)
 
         def deployDir = Context.current.getContextSvc().getDeployDir().getAbsolutePath();
         def sessionId = LivyServer.getSessionId(params, livyServer)
