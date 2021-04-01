@@ -227,17 +227,10 @@ class Deployment {
             }
         }
 
-        //db.save(newScheme)
-        ECoreUtils.merge(softwareSystem.scheme, newScheme)
-        db.save(newScheme)
-        def oldScheme = softwareSystem.scheme
+        newScheme = ECoreUtils.merge(softwareSystem.scheme, newScheme)
         softwareSystem.scheme = newScheme
         softwareSystem.defaultDeployment = deployment
         db.save(softwareSystem)
-        if (oldScheme) {
-            db.delete(oldScheme._type_, oldScheme)
-        }
-        //return JSONHelper.toJSON(dbname, softwareSystem.scheme._type_, softwareSystem.scheme)
         return [softwareSystem.scheme.name]
     /* protected region MetaServer.rtDeployment.refreshScheme end */
     }
