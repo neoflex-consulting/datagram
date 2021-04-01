@@ -187,14 +187,16 @@ class Run extends Component {
     }
 
     addNewParameter() {
-        const { counter, data } = this.state
-        const newData = {
+        const { counter, data, selectedDeployment } = this.state
+        const newItem = {
             name: 'name',
             value: 'value',
             description: '',
-            key: counter + 2
+            key: counter + 2,
+            deploymentName: selectedDeployment
         }
-        this.setState({ data: [...data, newData], counter: counter + 2, })
+        const newData = update(data, {$push: [newItem]})
+        this.setState({ data: newData, counter: counter + 2, })
     }
 
     isEditing = (record) => {
