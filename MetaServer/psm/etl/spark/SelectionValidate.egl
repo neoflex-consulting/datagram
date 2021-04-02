@@ -8,7 +8,7 @@ import scala.collection.mutable
 
 case class SelectionClass(
         [%for (field in step.get('inputPort').get('fields')) {%]
-        [%=field.get("name")%]: [%=field.get("javaDomain")%][%if (hasMore){%],[%}%]
+        [%=field.get("name")%]: [%=javaTypeName(field.get("dataTypeDomain"))%][%if (hasMore){%],[%}%]
         
         [%}%]
 )
@@ -18,7 +18,7 @@ val jobParameters: mutable.HashMap[String, AnyRef] = new mutable.HashMap[String,
 [%}%]
 val df = Seq(SelectionClass(
         [%for (field in step.get('inputPort').get('fields')) {%]
-        [%=field.get("name")%] = null.asInstanceOf[[%=field.get("javaDomain")%]][%if (hasMore){%],[%}%]
+        [%=field.get("name")%] = null.asInstanceOf[ [%=javaTypeName(field.get("dataTypeDomain"))%] ][%if (hasMore){%],[%}%]
         
         [%}%]
     )).toDF([%for (f in step.get('inputPort').get('fields')) {%]"[%=f.get('name')%]"[%if (hasMore){%],[%}%]

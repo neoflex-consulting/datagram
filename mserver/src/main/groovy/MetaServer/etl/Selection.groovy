@@ -23,10 +23,9 @@ class Selection {
     public static Object test(Map entity, Map params = null) {
         def transformation = entity.parent ? Database.new.get(entity.parent) : entity.transformation
         def trd = Transformation.findOrCreateTRD(transformation)
-        def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SelectionValidate.egl", [step: entity, parameters: trd.parameters], [])
+        def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SelectionValidate.egl", [step: entity, parameters: trd.parameters], [EMF.create("src", transformation)])
         def livyServer = LivyServer.findCurrentLivyServer(trd, params)
 
-        def deployDir = Context.current.getContextSvc().getDeployDir().getAbsolutePath();
         def sessionId = LivyServer.getSessionId(params, livyServer)
         def result = LivyServer.executeStatementAndWait(sessionId, code, logger, livyServer)
 
@@ -34,7 +33,8 @@ class Selection {
             return [result: "text/plain:${result.output}", sessionId: sessionId]
         } else {
             result = result.output.data
-            if (params.outputType == 'json') {
+            def outputType = params == null ? null : params.outputType
+            if (outputType == 'json') {
                 def jsonData = (result =~ /\{.*\}/)[0]
                 return [result: true, message: jsonData, sessionId: sessionId]
             } else {
