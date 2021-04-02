@@ -138,7 +138,10 @@ class Oozie {
 
     public static findByProject(Object project) {
         if (project == null) return getDefault()
-        else return Context.current.session.createQuery("from rt.Oozie where project.e_id = ${project?.e_id}").uniqueResult()
+        else {
+            def projectOozie =  Context.current.session.createQuery("from rt.Oozie where project.e_id = ${project?.e_id}").uniqueResult()
+            return projectOozie == null ? getDefault() : projectOozie
+        }
     }
 
     public static getDefault() {
