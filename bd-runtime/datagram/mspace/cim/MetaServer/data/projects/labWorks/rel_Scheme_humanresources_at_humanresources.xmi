@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rel:Scheme xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rel="http://www.neoflex.ru/meta/relational" name="humanresources_at_humanresources">
+  <tables name="department" description="Lookup table containing the departments within the Adventure Works Cycles company.">
+    <columns name="departmentid" description="Primary key for Department records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Name of the department.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="groupname" description="Name of the group to which the department belongs.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="department_pk">
+      <keyFeatures column="//@tables.0/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="employee" description="Employee information such as salary, department, and title.">
+    <columns name="businessentityid" description="Primary key for Employee records.  Foreign key to BusinessEntity.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="nationalidnumber" description="Unique national identification number such as a social security number.">
+      <dataType xsi:type="rel:VARCHAR" length="15"/>
+    </columns>
+    <columns name="loginid" description="Network login.">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="jobtitle" description="Work title such as Buyer or Sales Representative.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="birthdate" description="Date of birth.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="maritalstatus" description="M = Married, S = Single">
+      <dataType xsi:type="rel:CHAR" length="1"/>
+    </columns>
+    <columns name="gender" description="M = Male, F = Female">
+      <dataType xsi:type="rel:CHAR" length="1"/>
+    </columns>
+    <columns name="hiredate" description="Employee hired on this date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="salariedflag" description="Job classification. 0 = Hourly, not exempt from collective bargaining. 1 = Salaried, exempt from collective bargaining.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="vacationhours" description="Number of available vacation hours.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="sickleavehours" description="Number of available sick leave hours.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="currentflag" description="0 = Inactive, 1 = Active">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="organizationnode" nullable="true" description="Where the employee is located in corporate hierarchy.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <primaryKey name="employee_pk">
+      <keyFeatures column="//@tables.1/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_Employee_Person_BusinessEntityID">
+      <keyFeatures column="//@tables.1/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="employeedepartmenthistory" description="Employee department transfers.">
+    <columns name="businessentityid" description="Employee identification number. Foreign key to Employee.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="departmentid" description="Department in which the employee worked including currently. Foreign key to Department.DepartmentID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="shiftid" description="Identifies which 8-hour shift the employee works. Foreign key to Shift.Shift.ID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="startdate" description="Date the employee started work in the department.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="enddate" nullable="true" description="Date the employee left the department. NULL = Current department.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="employeedepartmenthistory_pk">
+      <keyFeatures column="//@tables.2/@columns.0"/>
+      <keyFeatures column="//@tables.2/@columns.3"/>
+      <keyFeatures column="//@tables.2/@columns.1"/>
+      <keyFeatures column="//@tables.2/@columns.2"/>
+    </primaryKey>
+    <foreignKeys name="FK_EmployeeDepartmentHistory_Department_DepartmentID" target="//@tables.0">
+      <keyFeatures column="//@tables.2/@columns.1"/>
+    </foreignKeys>
+    <foreignKeys name="FK_EmployeeDepartmentHistory_Employee_BusinessEntityID" target="//@tables.1">
+      <keyFeatures column="//@tables.2/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_EmployeeDepartmentHistory_Shift_ShiftID" target="//@tables.5">
+      <keyFeatures column="//@tables.2/@columns.2"/>
+    </foreignKeys>
+  </tables>
+  <tables name="employeepayhistory" description="Employee pay history.">
+    <columns name="businessentityid" description="Employee identification number. Foreign key to Employee.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="ratechangedate" description="Date the change in pay is effective">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="rate" description="Salary hourly rate.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="payfrequency" description="1 = Salary received monthly, 2 = Salary received biweekly">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="employeepayhistory_pk">
+      <keyFeatures column="//@tables.3/@columns.0"/>
+      <keyFeatures column="//@tables.3/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_EmployeePayHistory_Employee_BusinessEntityID" target="//@tables.1">
+      <keyFeatures column="//@tables.3/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="jobcandidate" description="R&#xc3;&#xa9;sum&#xc3;&#xa9;s submitted to Human Resources by job applicants.">
+    <columns name="jobcandidateid" description="Primary key for JobCandidate records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="businessentityid" nullable="true" description="Employee identification number if applicant was hired. Foreign key to Employee.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="resume" nullable="true" description="R&#xc3;&#xa9;sum&#xc3;&#xa9; in XML format.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="jobcandidate_pk">
+      <keyFeatures column="//@tables.4/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_JobCandidate_Employee_BusinessEntityID" target="//@tables.1">
+      <keyFeatures column="//@tables.4/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="shift" description="Work shift lookup table.">
+    <columns name="shiftid" description="Primary key for Shift records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Shift description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="starttime" description="Shift start time.">
+      <dataType xsi:type="rel:TIME"/>
+    </columns>
+    <columns name="endtime" description="Shift end time.">
+      <dataType xsi:type="rel:TIME"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="shift_pk">
+      <keyFeatures column="//@tables.5/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <views name="vemployee">
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="title" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="8"/>
+    </columns>
+    <columns name="firstname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="middlename" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="lastname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="suffix" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="10"/>
+    </columns>
+    <columns name="jobtitle" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="phonenumber" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="phonenumbertype" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="emailaddress" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="emailpromotion" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="addressline1" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <columns name="addressline2" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <columns name="city" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="stateprovincename" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="postalcode" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="15"/>
+    </columns>
+    <columns name="countryregionname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="additionalcontactinfo" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+  </views>
+  <views name="vemployeedepartment">
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="title" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="8"/>
+    </columns>
+    <columns name="firstname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="middlename" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="lastname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="suffix" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="10"/>
+    </columns>
+    <columns name="jobtitle" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="department" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="groupname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="startdate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </views>
+  <views name="vemployeedepartmenthistory">
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="title" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="8"/>
+    </columns>
+    <columns name="firstname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="middlename" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="lastname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="suffix" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="10"/>
+    </columns>
+    <columns name="shift" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="department" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="groupname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="startdate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="enddate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </views>
+  <views name="vjobcandidate">
+    <columns name="jobcandidateid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="Name.Prefix" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="Name.First" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="Name.Middle" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="Name.Last" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="Name.Suffix" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="Skills" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="Addr.Type" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="Addr.Loc.CountryRegion" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="Addr.Loc.State" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="Addr.Loc.City" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="Addr.PostalCode" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="20"/>
+    </columns>
+    <columns name="EMail" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="WebSite" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </views>
+  <views name="vjobcandidateeducation">
+    <columns name="jobcandidateid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="Edu.Level" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="Edu.StartDate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="Edu.EndDate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="Edu.Degree" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="Edu.Major" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="Edu.Minor" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="Edu.GPA" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="5"/>
+    </columns>
+    <columns name="Edu.GPAScale" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="5"/>
+    </columns>
+    <columns name="Edu.School" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="Edu.Loc.CountryRegion" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="Edu.Loc.State" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="Edu.Loc.City" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+  </views>
+  <views name="vjobcandidateemployment">
+    <columns name="jobcandidateid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="Emp.StartDate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="Emp.EndDate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="Emp.OrgName" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="Emp.JobTitle" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="100"/>
+    </columns>
+    <columns name="Emp.Responsibility" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="Emp.FunctionCategory" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="Emp.IndustryCategory" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="Emp.Loc.CountryRegion" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="Emp.Loc.State" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="Emp.Loc.City" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+  </views>
+</rel:Scheme>
