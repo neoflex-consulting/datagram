@@ -59,15 +59,10 @@ class HiveView extends Component {
         const entity = this.props.entity
         const cellEntity = this.props.cellEntity
         this.setState({queryResult: null, queryError: cupOfCoffee})
-        resource.call({
+        resource.call(cellEntity, "generateAndRunPart", {
             sessionId: session !== null ? session : null,
-            _type_: entity._type_,
-            e_id: entity.e_id,
-            sampleSize: cellEntity.sampleSize,
-            nodeName: cellEntity.name,
-            statement: cellEntity.statement,
-            outputType: "json"
-        }, "generateAndRunPart", {}).then(json => {
+            transformation_id: entity.e_id
+        }, ).then(json => {
             if (!json.result.valueCount) {
                 this.setState({ queryResult: JSON.parse(json.result), session: json.sessionId, queryError: null })
             } else {

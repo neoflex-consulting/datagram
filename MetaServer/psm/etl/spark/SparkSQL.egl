@@ -1,0 +1,24 @@
+object SparkSQL extends Serializable {
+    import org.apache.spark
+    import org.apache.spark.sql._
+    import org.apache.spark.sql.functions._
+    import scala.collection.mutable
+
+	def run(spark: SparkSession) = {
+	  	import spark.implicits._
+
+        val jobParameters: mutable.HashMap[String, AnyRef] = new mutable.HashMap[String, AnyRef]()
+        [%for (param in parameters) {%]
+        jobParameters.put("[%=param.get("name")%]", s"""[%=param.get("value").replace("\\\\/", "/")%]""")
+
+        [%}%]
+
+        val df = spark.sql(s"""[%=step.get("statement")%]""")
+
+        val schema = df.schema.json
+        val data = df.toJSON.take([%=step.get("sampleSize")%]).mkString("[", ",", "]")
+        println(s"""{"schema":$schema, "data":$data}""")
+    }
+}
+
+SparkSQL.run(spark)
