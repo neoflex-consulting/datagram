@@ -6,6 +6,7 @@ import ru.neoflex.meta.utils.Context
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.hibernate.persister.entity.EntityPersister
+import ru.neoflex.meta.utils.JSONHelper
 import ru.neoflex.meta.utils.SymmetricCipher
 import org.apache.commons.lang.StringUtils
 
@@ -54,8 +55,31 @@ Context.current.with {
                 return result
             }
         }
+
+        PersistentEventsListener.OnEvent setTransformationRuntime = new PersistentEventsListener.OnEvent() {
+            @Override
+            boolean execute(final String dbType, String eventName, final String entityName, final Map entity) {
+
+                def result = false
+                if(entityName.toLowerCase().contains("transformation")){
+                    def version = Context.current.getContextSvc().getBuildInfo().get("version")
+                    if(entity.containsKey("sparkVersion")){
+                        def sparkVersion = entity.get("sparkVersion");
+                        def setVersion = "";
+                        def newVersion = JSONHelper.getEnumerator("teneo", "etl.Transformation", "sparkVersion", "SPARK3")
+                        if(version.toLowerCase().contains("spark2")){
+                            newVersion = JSONHelper.getEnumerator("teneo", "etl.Transformation", "sparkVersion", "SPARK2")
+                        }
+                        entity.put("sparkVersion", newVersion);
+                        result = true
+                    }
+                }
+                return result
+            }
+        }
         getPersistentEventsListener().register(PersistentEventsListener.FLUSH_DIRTY_INTERCEPTOR, "teneo", setLastUpdatedMeta)
         getPersistentEventsListener().register(PersistentEventsListener.SAVE_INTERCEPTOR, "teneo", setLastUpdatedMeta)
+        getPersistentEventsListener().register(PersistentEventsListener.PRE_INSERT_EVENT, "teneo", setTransformationRuntime)
 
         PersistentEventsListener.OnEvent encryptPassword = new PersistentEventsListener.OnEvent() {
             @Override
