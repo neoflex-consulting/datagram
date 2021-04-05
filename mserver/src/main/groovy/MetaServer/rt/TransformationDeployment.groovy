@@ -424,24 +424,7 @@ class TransformationDeployment extends GenerationBase {
         def livyServer = LivyServer.findCurrentLivyServer(trDeployment, params)
         def sessionId = LivyServer.getSessionId(params, livyServer)
         def result = LivyServer.executeStatementAndWait(sessionId, (String) params.code, logger, livyServer)
-        if (result.output.status == 'error') {
-            logger.error(result.output.evalue)
-            return [result: "text/plain:${result.output}", sessionId: sessionId]
-        } else {
-            result = result.output.data
-            if (params.outputType == 'json') {
-                def jsonData = "{fields:[]}"
-                if (result != null) {
-                    def parsedJson = (result instanceof Map) ? ((result.values()[0] =~ /(?ms).*^(\{.*\})$.*/)) : (result =~ /\{.*\}/)
-                    if (parsedJson.matches()) {
-                        jsonData = parsedJson.group(1)
-                    }
-                }
-                return [result: jsonData, sessionId: sessionId]
-            } else {
-                return [result: result, sessionId: sessionId]
-            }
-        }
+        return LivyServer.parseResult(result, params.outputType, sessionId)
         /* protected region MetaServer.rtTransformationDeployment.runPart end */
     }
 
