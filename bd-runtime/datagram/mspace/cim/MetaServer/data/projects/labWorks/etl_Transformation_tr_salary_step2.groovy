@@ -1,7 +1,7 @@
 import ru.neoflex.meta.utils.Context
 def session = Context.current.txSession
 def entity = session.createQuery("from etl.Transformation where name = :name").setParameter("name", "tr_salary_step2").uniqueResult() 
-entity.transformationSteps.find {it.name == "Projection_4"}.outputPort.fields.find {it.name == "Option0"}.sourceFields.clear()
+entity.transformationSteps.find {it.name == "excessSumAndCount"}.outputPort.fields.find {it.name == "maxRate"}.sourceFields.clear()
 entity.userDefinedFunctions.clear()
 entity.mavenDependencies.clear()
 entity.project = session.createQuery("from etl.Project where name = :name").setParameter("name", "labWorks").uniqueResult()
