@@ -6,4 +6,5 @@ entity.project = session.createQuery("from etl.Project where name = :name").setP
 entity.livyServer = session.createQuery("from rt.LivyServer where name = :name").setParameter("name", "bd-livy").uniqueResult()
 entity.transformation = session.createQuery("from etl.Transformation where name = :name").setParameter("name", "tr_aw_salary_analysis_step2").uniqueResult()
 entity.deployments.add(session.createQuery("from rt.Deployment where name = :name").setParameter("name", "awHR").uniqueResult())
+entity.deployments.add(session.createQuery("from rt.Deployment where name = :name").setParameter("name", "awPerson").uniqueResult())
 Context.current.commit()

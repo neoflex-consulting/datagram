@@ -22,7 +22,7 @@ RUN apk add --no-cache \
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Hadoop
-ENV HADOOP_VERSION=3.2.0
+ENV HADOOP_VERSION=3.2.1
 ENV HADOOP_HOME /usr/hadoop
 RUN curl --progress-bar -L --retry 3 \
   "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
@@ -151,6 +151,8 @@ COPY scripts/ /scripts
 RUN apk add --no-cache 'linux-headers=~4.19' \
  && gcc /scripts/watchdir.c -o /scripts/watchdir \
  && chmod +x /scripts/parallel_commands.sh
+
+COPY jarhell.py /
 
 # Entry point: start all services and applications.
 COPY entrypoint.sh /

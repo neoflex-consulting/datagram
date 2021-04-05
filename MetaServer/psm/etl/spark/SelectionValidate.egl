@@ -4,17 +4,21 @@ import "Utils.egl";
 import org.apache.spark
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
+import scala.collection.mutable
 
 case class SelectionClass(
         [%for (field in step.get('inputPort').get('fields')) {%]
-        [%=field.get("name")%]: [%=field.get("javaDomain")%][%if (hasMore){%],[%}%]
+        [%=field.get("name")%]: [%=javaTypeName(field.get("dataTypeDomain"))%][%if (hasMore){%],[%}%]
         
         [%}%]
 )
-
+val jobParameters: mutable.HashMap[String, AnyRef] = new mutable.HashMap[String, AnyRef]()
+[%for (param in parameters) {%]
+	jobParameters.put("[%=param.get("name")%]", s"""[%=param.get("value").replace("\\\\/", "/")%]""")
+[%}%]
 val df = Seq(SelectionClass(
         [%for (field in step.get('inputPort').get('fields')) {%]
-        [%=field.get("name")%] = null.asInstanceOf[[%=field.get("javaDomain")%]][%if (hasMore){%],[%}%]
+        [%=field.get("name")%] = null.asInstanceOf[ [%=javaTypeName(field.get("dataTypeDomain"))%] ][%if (hasMore){%],[%}%]
         
         [%}%]
     )).toDF([%for (f in step.get('inputPort').get('fields')) {%]"[%=f.get('name')%]"[%if (hasMore){%],[%}%]

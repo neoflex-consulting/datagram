@@ -75,6 +75,7 @@ services:
       - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
       - ./bd-base/conf/hadoop/yarn-site.xml:/usr/hadoop/etc/hadoop/yarn-site.xml
       - ./bd-base/conf/spark/spark-defaults.conf:/usr/spark/conf/spark-defaults.conf
+      - ./bd-base/entrypoint.sh:/entrypoint.sh
     networks:
       bd_net:
         ipv4_address: 10.20.1.1
@@ -249,8 +250,8 @@ services:
     volumes:
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/usr/oozie/sharelib/lib/spark2/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
       - ./bd-oozie/conf/oozie/oozie-site.xml:/usr/oozie/conf/oozie-site.xml
+      - ./bd-oozie/entrypoint.sh:/entrypoint.sh
     expose:
       - 1-65535
     ports:

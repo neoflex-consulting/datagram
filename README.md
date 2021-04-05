@@ -71,6 +71,14 @@ __ИЛИ__, в каталоге `./bd-runtime/datagram/gitflow/default` выпо
 ```
 git reset --hard
 ```
+### Пользовательский интерфейс Hue
+Для запуска:
+```
+docker-compose -f bd-runtime/docker-compose.yml up -d hue
+```
+Интерфейс доступен по ссылке: http://localhost:8888/.
+При первом входе введите user/password: root/root.
+
 ## Ссылки на WEB UI
 Ресурс|URL
 ------|---
@@ -80,6 +88,7 @@ Livy|http://localhost:8998/
 Oozie|http://localhost:11000/
 Spark|http://localhost:8080/
 Name Node|http://localhost:9870/
+Hue|http://localhost:8888/
 
 
 Для просмотра логов кластера, в файл `C:\Windows\System32\drivers\etc\hosts ` (или `/etc/hosts`) нужно добавить следующие строки:
@@ -89,4 +98,5 @@ Name Node|http://localhost:9870/
 127.0.0.1 worker2
 127.0.0.1 livy
 127.0.0.1 hivemetastore
+127.0.0.1 hue
 ```

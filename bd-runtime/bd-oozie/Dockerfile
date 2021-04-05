@@ -2,7 +2,7 @@ FROM neoflexdatagram/bd-base
 
 ENV OOZIE_VERSION   5.2.0
 ENV OOZIE_HOME      /usr/oozie
-RUN apk add --no-cache git maven \
+RUN apk add --no-cache busybox maven git \
   && curl --progress-bar -L --retry 3 \
   "http://archive.apache.org/dist/oozie/${OOZIE_VERSION}/oozie-${OOZIE_VERSION}.tar.gz" \
   | gunzip \
@@ -29,45 +29,33 @@ RUN apk add --no-cache git maven \
  && cd /tmp && tar xzf "$OOZIE_HOME/oozie-sharelib-${OOZIE_VERSION}.tar.gz" \
  && mv /tmp/share "${OOZIE_HOME}/sharelib" \
  && mkdir "${OOZIE_HOME}/sharelib/lib/spark2" \
- && cp  $SPARK_HOME/jars/*.jar "${OOZIE_HOME}/sharelib/lib/spark2/" \
- && cp "${OOZIE_HOME}/sharelib/lib/spark/oozie-sharelib-spark-5.2.0.jar" "${OOZIE_HOME}/sharelib/lib/spark2/" \
- && cp $HADOOP_HOME/share/hadoop/common/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp $HADOOP_HOME/share/hadoop/common/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp $HADOOP_HOME/share/hadoop/hdfs/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp $HADOOP_HOME/share/hadoop/hdfs/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp $HADOOP_HOME/share/hadoop/mapreduce/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp $HADOOP_HOME/share/hadoop/mapreduce/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp $HADOOP_HOME/share/hadoop/yarn/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp $HADOOP_HOME/share/hadoop/yarn/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp $HADOOP_HOME/share/hadoop/yarn/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp "${HADOOP_CONF_DIR}/core-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp "${HADOOP_CONF_DIR}/hdfs-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp "${HADOOP_CONF_DIR}/mapred-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
- && cp "${HADOOP_CONF_DIR}/yarn-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/commons-net-3.1.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/netty-3.10.5.Final.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/netty-all-4.0.52.Final.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/paranamer-2.3.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/avro-1.7.7.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/commons-codec-1.10.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/commons-compress-1.4.1.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/commons-lang3-3.7.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/commons-math3-3.1.1.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/commons-text-1.4.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/jackson-*-2.9.5.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/jersey-*-1.19.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/jul-to-slf4j-1.7.25.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/metrics-core-3.2.4.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/objenesis-1.0.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/okhttp-2.7.5.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/okio-1.15.0.jar \
- && rm -rf $OOZIE_HOME/sharelib/lib/spark2/xz-1.0.jar \
  && rm -rf /root/.m2/repository/ \
  && rm "/usr/oozie/oozie-sharelib-${OOZIE_VERSION}.tar.gz"
+RUN   cp "${OOZIE_HOME}/sharelib/lib/spark/oozie-sharelib-spark-5.2.0.jar" "${OOZIE_HOME}/sharelib/lib/spark2/" \
+       && cp  $SPARK_HOME/jars/*.jar "${OOZIE_HOME}/sharelib/lib/spark2/" \
+       && cp $HADOOP_HOME/share/hadoop/common/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp $HADOOP_HOME/share/hadoop/common/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp $HADOOP_HOME/share/hadoop/hdfs/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp $HADOOP_HOME/share/hadoop/hdfs/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp $HADOOP_HOME/share/hadoop/mapreduce/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp $HADOOP_HOME/share/hadoop/mapreduce/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp $HADOOP_HOME/share/hadoop/yarn/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp $HADOOP_HOME/share/hadoop/yarn/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp "${HADOOP_CONF_DIR}/core-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp "${HADOOP_CONF_DIR}/hdfs-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp "${HADOOP_CONF_DIR}/mapred-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp "${HADOOP_CONF_DIR}/yarn-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp $HIVE_HOME/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
+       && (cd $OOZIE_HOME/sharelib/lib/spark2/ && curl -O  https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.13/scala-compiler-2.12.13.jar) \
+       && (cd $OOZIE_HOME/sharelib/lib/spark2/ && curl -O  https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.13/scala-library-2.12.13.jar) \
+       && (cd $OOZIE_HOME/sharelib/lib/spark2/ && curl -O  https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.13/scala-reflect-2.12.13.jar)
+
 ADD conf/oozie/oozie-site.xml $OOZIE_HOME/conf/.
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
+
 WORKDIR $OOZIE_HOME
+
 EXPOSE 11000 11000
 HEALTHCHECK CMD curl -f "http://host.docker.internal:11000/" || exit 1
 
