@@ -382,6 +382,27 @@ class LivyServer {
         return sessionId
     }
 
+    static Map parseResult(result, outputType, sessionId) {
+        if (result.output.status == 'error') {
+            logger.error(result.output.evalue)
+            return [result: "text/plain:${result.output}", sessionId: sessionId]
+        } else {
+            result = result.output.data
+            if (outputType == 'json') {
+                def jsonData = "{fields:[]}"
+                if (result != null) {
+                    def parsedJson = (result instanceof Map) ? ((result.values()[0] =~ /(?ms).*^(\{.*\})$.*/)) : (result =~ /\{.*\}/)
+                    if (parsedJson.matches()) {
+                        jsonData = parsedJson.group(1)
+                    }
+                }
+                return [result: jsonData, sessionId: sessionId]
+            } else {
+                return [result: result, sessionId: sessionId]
+            }
+        }
+    }
+
     static Object executeStatementAndWait(Integer sessionId, String code, Log logger, Map livyServer, String kind='spark') {
         def result
         def statementId

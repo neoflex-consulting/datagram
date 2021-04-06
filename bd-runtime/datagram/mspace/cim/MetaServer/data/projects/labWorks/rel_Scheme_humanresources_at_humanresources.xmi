@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="ASCII"?>
-<rel:Scheme xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rel="http://www.neoflex.ru/meta/relational" name="humanresources_at_awHR">
+<rel:Scheme xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rel="http://www.neoflex.ru/meta/relational" name="humanresources_at_humanresources">
   <tables name="department" description="Lookup table containing the departments within the Adventure Works Cycles company.">
     <columns name="departmentid" description="Primary key for Department records.">
       <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Name of the department.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="groupname" description="Name of the group to which the department belongs.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
     </columns>
     <columns name="modifieddate">
       <dataType xsi:type="rel:DATETIME"/>
@@ -36,14 +42,20 @@
     <columns name="hiredate" description="Employee hired on this date.">
       <dataType xsi:type="rel:DATETIME"/>
     </columns>
+    <columns name="salariedflag" description="Job classification. 0 = Hourly, not exempt from collective bargaining. 1 = Salaried, exempt from collective bargaining.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
     <columns name="vacationhours" description="Number of available vacation hours.">
       <dataType xsi:type="rel:INTEGER"/>
     </columns>
     <columns name="sickleavehours" description="Number of available sick leave hours.">
       <dataType xsi:type="rel:INTEGER"/>
     </columns>
+    <columns name="currentflag" description="0 = Inactive, 1 = Active">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
     <columns name="rowguid">
-      <dataType xsi:type="rel:DATETIME"/>
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
     </columns>
     <columns name="modifieddate">
       <dataType xsi:type="rel:DATETIME"/>
@@ -141,6 +153,9 @@
     <columns name="shiftid" description="Primary key for Shift records.">
       <dataType xsi:type="rel:INTEGER"/>
     </columns>
+    <columns name="name" description="Shift description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
     <columns name="starttime" description="Shift start time.">
       <dataType xsi:type="rel:TIME"/>
     </columns>
@@ -161,11 +176,26 @@
     <columns name="title" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="8"/>
     </columns>
+    <columns name="firstname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="middlename" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="lastname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
     <columns name="suffix" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="10"/>
     </columns>
     <columns name="jobtitle" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="phonenumber" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="phonenumbertype" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
     </columns>
     <columns name="emailaddress" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="50"/>
@@ -182,8 +212,14 @@
     <columns name="city" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="30"/>
     </columns>
+    <columns name="stateprovincename" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
     <columns name="postalcode" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="15"/>
+    </columns>
+    <columns name="countryregionname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
     </columns>
     <columns name="additionalcontactinfo" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
@@ -196,11 +232,26 @@
     <columns name="title" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="8"/>
     </columns>
+    <columns name="firstname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="middlename" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="lastname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
     <columns name="suffix" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="10"/>
     </columns>
     <columns name="jobtitle" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="department" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="groupname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
     </columns>
     <columns name="startdate" nullable="true">
       <dataType xsi:type="rel:DATETIME"/>
@@ -213,8 +264,26 @@
     <columns name="title" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="8"/>
     </columns>
+    <columns name="firstname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="middlename" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="lastname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
     <columns name="suffix" nullable="true">
       <dataType xsi:type="rel:VARCHAR" length="10"/>
+    </columns>
+    <columns name="shift" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="department" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="groupname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
     </columns>
     <columns name="startdate" nullable="true">
       <dataType xsi:type="rel:DATETIME"/>
