@@ -45,6 +45,7 @@ RUN   cp "${OOZIE_HOME}/sharelib/lib/spark/oozie-sharelib-spark-5.2.0.jar" "${OO
        && cp "${HADOOP_CONF_DIR}/hdfs-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
        && cp "${HADOOP_CONF_DIR}/mapred-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
        && cp "${HADOOP_CONF_DIR}/yarn-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
+       && cp "${HIVE_CONF_DIR}/hive-site.xml" $OOZIE_HOME/sharelib/lib/spark2/ \
        && cp $HIVE_HOME/lib/*.jar $OOZIE_HOME/sharelib/lib/spark2/ \
        && (cd $OOZIE_HOME/sharelib/lib/spark2/ && curl -O  https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.13/scala-compiler-2.12.13.jar) \
        && (cd $OOZIE_HOME/sharelib/lib/spark2/ && curl -O  https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.13/scala-library-2.12.13.jar) \
