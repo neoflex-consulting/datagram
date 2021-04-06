@@ -294,7 +294,7 @@
             "_type_": "etl.RestTarget",
             "type": "devs.transformation.RestTarget",
             "label": "REST WS",
-            "image": "images/icon-core/World.svg",
+            "image": "images/icon-core/world.svg",
             "group": "targets",
             "ports":[{"id": "in", "group": "in", "attribute": "inputPort", "_type_": "etl.Port"}],
             "actions": []
