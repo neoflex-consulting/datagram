@@ -75,7 +75,6 @@ services:
       - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
       - ./bd-base/conf/hadoop/yarn-site.xml:/usr/hadoop/etc/hadoop/yarn-site.xml
       - ./bd-base/conf/spark/spark-defaults.conf:/usr/spark/conf/spark-defaults.conf
-      - ./bd-base/entrypoint.sh:/entrypoint.sh
     networks:
       bd_net:
         ipv4_address: 10.20.1.1
