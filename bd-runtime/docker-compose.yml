@@ -192,9 +192,6 @@ services:
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
       - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
       - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
-    #      - ./bd-base/extralib/postgresql-42.2.12.jre6.jar:/usr/livy/repl_2.12-jars/postgresql-42.2.12.jre6.jar
-    #      - ./bd-base/extralib/ojdbc8.jar:/usr/livy/repl_2.12-jars/ojdbc8.jar
-    #      - ./bd-base/extralib/HiveJDBC4.jar:/usr/livy/repl_2.12-jars/HiveJDBC4.jar
     environment:
       - SPARK_MASTER=yarn
       - SPARK_DEPLOY_MODE=cluster
@@ -248,10 +245,10 @@ services:
       - worker1
       - worker2
     volumes:
-      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
-      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/usr/oozie/sharelib/lib/spark2/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ./bd-base/extralib:/extralib
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
       - ./bd-oozie/conf/oozie/oozie-site.xml:/usr/oozie/conf/oozie-site.xml
-      - ./bd-oozie/entrypoint.sh:/entrypoint.sh
     expose:
       - 1-65535
     ports:

@@ -1,9 +1,8 @@
 #FROM bigdata-docker-compose_master:latest
-FROM neoflexdatagram/bd-base
+FROM neoflexdatagram/bd-base as builder
 
 ARG LIVY_VERSION=0.8.0-incubating-SNAPSHOT
 ENV LIVY_HOME /usr/livy
-ENV LIVY_CONF_DIR "${LIVY_HOME}/conf"
 RUN apk add --no-cache git maven \
   && git clone https://github.com/apache/incubator-livy.git \
   && cd incubator-livy \
@@ -16,6 +15,17 @@ RUN apk add --no-cache git maven \
   && rm -rf "/root/.m2" \
   && mkdir "${LIVY_HOME}/logs" \
   && chown -R root:root "${LIVY_HOME}"
+
+FROM alpine:3.10.4
+RUN apk add --no-cache openjdk8 bash coreutils findutils
+
+ARG LIVY_VERSION=0.8.0-incubating-SNAPSHOT
+ENV LIVY_HOME /usr/livy
+ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
+ENV PATH=${PATH}:${JAVA_HOME}/bin:${LIVY_HOME}/bin
+
+COPY --from=builder $LIVY_HOME $LIVY_HOME
+COPY --from=builder /scripts /scripts
 
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
