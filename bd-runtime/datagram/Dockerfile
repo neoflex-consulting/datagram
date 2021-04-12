@@ -1,22 +1,29 @@
-FROM openjdk:8-jdk-alpine
+FROM maven:3.6.3-openjdk-8-slim as builder
+RUN apt-get update && apt-get install -y git \
+  && git clone https://github.com/neoflex-consulting/datagram.git \
+  && cd datagram \
+  && mvn clean install
+
+FROM maven:3.6.3-openjdk-8-slim
 
 ENV MAVEN_HOME=/usr/share/maven
 ENV MEM_MAX=6g
 ENV TENEO_URL jdbc:postgresql://hivemetastore:5432/teneo
 ENV TENEO_USER postgres
 ENV TENEO_PASSWORD new_password
-ENV DEPLOY_DIR /opt/datagram/mspace
+ENV DATAGRAM_HOME /opt/datagram
+ENV DEPLOY_DIR $DATAGRAM_HOME/mspace
+ENV VERSION spark3-2.0.0-SNAPSHOT
+ENV SERVER_PORT 8089
 
-RUN apk --no-cache add git bash
+COPY --from=builder /datagram/mserver/target/mserver-$VERSION.jar /opt/datagram/mserver.jar
+COPY --from=builder /datagram/spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar /root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/$VERSION/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+COPY --from=builder /datagram/spark2lib/.flattened-pom.xml /root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/$VERSION/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.pom
+COPY --from=builder /datagram/runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar /root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/$VERSION/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+COPY --from=builder /datagram/runtime/.flattened-pom.xml /root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/$VERSION/ru.neoflex.meta.etl.spark.runtime-$VERSION.pom
+COPY --from=builder /datagram/.flattened-pom.xml /root/.m2/repository/ru/neoflex/parent/$VERSION/parent-$VERSION.pom
 
-RUN cd /tmp \
-   && wget https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz \
-   && tar zxf apache-maven-3.3.9-bin.tar.gz \
-   && rm -rf apache-maven-3.3.9-bin.tar.gz \
-   && mv ./apache-maven-3.3.9 /usr/share/maven \
-   && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
-
-COPY entrypoint.sh /
-RUN chmod +x /entrypoint.sh
-WORKDIR /opt/datagram
-ENTRYPOINT ["/entrypoint.sh"]
+WORKDIR $DATAGRAM_HOME
+RUN echo "#!/bin/bash\njava -Xmx${MEM_MAX} -Dteneo.url=${TENEO_URL} -Dteneo.user=${TENEO_USER} -Dteneo.password=${TENEO_PASSWORD} -Dmaven.home=${MAVEN_HOME} -Ddeploy.dir=${DEPLOY_DIR} -Dserver.port=${SERVER_PORT} -Dfile.encoding=UTF-8 -jar mserver.jar" >./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
