@@ -20,13 +20,8 @@ git config --global core.autocrlf false
 ```
 git clone https://github.com/neoflex-consulting/datagram.git
 cd datagram
-# По умолчанию используется профайл для spark3, если нужна сборка для spark2 
-# добавить к строке запуска следующей команды -Pspark2
-mvn clean install 
 docker-compose -f bd-runtime/docker-compose.yml pull
-docker-compose -f bd-runtime/docker-compose.yml up -d datagram
-# Загрузка тестовых данных для проверки работоспособности
-docker-compose -f bd-runtime/docker-compose.yml up -d samples
+docker-compose -f bd-runtime/docker-compose.yml up -d
 ```
 
 ### Проверка работоспособности
