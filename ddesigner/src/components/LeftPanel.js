@@ -155,6 +155,7 @@ class LeftPanel extends Component {
 
     setActiveObject(activeObject) {
         if (activeObject) {
+
             let openKeys, linkedClasses = []
             if(this.getLinkedClasses(activeObject).length === 0 && this.state.linkedClasses.length > 0){
                 this.setState({
@@ -172,6 +173,9 @@ class LeftPanel extends Component {
                     })
                 })
             })
+            if(activeObject._type_.indexOf("Deployment") > 0){
+                this.splitterPosition = '0%';
+            }
         }
     }
 
