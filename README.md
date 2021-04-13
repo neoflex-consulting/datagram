@@ -20,7 +20,6 @@ git config --global core.autocrlf false
 ```
 git clone https://github.com/neoflex-consulting/datagram.git
 cd datagram
-mvn clean install
 docker-compose -f bd-runtime/docker-compose.yml pull
 docker-compose -f bd-runtime/docker-compose.yml up -d
 ```
@@ -74,6 +73,16 @@ docker-compose -f bd-runtime/docker-compose.yml up -d hue
 ```
 Интерфейс доступен по ссылке: http://localhost:8888/.
 При первом входе введите user/password: root/root.
+
+### Сборка docker образов
+```
+git clone https://github.com/neoflex-consulting/datagram.git
+cd datagram
+docker-compose -f bd-runtime/docker-compose.yml build datagram
+docker-compose -f bd-runtime/docker-compose.yml build
+```
+
+
 
 ## Ссылки на WEB UI
 Ресурс|URL
