@@ -38,11 +38,8 @@ COPY --from=builder $HADOOP_HOME $HADOOP_HOME
 COPY --from=builder $HIVE_HOME $HIVE_HOME
 COPY --from=builder $SPARK_HOME $SPARK_HOME
 COPY --from=builder $LIVY_HOME $LIVY_HOME
+COPY --from=builder /extralib $LIVY_HOME/repl_2.12-jars
 COPY --from=builder /scripts /scripts
-
-#RUN ln -s $SPARK_HOME/jars/scala-library-*.jar $HIVE_HOME/lib \
-#    && ln -s $SPARK_HOME/jars/spark-core_*.jar $HIVE_HOME/lib \
-#    && ln -s $SPARK_HOME/jars/spark-network-common_*.jar $HIVE_HOME/lib
 
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh

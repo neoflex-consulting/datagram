@@ -63,8 +63,7 @@ RUN    cp $SPARK_HOME/jars/*.jar "${OOZIE_HOME}/sharelib/lib/spark2/" \
     && cd /hive_exec && jar cf hive-exec-3.1.2.jar * \
     && mv hive-exec-3.1.2.jar /usr/oozie/sharelib/lib/spark2 \
     && cd / && rm -rf /hive_exec \
-    && cp ${OOZIE_HOME}/sharelib/lib/spark/oozie-sharelib-spark-${OOZIE_VERSION}.jar ${OOZIE_HOME}/sharelib/lib/spark2/ \
-    && mkdir /extralib
+    && cp ${OOZIE_HOME}/sharelib/lib/spark/oozie-sharelib-spark-${OOZIE_VERSION}.jar ${OOZIE_HOME}/sharelib/lib/spark2
 
 FROM alpine:3.10.4
 RUN apk add --no-cache openjdk8 bash coreutils findutils python3
@@ -78,6 +77,7 @@ ENV PATH=${PATH}:${JAVA_HOME}/bin:${HADOOP_HOME}/bin:${OOZIE_HOME}/bin
 COPY --from=builder $OOZIE_HOME $OOZIE_HOME
 COPY --from=builder $HADOOP_HOME $HADOOP_HOME
 COPY --from=builder /scripts /scripts
+COPY --from=builder /extralib /extralib
 COPY --from=builder /jarhell.py /jarhell.py
 ADD conf/oozie/oozie-site.xml $OOZIE_HOME/conf/.
 COPY entrypoint.sh /

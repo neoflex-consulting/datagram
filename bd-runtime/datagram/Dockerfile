@@ -18,10 +18,11 @@ ENV SERVER_PORT 8089
 
 COPY --from=builder /datagram/mserver/target/mserver-$VERSION.jar /opt/datagram/mserver.jar
 COPY --from=builder /datagram/spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar /root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/$VERSION/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
-COPY --from=builder /datagram/spark2lib/.flattened-pom.xml /root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/$VERSION/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.pom
 COPY --from=builder /datagram/runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar /root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/$VERSION/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+COPY --from=builder /datagram/spark2lib/.flattened-pom.xml /root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/$VERSION/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.pom
 COPY --from=builder /datagram/runtime/.flattened-pom.xml /root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/$VERSION/ru.neoflex.meta.etl.spark.runtime-$VERSION.pom
 COPY --from=builder /datagram/.flattened-pom.xml /root/.m2/repository/ru/neoflex/parent/$VERSION/parent-$VERSION.pom
+COPY ./mspace $DEPLOY_DIR
 
 WORKDIR $DATAGRAM_HOME
 RUN echo "#!/bin/bash\njava -Xmx${MEM_MAX} -Dteneo.url=${TENEO_URL} -Dteneo.user=${TENEO_USER} -Dteneo.password=${TENEO_PASSWORD} -Dmaven.home=${MAVEN_HOME} -Ddeploy.dir=${DEPLOY_DIR} -Dserver.port=${SERVER_PORT} -Dfile.encoding=UTF-8 -jar mserver.jar" >./entrypoint.sh

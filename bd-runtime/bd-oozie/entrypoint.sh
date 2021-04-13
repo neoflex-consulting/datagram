@@ -2,6 +2,16 @@
 
 export LD_BIND_NOW=1
 
+echo "Check for HDFS is Up"
+hdfsUp=`hdfs dfsadmin -report 2>/dev/null | grep 'Live datanodes (2)' | wc -l`
+while [ $hdfsUp -ne 1 ]
+do
+  echo "[$(date +'%T')] Waiting for HDFS..."
+  sleep 1
+  hdfsUp=`hdfs dfsadmin -report 2>/dev/null | grep 'Live datanodes (2)' | wc -l`
+done
+
+
 hdfs dfs -test -e /user/root/share/lib
 if [ $? -ne 0 ]
 then

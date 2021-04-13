@@ -1,6 +1,7 @@
+FROM neoflexdatagram/datagram as builder
+
 # Alpine 3.11 contains Python 3.8, pyspark only supports Python up to 3.7
 FROM alpine:3.10.4
-
 # curl and unzip: download and extract Hive, Hadoop, Spark etc.
 # bash: Hadoop is not compatible with Alpine's `ash` shell
 # openjdk8: Java
@@ -153,6 +154,11 @@ RUN apk add --no-cache 'linux-headers=~4.19' \
  && chmod +x /scripts/parallel_commands.sh
 
 COPY jarhell.py /
+
+ENV VERSION spark3-2.0.0-SNAPSHOT
+COPY ./extralib /extralib
+COPY --from=builder /root/.m2/repository/ru/neoflex/meta/etl2/ru.neoflex.meta.etl2.spark.spark2lib/$VERSION/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar /extralib
+COPY --from=builder /root/.m2/repository/ru/neoflex/meta/etl/ru.neoflex.meta.etl.spark.runtime/$VERSION/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar /extralib
 
 # Entry point: start all services and applications.
 COPY entrypoint.sh /
