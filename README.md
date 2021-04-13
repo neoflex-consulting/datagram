@@ -20,6 +20,7 @@ git config --global core.autocrlf false
 ```
 git clone https://github.com/neoflex-consulting/datagram.git
 cd datagram
+mvn clean install
 docker-compose -f bd-runtime/docker-compose.yml pull
 docker-compose -f bd-runtime/docker-compose.yml up -d
 ```
