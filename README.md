@@ -16,7 +16,7 @@
 git config --global core.autocrlf false
 ```
 Убедитесь, что у вас установлен maven и работает команда mvn.
-### Сборка и запуск
+### Запуск через docker-compose
 ```
 git clone https://github.com/neoflex-consulting/datagram.git
 cd datagram
