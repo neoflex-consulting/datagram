@@ -69,11 +69,12 @@ EOF
 fi
 
 TR_NAME=tr_aw_long_time_no_sale
+echo "Create URL for $TR_NAME"
 URL_BASE='cim/ddesigner/build/index.html?path=/eyJfdHlwZV8iOiJ1aTMuTW9kdWxlIiwibmFtZSI6IkVUTCJ9/eyJfdHlwZV8iOiJlY29yZS5FQ2xhc3MiLCJuYW1lIjoiZXRsLlRyYW5zZm9ybWF0aW9uIn0=/'
 TR_ID=`curl -s --user admin:admin "http://datagram:8089/api/teneo/select/from%20etl.Transformation%20where%20name='$TR_NAME'" | jq '.[0].e_id'`
 EOBJECT="{\"_type_\":\"etl.Transformation\",\"e_id\":$TR_ID,\"name\":\"$TR_NAME\"}"
 TR_URL="$URL_BASE`echo $EOBJECT | base64`"
-echo $TR_URL > tr.url
+echo $TR_URL > /tr.url
 
 echo "All done. Waiting forever to allow exec command."
 tail -f /dev/null
