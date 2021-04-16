@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.neoflex.meta</groupId>
+    <artifactId>emfatic2ecore</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emfatic/org.eclipse.emfatic.core -->
+        <dependency>
+            <groupId>org.eclipse.emfatic</groupId>
+            <artifactId>org.eclipse.emfatic.core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emfatic/org.eclipse.gymnast.runtime.core -->
+        <dependency>
+            <groupId>org.eclipse.emfatic</groupId>
+            <artifactId>org.eclipse.gymnast.runtime.core</artifactId>
+            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emfatic/org.eclipse.emf.emfatic -->
+        <dependency>
+            <groupId>org.eclipse.emfatic</groupId>
+            <artifactId>org.eclipse.emf.emfatic</artifactId>
+            <version>0.8.0</version>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+</project>
