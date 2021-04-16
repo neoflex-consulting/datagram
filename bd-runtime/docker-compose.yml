@@ -225,6 +225,8 @@ services:
       - datagram
       - oozie
       - kafka
+    volumes:
+      - ./tr.url:/tr.url
     networks:
       bd_net:
         ipv4_address: 10.20.1.11
