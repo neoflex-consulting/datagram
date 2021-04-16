@@ -1,0 +1,902 @@
+Коллеги, добрый день.
+
+Меня зовут Суворова Анна, я ведущий разработчик Datagram
+
+Сегодня я, на ваших глазах, с помощью Datagram решу задачку. Звучит она так:
+В фирме необходимо провести индексацию зарплат с учетом бизнес правил, в декабре 2013 года.
+
+Бизнес правила:
+1. Повышение ЗП максимум 1 раз в год
+2. Максимальное повышение ЗП за год - 20%
+3. В случае несоблюдения правила 1 или 2, необходимо согласование руководителя компании
+
+Проанализируем, что нужно на выходе:
+   - Таблица фактов повышения ЗП за предыдущий год
+   - Таблица плана повышения ЗП
+   - Таблица плана повышения ЗП с конфликтами
+
+## Шаг 1. Создать Project
+1. Перейти в раздел ![](img/Common/home.PNG) / ETL / Project
+2. Нажать “+” -> Project
+3. Заполнить поле Name: labWorks
+4. ![](img/Common/save.PNG) Сохранить 
+
+## Шаг 3. Создать Подключение к СУБД
+### 3.1. Создать Context
+>##### №1
+1. Перейти в раздел ![](img/Common/home.PNG) / ETL / JdbcContext
+2. Нажать “+” -> JdbcContext
+3. Заполнить поле Name: humanresources
+4. ![](img/Common/save.PNG) Сохранить
+
+> JdbcContext
+
+>##### №2
+1. Перейти в раздел ![](img/Common/home.PNG) / ETL / JdbcContext
+2. Нажать “+” -> JdbcContext
+3. Заполнить поле Name: person
+4. ![](img/Common/save.PNG) Сохранить
+
+### 3.2. Создать Software System
+>##### №1
+1. Перейти в раздел ![](img/Common/home.PNG) / Connections / SoftwareSystem
+2. Нажать “+” -> SoftwareSystem
+3. Заполнить поля:
+   - Name: humanresources
+   - Project: выбрать labWorks
+4. ![](img/Common/save.PNG) Сохранить
+   
+>##### №2
+1. Перейти в раздел ![](img/Common/home.PNG) / Connections / SoftwareSystem
+2. Нажать “+” -> Software System
+3. Заполнить поля:
+   - Name: person
+   - Project: выбрать labWorks
+4. Сохранить
+> Важно! Name в JdbcContext должно совпадать с Name в Software System
+
+> Оставшиеся поля заполнятся автоматически в конце Шага 2
+
+### Шаг 3.3. Создать JdbcConnection
+>##### №1ъ
+1. Перейти в раздел ![](img/Common/home.PNG) / Connections / JdbcConnection
+2. Нажать “+” -> JdbcConnection
+3. Заполнить поля 
+    - Name: humanresources
+    - Project: выбрать labWorks
+    - Url: jdbc:postgresql://hivemetastore:5432/Adventureworks
+    - Schema: humanresources
+    - User: postgres
+    - Password: new_password
+    - Driver: org.postgresql.Driver
+4. ![](img/Common/save.PNG) Сохранить
+5. ![](img/Common/action.PNG) Запустить Test
+6. Получить сообщение об успешном соединении: [ "Connected!" ]
+7. Закрыть сообщение
+   
+>##### №2
+1. Нажать ![](img/Common/copy.PNG) Copy
+2. Ввести name: person
+3. Заменить поле:
+    - Schema: person
+4. ![](img/Common/save.PNG) Сохранить
+5. ![](img/Common/action.PNG) Запустить Test
+6. Получить сообщение об успешном соединении: [ "Connected!" ]
+
+### Шаг 3.4. Создать Deployment
+>##### №1
+1. Перейти в раздел ![](img/Common/home.PNG) / Connections / Deployment
+2. Нажать “+” -> Deployment
+3. Заполнить поля:
+    - Name: humanresources
+    - Project: выбрать labWorks
+    - Connection: Выбрать humanresources
+    - Software System: humanresources
+4. ![](img/Common/save.PNG) Сохранить
+5. ![](img/Common/action.PNG) Запустить в верхней панели инструментов Refresh Scheme 
+6. Получить сообщение об успешном соединении: [ "humanresources_at_humanresources" ]
+
+>##### №2
+1. Перейти в раздел ![](img/Common/home.PNG)  / Connections / Deployment
+2. Нажать “+” -> Deployment
+3. Заполнить поля:
+   - Name: person
+   - Project: выбрать labWorks
+   - Connection: Выбрать Person
+   - Software System: Person
+4. ![](img/Common/save.PNG) Сохранить
+5. ![](img/Common/action.PNG) Запустить Refresh Scheme
+6. Получить сообщение об успешном соединении: [ "person_at_person" ]
+
+> Важно! Если при запуске Refresh Scheme возникла ошибка 
+> "id to load is required for loading".
+> Кнопка сохранить не отработала, нужно нажать её еще раз и повторить запуск Refresh Scheme
+
+### Шаг 3.5. Проверить автоматически созданную Scheme
+>##### №1
+1. Перейти в раздел ![](img/Common/home.PNG) / Connections / Scheme
+2. Проверить наличие humanresources_at_humanresources (Scheme создалась на предыдущем шаге)
+3. Перейти в режим редактирования 
+4. Развернуть Tables (6 штук)
+
+>##### №2
+1. Перейти в раздел ![](img/Common/home.PNG) / Connections / Scheme
+2. Проверить наличие person_at_person (Scheme создалась на предыдущем шаге)
+3. Перейти в режим редактирования
+4. Развернуть Tables (13 штук)
+
+## Шаг 4. Создать Transformation Step1
+
+>##### №1
+1. Перейти в раздел ![](img/Common/home.PNG) / ETL / Transformation
+2. Нажать “+” -> Transformation
+3. Заполнить поля:
+   - Name: tr_salary_step1
+   - Label: Автоматически подставляется "= Name"
+   - Project: выбрать labWorks
+   - Spark Version: Выбрать SPARK3
+   - Description: Формирование таблицы фактов повышения ЗП за предыдущий год
+4. ![](img/Common/save.PNG) Сохранить
+
+>##### №2
+1. ![](img/Common/run.PNG) Нажать Run в нижней панели (снизу откроется панель инструментов)
+2. Сделать Refresh страницы
+3. Перейти в меню слева в autogenerated_tr_tr_salary_step1
+4. Прокрутить вниз до пункта Parameters
+5. Нажать ![](img/Common/add%20file.PNG) -> Property*
+6. Раскрыть и заполнить поля:
+   - Name: currentDate
+   - Value: 2013-12-01
+   - Description: Переменная для бизнес-правила: Повышение ЗП максимум 1 раз в год
+7. Прокрутить вверх страницы
+8. ![](img/Common/save.PNG) Сохранить
+9. Вернуться в трансформацию: ![](img/Common/home.PNG) / ETL / Transformation / tr_salary_step1
+10. В нижней панели инструментов должны появиться два этих параметра (если панель скрыта, то нажать ![](img/Common/run.PNG))
+
+>*Property для запуска через Livy. Для запуска через Oozie они не работают.
+
+>##### №3
+1. Перетащить на поле объект из ![](img/Transformation/source.PNG)
+   - SQL  
+2. Выбрать его на поле трансформации
+3. Справа в Свойствах:
+   - Name: humanresources
+   - Label: humanresources
+   - Context: выбрать humanresources
+4. ![](img/Common/save.PNG) Сохранить
+
+>##### №4
+1. Под "SQL humanresources" нажать ![](img/Common/txt.PNG) (Edit SQL)
+2. Открылся новый Tab SQL Editor humanresources
+3. ![](img/Common/table.PNG) Нажать Table в вехней пенели инструментов
+4. Выбрать Table: employeepayhistory
+5. Выбрать Fields (через Ctrl):
+   - businessentityid (id сотрудника, по нему потом подтянуть ФИО)
+   - ratechangedate (дата повышения ЗП)
+   - rate (процент повышения ЗП)
+6. Нажать синюю кнопку Apply
+7. Сгенерируется запрос:
+    ```
+    select 
+       businessentityid,
+       ratechangedate,
+       rate
+   from employeepayhistory
+    ```
+8. ![](img/Common/run.PNG) Нажать Run*
+9. Возникла ошибка: relation "employeepayhistory" does not exist
+   - Необходимо изменить **from employeepayhistory** на **from humanresources.employeepayhistory** (особенность работы с Postgres)
+10. ![](img/Common/run.PNG) Нажать Run
+11. Нажать галочку ![](img/Common/check.PNG) (Apply)**
+12. Закрыть Tab SQL Editor humanresources
+11. ![](img/Common/save.PNG) Сохранить
+
+>/* В этот момент: 
+> - Под запросом появится чашка кофе
+> - Закутиться голубая шестеренка в нижней панели инструментов
+> * Запрос отработает, как только:
+>  - Шестеренка перестанет крутиться
+>  - Появится сообщение о статусе выполнения задачи
+>  - Вернется результат запроса
+
+>/** При этим устанавливается структура данных на выходе узла трансформации (в Output Port)
+
+>##### №5
+1. Выбрать "SQL humanresources" на поле трансформации
+2. Посмотреть, что в свойстве Statement появился запрос
+3. Посмотреть, что в свойстве Output Port: OutputPort -> Fields появились 3 поля, которые вернулись из запроса с названием колонок и типом данных (появились в момент отработки Apply)
+
+>##### №6
+1. Перетащить на поле трансформации объект из ![](img/Transformation/Transform.PNG)
+   - Spark SQL
+2. Выбрать его
+3. Справа в Свойствах:
+   - Name: filterSpark
+   - Label: filterSpark
+   - Sql Ports: 
+      - Нажать ![](img/Common/add%20file.PNG) -> SQLPort
+      - Развернуть появившееся поле
+      - Заполнить поля:
+         - Name: Salary
+         - Alias: Salary
+4. Соединить "SQL humanresources" и "Spark SQL filterSpark" на поле трансформации
+5. ![](img/Common/save.PNG) Сохранить 
+6. Результат:
+
+   ![](img/1.%20Salary%20Analysis/Step%204.6.PNG)
+
+>##### №7
+1. Под объектом Spark SQL filterSpark нажать ![](img/Common/txt.PNG) (Edit Spark SQL)
+2. Открылся новый Tab Spark Editor filterSpark
+3. Написать запрос, который возвращает все столбцы из предыдущего шага:
+    ```
+    select * from Salary
+    ```
+4. ![](img/Common/run.PNG) Нажать Run
+   
+5. Если возникла ошибка: java.lang.NullPointerException
+   - Вернуться на первый Tab
+   - Удалить стрелочку между "SQL humanresources" и "Spark SQL filterSpark"
+   - ![](img/Common/save.PNG) Сохранить
+   - Соединить повторно "SQL humanresources" и "Spark SQL filterSpark" на поле трансформации
+   - Вернуться на Tab Spark Editor filterSpark
+   - ![](img/Common/run.PNG) Нажать Run
+6. Нажать галочку ![](img/Common/check.PNG) (Apply)
+7. ![](img/Common/save.PNG) Сохранить
+
+>##### №8
+1. Оставаясь на этом Tab, проанализировать, как нужно изменить запрос в "Spark SQL filterSpark" 
+2. Необходимо добавить к запросу фильтрацию по бизнес-правилу: Повышение ЗП максимум 1 раз в год
+   1.  Используем where в запросе:
+    ```
+    months_between(cast('${jobParameters("currentDate")}' as date), ratechangedate, true) <= 12
+    ```
+   2. В нем:
+      1. Используется Property currentDate, со вспомогательной функцией jobParameters: '${jobParameters("currentDate")}'
+      2. Приводится тип String к Date: cast( ... as date)
+      3. Вычисляется разница в месяцах между текущей датой и датой повышения: months_between(..., ..., true)
+3. Удалить * из запроса
+4. Раскрыть справа меню со столбцами Salary
+5. Выбрать поля по одному, через запятую:
+    - businessentityid
+    - rate
+    - ratechangedate
+6. Добавить Where
+7. Итоговый запрос выглядит так:
+    ```
+    select 
+       businessentityid,
+       rate,
+       ratechangedate
+   from Salary
+   where months_between(cast('${jobParameters("currentDate")}' as date), ratechangedate, true) <= 12
+    ```
+8. ![](img/Common/run.PNG) Нажать Run
+9. Нажать галочку ![](img/Common/check.PNG) (Apply)
+10. Закрыть Tab Spark Editor filterSpark
+11. ![](img/Common/save.PNG) Сохранить
+
+>##### №9
+1. Перетащить на поле трансформации объект из ![](img/Transformation/source.PNG)
+   - SQL
+2. Выбрать его
+3. Справа в Свойствах:
+   - Name: person
+   - Label: person
+   - Context: person
+4. ![](img/Common/save.PNG) Сохранить
+
+>##### №10
+1. Под объектом "SQL person" нажать ![](img/Common/txt.PNG) (Edit SQL)
+2. Открылся новый Tab SQL Editor person
+3. Написать запрос, который возвращает id сотрудника и его ФИО из таблицы person:
+   ```
+   select
+      businessentityid,
+      firstname, 
+      middlename,
+      lastname
+   from person.person
+   ```
+4. ![](img/Common/run.PNG)Нажать Run
+5. Подождать, пока запрос отработает и вернет результат
+6. Нажать галочку ![](img/Common/check.PNG) (Apply)
+7. Закрыть Tab SQL Editor person
+8. ![](img/Common/save.PNG) Сохранить
+
+>##### №11
+1. Перетащить на поле объект из ![](img/Transformation/Transform.PNG)
+   - Join
+2. Соединить его сверху слева со Spark SQL
+3. Соединить его снизу слева с SQL
+4. Справа в Свойствах:
+   - Name: joinSalary
+   - Label: joinSalary
+   - Join Type: Выбрать LEFT
+   - Key Fields: Выбрать businessentityid
+   - Joinee Key Fields: Выбрать businessentityid
+   - Checkpoint: Поставить True ( true = на этом шаге Spark сохранит промежуточный результат)
+5. ![](img/Common/save.PNG) Сохранить
+6. Результат:
+   ![](img/1.%20Salary%20Analysis/Step%204.11.PNG)
+
+>##### №12
+1. Под объектом "Spark joinSalary" нажать ![](img/Common/txt.PNG) (Edit Join)
+2. Открылся новый Tab Join Editor joinSalary
+3. Обзорно смотрим, что в нем есть:
+    - Добавление новой колонки
+    - Копирование существующей
+    - Изменение порядка колонок
+    - Удаление колонки
+    - Name: наименование колонки
+    - Field Operation Type: тип операции. 
+         - Add - проброс поля
+         - Transform - выражение на Scala
+         - SQL - выражение на Spark SQL
+         - Pack - Делает структуру из полей
+    - Data Type Domain: тип данный столбца
+    - Source Fields: поле, которое возвращается в столбце
+      - Если в названии поля стоит _1. - это столбец из 1-ой таблицы
+      - Если в названии поля стоит _2. - это столбец из 2-ой таблицы
+4. Нажать на "+". Создаем новый столбец с параметрами:
+   - Name: personName
+   - Field Operation Type: SQL
+   - Data Type Domain: String
+   - Source Fields: выбрать    _2.firstname, _2.middlename, _2.lastname
+   - Expression: 
+      ```
+      concat( 
+       if(_2.firstname is null, '', _2.firstname), 
+       ' ', 
+       if(_2.middlename is null, '', _2.middlename), 
+       ' ',
+       if(_2.lastname is null, '', _2.lastname) 
+      )
+      ```
+5. Нажать галочку ![](img/Common/check.PNG) (Check)
+6. Справа от Expression должно появиться "OK"
+7. Удалить столбцы:
+   - firstname
+   - middlename
+   - lastname
+8. ![](img/Common/save.PNG) Сохранить
+4. Закрыть Tab Join Editor Join
+
+> Важно! Если Field Operation Type = Add, то Data Type Domain обязательно должен совпадать с типом в поле Source Fields (два последних пункта)
+
+>##### №13
+1. Справа сверху навести на плюсик и выбрать Source Code Editor 
+2. Выбрать:
+   - Tab "Step"
+   - Select server: db-livy
+   - Step: joinSalary (Join)
+2. ![](img/Common/load.PNG) Нажать Load code
+3. ![](img/Common/run.PNG) Нажать Run
+4. Подождать, пока запрос отработает и вернет результат
+7. В нем столбцы:
+   - businessentityid: id сотрудника
+   - rate: Процент повышения ЗП
+   - ratechangedate: Дата повышения ЗП
+   - personName: ФИО сотрудника
+8. Таким образом проверить, что запрос отрабатывает корректно
+9. Вернуться на первый Tab Transformation Transformation Designer
+
+>##### №14
+1. Перетащить на поле трансформации объект из ![](img/Transformation/target.PNG)
+   - CSV
+2. Соединить Join с ним 
+3. Выбрать его
+4. Справа в Свойствах:
+   - Name: lastYear
+   - Label: lastYear
+   - Hdfs: Должен быть выбран True
+   - Path: /tmp/salary/lastYear.xls
+   - Format: EXCEL
+   - Header: Должен быть выбран True
+   - EXCEL: 
+      - Save Mode: OVERWRITE
+5. ![](img/Common/save.PNG) Сохранить
+6. Результат:
+   
+   ![](img/1.%20Salary%20Analysis/Step%204.14.PNG)
+
+>##### №15
+1. Перетащить на поле трансформации объект из ![](img/Transformation/target.PNG)
+   - Local
+2. Соединить Join с ним
+3. Выбрать его
+4. Справа в Свойствах:
+   - Name: lastYearSalary
+   - Label: lastYearSalary
+   - Local File Format: ORC
+   - Save Mode: OVERWRITE
+   - Local File Name: /tmp/salary/lastYearSalary
+   - Register Table: Должен быть выбран True
+   - Hive Table Name: lastYearSalary
+5. ![](img/Common/save.PNG) Сохранить
+6. Результат:
+
+   ![](img/1.%20Salary%20Analysis/Step%204.15.PNG)
+
+> Важно! Именно для этого мы поставили в Join свойство Checkpoint = true. Чтобы результат шага сохранился, а потом параллельно использовался для выгрузки в Excel и Hive.
+> Если это свойство не будет проставлено, то отработают два запроса от начала трансформации до конца.
+
+
+## Шаг 5. Запустить Transformation Step1
+
+>##### №1
+1. Проверить Transformation на ошибки:
+   1. ![](img/Common/action.PNG) Запустить в верхней панели инструментов Run/Validate
+   2. Получить сообщение об отсутствии ошибок: { "result": true, "problems": [] }
+2. ![](img/Common/run.PNG) Запустить в нижней панели инструментов Run/Run
+3. Получить сообщение об успешном завершении Transformation: Successful run
+
+>##### №2
+1. Выбрать "CSV lastYear" на поле трансформации
+2. Под объектом нажать ![](img/Common/table.PNG) (View content)
+3. Открылся новый Tab CSV Target Editor CSV
+4. ![](img/Common/eye.PNG) Нажать глаз (show)
+5. Посмотреть, что внизу закрутилась шестеренка и стала голубой ![](img/Common/gear-blue.PNG)
+6. Подождать, пока запрос отработает и вернет результат
+7. Это и есть таблица фактов повышения ЗП за предыдущий год
+8. Вернуться на предыдущий Tab
+
+> Если возникла ошибка: java.io.FileNotFoundException: File does not exist: /tmp/salary/lastYear.xls
+> Удалить сессию и батчи в Livy.
+
+>##### №3
+1. Выбрать "Local lastYearSalary" на поле трансформации
+2. Под объектом нажать ![](img/Common/table.PNG) (View content)
+3. Открылся новый Tab Local Target Editor lastYearSalary
+4. ![](img/Common/eye.PNG) Нажать глаз (show)
+5. Посмотреть, что внизу закрутилась шестеренка и стала голубой ![](img/Common/gear-blue.PNG)
+6. Подождать, пока запрос отработает и вернет результат
+7. Это тоже таблица фактов повышения ЗП за предыдущий год, но сохраненная в Hive
+8. Вернуться на предыдущий Tab
+
+## Шаг 6. Открыть таблицу в HDFS
+1. Перейти в раздел ![](img/Common/home.PNG) / Servers / Livy / bd-livy
+2. Нажать “+” -> HDFS Console
+3. Перейти в /tmp/salary
+4. Напротив lastYear.xls нажать ![](img/Common/download.PNG) (download)
+5. Открыть скачанный Excel
+6. Перейти в /tmp/salary/lastYearSalary - тут хранится таже самая таблицы, но разбитая по партициям (от partition - разделение)
+
+## Шаг 7. Найти все таблицы в Hive
+1. Перейти в раздел ![](img/Common/home.PNG) / Servers / Livy / bd-livy
+2. Нажать нижний “+” -> Появится новый Tab Interpreter 1
+3. Написать запрос:
+   ```
+   spark.sql("show tables").show()
+   ```
+4. ![](img/Common/action.PNG) Нажать молнию (run)
+5. Посмотреть список существующих таблиц
+6. Убедиться, что таблица lastyearsalary создалась
+
+## Шаг 5. Создать Transformation Step2
+
+>##### №1
+1. Перейти в раздел ![](img/Common/home.PNG) / ETL / Transformation
+2. Нажать “+” -> Transformation
+3. Заполнить поля:
+   - Name: tr_salary_step2
+   - Label: Автоматически подставляется "= Name"
+   - Project: выбрать labWorks
+   - Spark Version: Выбрать SPARK3
+   - Description: Формирование таблицы плана повышения ЗП
+4. ![](img/Common/save.PNG) Сохранить
+
+>##### №2
+1. ![](img/Common/run.PNG) Нажать Run в нижней панели (снизу откроется панель инструментов)
+2. Сделать Refresh страницы
+3. ![](img/Common/run.PNG) Нажать еще раз Run в нижней панели (снизу откроется панель инструментов)
+4. Нажать "+" (add) в нижней панели (2 раза)
+5. ![](img/Common/save.PNG) Нажать Save в нижней панели
+6. Сделать Refresh страницы
+7. ![](img/Common/save.PNG) Нажать Edit напротив первой появившейся строки с Property
+8. Заполнить поля:
+   - Name: maxRate
+   - Value: 20
+   - Description: Переменная для бизнес-правила: Максимальное повышение ЗП на 20% в год
+9. ![](img/Common/save.PNG) Нажать Edit напротив второй появившейся строки с Property
+10. ![](img/Common/save.PNG) Нажать Save в этой же строке
+11. ![](img/Common/save.PNG) Нажать Save в нижней панели
+
+>##### №3
+1. Перетащить на поле объект из ![](img/Transformation/source.PNG)
+   - Hive
+2. Выбрать его на поле трансформации
+3. Справа в Свойствах:
+   - Name: hiveSalary
+   - Label: hiveSalary
+4. ![](img/Common/save.PNG) Сохранить
+
+>##### №4
+1. Под "Hive hiveSalary" нажать ![](img/Common/txt.PNG) (Edit Hive)
+2. Открылся новый Tab Hive Editor hiveSalary
+3. Написать запрос к таблице, которую создали ранее
+```
+   select * from lastyearsalary
+```
+4. ![](img/Common/run.PNG) Нажать Run
+5. Дождаться, пока запрос отработает
+5. Нажать галочку ![](img/Common/check.PNG) (Apply)
+12. Закрыть Tab Hive Source Editor hiveSalary
+11. ![](img/Common/save.PNG) Сохранить
+
+>/* Если в таблице вернулись пустые строки, то нажать ![](img/Common/run.PNG) Run еще раз.
+
+>##### №5
+1. Выбрать "Hive hiveSalary" на поле трансформации
+2. Посмотреть, что в свойстве Statement появился запрос
+3. Посмотреть, что в свойстве Output Port: OutputPort -> Fields появились 4 поля, которые вернулись из запроса с названием колонок и типом данных (появились в момент отработки Apply)
+
+>##### №6
+1. Перетащить на поле объект из ![](img/Transformation/Transform.PNG)
+   - Aggregation
+2. Соединить его с Hive hiveSalary
+3. Выбрать его на поле трансформации
+4. Справа в Свойствах:
+   - Name: sumUpSalary
+   - Label: sumUpSalary
+   - Group By Field Name: выбрать businessentityid
+   - Aggregation Parameters:
+      - Нажать ![](img/Common/add%20file.PNG) -> AggregationParameters (2 раза)
+      - Развернуть 1 появившееся поле
+      - Заполнить:
+         - Result Field Name: sumUpSalary
+         - Field Name: выбрать rate
+         - Aggregation Function: выбрать SUM
+      - Развернуть 2 появившееся поле
+      - Заполнить:
+         - Result Field Name: countUpSalary
+         - Field Name: выбрать rate
+         - Aggregation Function: выбрать COUNT
+5. ![](img/Common/save.PNG) Сохранить
+
+>##### №7
+1. Справа сверху навести на плюсик и выбрать Source Code Editor
+2. Выбрать:
+   - Tab "Step"
+   - Select server: db-livy
+   - Step: sumUpSalary (Aggregation)
+2. ![](img/Common/load.PNG) Нажать Load code
+3. ![](img/Common/run.PNG) Нажать Run
+4. Подождать, пока запрос отработает и вернет результат
+7. В нем столбцы:
+   - businessentityid: id сотрудника
+   - sumUpSalary: Суммарный процент повышения ЗП за год
+   - countUpSalary: Количество повышений ЗП за год
+8. Таким образом проверить, что запрос отрабатывает корректно
+9. Вернуться на первый Tab Transformation Transformation Designer
+
+>##### №8
+1. Перетащить на поле объект из ![](img/Transformation/Transform.PNG)
+   - Projection
+2. Соединить его с Aggregation sumUpSalary
+3. Выбрать его на поле трансформации
+4. Справа в Свойствах:
+   - Name: excessSumAndCount
+   - Label: excessSumAndCount
+5. ![](img/Common/save.PNG) Сохранить
+
+>##### №8
+1. Под объектом "Projection excessSumAndCount" нажать ![](img/Common/txt.PNG) (Edit Projection)
+2. Открылся новый Tab Projection Editor excessSumAndCount
+3. ![](img/Common/add.PNG) Нажать New
+4. Заполнить:
+   - Name: excessSum
+   - Field Operation Type: SQL
+   - Data Type Domain: выбрать BOOLEAN
+   - Source Fields: выбрать sumUpSalary: DECIMAL
+   - Expression:
+      ```
+      sumUpSalary >= cast('${jobParameters("maxRate")}' as integer)
+      ```
+5. Нажать галочку ![](img/Common/check.PNG) (Check)
+6. Справа от Expression должно появиться "OK"
+
+7. ![](img/Common/add.PNG) Нажать New
+8. Заполнить:
+   - Name: excessCount
+   - Field Operation Type: SQL
+   - Data Type Domain: выбрать BOOLEAN
+   - Source Fields: выбрать countUpSalary: DECIMAL
+   - Expression:
+      ```
+      true
+      ```
+9. Нажать галочку ![](img/Common/check.PNG) (Check)
+10. Справа от Expression должно появиться "OK"
+
+11. ![](img/Common/add.PNG) Нажать New
+12. Заполнить:
+- Name: maxRate
+- Field Operation Type: SQL
+- Data Type Domain: выбрать STRING
+- Expression:
+   ```
+   cast('${jobParameters("maxRate")}' as integer)
+   ```
+13. Нажать галочку ![](img/Common/check.PNG) (Check)
+14. Справа от Expression должно появиться "OK"
+15. ![](img/Common/save.PNG) Сохранить
+16. Закрыть Tab Projection Editor excessSumAndCount
+
+>##### №9
+1. Перетащить на поле трансформации объект из ![](img/Transformation/source.PNG)
+   - SQL
+2. Выбрать его
+3. Справа в Свойствах:
+   - Name: person
+   - Label: person
+   - Context: person
+4. ![](img/Common/save.PNG) Сохранить
+
+>##### №10
+1. Под объектом "SQL person" нажать ![](img/Common/txt.PNG) (Edit SQL)
+2. Открылся новый Tab SQL Editor person
+3. Написать запрос, который возвращает id сотрудника и его ФИО из таблицы person:
+   ```
+   select
+      businessentityid,
+      firstname, 
+      middlename,
+      lastname
+   from person.person
+   ```
+4. ![](img/Common/run.PNG)Нажать Run
+5. Подождать, пока запрос отработает и вернет результат
+6. Нажать галочку ![](img/Common/check.PNG) (Apply)
+7. Закрыть Tab SQL Editor person
+8. ![](img/Common/save.PNG) Сохранить
+
+>##### №11
+1. Перетащить на поле объект из ![](img/Transformation/Transform.PNG)
+   - Join
+2. Соединить его сверху слева со Spark SQL
+3. Соединить его снизу слева с SQL
+4. Справа в Свойствах:
+   - Name: tableFactUp
+   - Label: tableFactUp
+   - Join Type: Выбрать LEFT
+   - Key Fields: Выбрать businessentityid
+   - Joinee Key Fields: Выбрать businessentityid
+   - Checkpoint: Поставить True ( true = на этом шаге Spark сохранит промежуточный результат)
+5. ![](img/Common/save.PNG) Сохранить
+6. Результат:
+   ![](img/1.%20Salary%20Analysis/Step%205.11.PNG)
+
+>##### №12
+1. Под объектом "Join tableFactUp" нажать ![](img/Common/txt.PNG) (Edit Join)
+2. Открылся новый Tab Join Editor tableFactUp
+3. Нажать на "+". Создаем новый столбец с параметрами:
+   - Name: personName
+   - Field Operation Type: SQL
+   - Data Type Domain: String
+   - Source Fields: выбрать    _2.firstname, _2.middlename, _2.lastname
+   - Expression:
+      ```
+      concat( 
+       if(_2.firstname is null, '', _2.firstname), 
+       ' ', 
+       if(_2.middlename is null, '', _2.middlename), 
+       ' ',
+       if(_2.lastname is null, '', _2.lastname) 
+      )
+      ```
+5. Нажать галочку ![](img/Common/check.PNG) (Check)
+6. Справа от Expression должно появиться "OK"
+7. Удалить столбцы:
+   - firstname
+   - middlename
+   - lastname
+8. ![](img/Common/save.PNG) Сохранить
+4. Закрыть Tab Join Editor tableFactUp
+
+> Важно! Если Field Operation Type = Add, то Data Type Domain обязательно должен совпадать с типом в поле Source Fields (два последних пункта)
+
+>##### №13
+1. Справа сверху навести на плюсик и выбрать Source Code Editor
+2. Выбрать:
+   - Tab "Step"
+   - Select server: db-livy
+   - Step: tableFactUp (Join)
+3. ![](img/Common/load.PNG) Нажать Load code
+4. ![](img/Common/run.PNG) Нажать Run
+5. Подождать, пока запрос отработает и вернет результат
+6. В нем столбцы:
+   - businessentityid: id сотрудника
+   - personName: ФИО сотрудника
+   - sumUpSalary: Суммарный процент повышения ЗП за год
+   - countUpSalary: Количество повышений ЗП за год
+   - excessSum: Есть ли превышение по суммарному проценту за год
+   - excessCount: Есть ли превышение по количеству повышений за год
+   - newSum: Плановый процент повышения ЗП
+7. Таким образом проверить, что запрос отрабатывает корректно
+8. Вернуться на первый Tab Transformation Transformation Designer
+
+>##### №14
+1. Перетащить на поле объект из ![](img/Transformation/Transform.PNG)
+   - Selection
+2. Соединить его слева с Join tableFactUp
+3. Справа в Свойствах:
+   - Name: selectNotExcessSum
+   - Label: selectNotExcessSum
+   - Expression:
+      ```
+      excessSum == false AND excessCount == true
+      ```
+5. ![](img/Common/save.PNG) Сохранить
+
+>##### №15
+1. Под объектом "Selection selectNotExcessSum" нажать ![](img/Common/txt.PNG) (Edit Selection)
+2. Открылся новый Tab SQL Editor person
+3. Нажать галочку ![](img/Common/check.PNG) (Apply)
+4. Убедится, что фильтрация сработала
+5. В нижней панели появится "ОК"
+8. ![](img/Common/save.PNG) Сохранить
+
+>##### №16
+1. Перетащить на поле трансформации объект из ![](img/Transformation/target.PNG)
+   - Local
+2. Соединить Selection с ним
+3. Выбрать его
+4. Справа в Свойствах:
+   - Name: tableUpSalaryConflict
+   - Label: tableUpSalaryConflict
+   - Local File Format: PARQUET
+   - Save Mode: OVERWRITE
+   - Local File Name: /tmp/salary/tableUpSalaryConflict
+   - Register Table: Должен быть выбран True
+   - Hive Table Name: tableUpSalaryConflict
+5. ![](img/Common/save.PNG) Сохранить
+
+>##### №17
+1. Перетащить на поле трансформации объект из ![](img/Transformation/target.PNG)
+   - Local
+2. Соединить Selection с ним
+3. Выбрать его
+4. Справа в Свойствах:
+   - Name: tableUpSalary
+   - Label: tableUpSalary
+   - Local File Format: PARQUET
+   - Save Mode: OVERWRITE
+   - Local File Name: /tmp/salary/tableUpSalary
+   - Register Table: Должен быть выбран True
+   - Hive Table Name: tableUpSalary
+5. ![](img/Common/save.PNG) Сохранить
+6. Результат:
+   ![](img/1.%20Salary%20Analysis/Step%205.17.PNG)
+
+## Шаг 6. Запустить Transformation Step2
+
+>##### №1
+1. Проверить Transformation на ошибки:
+   1. ![](img/Common/action.PNG) Запустить в верхней панели инструментов Run/Validate
+   2. Получить сообщение об отсутствии ошибок: { "result": true, "problems": [] }
+2. ![](img/Common/run.PNG) Запустить в нижней панели инструментов Run/Run
+3. Получить сообщение об успешном завершении Transformation: Successful run
+
+>##### №2
+1. Выбрать "Local tableUpSalaryConflict" на поле трансформации
+2. Под объектом нажать ![](img/Common/table.PNG) (View content)
+3. Открылся новый Tab Local Target Editor tableUpSalaryConflict
+4. ![](img/Common/eye.PNG) Нажать глаз (show)
+5. Посмотреть, что внизу закрутилась шестеренка и стала голубой ![](img/Common/gear-blue.PNG)
+6. Подождать, пока запрос отработает и вернет результат
+7. Это таблица плана повышения ЗП с конфликтами
+8. Вернуться на предыдущий Tab
+
+>##### №3
+1. Выбрать "Local tableUpSalary" на поле трансформации
+2. Под объектом нажать ![](img/Common/table.PNG) (View content)
+3. Открылся новый Tab Local Target Editor tableUpSalary
+4. ![](img/Common/eye.PNG) Нажать глаз (show)
+5. Посмотреть, что внизу закрутилась шестеренка и стала голубой ![](img/Common/gear-blue.PNG)
+6. Подождать, пока запрос отработает и вернет результат
+7. Это таблица плана повышения ЗП
+8. Вернуться на предыдущий Tab
+
+## Шаг 4. Проверить таблицы в HDFS
+1. Перейти в раздел ![](img/Common/home.PNG) / Servers / Livy / bd-livy
+2. Нажать “+” -> HDFS Console
+3. Перейти в /tmp/salary
+4. Проверить наличие таблиц:
+   - lastYear.xls
+   - lastYearSalary
+   - tableUpSalary
+   - tableUpSalaryConflict
+   
+## Шаг 7. Создать и запустить Workflow
+
+>##### №1
+1. Перейти в раздел ![](img/Common/home.PNG) / ETL / Workflow
+2. Нажать “+” -> Workflow
+3. Заполнить поля:
+   - Name: wf_salary_analysis
+   - Label: Автоматически подставляется "= Name"
+   - Project: выбрать labWorks
+4. ![](img/Common/save.PNG) Сохранить
+
+>##### №2
+1. Перетащить на поле объект из ![](img/Workflow/nodes.PNG)
+   - Start
+2. Выбрать его на поле трансформации
+3. Справа в Свойствах:
+   - Name: start
+   - Label: start
+4. ![](img/Common/save.PNG) Сохранить
+
+>##### №3
+1. Перетащить на поле объект из ![](img/Workflow/nodes.PNG)
+   - Transformation
+2. Соединить его со Start
+3. Выбрать его на поле трансформации
+4. Справа в Свойствах:
+   - Name: step1
+   - Label: step1
+   - Transformation: выбрать tr_salary_step1
+   - parameters:
+      - Нажать ![](img/Common/add%20file.PNG) -> Property*
+      - Развернуть появившееся поле
+      - Заполнить:
+         - Name: currentDate
+         - Value: 2013-12-01
+         - Description: Переменная для бизнес-правила: Повышение ЗП максимум 1 раз в год
+5. ![](img/Common/save.PNG) Сохранить
+
+>*Property для запуска через Oozie
+
+>##### №4
+1. Перетащить на поле объект из ![](img/Workflow/nodes.PNG)
+   - Transformation
+2. Соединить его с Transformation step1
+3. Выбрать его на поле трансформации
+4. Справа в Свойствах:
+   - Name: step2
+   - Label: step2
+   - Transformation: выбрать tr_salary_step2
+   - parameters:
+      - Нажать ![](img/Common/add%20file.PNG) -> Property
+      - Развернуть появившееся поле
+      - Заполнить:
+         - Name: maxRate
+         - Value: 20
+         - Description: Переменная для бизнес-правила: Максимальное повышение ЗП на 20% в год
+5. ![](img/Common/save.PNG) Сохранить
+
+>##### №5
+1. Перетащить на поле объект из ![](img/Workflow/nodes.PNG)
+   - Kill
+2. Соединить его с Transformation step1 и step2
+3. Выбрать его на поле трансформации
+4. Справа в Свойствах:
+   - Name: fail
+   - Label: fail
+   - Message: Workflow Salary Failed
+5. ![](img/Common/save.PNG) Сохранить
+
+>##### №6
+1. Перетащить на поле объект из ![](img/Workflow/nodes.PNG)
+   - End
+2. Соединить его с Transformation step2
+3. Выбрать его на поле трансформации
+4. Справа в Свойствах:
+   - Name: success
+   - Label: success
+5. ![](img/Common/save.PNG) Сохранить
+6. Результат:
+
+   ![](img/1.%20Salary%20Analysis/Step%207.6.PNG)
+
+>##### №7
+1. Проверить Workflow на ошибки:
+   1. ![](img/Common/action.PNG) Запустить в верхней панели инструментов Run/Validate
+   2. Получить сообщение об отсутствии ошибок: { "result": true, "problems": [] }
+
+>##### №7
+1. ![](img/Common/action.PNG) Запустить в верхней панели инструментов Run/Install
+2. Увидеть слева автоматически сгенерированный Workflow Deployment autogenerated_wf_wf_salary_analysis
+3. ![](img/Common/action.PNG) Запустить в верхней панели инструментов Run/RunIt
+4. 
