@@ -167,6 +167,22 @@ Context.current.with {
         }
         getPersistentEventsListener().register(PersistentEventsListener.FLUSH_DIRTY_INTERCEPTOR, "teneo", setName)
         getPersistentEventsListener().register(PersistentEventsListener.SAVE_INTERCEPTOR, "teneo", setName)
+
+        PersistentEventsListener.OnEvent createContext = new PersistentEventsListener.OnEvent() {
+            @Override
+            boolean execute(final String dbType, String eventName, final String entityName, final Map entity) {
+                def result = false
+                if ("rt.SoftwareSystem" == entityName) {
+                    EntityPersister ep = ((SessionFactoryImplementor)Context.getCurrent().getContextSvc().getTeneoSvc().getHbds().getSessionFactory()).getEntityPersister("etl.JdbcContext")
+                    Map context = (Map) ep.getEntityTuplizer().instantiate()
+                    context.put("name", entity.get("name"))
+                    Context.getCurrent().getSession("teneo", true).persist(context)
+                    result = true
+                }
+                return result
+            }
+        }
+        getPersistentEventsListener().register(PersistentEventsListener.SAVE_INTERCEPTOR, "teneo", createContext)
     }
     
 }
