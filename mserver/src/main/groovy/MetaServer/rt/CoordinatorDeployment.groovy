@@ -14,7 +14,13 @@ import ru.neoflex.meta.utils.Context
 /* protected region MetaServer.rtCoordinatorDeployment.inport on begin */
 import ru.neoflex.meta.utils.MetaResource
 
+import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.concurrent.Callable
+import java.util.function.BiFunction
+import java.util.function.Function
+
 /* protected region MetaServer.rtCoordinatorDeployment.inport end */
 class CoordinatorDeployment {
     /* protected region MetaServer.rtCoordinatorDeployment.statics on begin */
@@ -91,111 +97,179 @@ class CoordinatorDeployment {
             }
             return retModel
         }
-        def deployDir = Context.current.getContextSvc().getmSpaceSvc().getEpsilonSvc().getDeployDir().getAbsolutePath();
         def jobDeployment = new Database("teneo").get("rt.JobDeployment", (Long)entity.e_id)
-        FileSystem.forceDeleteFolder(Paths.get("${deployDir}/deployments/${jobDeployment.name}"))
-        def jobModel = new EmfModel();
-        def modelProperties = new StringProperties()
-        modelProperties.put(EmfModel.PROPERTY_NAME, "src")
-        modelProperties.put(EmfModel.PROPERTY_MODEL_URI, "hibernate://?dsname=teneo&query1=from rt.JobDeployment where e_id=${jobDeployment.e_id}")
-        modelProperties.put(EmfModel.PROPERTY_METAMODEL_URI, "http://www.neoflex.ru/meta/rt")
-        modelProperties.put(EmfModel.PROPERTY_READONLOAD, "true")
-        jobModel.load(modelProperties, "" );
-        Context.current.getContextSvc().epsilonSvc.executeEgx("/psm/etl/spark/job.egx", [mspaceRoot:"file:///" + deployDir], [jobModel])
-        def coordModel = new EmfModel();
-       // def modelProperties = new StringProperties()
-        modelProperties.put(EmfModel.PROPERTY_NAME, "src")
-        modelProperties.put(EmfModel.PROPERTY_MODEL_URI, "hibernate://?dsname=teneo&query1=from etl.CoJob where e_id=${jobDeployment.coordinator.e_id}")
-        modelProperties.put(EmfModel.PROPERTY_METAMODEL_URI, "http://www.neoflex.ru/meta/etl")
-        modelProperties.put(EmfModel.PROPERTY_READONLOAD, "true")
-        coordModel.load(modelProperties, "" );
-        Context.current.getContextSvc().epsilonSvc.executeEgx("/psm/etl/spark/coord.egx", [mspaceRoot:"file:///" + deployDir, jobDeployment: jobDeployment], [coordModel])
+        def gitFlow = Context.current.getContextSvc().getGitflowSvc()
+        gitFlow.inDir(gitFlow.SOURCES + "/CoordinatorDeployment", "Generate Coordinator Deployment", new BiFunction<Path, Path, Map>() {
+            @Override
+            Map apply(Path tmp, Path gitPath) {
+                WorkflowDeployment.generateJobFile(jobDeployment, tmp.toUri().toString())
+                def coordModel = new EmfModel();
+                def modelProperties = new StringProperties()
+                modelProperties.put(EmfModel.PROPERTY_NAME, "src")
+                modelProperties.put(EmfModel.PROPERTY_MODEL_URI, "hibernate://?dsname=teneo&query1=from etl.CoJob where e_id=${jobDeployment.coordinator.e_id}")
+                modelProperties.put(EmfModel.PROPERTY_METAMODEL_URI, "http://www.neoflex.ru/meta/etl")
+                modelProperties.put(EmfModel.PROPERTY_READONLOAD, "true")
+                coordModel.load(modelProperties, "" );
+                Context.current.getContextSvc().epsilonSvc.executeEgx("/psm/etl/spark/coord.egx", [mspaceRoot:tmp.toUri().toString(), jobDeployment: jobDeployment], [coordModel])
+                for (workflow in getWorkflows(jobDeployment)) {
+                    def emfModel = new EmfModel()
+                    def properties = new StringProperties()
+                    properties.put(EmfModel.PROPERTY_NAME, "src")
+                    properties.put(EmfModel.PROPERTY_MODEL_URI, "hibernate://?dsname=teneo&query1=from etl.Workflow where e_id=${workflow.e_id}")
+                    properties.put(EmfModel.PROPERTY_METAMODEL_URI, "http://www.neoflex.ru/meta/etl")
+                    properties.put(EmfModel.PROPERTY_READONLOAD, "true")
+                    emfModel.load(properties, "" )
+                    Context.current.getContextSvc().epsilonSvc.executeEgx("/psm/etl/spark/workflow.egx", [mspaceRoot: tmp.toUri().toString(), jobDeployment: jobDeployment], [emfModel])
+                }
+                gitFlow.copyContentRecursive(tmp.resolve(jobDeployment.name), gitPath.resolve(jobDeployment.name), true)
+                return null
+            }
+        })
+        def transformations = []
         for (workflow in getWorkflows(jobDeployment)) {
-            def emfModel = new EmfModel();
-            def properties = new StringProperties()
-            properties.put(EmfModel.PROPERTY_NAME, "src")
-            properties.put(EmfModel.PROPERTY_MODEL_URI, "hibernate://?dsname=teneo&query1=from etl.Workflow where e_id=${workflow.e_id}")
-            properties.put(EmfModel.PROPERTY_METAMODEL_URI, "http://www.neoflex.ru/meta/etl")
-            properties.put(EmfModel.PROPERTY_READONLOAD, "true")
-            emfModel.load(properties, "" );
-            Context.current.getContextSvc().epsilonSvc.executeEgx("/psm/etl/spark/workflow.egx", [mspaceRoot:"file:///" + deployDir, jobDeployment: jobDeployment], [emfModel])
             for (node in workflow.nodes) {
                 if (node._type_ == "etl.WFTransformation") {
                     def transformation = node.transformation
                     println(transformation.name)
-                    //MetaResource.exportDir("psm/etl/spark/src", new File("${deployDir}/deployments/${jobDeployment.name}/${transformation.name}/src"))
-                    MetaResource.exportDir("psm/etl/spark/src/main/resources", new File("${deployDir}/deployments/${jobDeployment.name}/${transformation.name}/src/main/resources"))
-                    emfModel = new EmfModel();
-                    properties = new StringProperties()
-                    properties.put(EmfModel.PROPERTY_NAME, "src")
-                    properties.put(EmfModel.PROPERTY_MODEL_URI, "hibernate://?dsname=teneo&query1=from etl.Transformation where e_id=${transformation.e_id}")
-                    properties.put(EmfModel.PROPERTY_METAMODEL_URI, "http://www.neoflex.ru/meta/etl")
-                    properties.put(EmfModel.PROPERTY_READONLOAD, "true")
-                    emfModel.load(properties, "" );
-                    Context.current.getContextSvc().epsilonSvc.executeEgx("/psm/etl/spark/Transformation.egx", [mspaceRoot:"file:///" + deployDir, jobDeployment: jobDeployment, workflow:workflow, packagePrefix:""], [emfModel])
+                    transformations += transformation
                 }
             }
-
+            def ts = transformations as Set
+            for (transformation in ts) {
+                Boolean needRebuild = gitFlow.inGitTransaction(null, new Callable<Boolean>() {
+                    @Override
+                    Boolean call() throws Exception {
+                        def auditInfo = transformation.auditInfo
+                        def changeDateTime = auditInfo.changeDateTime
+                        def transformationGenerateDate = gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/Transformation/${transformation.name}/pom.xml"))
+                        def buildVersion = transformation.buildVersion ? transformation.buildVersion : "1.0-SNAPSHOT"
+                        def transformationBuildDate = gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/Transformation/${transformation.name}/target/ru.neoflex.meta.etl2.spark.${transformation.name}-${buildVersion}.jar"))
+                        return changeDateTime != null && (transformationGenerateDate == null || transformationBuildDate == null ||
+                                transformationGenerateDate.before(changeDateTime) || transformationGenerateDate.before(changeDateTime))
+                    }
+                });
+                if(needRebuild) {
+                    def result = chain([
+                            MetaServer.etl.Transformation.&generate,
+                            MetaServer.etl.Transformation.&build
+                    ], transformation as Map, params)
+                    println("Call generate for " + transformation.name)
+                }
+            }
         }
         return [result: true, problems:[]]
         /* protected region MetaServer.rtCoordinatorDeployment.generate end */
     }
 
     public static Object build(Map entity, Map params = null) {
-    /* protected region MetaServer.rtCoordinatorDeployment.build on begin */
-        def deployDir = Context.current.getContextSvc().getDeployDir().getAbsolutePath();
         def jobDeployment = new Database("teneo").get("rt.JobDeployment", (Long)entity.e_id)
         println(jobDeployment.name + " loaded")
+
+        def sparkVer = ""
+        if (jobDeployment.oozie.spark2) sparkVer = "2"
+        def transformations = []
         for (workflow in getWorkflows(jobDeployment)) {
-            def wfDir = "${deployDir}/deployments/${jobDeployment.name}"
             for (node in workflow.nodes) {
                 if (node._type_ == "etl.WFTransformation") {
                     def transformation = node.transformation
                     println(transformation.name)
-                    def transDir = "${wfDir}/${transformation.name}"
-                    Context.current.getContextSvc().getMavenSvc().run(new File("${transDir}/pom.xml"), "clean,install", null, null, null, [:]);
-                    FileUtils.copyFile(
-                            new File("${transDir}/target/ru.neoflex.meta.etl.spark.${transformation.name}-1.0-SNAPSHOT.jar"),
-                            new File("${wfDir}/job/lib/ru.neoflex.meta.etl.spark.${transformation.name}-1.0-SNAPSHOT.jar")
-                    )
+                    transformations += transformation
                 }
             }
         }
+        def gitFlow = Context.current.getContextSvc().getGitflowSvc()
+        def ts = transformations as Set
+        for (transformation in ts) {
+            def buildVersion = transformation.buildVersion ? transformation.buildVersion : "1.0-SNAPSHOT"
+            Boolean needRebuild = gitFlow.inGitTransaction(null, new Callable<Boolean>() {
+                @Override
+                Boolean call() throws Exception {
+                    def auditInfo = transformation.auditInfo
+                    def changeDateTime = auditInfo.changeDateTime
+                    def transformationGenerateDate = gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/Transformation/${transformation.name}/pom.xml"))
+                    def transformationBuildDate = gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/Transformation/${transformation.name}/target/ru.neoflex.meta.etl2.spark.${transformation.name}-${buildVersion}.jar"))
+                    return changeDateTime != null && (transformationGenerateDate == null || transformationBuildDate == null ||
+                            transformationGenerateDate.before(changeDateTime) ||
+                            transformationBuildDate.before(changeDateTime))
+                }
+            });
+            if(needRebuild) {
+                def result = chain([
+                        MetaServer.etl.Transformation.&generate,
+                        MetaServer.etl.Transformation.&build
+                ], transformation as Map, params)
+                println("Call generate for " + transformation.name)
+            }
+        }
+        return gitFlow.inCopy(gitFlow.SOURCES + "/CoordinatorDeployment/${jobDeployment.name}", "", new Function<File, Map>() {
+            @Override
+            Map apply(File dir) {
+                def libPath = dir.toPath().resolve("job/lib")
+                gitFlow.deleteDirectoryRecursive(libPath)
+                Files.createDirectories(libPath)
+                for (transformation in ts) {
+                    def buildVersion = transformation.buildVersion ? transformation.buildVersion : "1.0-SNAPSHOT"
+                    println("Apply copy ts lib: " + transformation.name + ", copy path : " + gitFlow.SOURCES + "/Transformation/${transformation.name}/target/ru.neoflex.meta.etl${sparkVer}.spark.${transformation.name}-${buildVersion}.jar");
+                    Files.write(
+                            libPath.resolve("ru.neoflex.meta.etl${sparkVer}.spark.${transformation.name}-${buildVersion}.jar"),
+                            Files.readAllBytes(gitFlow.getCurrentGfs().getRootPath().resolve(
+                                    gitFlow.SOURCES + "/Transformation/${transformation.name}/target/ru.neoflex.meta.etl${sparkVer}.spark.${transformation.name}-${buildVersion}.jar")
+                            )
+                    )
+                }
+                def jars = getWorkflows(jobDeployment).collectMany {Workflow.collectJarFiles(it, [])}
+                jars.each {
+                    def resource = Context.current.contextSvc.applicationContext.getResource(it)
+                    resource.inputStream.withCloseable {is ->
+                        Files.copy(is, libPath.resolve(resource.filename.replaceAll("[?].*\$", "")))
+                    }
+                }
+                return [result: true, problems:[]]
+            }
+        })
         return [result: true, problems:[]]
-        /* protected region MetaServer.rtCoordinatorDeployment.build end */
     }
 
     public static Object deploy(Map entity, Map params = null) {
     /* protected region MetaServer.rtCoordinatorDeployment.deploy on begin */
-        def deployDir = Context.current.getContextSvc().getmSpaceSvc().getDeployDir().getAbsolutePath();
         def jobDeployment = new Database("teneo").get("rt.JobDeployment", (Long)entity.e_id)
         println(jobDeployment.name + " loaded")
-        String deploymentDir = "${deployDir}/deployments/${entity.get("name")}";
         def oozie = jobDeployment.oozie
-
         def hdfs = new HDFSClient(oozie.webhdfs, oozie.user, oozie)
+
         def path = "${oozie.home}/${oozie.user}/deployments/${jobDeployment.name}"
-        
+
         hdfs.deleteDir(path)
         hdfs.createDir(path)
 
-        def jobDir = new File(deployDir, "deployments/${jobDeployment.name}/job")
-        def exclude = ["pom-run.xml", "pom-moveto.xml"]
-        hdfs.putDir(path, jobDir, exclude)
-
-        return [result: true, problems:[]]
+        def gitFlow = Context.current.getContextSvc().getGitflowSvc()
+        return gitFlow.inCopy(gitFlow.SOURCES + "/CoordinatorDeployment/${jobDeployment.name}/job", null, new Function<File, Map>() {
+            @Override
+            Map apply(File jobDir) {
+                def exclude = ["pom-run.xml", "pom-moveto.xml"]
+                hdfs.putDir(path, jobDir, exclude)
+                return [result: true, problems:[]]
+            }
+        })
         /* protected region MetaServer.rtCoordinatorDeployment.deploy end */
     }
 
     public static Object install(Map entity, Map params = null) {
     /* protected region MetaServer.rtCoordinatorDeployment.install on begin */
         Database db = Database.new
-        Map coJob = db.get(entity)
+        Map jobDeployment = db.get(entity)
         def changeDateTime = null
-        if (coJob.auditInfo != null) {
-            changeDateTime = coJob.auditInfo.changeDateTime
+        if (jobDeployment.auditInfo != null) {
+            changeDateTime = jobDeployment.auditInfo.changeDateTime
         }
-        getWorkflows(coJob).each {
+        if (jobDeployment.coordinator.auditInfo != null) {
+            if (jobDeployment.coordinator.auditInfo.changeDateTime != null) {
+                if (changeDateTime == null || changeDateTime.time < jobDeployment.coordinator.auditInfo.changeDateTime.time) {
+                    changeDateTime = jobDeployment.coordinator.auditInfo.changeDateTime
+                }
+            }
+        }
+        getWorkflows(jobDeployment).each {
             if (it.auditInfo != null) {
                 if (changeDateTime == null || it.auditInfo.changeDateTime != null && it.auditInfo.changeDateTime.after(changeDateTime)) {
                     changeDateTime = it.auditInfo.changeDateTime
@@ -209,16 +283,27 @@ class CoordinatorDeployment {
                 }
             }
         }
-        def deployDir = Context.current.getContextSvc().getmSpaceSvc().getEpsilonSvc().getDeployDir().getAbsolutePath();
-        File statusFile = new File(deployDir, "deployments/${coJob.name}/status.txt")
-        if (changeDateTime == null || !statusFile.isFile() || changeDateTime.time > statusFile.lastModified()) {
+        def gitFlow = Context.current.getContextSvc().getGitflowSvc()
+        Date statustLastModified = gitFlow.inGitTransaction(null, new Callable<Date>() {
+            @Override
+            Date call() throws Exception {
+                return gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/CoordinatorDeployment/${jobDeployment.name}/status.txt"))
+            }
+        })
+        if (statustLastModified == null || changeDateTime.time > statustLastModified.time) {
             def result = chain([
                     CoordinatorDeployment.&generate,
                     CoordinatorDeployment.&build,
                     CoordinatorDeployment.&deploy
             ], entity, params)
             if (result.result) {
-                statusFile.write("OK")
+                gitFlow.inGitTransaction("Install", new Callable<Void>() {
+                    @Override
+                    Void call() throws Exception {
+                        Files.write(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/CoordinatorDeployment/${jobDeployment.name}/status.txt"), "OK".bytes)
+                        return null
+                    }
+                })
             }
             return result
         }
@@ -227,21 +312,39 @@ class CoordinatorDeployment {
     }
 
     public static Object run(Map entity, Map params = null) {
-    /* protected region MetaServer.rtCoordinatorDeployment.run on begin */
-        def deployDir = Context.current.getContextSvc().getDeployDir().getAbsolutePath();
-        def teneo = new Database("teneo");
-        def jobDeployment = teneo.get("rt.JobDeployment", (Long)entity.e_id)
-        String deploymentDir = "${deployDir}/deployments/${jobDeployment.name}";
-        //current.getContextSvc().getMavenSvc().run(new File("${deploymentDir}/workflow/pom-run.xml"), "validate", null, null, null, [:]);
-        File propFile = new File("${deploymentDir}/job/job.properties")
+        def jobDeployment = new Database("teneo").get("rt.JobDeployment", (Long)entity.e_id)
+        def gitFlow = Context.current.getContextSvc().getGitflowSvc()
+        Properties props = new Properties()
+        gitFlow.inGitTransaction(null, new Callable<Void>() {
+            @Override
+            Void call() throws Exception {
+                def path = gitFlow.getCurrentGfs().getPath("/${gitFlow.SOURCES}/CoordinatorDeployment/${jobDeployment.name}/job/job.properties")
+                return Files.newInputStream(path).withCloseable {is -> return props.load(is)}
+            }
+        })
         def oozie = jobDeployment.oozie
-        def jobId = Oozie.submitWorkflow(oozie, propFile, params)
-        logger.info("Workflow submitted, id: ${jobId}")
-        jobDeployment.jobId = jobId
-        teneo.save(jobDeployment)
+        if (oozie == null) {
+            throw new RuntimeException("Oozie not found in Coordinator JobDeployment ${jobDeployment.name}")
+        }
+        def coId = File.createTempFile("datagram", ".properties").with {tempFile ->
+            try {
+                def date = new Date()
+                def now = new Date(date.getTime() - TimeZone.getDefault().getOffset(date.getTime()))
+                props.setProperty('nominal_time', now.format("yyyy-MM-dd'T'HH:mm'Z'"))
+                tempFile.newWriter().withCloseable {writer -> props.store(writer, null)}
+                return Oozie.submitWorkflow(oozie, tempFile, params)
+            }
+            finally {
+                tempFile.delete()
+            }
+        }
 
+        logger.info("Coordinator Job submitted")
+        logger.info("Coordinator Job: ${jobDeployment.name}")
+        logger.info("Oozie:               ${oozie.name}")
+        logger.info("Coordinator Job Id:         ${coId}")
+        Context.current.commitResources()
         return [result: true, problems:[]]
-        /* protected region MetaServer.rtCoordinatorDeployment.run end */
     }
 
     public static Object generateAndRun(Map entity, Map params = null) {

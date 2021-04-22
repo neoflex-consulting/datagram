@@ -759,6 +759,7 @@ class CoJob {
   val CoInputEvent[*]#job inputEvents;
   val CoOutputEvent[*]#job outputEvents;
   val CoAction[1]#job action;
+  val auth.AuditInfo auditInfo;
 }
 
 class CoControls {
