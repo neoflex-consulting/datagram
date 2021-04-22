@@ -284,12 +284,13 @@ class CoordinatorDeployment {
             }
         }
         def gitFlow = Context.current.getContextSvc().getGitflowSvc()
-        Date statustLastModified = null;/*gitFlow.inGitTransaction(null, new Callable<Date>() {
-            @Override
-            Date call() throws Exception {
-                return gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/CoordinatorDeployment/${jobDeployment.name}/status.txt"))
-            }
-        })*/
+        Date statustLastModified = null;
+//        Date statustLastModified = gitFlow.inGitTransaction(null, new Callable<Date>() {
+//            @Override
+//            Date call() throws Exception {
+//                return gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/CoordinatorDeployment/${jobDeployment.name}/status.txt"))
+//            }
+//        })
         if (statustLastModified == null || changeDateTime.time > statustLastModified.time) {
             def result = chain([
                     CoordinatorDeployment.&generate,
