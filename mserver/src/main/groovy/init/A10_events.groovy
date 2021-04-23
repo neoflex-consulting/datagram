@@ -173,11 +173,20 @@ Context.current.with {
             boolean execute(final String dbType, String eventName, final String entityName, final Map entity) {
                 def result = false
                 if ("rt.SoftwareSystem" == entityName) {
-                    EntityPersister ep = ((SessionFactoryImplementor)Context.getCurrent().getContextSvc().getTeneoSvc().getHbds().getSessionFactory()).getEntityPersister("etl.JdbcContext")
-                    Map context = (Map) ep.getEntityTuplizer().instantiate()
-                    context.put("name", entity.get("name"))
-                    Context.getCurrent().getSession("teneo", true).persist(context)
-                    result = true
+                    def session = Context.current.contextSvc.getDbAdapter().getSessionFactory(dbType).openSession()
+                    try {
+                        def jdbcContext = session.createQuery("from etl.JdbcContext where name = :name").setParameter("name", entity.get("name")).uniqueResult()
+                        if (jdbcContext == null) {
+                            EntityPersister ep = ((SessionFactoryImplementor)Context.getCurrent().getContextSvc().getTeneoSvc().getHbds().getSessionFactory()).getEntityPersister("etl.JdbcContext")
+                            Map context = (Map) ep.getEntityTuplizer().instantiate()
+                            context.put("name", entity.get("name"))
+                            Context.getCurrent().getSession("teneo", true).persist(context)
+                            result = true
+                        }
+                    }
+                    finally {
+                        session.close()
+                    }
                 }
                 return result
             }
