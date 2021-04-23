@@ -867,6 +867,9 @@ public class GitflowSvc extends BaseSvc {
 
     public Date getLastModified(GitPath gfsPath) throws IOException {
         GitFileSystem gfs = getCurrentGfs();
+        if (!Files.exists(gfsPath)) {
+            return null;
+        }
         RevCommit commit = getLastCommit(gfs, gfsPath);
 //        PersonIdent authorIdent = commit.getAuthorIdent();
 //        Date authorDate = authorIdent.getWhen();
