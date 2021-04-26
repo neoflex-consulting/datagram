@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ASCII"?>
+<etl:CoJob xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:etl="http://www.neoflex.ru/meta/etl" name="co_load_datagram_transformations" frequency="0/10 * * * *" start="2021-04-22T00:00+0300" end="2021-04-26T00:00+0300" timezone="UTC">
+  <action xsi:type="etl:CoWorkflow" name="wf_load_datagram_transformations"/>
+</etl:CoJob>

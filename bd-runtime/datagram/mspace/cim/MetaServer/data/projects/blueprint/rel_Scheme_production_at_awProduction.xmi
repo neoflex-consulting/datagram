@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rel:Scheme xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rel="http://www.neoflex.ru/meta/relational" name="production_at_awProduction">
+  <tables name="billofmaterials" description="Items required to make bicycles and bicycle subassemblies. It identifies the heirarchical relationship between a parent product and its components.">
+    <columns name="billofmaterialsid" description="Primary key for BillOfMaterials records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productassemblyid" nullable="true" description="Parent product identification number. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="componentid" description="Component identification number. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="startdate" description="Date the component started being used in the assembly item.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="enddate" nullable="true" description="Date the component stopped being used in the assembly item.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="unitmeasurecode" description="Standard code identifying the unit of measure for the quantity.">
+      <dataType xsi:type="rel:CHAR" length="3"/>
+    </columns>
+    <columns name="bomlevel" description="Indicates the depth the component is from its parent (AssemblyID).">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="perassemblyqty" description="Quantity of the component needed to create the assembly.">
+      <dataType xsi:type="rel:DECIMAL" length="8" precision="2"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="billofmaterials_pk">
+      <keyFeatures column="//@tables.0/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_BillOfMaterials_Product_ComponentID" target="//@tables.5">
+      <keyFeatures column="//@tables.0/@columns.2"/>
+    </foreignKeys>
+    <foreignKeys name="FK_BillOfMaterials_Product_ProductAssemblyID" target="//@tables.5">
+      <keyFeatures column="//@tables.0/@columns.1"/>
+    </foreignKeys>
+    <foreignKeys name="FK_BillOfMaterials_UnitMeasure_UnitMeasureCode" target="//@tables.22">
+      <keyFeatures column="//@tables.0/@columns.5"/>
+    </foreignKeys>
+  </tables>
+  <tables name="culture" description="Lookup table containing the languages in which some AdventureWorks data is stored.">
+    <columns name="cultureid" description="Primary key for Culture records.">
+      <dataType xsi:type="rel:CHAR" length="6"/>
+    </columns>
+    <columns name="name" description="Culture description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="culture_pk">
+      <keyFeatures column="//@tables.1/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="document" description="Product maintenance documents.">
+    <columns name="title" description="Title of the document.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="owner" description="Employee who controls the document.  Foreign key to Employee.BusinessEntityID">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="folderflag" description="0 = This is a folder, 1 = This is a document.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="filename" description="File name of the document">
+      <dataType xsi:type="rel:VARCHAR" length="400"/>
+    </columns>
+    <columns name="fileextension" nullable="true" description="File extension indicating the document type. For example, .doc or .txt.">
+      <dataType xsi:type="rel:VARCHAR" length="8"/>
+    </columns>
+    <columns name="revision" description="Revision number of the document.">
+      <dataType xsi:type="rel:CHAR" length="5"/>
+    </columns>
+    <columns name="changenumber" description="Engineering change approval number.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="status" description="1 = Pending approval, 2 = Approved, 3 = Obsolete">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="documentsummary" nullable="true" description="Document abstract.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="document" nullable="true" description="Complete document.">
+      <dataType xsi:type="rel:BLOB"/>
+    </columns>
+    <columns name="rowguid" description="ROWGUIDCOL number uniquely identifying the record. Required for FileStream.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="documentnode" description="Primary key for Document records.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <primaryKey name="document_pk">
+      <keyFeatures column="//@tables.2/@columns.12"/>
+    </primaryKey>
+    <foreignKeys name="FK_Document_Employee_Owner">
+      <keyFeatures column="//@tables.2/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="illustration" description="Bicycle assembly diagrams.">
+    <columns name="illustrationid" description="Primary key for Illustration records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="diagram" nullable="true" description="Illustrations used in manufacturing instructions. Stored as XML.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="illustration_pk">
+      <keyFeatures column="//@tables.3/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="location" description="Product inventory and manufacturing locations.">
+    <columns name="locationid" description="Primary key for Location records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Location description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="costrate" description="Standard hourly cost of the manufacturing location.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="availability" description="Work capacity (in hours) of the manufacturing location.">
+      <dataType xsi:type="rel:DECIMAL" length="8" precision="2"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="location_pk">
+      <keyFeatures column="//@tables.4/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="product" description="Products sold or used in the manfacturing of sold products.">
+    <columns name="productid" description="Primary key for Product records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Name of the product.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="productnumber" description="Unique product identification number.">
+      <dataType xsi:type="rel:VARCHAR" length="25"/>
+    </columns>
+    <columns name="makeflag" description="0 = Product is purchased, 1 = Product is manufactured in-house.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="finishedgoodsflag" description="0 = Product is not a salable item. 1 = Product is salable.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="color" nullable="true" description="Product color.">
+      <dataType xsi:type="rel:VARCHAR" length="15"/>
+    </columns>
+    <columns name="safetystocklevel" description="Minimum inventory quantity.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="reorderpoint" description="Inventory level that triggers a purchase order or work order.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="standardcost" description="Standard cost of the product.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="listprice" description="Selling price.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="size" nullable="true" description="Product size.">
+      <dataType xsi:type="rel:VARCHAR" length="5"/>
+    </columns>
+    <columns name="sizeunitmeasurecode" nullable="true" description="Unit of measure for Size column.">
+      <dataType xsi:type="rel:CHAR" length="3"/>
+    </columns>
+    <columns name="weightunitmeasurecode" nullable="true" description="Unit of measure for Weight column.">
+      <dataType xsi:type="rel:CHAR" length="3"/>
+    </columns>
+    <columns name="weight" nullable="true" description="Product weight.">
+      <dataType xsi:type="rel:DECIMAL" length="8" precision="2"/>
+    </columns>
+    <columns name="daystomanufacture" description="Number of days required to manufacture the product.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productline" nullable="true" description="R = Road, M = Mountain, T = Touring, S = Standard">
+      <dataType xsi:type="rel:CHAR" length="2"/>
+    </columns>
+    <columns name="class" nullable="true" description="H = High, M = Medium, L = Low">
+      <dataType xsi:type="rel:CHAR" length="2"/>
+    </columns>
+    <columns name="style" nullable="true" description="W = Womens, M = Mens, U = Universal">
+      <dataType xsi:type="rel:CHAR" length="2"/>
+    </columns>
+    <columns name="productsubcategoryid" nullable="true" description="Product is a member of this product subcategory. Foreign key to ProductSubCategory.ProductSubCategoryID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productmodelid" nullable="true" description="Product is a member of this product model. Foreign key to ProductModel.ProductModelID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="sellstartdate" description="Date the product was available for sale.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="sellenddate" nullable="true" description="Date the product was no longer available for sale.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="discontinueddate" nullable="true" description="Date the product was discontinued.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="product_pk">
+      <keyFeatures column="//@tables.5/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_Product_ProductModel_ProductModelID" target="//@tables.12">
+      <keyFeatures column="//@tables.5/@columns.19"/>
+    </foreignKeys>
+    <foreignKeys name="FK_Product_ProductSubcategory_ProductSubcategoryID" target="//@tables.18">
+      <keyFeatures column="//@tables.5/@columns.18"/>
+    </foreignKeys>
+    <foreignKeys name="FK_Product_UnitMeasure_SizeUnitMeasureCode" target="//@tables.22">
+      <keyFeatures column="//@tables.5/@columns.11"/>
+    </foreignKeys>
+    <foreignKeys name="FK_Product_UnitMeasure_WeightUnitMeasureCode" target="//@tables.22">
+      <keyFeatures column="//@tables.5/@columns.12"/>
+    </foreignKeys>
+  </tables>
+  <tables name="productcategory" description="High-level product categorization.">
+    <columns name="productcategoryid" description="Primary key for ProductCategory records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Category description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productcategory_pk">
+      <keyFeatures column="//@tables.6/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="productcosthistory" description="Changes in the cost of a product over time.">
+    <columns name="productid" description="Product identification number. Foreign key to Product.ProductID">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="startdate" description="Product cost start date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="enddate" nullable="true" description="Product cost end date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="standardcost" description="Standard cost of the product.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productcosthistory_pk">
+      <keyFeatures column="//@tables.7/@columns.0"/>
+      <keyFeatures column="//@tables.7/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_ProductCostHistory_Product_ProductID" target="//@tables.5">
+      <keyFeatures column="//@tables.7/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="productdescription" description="Product descriptions in several languages.">
+    <columns name="productdescriptionid" description="Primary key for ProductDescription records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="description" description="Description of the product.">
+      <dataType xsi:type="rel:VARCHAR" length="400"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productdescription_pk">
+      <keyFeatures column="//@tables.8/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="productdocument" description="Cross-reference table mapping products to related product documents.">
+    <columns name="productid" description="Product identification number. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="documentnode" description="Document identification number. Foreign key to Document.DocumentNode.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <primaryKey name="productdocument_pk">
+      <keyFeatures column="//@tables.9/@columns.0"/>
+      <keyFeatures column="//@tables.9/@columns.2"/>
+    </primaryKey>
+    <foreignKeys name="FK_ProductDocument_Document_DocumentNode" target="//@tables.2">
+      <keyFeatures column="//@tables.9/@columns.2"/>
+    </foreignKeys>
+    <foreignKeys name="FK_ProductDocument_Product_ProductID" target="//@tables.5">
+      <keyFeatures column="//@tables.9/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="productinventory" description="Product inventory information.">
+    <columns name="productid" description="Product identification number. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="locationid" description="Inventory location identification number. Foreign key to Location.LocationID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="shelf" description="Storage compartment within an inventory location.">
+      <dataType xsi:type="rel:VARCHAR" length="10"/>
+    </columns>
+    <columns name="bin" description="Storage container on a shelf in an inventory location.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="quantity" description="Quantity of products in the inventory location.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productinventory_pk">
+      <keyFeatures column="//@tables.10/@columns.0"/>
+      <keyFeatures column="//@tables.10/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_ProductInventory_Location_LocationID" target="//@tables.4">
+      <keyFeatures column="//@tables.10/@columns.1"/>
+    </foreignKeys>
+    <foreignKeys name="FK_ProductInventory_Product_ProductID" target="//@tables.5">
+      <keyFeatures column="//@tables.10/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="productlistpricehistory" description="Changes in the list price of a product over time.">
+    <columns name="productid" description="Product identification number. Foreign key to Product.ProductID">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="startdate" description="List price start date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="enddate" nullable="true" description="List price end date">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="listprice" description="Product list price.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productlistpricehistory_pk">
+      <keyFeatures column="//@tables.11/@columns.0"/>
+      <keyFeatures column="//@tables.11/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_ProductListPriceHistory_Product_ProductID" target="//@tables.5">
+      <keyFeatures column="//@tables.11/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="productmodel" description="Product model classification.">
+    <columns name="productmodelid" description="Primary key for ProductModel records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Product model description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="catalogdescription" nullable="true" description="Detailed product catalog information in xml format.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="instructions" nullable="true" description="Manufacturing instructions in xml format.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productmodel_pk">
+      <keyFeatures column="//@tables.12/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="productmodelillustration" description="Cross-reference table mapping product models and illustrations.">
+    <columns name="productmodelid" description="Primary key. Foreign key to ProductModel.ProductModelID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="illustrationid" description="Primary key. Foreign key to Illustration.IllustrationID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productmodelillustration_pk">
+      <keyFeatures column="//@tables.13/@columns.0"/>
+      <keyFeatures column="//@tables.13/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_ProductModelIllustration_Illustration_IllustrationID" target="//@tables.3">
+      <keyFeatures column="//@tables.13/@columns.1"/>
+    </foreignKeys>
+    <foreignKeys name="FK_ProductModelIllustration_ProductModel_ProductModelID" target="//@tables.12">
+      <keyFeatures column="//@tables.13/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="productmodelproductdescriptionculture" description="Cross-reference table mapping product descriptions and the language the description is written in.">
+    <columns name="productmodelid" description="Primary key. Foreign key to ProductModel.ProductModelID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productdescriptionid" description="Primary key. Foreign key to ProductDescription.ProductDescriptionID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="cultureid" description="Culture identification number. Foreign key to Culture.CultureID.">
+      <dataType xsi:type="rel:CHAR" length="6"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productmodelproductdescriptionculture_pk">
+      <keyFeatures column="//@tables.14/@columns.0"/>
+      <keyFeatures column="//@tables.14/@columns.1"/>
+      <keyFeatures column="//@tables.14/@columns.2"/>
+    </primaryKey>
+    <foreignKeys name="FK_ProductModelProductDescriptionCulture_Culture_CultureID" target="//@tables.1">
+      <keyFeatures column="//@tables.14/@columns.2"/>
+    </foreignKeys>
+    <foreignKeys name="FK_ProductModelProductDescriptionCulture_ProductDescription_Pro" target="//@tables.8">
+      <keyFeatures column="//@tables.14/@columns.1"/>
+    </foreignKeys>
+    <foreignKeys name="FK_ProductModelProductDescriptionCulture_ProductModel_ProductMo" target="//@tables.12">
+      <keyFeatures column="//@tables.14/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="productphoto" description="Product images.">
+    <columns name="productphotoid" description="Primary key for ProductPhoto records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="thumbnailphoto" nullable="true" description="Small image of the product.">
+      <dataType xsi:type="rel:BLOB"/>
+    </columns>
+    <columns name="thumbnailphotofilename" nullable="true" description="Small image file name.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="largephoto" nullable="true" description="Large image of the product.">
+      <dataType xsi:type="rel:BLOB"/>
+    </columns>
+    <columns name="largephotofilename" nullable="true" description="Large image file name.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productphoto_pk">
+      <keyFeatures column="//@tables.15/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="productproductphoto" description="Cross-reference table mapping products and product photos.">
+    <columns name="productid" description="Product identification number. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productphotoid" description="Product photo identification number. Foreign key to ProductPhoto.ProductPhotoID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="primary" description="0 = Photo is not the principal image. 1 = Photo is the principal image.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productproductphoto_pk">
+      <keyFeatures column="//@tables.16/@columns.0"/>
+      <keyFeatures column="//@tables.16/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_ProductProductPhoto_Product_ProductID" target="//@tables.5">
+      <keyFeatures column="//@tables.16/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_ProductProductPhoto_ProductPhoto_ProductPhotoID" target="//@tables.15">
+      <keyFeatures column="//@tables.16/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="productreview" description="Customer reviews of products they have purchased.">
+    <columns name="productreviewid" description="Primary key for ProductReview records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productid" description="Product identification number. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="reviewername" description="Name of the reviewer.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="reviewdate" description="Date review was submitted.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="emailaddress" description="Reviewer's e-mail address.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="rating" description="Product rating given by the reviewer. Scale is 1 to 5 with 5 as the highest rating.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="comments" nullable="true" description="Reviewer's comments">
+      <dataType xsi:type="rel:VARCHAR" length="3850"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productreview_pk">
+      <keyFeatures column="//@tables.17/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_ProductReview_Product_ProductID" target="//@tables.5">
+      <keyFeatures column="//@tables.17/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="productsubcategory" description="Product subcategories. See ProductCategory table.">
+    <columns name="productsubcategoryid" description="Primary key for ProductSubcategory records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productcategoryid" description="Product category identification number. Foreign key to ProductCategory.ProductCategoryID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Subcategory description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="productsubcategory_pk">
+      <keyFeatures column="//@tables.18/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_ProductSubcategory_ProductCategory_ProductCategoryID" target="//@tables.6">
+      <keyFeatures column="//@tables.18/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="scrapreason" description="Manufacturing failure reasons lookup table.">
+    <columns name="scrapreasonid" description="Primary key for ScrapReason records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Failure description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="scrapreason_pk">
+      <keyFeatures column="//@tables.19/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="transactionhistory" description="Record of each purchase order, sales order, or work order transaction year to date.">
+    <columns name="transactionid" description="Primary key for TransactionHistory records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productid" description="Product identification number. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="referenceorderid" description="Purchase order, sales order, or work order identification number.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="referenceorderlineid" description="Line number associated with the purchase order, sales order, or work order.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="transactiondate" description="Date and time of the transaction.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="transactiontype" description="W = WorkOrder, S = SalesOrder, P = PurchaseOrder">
+      <dataType xsi:type="rel:CHAR" length="1"/>
+    </columns>
+    <columns name="quantity" description="Product quantity.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="actualcost" description="Product cost.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="transactionhistory_pk">
+      <keyFeatures column="//@tables.20/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_TransactionHistory_Product_ProductID" target="//@tables.5">
+      <keyFeatures column="//@tables.20/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="transactionhistoryarchive" description="Transactions for previous years.">
+    <columns name="transactionid" description="Primary key for TransactionHistoryArchive records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productid" description="Product identification number. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="referenceorderid" description="Purchase order, sales order, or work order identification number.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="referenceorderlineid" description="Line number associated with the purchase order, sales order, or work order.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="transactiondate" description="Date and time of the transaction.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="transactiontype" description="W = Work Order, S = Sales Order, P = Purchase Order">
+      <dataType xsi:type="rel:CHAR" length="1"/>
+    </columns>
+    <columns name="quantity" description="Product quantity.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="actualcost" description="Product cost.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="transactionhistoryarchive_pk">
+      <keyFeatures column="//@tables.21/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="unitmeasure" description="Unit of measure lookup table.">
+    <columns name="unitmeasurecode" description="Primary key.">
+      <dataType xsi:type="rel:CHAR" length="3"/>
+    </columns>
+    <columns name="name" description="Unit of measure description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="unitmeasure_pk">
+      <keyFeatures column="//@tables.22/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="workorder" description="Manufacturing work orders.">
+    <columns name="workorderid" description="Primary key for WorkOrder records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productid" description="Product identification number. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="orderqty" description="Product quantity to build.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="scrappedqty" description="Quantity that failed inspection.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="startdate" description="Work order start date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="enddate" nullable="true" description="Work order end date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="duedate" description="Work order due date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="scrapreasonid" nullable="true" description="Reason for inspection failure.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="workorder_pk">
+      <keyFeatures column="//@tables.23/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_WorkOrder_Product_ProductID" target="//@tables.5">
+      <keyFeatures column="//@tables.23/@columns.1"/>
+    </foreignKeys>
+    <foreignKeys name="FK_WorkOrder_ScrapReason_ScrapReasonID" target="//@tables.19">
+      <keyFeatures column="//@tables.23/@columns.7"/>
+    </foreignKeys>
+  </tables>
+  <tables name="workorderrouting" description="Work order details.">
+    <columns name="workorderid" description="Primary key. Foreign key to WorkOrder.WorkOrderID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productid" description="Primary key. Foreign key to Product.ProductID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="operationsequence" description="Primary key. Indicates the manufacturing process sequence.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="locationid" description="Manufacturing location where the part is processed. Foreign key to Location.LocationID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="scheduledstartdate" description="Planned manufacturing start date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="scheduledenddate" description="Planned manufacturing end date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="actualstartdate" nullable="true" description="Actual start date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="actualenddate" nullable="true" description="Actual end date.">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <columns name="actualresourcehrs" nullable="true" description="Number of manufacturing hours used.">
+      <dataType xsi:type="rel:DECIMAL" length="9" precision="4"/>
+    </columns>
+    <columns name="plannedcost" description="Estimated manufacturing cost.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="actualcost" nullable="true" description="Actual manufacturing cost.">
+      <dataType xsi:type="rel:DECIMAL" length="131089"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="workorderrouting_pk">
+      <keyFeatures column="//@tables.24/@columns.0"/>
+      <keyFeatures column="//@tables.24/@columns.1"/>
+      <keyFeatures column="//@tables.24/@columns.2"/>
+    </primaryKey>
+    <foreignKeys name="FK_WorkOrderRouting_Location_LocationID" target="//@tables.4">
+      <keyFeatures column="//@tables.24/@columns.3"/>
+    </foreignKeys>
+    <foreignKeys name="FK_WorkOrderRouting_WorkOrder_WorkOrderID" target="//@tables.23">
+      <keyFeatures column="//@tables.24/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <views name="vproductmodelcatalogdescription">
+    <columns name="productmodelid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="Summary" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="manufacturer" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="copyright" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="producturl" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="warrantyperiod" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="warrantydescription" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="noofyears" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="maintenancedescription" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="wheel" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="saddle" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="pedal" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="bikeframe" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="crankset" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="pictureangle" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="picturesize" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="productphotoid" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="material" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="color" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="productline" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="style" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="256"/>
+    </columns>
+    <columns name="riderexperience" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="1024"/>
+    </columns>
+    <columns name="rowguid" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </views>
+  <views name="vproductmodelinstructions">
+    <columns name="productmodelid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="instructions" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="LocationID" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="SetupHours" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="9" precision="4"/>
+    </columns>
+    <columns name="MachineHours" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="9" precision="4"/>
+    </columns>
+    <columns name="LaborHours" nullable="true">
+      <dataType xsi:type="rel:DECIMAL" length="9" precision="4"/>
+    </columns>
+    <columns name="LotSize" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="Step" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="1024"/>
+    </columns>
+    <columns name="rowguid" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </views>
+</rel:Scheme>
