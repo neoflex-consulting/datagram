@@ -271,6 +271,7 @@ services:
     hostname: datagram
     depends_on:
       - livy
+    env_file: .env
     volumes:
       - ./datagram/keystore.jks:/opt/datagram/keystore.jks
       - ./datagram/gitflow:/opt/datagram/gitflow
