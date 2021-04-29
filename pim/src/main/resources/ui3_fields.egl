@@ -1,0 +1,499 @@
+[%
+import "ui3_utils.eol";
+
+@template
+operation Field declare(form, width) {
+    var feature = form.eClass.getEAllStructuralFeatures().selectOne(f|f.name == self.name);
+%][%=feature.declare(form, self, width)%][%
+}
+
+@template
+operation FieldLine declare(form, width) {
+if (not width.isDefined() or width <= 0 or width > 12) {
+    width = 12;
+}
+var partWidth = width/self.fields.size();
+%]
+<Row>
+	[%for (field in self.fields) {%]
+	[%=field.declare(form, partWidth)%]
+	[%}%]
+</Row>
+[%}
+
+@template
+operation w(width) {
+    if (width.isDefined()) {%]className='col-xs-[%=width%]'[%}
+}
+
+@template
+operation FieldSet declare(form, width) {%]
+<Panel collapsible bsStyle="info" defaultExpanded={[%=not self.collapse%]} header={t('[%=form.eClass.getQName()%].groups.[%=self.name%].caption', {ns: 'classes'})} [%=w(width)%]>
+    [%for (field in self.fields) {%]    
+    [%=field.declare(form, null)%]
+    [%}%]
+</Panel>
+[%}
+
+operation EAttribute declareControl(form, field) {
+    if (self.eType.isKindOf(EEnum)) {
+        return self.declareEnum(form, field);
+    }
+    else if (self.eType.name == "EString") {
+        if (self.upperBound == -1) {
+            return self.declareJSON(form, field);
+        }
+        else {
+            if (self.getAnnotation("mspace.ui", "multiline", "false") == "true") {
+               return self.declareTextArea(form, field);
+            }
+            else if (self.getAnnotation("mspace.ui", "password", "false") == "true") {
+               return self.declarePassword(form, field);
+            }
+            else {
+                return self.declareText(form, field);
+            }
+        }
+    }
+    else if (Sequence{"EShort", "EInt", "ELong", "EFloat", "EDouble", "EDoubleObject", "EFloatObject", 
+        "ELongObject", "EIntegerObject", "EBigDecimal"}.contains(self.eType.name)) {
+        return self.declareNumber(form, field);
+    }
+    else if (self.eType.name == "EDate") {
+        if (self.getAnnotation("mspace.ui", "timestamp", "false") == "true")
+           return self.declareDateTime(form, field);
+        else
+           return self.declareDate(form, field);
+    }
+    else if (self.eType.name == "EBoolean" or self.eType.name == "EBooleanObject") {
+        return self.declareBoolean(form, field);
+    }
+    else {
+        return self.declareJSON(form, field);
+    }
+}
+
+@template
+operation EAttribute declareEnum(form, field) {%]
+<ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+<Select
+    disabled={[%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}
+    name="[%=self.name%]"
+	value={this.state.entity.[%=self.name%]}
+	placeholder={t('[%=form.eClass.getQName()%].attrs.[%=self.name%].placeholder', {ns: 'classes'})}
+	onChange={(selection)=>{this.setAttrs({[%=self.name%]: selection.value})}}
+	options={[
+	   [%for (eLiteral in self.eType.eLiterals) {%]
+       {value: '[%=eLiteral.name%]', label: '[%=eLiteral.name%]'}[%if (hasMore) {%],[%}%]
+       
+	   [%}%]
+    ]}
+/>
+[%}
+
+@template
+operation EAttribute declareDateTime(form, field) {%]
+<ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+<Datetime
+    value={this.state.entity.[%=self.name%] && moment(this.state.entity.[%=self.name%])} 
+    dateFormat={'DD/MM/YYYY'}
+    timeFormat={'hh:mm:ss.SSS'}
+    onChange={(e)=>{this.setAttrs({[%=self.name%]: e.toDate()})}}
+    inputProps={{disabled: [%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}}
+/>
+[%}
+
+@template
+operation EAttribute declareDate(form, field) {%]
+<ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+<Datetime
+    value={this.state.entity.[%=self.name%] && moment(this.state.entity.[%=self.name%])} 
+    dateFormat={'DD/MM/YYYY'}
+    timeFormat={false}
+    onChange={(e)=>{this.setAttrs({[%=self.name%]: e.toDate()})}}
+    inputProps={{disabled: [%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}}
+/>
+[%}
+
+@template
+operation EAttribute declareJSON(form, field) {%]
+<ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+<FormControl
+    readOnly={[%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}
+    componentClass="textarea"
+    value={JSON.stringify(this.state.entity.[%=self.name%])}
+    placeholder={t('[%=form.eClass.getQName()%].attrs.[%=self.name%].placeholder', {ns: 'classes'})}
+    onChange={(e)=>{this.setAttrs({[%=self.name%]: JSON.parse(e.target.value)})}}
+/>
+[%}
+
+@template
+operation EAttribute declareBoolean(form, field) {%]
+<Checkbox 
+    disabled={[%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}
+    checked={this.state.entity.[%=self.name%]}
+    onChange={(e)=>{this.setAttrs({[%=self.name%]: !this.state.entity.[%=self.name%]})}}
+>
+    {t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}
+</Checkbox>
+[%}
+
+@template
+operation EAttribute declareText(form, field) {%]
+<ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+<FormControl
+    readOnly={[%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}
+    type="text"
+    value={this.state.entity.[%=self.name%]}
+    placeholder={t('[%=form.eClass.getQName()%].attrs.[%=self.name%].placeholder', {ns: 'classes'})}
+    onChange={(e)=>{this.setAttrs({[%=self.name%]: e.target.value})}}
+/>
+[%}
+
+@template
+operation EAttribute declareNumber(form, field) {%]
+<ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+<FormControl
+    readOnly={[%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}
+    type="text"
+    value={this.state.entity.[%=self.name%]}
+    placeholder={t('[%=form.eClass.getQName()%].attrs.[%=self.name%].placeholder', {ns: 'classes'})}
+    onChange={(e)=>{this.setAttrs({[%=self.name%]: Number(e.target.value)})}}
+/>
+[%}
+
+@template
+operation EAttribute declareTextArea(form, field) {%]
+<ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+<FormControl
+    readOnly={[%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}
+    componentClass="textarea"
+    value={this.state.entity.[%=self.name%]}
+    placeholder={t('[%=form.eClass.getQName()%].attrs.[%=self.name%].placeholder', {ns: 'classes'})}
+    onChange={(e)=>{this.setAttrs({[%=self.name%]: e.target.value})}}
+/>
+[%}
+
+@template
+operation EAttribute declarePassword(form, field) {%]
+<ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+<FormControl
+    readOnly={[%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}
+    type="password"
+    value={this.state.entity.[%=self.name%]}
+    placeholder={t('[%=form.eClass.getQName()%].attrs.[%=self.name%].placeholder', {ns: 'classes'})}
+    onChange={(e)=>{this.setAttrs({[%=self.name%]: e.target.value})}}
+/>
+[%}
+
+@template
+operation EAttribute declare(form, field, width) {%]
+<FormGroup [%=w(width)%]
+  controlId="[%=self.name%]"
+  [%if (field.validationState.isDefined() and field.validationState.length > 0) {%]
+  validationState={()=>((value)=>{[%=field.validationState%]})(this.state.[%=self.name%])}
+  [%}%]
+>
+  [%=self.declareControl(form, field)%]
+  <FormControl.Feedback />
+  [%if (field.showHelp) {%]
+  <HelpBlock>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].help', {ns: 'classes'})}</HelpBlock>
+  [%}%]
+</FormGroup>
+[%}
+
+@template
+operation EReference declare(form, field, width) {
+    if (not self.isContainment()) {
+        %][%=self.declareSelect(form, field, width)%][%
+    } else if (self.getUpperBound() == 1) {
+        %][%=self.declareForm(form, field, width)%][%
+    } else {
+        %][%=self.declareTable(form, field, width)%][%
+    }
+}
+
+@template
+operation EReference declareSelect(form, field, width) {
+    var eClass = form.application.getClass(self.getEReferenceType());
+%]
+<FormGroup [%=w(width)%]
+  controlId="[%=self.name%]"
+  [%if (field.validationState.isDefined() and field.validationState.length > 0) {%]
+  validationState={()=>((value)=>{[%=field.validationState%]})(this.state.[%=self.name%])}
+  [%}%]
+>
+  <ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+  [%if (self.getUpperBound() == 1) {%]
+  <Select
+    disabled={[%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}
+    name="[%=self.name%]"
+    value={_.get(this.state.entity.[%=self.name%], 'e_id')}
+    placeholder={t('[%=form.eClass.getQName()%].attrs.[%=self.name%].placeholder', {ns: 'classes'})}
+    onChange={(value)=>{this.setAttrs({[%=self.name%]: _.get(value, 'entity')})}}
+    options={_.sortBy(_.get(this.state, ['refs', '[%=self.name%]'], []).map((e)=>({value: e.e_id, label: e.[%=eClass.getDisplayFieldName()%], entity: e})), (o)=>_.get(o, 'label', '').toLowerCase())}
+  />
+  [%} else {%]
+  <Select
+    disabled={[%=self.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)}
+    name="[%=self.name%]"
+    multi={true}
+    value={_.get(this.state.entity, '[%=self.name%]', []).map(e=>({value: e.e_id, label: e.[%=eClass.getDisplayFieldName()%], entity: e}))}
+    placeholder={t('[%=form.eClass.getQName()%].attrs.[%=self.name%].placeholder', {ns: 'classes'})}
+    onChange={(values)=>{this.setAttrs({[%=self.name%]: values.map(v=>v.entity)})}}
+    options={_.sortBy(_.get(this.state, ['refs', '[%=self.name%]'], []).map((e)=>({value: e.e_id, label: e.[%=eClass.getDisplayFieldName()%], entity: e})), (o)=>_.get(o, 'label', '').toLowerCase())}
+  />
+  [%}%]
+  [%if (field.showHelp) {%]
+  <HelpBlock>{t('[%=self.getEContainingClass().getQName()%].attrs.[%=self.name%].help', {ns: 'classes'})}</HelpBlock>
+  [%}%]
+</FormGroup>
+[%}
+
+
+@template
+operation EReference declareForm(form, field, width) {
+    var eClass = form.application.getClass(self.getEReferenceType());
+%]
+<FormGroup [%=w(width)%]
+  controlId="[%=self.name%]"
+  [%if (field.validationState.isDefined() and field.validationState.length > 0) {%]
+  validationState={()=>((value)=>{[%=field.validationState%]})(this.state.[%=self.name%])}
+  [%}%]
+>
+  <Panel bsStyle="info" collapsible header={
+      <div>
+          <ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+          {![%=self.readOnly()%] && !['view', 'delete'].includes(this.state.e_operation) && !this.state.entity.[%=self.name%] &&
+          <ButtonGroup className="pull-right">
+              <OverlayTrigger placement="top" overlay={<Tooltip id="new">{t("new")}</Tooltip>}>
+                  <DropdownButton bsStyle="primary" bsSize="xsmall" id="new.[%=eClass.getQName()%]" title={<Glyphicon glyph="unchecked"/>} onClick={(e)=>{e.stopPropagation()}} pullRight>
+                      [%for (subType in eClass.getSubTypes()) {%]
+                      <MenuItem id="new.[%=subType.getQName()%]" 
+                        onClick={(e)=>{
+                            this.setAttrs({[%=self.name%]: {_type_: '[%=subType.getQName()%]'}})
+                            e.stopPropagation();
+                        }}
+                      >{t('[%=subType.getQName()%].caption', {ns: 'classes'})}</MenuItem>
+                      [%}%]
+                  </DropdownButton>
+              </OverlayTrigger>
+          </ButtonGroup>}
+      </div>
+  }>
+	  {
+	      [%for (subType in eClass.getSubTypes()) {%]
+	      (_.get(this.state.entity.[%=self.name%], '_type_') === '[%=subType.getQName()%]' &&
+	      <Panel bsStyle="info" header={
+	      <div>
+	          <ControlLabel>{t(`${_.get(this.state.entity.[%=self.name%], '_type_')}.caption`, {ns: 'classes'})}</ControlLabel>
+	          <ButtonGroup className="pull-right">
+	              <OverlayTrigger placement="top" overlay={<Tooltip id="delete">{t("delete")}</Tooltip>}>
+	                  <Button bsStyle="danger" bsSize="xsmall" 
+                          disabled={[%=subType.readOnly()%] || ['view', 'delete'].includes(this.state.e_operation)} 
+	                      onClick={()=>{
+	                          this.setAttrs({[%=self.name%]: undefined})
+	                      }}
+	                  ><Glyphicon glyph="remove"/></Button>
+	              </OverlayTrigger>
+	          </ButtonGroup>
+	      </div>
+	           
+	      }>
+		      <[%=subType.getCName()%]Form entity={this.state.entity.[%=self.name%]} mode={this.state.e_operation} update={(entity)=>{
+		          this.setAttrs({[%=self.name%]: update(this.state.entity.[%=self.name%], {$merge: entity})})
+		      }}/>
+	      </Panel>
+	      ) ||
+	      [%}%]
+	      false
+	  }
+  </Panel>
+  <FormControl.Feedback />
+  [%if (field.showHelp) {%]
+  <HelpBlock>{t('[%=self.getEContainingClass().getQName()%].attrs.[%=self.name%].help', {ns: 'classes'})}</HelpBlock>
+  [%}%]
+</FormGroup>
+[%}
+
+@template
+operation EClass declareTableColumns() {
+for (column in self.~form.columns) {
+    var path = column.name.split('[.]');
+    var first = path.at(0);
+    var second = null;
+    if (path.size() > 1) {
+        second = path.at(1);
+    }
+    var accessor = column.name;
+    var eReference = self.getEAllReferences().selectOne(r|r.name == first);
+    var caption = self.getQName() + '.attrs.' + first + '.caption';
+    var ns = 'classes';
+    var eAttribute = null;
+    if (second.isDefined()) {
+        if (not eReference.isDefined()) {
+            throw column.name + " not found";
+        }
+        eAttribute = eReference.getEReferenceType().getEAllAttributes().selectOne(r|r.name == second);
+        if (eAttribute.isDefined()) {
+            caption = eReference.getEReferenceType().getQName() + '.attrs.' + second + '.caption';
+        }  
+    }
+    else if (eReference.isDefined()) {
+        eAttribute = eReference.getEReferenceType().getEAllAttributes().selectOne(r|r.name == eReference.getEReferenceType().getDisplayFieldName());
+        accessor = accessor + '.' + eReference.getEReferenceType().getDisplayFieldName();
+    }
+    else {
+        eAttribute = self.getEAllAttributes().selectOne(r|r.name == first);
+        if (not eAttribute.isDefined()) {
+            caption = column.name;
+            ns = 'common';
+        }
+    }
+%]
+{
+    Header: t('[%=caption%]', {ns: '[%=ns%]'}), 
+    accessor: '[%=accessor%]', 
+    show: [%=column.visible%],
+    [%if (eAttribute.isDefined() and eAttribute.eType.name.startsWith("EBoolean")) {%]
+    filterMethod: (filter, row) => (_.get(row, filter.id, 'false').toString().toLowerCase().includes(filter.value.toLowerCase())),
+    Cell: (row) => (
+        <div className="text-center">
+            <input type="checkbox" readOnly checked={_.get(row.original, '[%=accessor%]', false)} />
+        </div>
+    )
+    [%} else if (eAttribute.isDefined() and eAttribute.eType.name == "EDate") {%]
+    [%if (eAttribute.getAnnotation("mspace.ui", "timestamp", "false") == "true") {%]
+    filterMethod: (filter, row) => moment(_.get(row, '[%=accessor%]')).format('YYYY-MM-DD HH:mm:ss.SSS').includes(filter.value),
+    Cell: (row) => ((value) => value ? moment(value).format('YYYY-MM-DD HH:mm:ss.SSS') : '')(_.get(row.original, '[%=accessor%]')) 
+    [%} else {%]
+    filterMethod: (filter, row) => moment(_.get(row, '[%=accessor%]')).format('YYYY-MM-DD').includes(filter.value),
+    Cell: (row) => ((value) => value ? moment(value).format('YYYY-MM-DD') : '')(_.get(row.original, '[%=accessor%]')) 
+    [%}%]
+    [%} else {%]
+    Cell: (row) => (
+        _.get(row.original, '[%=accessor%]', '')
+    )
+    [%}%]    
+},
+[%}
+}
+
+@template
+operation EReference declareTable(form, field, width) {
+    var eClass = form.application.getClass(self.getEReferenceType());
+%]
+<FormGroup [%=w(width)%]
+  controlId="[%=self.name%]"
+  [%if (field.validationState.isDefined() and field.validationState.length > 0) {%]
+  validationState={()=>((value)=>{[%=field.validationState%]})(this.state.[%=self.name%])}
+  [%}%]
+>
+  <Panel bsStyle="info" collapsible header={
+	  <div>
+		  <ControlLabel>{t('[%=form.eClass.getQName()%].attrs.[%=self.name%].caption', {ns: 'classes'})}</ControlLabel>
+          {![%=self.readOnly()%] && !['view', 'delete'].includes(this.state.e_operation) &&
+		  <ButtonGroup className="pull-right">
+		      <OverlayTrigger placement="top" overlay={<Tooltip id="new">{t("new")}</Tooltip>}>
+		          <DropdownButton bsStyle="primary" bsSize="xsmall" id="new.[%=eClass.getQName()%]" title={<Glyphicon glyph="unchecked"/>} onClick={(e)=>{e.stopPropagation()}} pullRight>
+		              [%for (subType in eClass.getSubTypes()) {%]
+		              <MenuItem id="new.[%=subType.getQName()%]" 
+                        disabled={['view', 'delete'].includes(this.state.e_operation)} 
+                        onClick={(e)=>{
+		                  this.setAttrs({[%=self.name%]: [...(this.state.entity.[%=self.name%] || []), {_type_: '[%=subType.getQName()%]'}]})
+		                  e.stopPropagation();
+		              }}>{t('[%=subType.getQName()%].caption', {ns: 'classes'})}</MenuItem>
+		              [%}%]
+		          </DropdownButton>
+		      </OverlayTrigger>
+		  </ButtonGroup>}
+	  </div>
+  }>
+	<OptsTable
+	        storageId="[%=form.eClass.getQName()%].[%=self.name%]"
+		    columns={[
+		        [%=eClass.declareTableColumns()%]
+		    ]}
+		    data={this.state.entity.[%=self.name%] || []}
+		    controlColumn={{
+		        Header: '',
+		        accessor: 'e_id',
+		        Cell: row=>(
+		            <ButtonGroup>
+		                <OverlayTrigger placement="top" overlay={<Tooltip id="up">{t("up")}</Tooltip>}>
+		                    <Button bsStyle="primary" bsSize="xsmall" 
+		                      disabled={['view', 'delete'].includes(this.state.e_operation)} 
+		                      onClick={()=>{
+		                      const idx = this.state.entity.[%=self.name%].indexOf(row.original)
+		                      if (idx > 0) {
+		                          this.setAttrs({[%=self.name%]: [
+		                            ...this.state.entity.[%=self.name%].slice(0, idx - 1), 
+		                            this.state.entity.[%=self.name%][idx], 
+		                            this.state.entity.[%=self.name%][idx - 1], 
+		                            ...this.state.entity.[%=self.name%].slice(idx + 1)
+		                          ]})
+		                      }
+		                    }}><Glyphicon glyph="arrow-up"/></Button>
+		                </OverlayTrigger>
+		                <OverlayTrigger placement="top" overlay={<Tooltip id="down">{t("down")}</Tooltip>}>
+		                    <Button bsStyle="primary" bsSize="xsmall" 
+		                      disabled={['view', 'delete'].includes(this.state.e_operation)} 
+		                      onClick={()=>{
+		                      const idx = this.state.entity.[%=self.name%].indexOf(row.original)
+		                      if (idx >= 0 && idx < this.state.entity.[%=self.name%].length - 1) {
+		                          this.setAttrs({[%=self.name%]: [
+		                            ...this.state.entity.[%=self.name%].slice(0, idx), 
+		                            this.state.entity.[%=self.name%][idx + 1], 
+		                            this.state.entity.[%=self.name%][idx], 
+		                            ...this.state.entity.[%=self.name%].slice(idx + 2)
+		                          ]})
+		                      }
+		                    }}><Glyphicon glyph="arrow-down"/></Button>
+		                </OverlayTrigger>
+		                <OverlayTrigger placement="top" overlay={<Tooltip id="delete">{t("delete")}</Tooltip>}>
+		                    <Button bsStyle="danger" bsSize="xsmall" 
+		                      disabled={['view', 'delete'].includes(this.state.e_operation)} 
+		                      onClick={()=>{
+		                      const idx = this.state.entity.[%=self.name%].indexOf(row.original)
+		                      if (idx >= 0) {
+		                          this.setAttrs({[%=self.name%]: [
+		                            ...this.state.entity.[%=self.name%].slice(0, idx), 
+		                            ...this.state.entity.[%=self.name%].slice(idx + 1)
+		                          ]})
+		                      }
+		                    }}><Glyphicon glyph="remove"/></Button>
+		                </OverlayTrigger>
+		            </ButtonGroup>),
+		        filterable: false,
+		        sortable: false,
+		        minWidth: 60
+		    }}
+		    SubComponent={(row)=>
+		      <Panel bsStyle="info" header={t(`${_.get(row.original, '_type_')}.caption`, {ns: 'classes'})}>
+		      {
+		          [%for (subType in eClass.getSubTypes()) {%]
+		          (row.original._type_ === '[%=subType.getQName()%]' &&
+		          <[%=subType.getCName()%]Form entity={row.original} mode={this.state.e_operation} update={(entity)=>{
+		              const list = this.state.entity.[%=self.name%].slice()
+		              const idx = list.indexOf(row.original)
+		              if (idx < 0) return;
+		              list[idx] = update(list[idx], {$merge: entity})
+		              this.setAttrs({[%=self.name%]: list})
+		          }}/>
+		          ) ||
+		          [%}%]
+		          false
+		      }
+		      </Panel>
+		    }
+	/>
+  </Panel>
+  
+  <FormControl.Feedback />
+  [%if (field.showHelp) {%]
+  <HelpBlock>{t('[%=self.getEContainingClass().getQName()%].attrs.[%=self.name%].help', {ns: 'classes'})}</HelpBlock>
+  [%}%]
+</FormGroup>
+[%}
+
+%]

@@ -1,0 +1,81 @@
+<project default="generate-all">
+    <include file="epsilon-ant-tasks.xml"/>
+    <property file="etl-build.properties"/>
+
+    <target name="generate-all" depends="load-model"/>
+
+    <target name="load-model">
+        <echo message="${basedir}/src/main/resources/application.model"/>
+        <echo message="${basedir}/ui3/ui3.ecore"/>
+        <echo message="${basedir}\rt\rt.ecore"/>
+        <echo message="${basedir}\dwh\dwh.ecore"/>
+        <echo message="${basedir}\etl\etl.ecore"/>
+        <echo message="${basedir}\eventStreaming\evs.ecore"/>
+        <echo message="${basedir}\relational\relational.ecore"/>
+
+        <epsilon.emf.register file="${basedir}/ui3/ui3.ecore"/>
+        <epsilon.emf.register file="${basedir}/etl/etl.ecore"/>
+        <epsilon.emf.register file="${basedir}/rt/rt.ecore"/>
+        <epsilon.emf.register file="${basedir}/dwh/dwh.ecore"/>
+        <epsilon.emf.register file="${basedir}/auth/auth.ecore"/>
+        <epsilon.emf.register file="${basedir}/dataset/dataset.ecore"/>
+        <epsilon.emf.register file="${basedir}/relational/relational.ecore"/>
+        <epsilon.emf.register file="${basedir}/eventStreaming/evs.ecore"/>
+        <epsilon.emf.register file="${basedir}/dataspace/dataspace.ecore"/>
+        <epsilon.emf.register file="${basedir}/dataspace/sse.ecore"/>
+        <epsilon.emf.register file="${basedir}/sm/sm.ecore"/>
+
+
+        <!--epsilon.emf.loadRegisteredMetamodel name="etl" aliases="S" metamodeluri="http://www.neoflex.ru/meta/etl" />
+        <epsilon.emf.loadRegisteredMetamodel name="rt" aliases="S" metamodeluri="http://www.neoflex.ru/meta/rt" />
+        <epsilon.emf.loadRegisteredMetamodel name="dwh" aliases="S" metamodeluri="http://www.neoflex.ru/meta/dwh" />
+        <epsilon.emf.loadRegisteredMetamodel name="auth" aliases="S" metamodeluri="http://www.neoflex.ru/meta/auth" />
+        <epsilon.emf.loadRegisteredMetamodel name="dataset" aliases="S" metamodeluri="http://www.neoflex.ru/meta/dataset" />
+        <epsilon.emf.loadRegisteredMetamodel name="relational" aliases="S" metamodeluri="http://www.neoflex.ru/meta/relational" />
+        <epsilon.emf.loadRegisteredMetamodel name="evs" aliases="S" metamodeluri="http://www.neoflex.ru/meta/etlevs" /-->
+
+        <epsilon.emf.loadModel expand="true" name="model" aliases="S" read="true"
+                               modelfile="${basedir}\src\main\resources\application.model"
+                               metamodelfile="${basedir}\ui3\ui3.ecore"/>
+        <epsilon.emf.loadModel expand="true" aliases="S" name="rt" metamodeluri="http://www.eclipse.org/emf/2002/Ecore"
+                               modelfile="${basedir}\rt\rt.ecore"/>
+        <epsilon.emf.loadModel expand="true" aliases="S" name="dwh" metamodeluri="http://www.eclipse.org/emf/2002/Ecore"
+                               modelfile="${basedir}\dwh\dwh.ecore"/>
+        <epsilon.emf.loadModel expand="true" aliases="S" name="etl" metamodeluri="http://www.eclipse.org/emf/2002/Ecore"
+                               modelfile="${basedir}\etl\etl.ecore"/>
+        <epsilon.emf.loadModel expand="true" aliases="S" name="evs" metamodeluri="http://www.eclipse.org/emf/2002/Ecore"
+                               modelfile="${basedir}\eventStreaming\evs.ecore"/>
+        <epsilon.emf.loadModel expand="true" aliases="S" name="relational"
+                               metamodeluri="http://www.eclipse.org/emf/2002/Ecore"
+                               modelfile="${basedir}\relational\relational.ecore"/>
+        <epsilon.emf.loadModel expand="true" aliases="S" name="auth"
+                               metamodeluri="http://www.eclipse.org/emf/2002/Ecore"
+                               modelfile="${basedir}\auth\auth.ecore"/>
+        <epsilon.emf.loadModel expand="true" aliases="S" name="dataset"
+                               metamodeluri="http://www.eclipse.org/emf/2002/Ecore"
+                               modelfile="${basedir}\dataset\dataset.ecore"/>
+        <epsilon.emf.loadModel expand="true" aliases="S" name="dataspace"
+                               metamodeluri="http://www.eclipse.org/emf/2002/Ecore"
+                               modelfile="${basedir}\dataspace\dataspace.ecore"/>
+        <epsilon.emf.loadModel expand="true" aliases="S" name="sse"
+                               metamodeluri="http://www.eclipse.org/emf/2002/Ecore"
+                               modelfile="${basedir}\dataspace\sse.ecore"/>
+
+
+        <!--epsilon.eol src="${basedir}\src\main\resources\ui3_utils.eol" debug="true">
+            <model ref="evs"/>
+            <model ref="etl"/>
+            <model ref="rt"/>
+            <model ref="auth"/>
+            <model ref="relational"/>
+            <model ref="dataset"/>
+            <model ref="dwh"/>
+            <model ref="md"/>
+        </epsilon.eol-->
+        <epsilon.egl src="${basedir}\src\main\resources\ui4_Application.egl" target="target.json">
+            <model ref="model"/>
+            <parameter name="targetPath" value="${basedir}\src\main"/>
+            <parameter name="mspaceRoot" value="c:/workspace/MetaServer"/>
+        </epsilon.egl>
+    </target>
+</project>
