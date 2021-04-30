@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rel:Scheme xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rel="http://www.neoflex.ru/meta/relational" name="public_at_dwh">
+  <tables name="interpretation_needed">
+    <columns name="productmodelid">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="productmodel" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="255"/>
+    </columns>
+    <columns name="language" nullable="true">
+      <dataType xsi:type="rel:CHAR" length="64"/>
+    </columns>
+    <columns name="description" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="99999"/>
+    </columns>
+    <primaryKey name="interpretation_needed_pk">
+      <keyFeatures column="//@tables.0/@columns.0"/>
+    </primaryKey>
+  </tables>
+</rel:Scheme>
