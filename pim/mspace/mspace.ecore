@@ -1,104 +1,126 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mspace" nsURI="http://www.neoflex.ru/meta/mspace" nsPrefix="mspace">
-  <eClassifiers xsi:type="ecore:EClass" name="Script" abstract="true" eSuperTypes="#//File">
-    <eOperations name="run" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-        eType="#//StringParameter" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runOnStatrup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runOnce" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="false"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runOnShutdown" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="false"/>
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mspace" nsURI="http://www.neoflex.ru/meta/mspace" nsPrefix="mspace">
+  <eClassifiers xsi:type="ecore:EClass" name="Script" abstract="true" eSuperTypes="//File">
+    <eOperations name="run">
+      <eType xsi:type="ecore:EClass" href="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1" eType="//StringParameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runOnStatrup" defaultValueLiteral="true">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runOnce" defaultValueLiteral="false">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runOnShutdown" defaultValueLiteral="false">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GroovyScript" eSuperTypes="#//Script"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AntScript" eSuperTypes="#//Script"/>
-  <eClassifiers xsi:type="ecore:EClass" name="MavenScript" eSuperTypes="#//Script">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="goals" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="home" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repository" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="site" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GroovyScript" eSuperTypes="//Script"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AntScript" eSuperTypes="//Script"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MavenScript" eSuperTypes="//Script">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="goals">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="home">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repository">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="site">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EpsilonScript" abstract="true" eSuperTypes="#//Script">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="models" upperBound="-1"
-        eType="#//ModelParameter" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EpsilonScript" abstract="true" eSuperTypes="//Script">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="models" upperBound="-1" eType="//ModelParameter" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StringParameter">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ModelParameter" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EmfModelParameter" eSuperTypes="#//ModelParameter">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="read" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="false"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="store" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="false"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="emfModel" lowerBound="1"
-        eType="#//EmfModel"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EmfModelParameter" eSuperTypes="//ModelParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="read" defaultValueLiteral="false">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="store" defaultValueLiteral="false">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expand" defaultValueLiteral="true">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="emfModel" lowerBound="1" eType="//EmfModel"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RegisteredModelParameter" eSuperTypes="#//ModelParameter">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="registeredModel" lowerBound="1"
-        eType="#//RegisteredModel"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RegisteredModelParameter" eSuperTypes="//ModelParameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registeredModel" lowerBound="1" eType="//RegisteredModel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Model" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EmfModel" abstract="true" eSuperTypes="#//Model">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="mmUris" upperBound="-1"
-        eType="#//MetaModelURI" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EmfModel" abstract="true" eSuperTypes="//Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mmUris" upperBound="-1" eType="//MetaModelURI" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MetaModelURI">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FileModel" eSuperTypes="#//EmfModel">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileModelType" lowerBound="1"
-        eType="#//FileModelType" defaultValueLiteral="XMI"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileBase" lowerBound="1"
-        eType="#//FileBaseType" defaultValueLiteral="MSPACE"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FileModel" eSuperTypes="//EmfModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileModelType" lowerBound="1" eType="//FileModelType" defaultValueLiteral="XMI"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileBase" lowerBound="1" eType="//FileBaseType" defaultValueLiteral="MSPACE"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="URIModel" eSuperTypes="#//EmfModel">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="URIModel" eSuperTypes="//EmfModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RegisteredModel" eSuperTypes="#//Model">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nsURI" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RegisteredModel" eSuperTypes="//Model">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nsURI" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EolScript" eSuperTypes="#//EpsilonScript"/>
-  <eClassifiers xsi:type="ecore:EClass" name="EtlScript" eSuperTypes="#//EpsilonScript"/>
-  <eClassifiers xsi:type="ecore:EClass" name="EclScript" eSuperTypes="#//EpsilonScript"/>
-  <eClassifiers xsi:type="ecore:EClass" name="EglScript" eSuperTypes="#//EpsilonScript"/>
-  <eClassifiers xsi:type="ecore:EClass" name="EgxScript" eSuperTypes="#//EpsilonScript"/>
-  <eClassifiers xsi:type="ecore:EClass" name="FlockScript" eSuperTypes="#//EpsilonScript">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
-        eType="#//ModelParameter" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
-        eType="#//ModelParameter" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EolScript" eSuperTypes="//EpsilonScript"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EtlScript" eSuperTypes="//EpsilonScript"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EclScript" eSuperTypes="//EpsilonScript"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EglScript" eSuperTypes="//EpsilonScript"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EgxScript" eSuperTypes="//EpsilonScript"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FlockScript" eSuperTypes="//EpsilonScript">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1" eType="//ModelParameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1" eType="//ModelParameter" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MetaServer">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="models" upperBound="-1"
-        eType="#//Model" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="registerOnStartup" upperBound="-1"
-        eType="#//FileModel"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="persistent" upperBound="-1"
-        eType="#//FileModel"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scripts" upperBound="-1"
-        eType="#//Script" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="groovyScriptBases" upperBound="-1"
-        eType="#//Catalog" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="models" upperBound="-1" eType="//Model" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registerOnStartup" upperBound="-1" eType="//FileModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persistent" upperBound="-1" eType="//FileModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scripts" upperBound="-1" eType="//Script" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groovyScriptBases" upperBound="-1" eType="//Catalog" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="File" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileBase" lowerBound="1"
-        eType="#//FileBaseType" defaultValueLiteral="MSPACE"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileBase" lowerBound="1" eType="//FileBaseType" defaultValueLiteral="MSPACE"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Catalog" eSuperTypes="#//File"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Catalog" eSuperTypes="//File"/>
   <eClassifiers xsi:type="ecore:EEnum" name="FileBaseType">
     <eLiterals name="MSPACE" value="1"/>
     <eLiterals name="ABSOLUTE" value="2"/>

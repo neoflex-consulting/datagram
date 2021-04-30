@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dwh" nsURI="http://www.neoflex.ru/meta/dwh" nsPrefix="dwh">
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dwh" nsURI="http://www.neoflex.ru/meta/dwh" nsPrefix="dwh">
   <eClassifiers xsi:type="ecore:EClass" name="StagingArea">
     <eAnnotations source="mspace.ui">
       <details key="up" value="2"/>
@@ -9,77 +8,107 @@
     </eAnnotations>
     <eOperations name="genarateWorkflow">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ Workflow"/>
+        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; Workflow"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="oozie" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//Oozie"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="deployments" upperBound="-1"
-        eType="ecore:EClass http://www.neoflex.ru/meta/rt#//Deployment"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Context"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="softwareSystem" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//SoftwareSystem"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalog" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="csvOptions" eType="#//CsvOptions"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Property" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultFields" upperBound="-1"
-        eType="#//DefaultField" containment="true" eOpposite="#//DefaultField/stagingArea"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="tables" upperBound="-1"
-        eType="#//StagingTable" containment="true" eOpposite="#//StagingTable/stagingArea"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oozie">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/rt#//Oozie"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deployments" upperBound="-1">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/rt#//Deployment"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Context"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="softwareSystem">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/rt#//SoftwareSystem"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalog">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="csvOptions" eType="//CsvOptions" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Property"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultFields" upperBound="-1" eType="//DefaultField" containment="true" eOpposite="//DefaultField/stagingArea"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tables" upperBound="-1" eType="//StagingTable" containment="true" eOpposite="//StagingTable/stagingArea"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StagingTable">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="ecore:EClass http://www.neoflex.ru/meta/relational#//Table">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table">
       <eAnnotations source="mspace.ui">
         <details key="filter" value="scheme.name"/>
         <details key="ds" value="stagingArea.softwareSystem.scheme.name"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/relational#//Table"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columns" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columns">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10000)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1"
-        eType="#//Mapping" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultFields" upperBound="-1"
-        eType="#//DefaultField">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1" eType="//Mapping" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultFields" upperBound="-1" eType="//DefaultField">
       <eAnnotations source="mspace.ui">
         <details key="filter" value="auto"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="csvOptions" eType="#//CsvOptions"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="stagingArea" lowerBound="1"
-        eType="#//StagingArea" eOpposite="#//StagingArea/tables"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="csvOptions" eType="//CsvOptions" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stagingArea" lowerBound="1" eType="//StagingArea" eOpposite="//StagingArea/tables"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DefaultField">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="field">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression">
       <eAnnotations source="mspace.ui">
         <details key="multiline" value="true"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10000)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="stagingArea" lowerBound="1"
-        eType="#//StagingArea" eOpposite="#//StagingArea/defaultFields"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="static">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stagingArea" lowerBound="1" eType="//StagingArea" eOpposite="//StagingArea/defaultFields"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Mapping">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="from">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="to">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CsvOptions">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delimiter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="header" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
-        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delimiter">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateFormat">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charset">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="header" defaultValueLiteral="false">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

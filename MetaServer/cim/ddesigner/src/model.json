@@ -49,7 +49,6 @@
         {"name": "ecore.EClass", "_type_": "ecore.EClass"},
         {"name": "ui3.Application", "_type_": "ecore.EClass"},
         {"name": "ui3.Module", "_type_": "ecore.EClass"},
-
         {"name": "etl.JdbcContext", "_type_": "ecore.EClass"},        {"name": "sse.Model", "_type_": "ecore.EClass"},        {"name": "etl.CoJob", "_type_": "ecore.EClass"},        {"name": "rt.Deployment", "_type_": "ecore.EClass"},        {"name": "sse.DatasetType", "_type_": "ecore.EClass"},        {"name": "rt.Oozie", "_type_": "ecore.EClass"},        {"name": "etl.SchemeDataSet", "_type_": "ecore.EClass"},        {"name": "sse.LibraryNotebook", "_type_": "ecore.EClass"},        {"name": "sse.JdbcWorkspace", "_type_": "ecore.EClass"},        {"name": "rt.TransformationDeployment", "_type_": "ecore.EClass"},        {"name": "rt.ScheduledTask", "_type_": "ecore.EClass"},        {"name": "rt.ImportWizard", "_type_": "ecore.EClass"},        {"name": "sse.ValidateModelPipelineWorkspace", "_type_": "ecore.EClass"},        {"name": "etl.UserDefinedFunction", "_type_": "ecore.EClass"},        {"name": "rt.Atlas", "_type_": "ecore.EClass"},        {"name": "rt.Environment", "_type_": "ecore.EClass"},        {"name": "rt.Zeppelin", "_type_": "ecore.EClass"},        {"name": "etl.Workflow", "_type_": "ecore.EClass"},        {"name": "sse.ModelPipelineWorkspace", "_type_": "ecore.EClass"},        {"name": "rt.Airflow", "_type_": "ecore.EClass"},        {"name": "rt.MLFlowServer", "_type_": "ecore.EClass"},        {"name": "evs.FunctionsLibrary", "_type_": "ecore.EClass"},        {"name": "rt.WorkflowDeployment", "_type_": "ecore.EClass"},        {"name": "rt.RunTask", "_type_": "ecore.EClass"},        {"name": "rel.Scheme", "_type_": "ecore.EClass"},        {"name": "rt.CoordinatorDeployment", "_type_": "ecore.EClass"},        {"name": "sse.NotebookType", "_type_": "ecore.EClass"},        {"name": "sm.StateMachine", "_type_": "ecore.EClass"},        {"name": "evs.EventFunction", "_type_": "ecore.EClass"},        {"name": "etl.Transformation", "_type_": "ecore.EClass"},        {"name": "etl.Project", "_type_": "ecore.EClass"},        {"name": "sse.HadoopCluster", "_type_": "ecore.EClass"},        {"name": "sse.AnalyticWorkspace", "_type_": "ecore.EClass"},        {"name": "rt.JdbcConnection", "_type_": "ecore.EClass"},        {"name": "rt.SoftwareSystem", "_type_": "ecore.EClass"},        {"name": "rt.LivyServer", "_type_": "ecore.EClass"},        {"name": "evs.EventsProcessor", "_type_": "ecore.EClass"},        {"name": "etl.MavenDependency", "_type_": "ecore.EClass"}      ],
       "icon": "sub-right.svg"
     },
@@ -3739,7 +3738,7 @@
 	  {
 	      "name": "expression",
 	      "type": "text",
-	      "defaultValue": "Array(\n    Map(\"id\" -> new java.math.BigDecimal(1), \"name\" -> \"1\"),\n    Map(\"id\" -> new java.math.BigDecimal(2), \"name\" -> \"2\") \n)"
+	      "defaultValue": "Array(\n    Map(\"id\" -> new java.math.BigDecimal(1), \"name\" -> \"1\"),\n    Map(\"id\" -> new java.math.BigDecimal(2), \"name\" -> \"2\") \n)"
       }
       ]
     },
@@ -8131,6 +8130,30 @@
 		  "accessor": "action.name",
 		  "sortable": true,
 		  "show": false
+		},
+	    {
+		  "Header": "auth.AuditInfo.attrs.changeUser.caption",
+		  "accessor": "auditInfo.changeUser",
+		  "sortable": true,
+		  "show": false
+		},
+	    {
+		  "Header": "auth.AuditInfo.attrs.changeDateTime.caption",
+		  "accessor": "auditInfo.changeDateTime",
+		  "sortable": true,
+		  "show": false
+		},
+	    {
+		  "Header": "auth.AuditInfo.attrs.createUser.caption",
+		  "accessor": "auditInfo.createUser",
+		  "sortable": true,
+		  "show": false
+		},
+	    {
+		  "Header": "auth.AuditInfo.attrs.createDateTime.caption",
+		  "accessor": "auditInfo.createDateTime",
+		  "sortable": true,
+		  "show": false
 		}
       ],
       "fields": [
@@ -8185,6 +8208,11 @@
 	      "name": "action",
 	      "type": "form",
 	      "entityType": "etl.CoAction"
+      },
+	  {
+	      "name": "auditInfo",
+	      "type": "form",
+	      "entityType": "auth.AuditInfo"
       }
       ]
     },
@@ -10952,6 +10980,11 @@
 		  "show": true
 		},
 	    {
+		  "Header": "etl.Workflow.attrs.description.caption",
+		  "accessor": "description",
+		  "show": true
+		},
+	    {
 		  "Header": "etl.SlaDefinition.attrs.nominalTime.caption",
 		  "accessor": "sla.nominalTime",
 		  "sortable": true,
@@ -10967,7 +11000,7 @@
 		  "Header": "etl.SlaDefinition.attrs.shouldEnd.caption",
 		  "accessor": "sla.shouldEnd",
 		  "sortable": true,
-		  "show": true
+		  "show": false
 		},
 	    {
 		  "Header": "etl.SlaDefinition.attrs.maxDuration.caption",
@@ -11032,6 +11065,10 @@
 	      "name": "nodes",
 	      "type": "table",
 	      "entityType": "etl.WFNode"
+      },
+	  {
+	      "name": "description",
+	      "type": "string"
       },
 	  {
 	      "name": "jsonView",
@@ -19332,7 +19369,7 @@
 	  {
 	      "name": "sparkVersion",
 	      "type": "enum",
-	      "options": ["SPARK2", "SPARK3"]
+	      "options": ["DEFAULT", "SPARK2", "SPARK3"]
       },
 	  {
 	      "name": "description",

@@ -1,67 +1,75 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="evs" nsURI="http://www.neoflex.ru/meta/etlevs" nsPrefix="evs">
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="evs" nsURI="http://www.neoflex.ru/meta/etlevs" nsPrefix="evs">
   <eClassifiers xsi:type="ecore:EClass" name="EventFunction">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="library" eType="#//FunctionsLibrary"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userTextPattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="input" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Structure"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Structure"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" eType="//FunctionsLibrary"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userTextPattern">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Structure"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Structure"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceCode">
       <eAnnotations source="mspace.ui">
         <details key="multiline" value="true"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10485760)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10485760)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FunctionParamsMapping">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="action" eType="#//FunctionAction"
-        eOpposite="#//FunctionAction/paramsMapping"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" eType="//FunctionAction" eOpposite="//FunctionAction/paramsMapping"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="param">
       <eAnnotations source="mspace.ui">
         <details key="filter" value="dataSet.e_id"/>
         <details key="ds" value="action.function.input.e_id"/>
         <details key="entityType" value="dataset.Field"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Field"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value">
       <eAnnotations source="mspace.ui">
         <details key="listeval" value="[...(props.entity.__parent.__parent.__parent.input || {fields: []}).fields.map(f=>{f.displayField = 'input.'+f.name;return f;}), ...(props.entity.__parent.__parent.__parent.output || {fields: []}).fields.map(f=>{f.displayField = 'output.'+f.name;return f;}), ...(props.entity.__parent.__parent.__parent.state || {fields: []}).fields.map(f=>{f.displayField = 'state.'+f.name;return f;}), ...(props.entity.__parent.__parent.__parent.local || {fields: []}).fields.map(f=>{f.displayField = 'local.'+f.name;return f;})]"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Field"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FunctionOutputMapping">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="action" eType="#//FunctionAction"
-        eOpposite="#//FunctionAction/resultsMapping"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" eType="//FunctionAction" eOpposite="//FunctionAction/resultsMapping"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="param">
       <eAnnotations source="mspace.ui">
         <details key="filter" value="dataSet.e_id"/>
         <details key="ds" value="action.function.output.e_id"/>
         <details key="entityType" value="dataset.Field"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Field"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value">
       <eAnnotations source="mspace.ui">
         <details key="listeval" value="[...(props.entity.__parent.__parent.__parent.output || {fields: []}).fields.map(f=>{f.displayField = 'output.'+f.name;return f;}), ...(props.entity.__parent.__parent.__parent.state || {fields: []}).fields.map(f=>{f.displayField = 'state.'+f.name;return f;}), ...(props.entity.__parent.__parent.__parent.local || {fields: []}).fields.map(f=>{f.displayField = 'local.'+f.name;return f;})]"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Field"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Condition" abstract="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="LogicCondition" abstract="true" eSuperTypes="#//Condition">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" upperBound="-1"
-        eType="#//Condition" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicCondition" abstract="true" eSuperTypes="//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" upperBound="-1" eType="//Condition" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AndCondition" eSuperTypes="#//LogicCondition"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OrCondition" eSuperTypes="#//LogicCondition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AndCondition" eSuperTypes="//LogicCondition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OrCondition" eSuperTypes="//LogicCondition"/>
   <eClassifiers xsi:type="ecore:EClass" name="WhenTimeoutCondition"/>
   <eClassifiers xsi:type="ecore:EEnum" name="ConditionOperand">
     <eLiterals name="equal" value="1"/>
@@ -71,107 +79,136 @@
     <eLiterals name="moreOrEqals" value="5"/>
     <eLiterals name="lessOrEqals" value="6"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EvalCondition" eSuperTypes="#//Condition">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ParamsCompareCondition" eSuperTypes="#//Condition">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operand" eType="#//ConditionOperand"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="leftParam" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
-      <eAnnotations source="mspace.ui">
-        <details key="listeval" value="(props.entity.__parent.__parent.output || {fields: []}).fields.map(f=>{f.displayField = 'output.'+f.name; return f;}).concat(props.entity.__parent.__parent.input.fields.map(f=>{f.displayField = 'input.'+f.name; return f;})).concat((props.entity.__parent.__parent.state || {fields: []}).fields.map(f=>{f.displayField = 'state.'+f.name;return f;})).concat((props.entity.__parent.__parent.local || {fields: []}).fields.map(f=>{f.displayField = 'local.'+f.name;return f;}))"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rightParam" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
-      <eAnnotations source="mspace.ui">
-        <details key="listeval" value="(props.entity.__parent.__parent.output || {fields: []}).fields.map(f=>{f.displayField = 'output.'+f.name; return f;}).concat(props.entity.__parent.__parent.input.fields.map(f=>{f.displayField = 'input.'+f.name; return f;})).concat((props.entity.__parent.__parent.state || {fields: []}).fields.map(f=>{f.displayField = 'state.'+f.name;return f;})).concat((props.entity.__parent.__parent.local || {fields: []}).fields.map(f=>{f.displayField = 'local.'+f.name;return f;}))"/>
-      </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="EvalCondition" eSuperTypes="//Condition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ParamsToExpressionCondition" eSuperTypes="#//Condition">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operand" eType="#//ConditionOperand"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="leftParam" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+  <eClassifiers xsi:type="ecore:EClass" name="ParamsCompareCondition" eSuperTypes="//Condition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operand" eType="//ConditionOperand"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftParam">
       <eAnnotations source="mspace.ui">
         <details key="listeval" value="(props.entity.__parent.__parent.output || {fields: []}).fields.map(f=>{f.displayField = 'output.'+f.name; return f;}).concat(props.entity.__parent.__parent.input.fields.map(f=>{f.displayField = 'input.'+f.name; return f;})).concat((props.entity.__parent.__parent.state || {fields: []}).fields.map(f=>{f.displayField = 'state.'+f.name;return f;})).concat((props.entity.__parent.__parent.local || {fields: []}).fields.map(f=>{f.displayField = 'local.'+f.name;return f;}))"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Field"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightParam">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="(props.entity.__parent.__parent.output || {fields: []}).fields.map(f=>{f.displayField = 'output.'+f.name; return f;}).concat(props.entity.__parent.__parent.input.fields.map(f=>{f.displayField = 'input.'+f.name; return f;})).concat((props.entity.__parent.__parent.state || {fields: []}).fields.map(f=>{f.displayField = 'state.'+f.name;return f;})).concat((props.entity.__parent.__parent.local || {fields: []}).fields.map(f=>{f.displayField = 'local.'+f.name;return f;}))"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Field"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParamsToExpressionCondition" eSuperTypes="//Condition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operand" eType="//ConditionOperand"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftParam">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="(props.entity.__parent.__parent.output || {fields: []}).fields.map(f=>{f.displayField = 'output.'+f.name; return f;}).concat(props.entity.__parent.__parent.input.fields.map(f=>{f.displayField = 'input.'+f.name; return f;})).concat((props.entity.__parent.__parent.state || {fields: []}).fields.map(f=>{f.displayField = 'state.'+f.name;return f;})).concat((props.entity.__parent.__parent.local || {fields: []}).fields.map(f=>{f.displayField = 'local.'+f.name;return f;}))"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Field"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Rule">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifyFact" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//AndCondition"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
-        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifyFact">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="//AndCondition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1" eType="//Action" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifyFact" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifyFact">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FunctionAction" eSuperTypes="#//Action">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="function" eType="#//EventFunction"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="paramsMapping" upperBound="-1"
-        eType="#//FunctionParamsMapping" containment="true" eOpposite="#//FunctionParamsMapping/action"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="resultsMapping" upperBound="-1"
-        eType="#//FunctionOutputMapping" containment="true" eOpposite="#//FunctionOutputMapping/action"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionAction" eSuperTypes="//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="function" eType="//EventFunction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paramsMapping" upperBound="-1" eType="//FunctionParamsMapping" containment="true" eOpposite="//FunctionParamsMapping/action"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultsMapping" upperBound="-1" eType="//FunctionOutputMapping" containment="true" eOpposite="//FunctionOutputMapping/action"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SetValueAction" eSuperTypes="#//Action">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="outputField" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+  <eClassifiers xsi:type="ecore:EClass" name="SetValueAction" eSuperTypes="//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputField">
       <eAnnotations source="mspace.ui">
         <details key="listeval" value="(props.entity.__parent.__parent.output || {fields: []}).fields.map(f=>{f.displayField = 'output.'+f.name; return f;}).concat((props.entity.__parent.__parent.state || {fields: []}).fields.map(f=>{f.displayField = 'state.'+f.name; return f;})).concat((props.entity.__parent.__parent.local || {fields: []}).fields.map(f=>{f.displayField = 'local.'+f.name; return f;}))"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Field"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MapValueAction" eSuperTypes="#//Action">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="outputField" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+  <eClassifiers xsi:type="ecore:EClass" name="MapValueAction" eSuperTypes="//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputField">
       <eAnnotations source="mspace.ui">
         <details key="listeval" value="(props.entity.__parent.__parent.output || {fields: []}).fields.map(f=>{f.displayField = 'output.'+f.name; return f;}).concat((props.entity.__parent.__parent.state || {fields: []}).fields.map(f=>{f.displayField = 'state.'+f.name; return f;})).concat((props.entity.__parent.__parent.local || {fields: []}).fields.map(f=>{f.displayField = 'local.'+f.name; return f;}))"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Field"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="valueField" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueField">
       <eAnnotations source="mspace.ui">
         <details key="listeval" value="props.entity.__parent.__parent.input.fields.map(f=>{f.displayField = 'input.'+f.name; return f;}).concat((props.entity.__parent.__parent.state || {fields: []}).fields.map(f=>{f.displayField = 'state.'+f.name;return f;})).concat((props.entity.__parent.__parent.local || {fields: []}).fields.map(f=>{f.displayField = 'local.'+f.name;return f;}))"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Field"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SetTimeoutAction" eSuperTypes="#//Action">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SetTimeoutAction" eSuperTypes="//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AddOutputAction" eSuperTypes="#//Action"/>
-  <eClassifiers xsi:type="ecore:EClass" name="RemoveStateAction" eSuperTypes="#//Action"/>
-  <eClassifiers xsi:type="ecore:EClass" name="InitializeFactAction" eSuperTypes="#//Action"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AddOutputAction" eSuperTypes="//Action"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RemoveStateAction" eSuperTypes="//Action"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InitializeFactAction" eSuperTypes="//Action"/>
   <eClassifiers xsi:type="ecore:EClass" name="EventsProcessor">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="mspace.ui">
-        <details key="multiline" value="true"/>
-      </eAnnotations>
-      <eAnnotations source="teneo.jpa">
-        <details key="value" value="@Column(length=10485760)"/>
-      </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="input" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Structure"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="state" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Structure"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Structure"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="local" eType="ecore:EClass http://www.neoflex.ru/meta/dataset#//Structure"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
-        eType="#//Rule" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description">
       <eAnnotations source="mspace.ui">
         <details key="multiline" value="true"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10485760)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Structure"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Structure"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Structure"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="local" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/dataset#//Structure"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1" eType="//Rule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FunctionsLibrary">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

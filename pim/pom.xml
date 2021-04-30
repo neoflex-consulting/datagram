@@ -300,17 +300,15 @@
             </resource>
         </resources>
         <plugins>
-            <!--plugin>
+            <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
                 <executions>
                     <execution>
-                        <id>default-cli</id>
+                        <id>model-execute</id>
+                        <phase>package</phase>
                         <configuration>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <target name="main">
+                            <target name="emf2ecore">
                                 <property name="compile_classpath" refid="maven.compile.classpath"/>
                                 <property name="runtime_classpath" refid="maven.runtime.classpath"/>
                                 <property name="test_classpath" refid="maven.test.classpath"/>
@@ -321,48 +319,22 @@
                                          classpathref="maven.runtime.classpath" classpath="target/classes">
                                 </taskdef>
                                 <genecore/>
+                                <property name="classpath" refid="maven.compile.classpath"/>
+                                <property environment="env"/>
+                                <!--echo message="${classpath}"/-->
+                                <echo message="${env.JAVA_HOME}"/>
+                                <echo message="${basedir}"/>
+                                <ant antfile="${basedir}/src/main/resources/build.xml" target="generate-all"
+                                     inheritAll="true">
+                                    <property name="file.encoding" value="UTF-8"/>
+                                </ant>
                             </target>
-
                         </configuration>
-
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                     </execution>
                 </executions>
-            </plugin-->
-            <plugin>
-              <artifactId>maven-antrun-plugin</artifactId>
-              <version>1.8</version>
-              <executions>
-                  <execution>
-                      <id>ant-execute</id>
-                      <phase>generate-sources</phase>
-                      <configuration>
-                          <target name="genmodel">
-                              <property name="classpath" refid="maven.compile.classpath"/>
-                              <property environment="env"/>
-                              <echo message="${classpath}"/>
-                              <echo message="${env.JAVA_HOME}"/>
-                              <echo message="${basedir}"/>
-                              <ant antfile="${basedir}/src/main/resources/build.xml" target="generate-all" inheritAll="true">
-                                <property name="file.encoding" value="UTF-8" />
-                              </ant>
-                              <!--java classname="org.apache.tools.ant.launch.Launcher" fork="true" failonerror="true" dir="${basedir}" timeout="4000000" taskname="startAnt">
-                                  <classpath>
-                                      <pathelement path="${classpath}"/>
-                                  </classpath>
-                                  <jvmarg value="-Dfile.encoding=UTF-8"/>
-                                  <arg value="-buildfile"/>
-                                  <arg file="${basedir}/build.xml"/>
-                                  <arg value="-Dbasedir=${basedir}"/>
-                                  <arg value="-Dclasspath=${classpath}"/>
-                                  <arg value="generate-all"/>
-                              </java-->
-                          </target>
-                      </configuration>
-                      <goals>
-                          <goal>run</goal>
-                      </goals>
-                  </execution>
-              </executions>
                 <dependencies>
                     <dependency>
                         <groupId>org.eclipse.epsilon</groupId>
@@ -380,7 +352,7 @@
                         <version>2.3.0-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
-          </plugin>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>

@@ -1,193 +1,207 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="jitdataset" nsURI="http://www.neoflex.ru/meta/jitdataset" nsPrefix="jitdataset">
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="jitdataset" nsURI="http://www.neoflex.ru/meta/jitdataset" nsPrefix="jitdataset">
   <eClassifiers xsi:type="ecore:EClass" name="DataType" abstract="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ScalarType" eSuperTypes="#//DataType">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" lowerBound="1"
-        eType="ecore:EEnum http://www.neoflex.ru/meta/dataset#//DataTypeDomain"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ScalarType" eSuperTypes="//DataType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" lowerBound="1">
+      <eType xsi:type="ecore:EEnum" href="http://www.neoflex.ru/meta/dataset#//DataTypeDomain"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LookupType" eSuperTypes="#//DataType">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lookupField" eType="#//DsField"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LookupType" eSuperTypes="//DataType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lookupField" eType="//DsField"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DsField">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" lowerBound="1"
-        eType="#//DataType" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="#//AbstractDataset"
-        eOpposite="#//AbstractDataset/dataFields"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isVisible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" lowerBound="1" eType="//DataType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="//AbstractDataset" eOpposite="//AbstractDataset/dataFields"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isVisible">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnIndex">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnWidth">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ParameterField" eSuperTypes="#//DsField"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ClassifiedField" eSuperTypes="#//DsField">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ruleOption" eType="#//RuleExecutionOption"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterField" eSuperTypes="//DsField"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassifiedField" eSuperTypes="//DsField">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ruleOption" eType="//RuleExecutionOption"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Dataset" eSuperTypes="#//AbstractDataset">
+  <eClassifiers xsi:type="ecore:EClass" name="Dataset" eSuperTypes="//AbstractDataset">
     <eOperations name="validate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСЂРѕРІРµСЂРёС‚СЊ"/>
+        <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="activate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РђРєС‚РёРІРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x420;&#x452;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x420;&#x406;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="activateClassification">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РђРєС‚РёРІРёСЂРѕРІР°С‚СЊ РєР»Р°СЃСЃРёС„РёРєР°С†РёСЋ"/>
+        <details key="caption" value="&#x420;&#x452;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x420;&#x406;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x454;&#x420;&#xbb;&#x420;&#xb0;&#x421;&#x403;&#x421;&#x403;&#x420;&#x451;&#x421;&#x201e;&#x420;&#x451;&#x420;&#x454;&#x420;&#xb0;&#x421;&#x2020;&#x420;&#x451;&#x421;&#x40b;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="loadFromFile">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р—Р°РіСЂСѓР·РёС‚СЊ РёР· С„Р°Р№Р»Р°"/>
+        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x456;&#x421;&#x402;&#x421;&#x453;&#x420;&#xb7;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x451;&#x420;&#xb7; &#x421;&#x201e;&#x420;&#xb0;&#x420;&#x2116;&#x420;&#xbb;&#x420;&#xb0;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="build">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРѕР±СЂР°С‚СЊ"/>
+        <details key="caption" value="&#x420;&#x40e;&#x420;&#x455;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="classify">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСЂРѕРєР»Р°СЃСЃРёС„РёС†РёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x420;&#x454;&#x420;&#xbb;&#x420;&#xb0;&#x421;&#x403;&#x421;&#x403;&#x420;&#x451;&#x421;&#x201e;&#x420;&#x451;&#x421;&#x2020;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="repairTables">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ С‚Р°Р±Р»РёС†С‹"/>
+        <details key="caption" value="&#x420;&#x2019;&#x420;&#x455;&#x421;&#x403;&#x421;&#x403;&#x421;&#x201a;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a; &#x421;&#x201a;&#x420;&#xb0;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x2020;&#x421;&#x2039;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="export">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р­РєСЃРїРѕСЂС‚РёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x420;&#xad;&#x420;&#x454;&#x421;&#x403;&#x420;&#x457;&#x420;&#x455;&#x421;&#x402;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="buildSpec" eType="#//DsBuildSpec"
-        containment="true" eOpposite="#//DsBuildSpec/dataset"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="classificationFieldSpecs"
-        upperBound="-1" eType="#//ClassificationFieldSpec" containment="true" eOpposite="#//ClassificationFieldSpec/dataset"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildSpec" eType="//DsBuildSpec" containment="true" eOpposite="//DsBuildSpec/dataset"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classificationFieldSpecs" upperBound="-1" eType="//ClassificationFieldSpec" containment="true" eOpposite="//ClassificationFieldSpec/dataset"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DeploymentDescriptor">
     <eOperations name="activate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РђРєС‚РёРІРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x420;&#x452;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x420;&#x406;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="datasets" upperBound="-1"
-        eType="#//AbstractDataset"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="hiveConnection" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//JdbcConnection"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hiveDatabaseName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfsNameNode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfsBaseDirectory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfsIncomeFilesDirectory"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfsUser" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="webHdfsUtl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sparkJobServer" eType="ecore:EClass http://www.neoflex.ru/meta/rt#//JobServer"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="biServerUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="deployments" upperBound="-1"
-        eType="ecore:EClass http://www.neoflex.ru/meta/rt#//Deployment"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="zeppelinConnection" eType="#//ZeppelinConnection"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datasets" upperBound="-1" eType="//AbstractDataset"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hiveConnection">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/rt#//JdbcConnection"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hiveDatabaseName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfsNameNode">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfsBaseDirectory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfsIncomeFilesDirectory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfsUser">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="webHdfsUtl">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sparkJobServer">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/rt#//JobServer"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="biServerUrl">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deployments" upperBound="-1">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/rt#//Deployment"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="zeppelinConnection" eType="//ZeppelinConnection"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DsBuildSpec" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="#//Dataset"
-        eOpposite="#//Dataset/buildSpec"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="//Dataset" eOpposite="//Dataset/buildSpec"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ASTBuildSpec" eSuperTypes="#//DsBuildSpec">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="#//Subquery"
-        containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ASTBuildSpec" eSuperTypes="//DsBuildSpec">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="//Subquery" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SQLBuildSpec" eSuperTypes="#//DsBuildSpec">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sql" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+  <eClassifiers xsi:type="ecore:EClass" name="SQLBuildSpec" eSuperTypes="//DsBuildSpec">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sql">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10485760)"/>
       </eAnnotations>
       <eAnnotations source="mspace.ui">
         <details key="multiline" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="usedDatasets" upperBound="-1"
-        eType="#//DatasetReference" containment="true" eOpposite="#//DatasetReference/buildSpec"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedDatasets" upperBound="-1" eType="//DatasetReference" containment="true" eOpposite="//DatasetReference/buildSpec"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ClassificationFieldSpec">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="#//Dataset"
-        eOpposite="#//Dataset/classificationFieldSpecs"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dsField" eType="#//ClassifiedField">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="//Dataset" eOpposite="//Dataset/classificationFieldSpecs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dsField" eType="//ClassifiedField">
       <eAnnotations source="mspace.ui">
         <details key="filter" value="auto"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" eType="#//ClassificationRule"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="resultExpr" eType="#//ConstantExpr"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" eType="//ClassificationRule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultExpr" eType="//ConstantExpr" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JoinClause">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="#//Subquery"
-        eOpposite="#//Subquery/joinClause"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="tableReference" lowerBound="1"
-        eType="#//TableReference" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="joinedReference" upperBound="-1"
-        eType="#//JoinedReference" containment="true" eOpposite="#//JoinedReference/joinClause"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="//Subquery" eOpposite="//Subquery/joinClause"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableReference" lowerBound="1" eType="//TableReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinedReference" upperBound="-1" eType="//JoinedReference" containment="true" eOpposite="//JoinedReference/joinClause"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JoinedReference">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="joinClause" eType="#//JoinClause"
-        eOpposite="#//JoinClause/joinedReference"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="joinType" lowerBound="1"
-        eType="#//JoinType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="joinExpr" upperBound="-1"
-        eType="#//JoinedFields" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="joinedReference" lowerBound="1"
-        eType="#//TableReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinClause" eType="//JoinClause" eOpposite="//JoinClause/joinedReference"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="joinType" lowerBound="1" eType="//JoinType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinExpr" upperBound="-1" eType="//JoinedFields" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinedReference" lowerBound="1" eType="//TableReference" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TableReference" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fieldSpecs" upperBound="-1"
-        eType="#//DsFieldSpec" containment="true" eOpposite="#//DsFieldSpec/tableReference"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fieldSpecs" upperBound="-1" eType="//DsFieldSpec" containment="true" eOpposite="//DsFieldSpec/tableReference"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Subquery" eSuperTypes="#//TableReference">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="joinClause" lowerBound="1"
-        eType="#//JoinClause" containment="true" eOpposite="#//JoinClause/subquery"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="whereClause" eType="#//BinaryExpr"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="unionSubquery" eType="#//UnionSubquery"
-        containment="true" eOpposite="#//UnionSubquery/subquery"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Subquery" eSuperTypes="//TableReference">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinClause" lowerBound="1" eType="//JoinClause" containment="true" eOpposite="//JoinClause/subquery"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whereClause" eType="//BinaryExpr" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unionSubquery" eType="//UnionSubquery" containment="true" eOpposite="//UnionSubquery/subquery"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DatasetReference">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="buildSpec" eType="#//SQLBuildSpec"
-        eOpposite="#//SQLBuildSpec/usedDatasets"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" lowerBound="1"
-        eType="#//AbstractDataset"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterConstraints" upperBound="-1"
-        eType="#//ParameterConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildSpec" eType="//SQLBuildSpec" eOpposite="//SQLBuildSpec/usedDatasets"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" lowerBound="1" eType="//AbstractDataset"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterConstraints" upperBound="-1" eType="//ParameterConstraint" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DsFieldSpec" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="#//DataType"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="tableReference" eType="#//TableReference"
-        eOpposite="#//TableReference/fieldSpecs"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="//DataType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableReference" eType="//TableReference" eOpposite="//TableReference/fieldSpecs"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DsReferenceFieldSpec" eSuperTypes="#//DsFieldSpec">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedField" eType="#//DsField"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DsReferenceFieldSpec" eSuperTypes="//DsFieldSpec">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedField" eType="//DsField"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SubqueryFieldSpec" abstract="true" eSuperTypes="#//DsFieldSpec"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SubqueryReferenceFieldSpec" eSuperTypes="#//DsFieldSpec">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedFieldSpec" eType="#//DsFieldSpec"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubqueryFieldSpec" abstract="true" eSuperTypes="//DsFieldSpec"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubqueryReferenceFieldSpec" eSuperTypes="//DsFieldSpec">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedFieldSpec" eType="//DsFieldSpec"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExpressionRuleSpec" eSuperTypes="#//SubqueryFieldSpec">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpressionRuleSpec" eSuperTypes="//SubqueryFieldSpec">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="//Expr" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JoinedFields">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rootSide" eType="#//DsFieldSpec"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="joinedSide" eType="#//DsFieldSpec"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootSide" eType="//DsFieldSpec"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinedSide" eType="//DsFieldSpec"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="JoinType">
     <eLiterals name="INNER"/>
@@ -197,13 +211,14 @@
     <eLiterals name="CROSS_JOIN" value="4"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UnionSubquery">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="#//Subquery"
-        eOpposite="#//Subquery/unionSubquery"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="//Subquery" eOpposite="//Subquery/unionSubquery"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ParameterConstraint">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="#//ParameterField"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" eType="#//Op"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sqlExpr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="//ParameterField"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" eType="//Op"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sqlExpr">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Op">
     <eLiterals name="AND"/>
@@ -227,242 +242,311 @@
     <eLiterals name="IS_NOT_EMPTY" value="18"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataTypeOps">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" lowerBound="1"
-        eType="ecore:EEnum http://www.neoflex.ru/meta/dataset#//DataTypeDomain"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="availableOps" upperBound="-1"
-        eType="#//Op"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" lowerBound="1">
+      <eType xsi:type="ecore:EEnum" href="http://www.neoflex.ru/meta/dataset#//DataTypeDomain"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="availableOps" upperBound="-1" eType="//Op"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ParamEntry">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="#//ParameterField"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" upperBound="-1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="//ParameterField"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" upperBound="-1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Expr" abstract="true">
-    <eOperations name="eval" eType="#//ScalarType">
-      <eParameters name="parameters" upperBound="-1" eType="#//ParamEntry"/>
+    <eOperations name="eval" eType="//ScalarType">
+      <eParameters name="parameters" upperBound="-1" eType="//ParamEntry"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BinaryExpr" eSuperTypes="#//NonTerminalExpr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1" eType="#//Expr"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" lowerBound="1"
-        eType="#//Op"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" eType="#//Expr"
-        containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryExpr" eSuperTypes="//NonTerminalExpr">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1" eType="//Expr" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" lowerBound="1" eType="//Op"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" eType="//Expr" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="UnaryExpr" eSuperTypes="#//NonTerminalExpr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" lowerBound="1" eType="#//Expr"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" lowerBound="1"
-        eType="#//Op"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UnaryExpr" eSuperTypes="//NonTerminalExpr">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" lowerBound="1" eType="//Expr" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" lowerBound="1" eType="//Op"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TerminalExpr" abstract="true" eSuperTypes="#//Expr"/>
-  <eClassifiers xsi:type="ecore:EClass" name="FieldRefExpr" eSuperTypes="#//TerminalExpr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fieldRef" eType="#//DsField"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TerminalExpr" abstract="true" eSuperTypes="//Expr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldRefExpr" eSuperTypes="//TerminalExpr">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fieldRef" eType="//DsField"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ParameterExpr" eSuperTypes="#//TerminalExpr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="#//ParameterField"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterExpr" eSuperTypes="//TerminalExpr">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="//ParameterField"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ConstantExpr" eSuperTypes="#//TerminalExpr">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" upperBound="-1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="requireTypeCast" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
-        defaultValueLiteral="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstantExpr" eSuperTypes="//TerminalExpr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" upperBound="-1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="requireTypeCast" defaultValueLiteral="true">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ClassificationRule">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="effectiveDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="classificationExpressions"
-        upperBound="-1" eType="#//ClassificationExpression" containment="true" eOpposite="#//ClassificationExpression/rule"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="effectiveDate">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classificationExpressions" upperBound="-1" eType="//ClassificationExpression" containment="true" eOpposite="//ClassificationExpression/rule"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnabled" defaultValueLiteral="true">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ClassificationExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" eType="#//ClassificationRule"
-        eOpposite="#//ClassificationRule/classificationExpressions"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" upperBound="-1"
-        eType="#//NonTerminalExpr" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" eType="//ClassificationRule" eOpposite="//ClassificationRule/classificationExpressions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" upperBound="-1" eType="//NonTerminalExpr" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnabled" defaultValueLiteral="true">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ReportDataset" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="reportForm" eType="#//ReportForm"
-        eOpposite="#//ReportForm/datasets"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="#//AbstractDataset"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterConstraints" upperBound="-1"
-        eType="#//ParameterConstraint" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sortByFields" upperBound="-1"
-        eType="#//FieldSort" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reportForm" eType="//ReportForm" eOpposite="//ReportForm/datasets"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="//AbstractDataset"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterConstraints" upperBound="-1" eType="//ParameterConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sortByFields" upperBound="-1" eType="//FieldSort" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="KlikoExportDataset" eSuperTypes="#//ExportedDataset">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="klikoField" eType="#//DsField"/>
+  <eClassifiers xsi:type="ecore:EClass" name="KlikoExportDataset" eSuperTypes="//ExportedDataset">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="klikoField" eType="//DsField"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DetalizationDataset" eSuperTypes="#//ReportDataset"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SummaryDataset" eSuperTypes="#//ReportDataset"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DetalizationDataset" eSuperTypes="//ReportDataset"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SummaryDataset" eSuperTypes="//ReportDataset"/>
   <eClassifiers xsi:type="ecore:EClass" name="ReportParameter">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterType" eType="ecore:EEnum http://www.neoflex.ru/meta/dataset#//DataTypeDomain"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lookupField" eType="#//DsField"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="reportForm" eType="#//ReportForm"
-        eOpposite="#//ReportForm/parameters"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterType">
+      <eType xsi:type="ecore:EEnum" href="http://www.neoflex.ru/meta/dataset#//DataTypeDomain"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lookupField" eType="//DsField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reportForm" eType="//ReportForm" eOpposite="//ReportForm/parameters"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ReportParameterValue">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="#//ReportParameter"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//ConstantExpr"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="//ReportParameter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="//ConstantExpr" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ReportForm">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="datasets" upperBound="-1"
-        eType="#//ReportDataset" containment="true" eOpposite="#//ReportDataset/reportForm"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-        eType="#//ReportParameter" containment="true" eOpposite="#//ReportParameter/reportForm"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datasets" upperBound="-1" eType="//ReportDataset" containment="true" eOpposite="//ReportDataset/reportForm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1" eType="//ReportParameter" containment="true" eOpposite="//ReportParameter/reportForm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/auth#//AuditInfo"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Status">
     <eLiterals name="NOT_STARTED"/>
     <eLiterals name="WORK_IN_PROGRESS" value="1"/>
     <eLiterals name="FINISHED" value="2"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AppUser" eSuperTypes="http://www.neoflex.ru/meta/auth#//UserInfo">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AppUser">
+    <eSuperTypes href="http://www.neoflex.ru/meta/auth#//UserInfo"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnabled">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Report">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deadlineDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signingDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//Status"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibleUser" eType="#//AppUser"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="reportForm" eType="#//ReportForm"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterValues" upperBound="-1"
-        eType="#//ReportParameterValue" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationTime">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deadlineDate">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signingDate">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="//Status"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibleUser" eType="//AppUser"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reportForm" eType="//ReportForm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterValues" upperBound="-1" eType="//ReportParameterValue" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/auth#//AuditInfo"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LookupDataset" eSuperTypes="#//Dataset">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lookupField" eType="#//DsField"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="displayField" eType="#//DsField"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LookupDataset" eSuperTypes="//Dataset">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lookupField" eType="//DsField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="displayField" eType="//DsField"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExportedDataset" eSuperTypes="#//ReportDataset">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fieldsToExport" upperBound="-1"
-        eType="#//DsField"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="exportFormat" eType="#//ExportFormat"
-        containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExportedDataset" eSuperTypes="//ReportDataset">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fieldsToExport" upperBound="-1" eType="//DsField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportFormat" eType="//ExportFormat" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CsvExportedDataset" eSuperTypes="#//ExportedDataset">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldDelimiter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        defaultValueLiteral="|"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeHeaders" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CsvExportedDataset" eSuperTypes="//ExportedDataset">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldDelimiter" defaultValueLiteral="|">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeHeaders" defaultValueLiteral="true">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FuncallExpr" eSuperTypes="#//TerminalExpr">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fun" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
-        eType="#//Expr" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FuncallExpr" eSuperTypes="//TerminalExpr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fun">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1" eType="//Expr" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SortDirection">
     <eLiterals name="ASC"/>
     <eLiterals name="DESC" value="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FieldSort">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="#//DsField"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sortDirection" eType="#//SortDirection"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="//DsField"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sortDirection" eType="//SortDirection"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractDataset">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="businessName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="datasetDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dataFields" upperBound="-1"
-        eType="#//DsField" containment="true" eOpposite="#//DsField/dataset"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataAnalysisLink" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="publications" upperBound="-1"
-        eType="#//DatasetPublication" containment="true" eOpposite="#//DatasetPublication/dataset"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="businessName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="datasetDescription">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataFields" upperBound="-1" eType="//DsField" containment="true" eOpposite="//DsField/dataset"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataAnalysisLink">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="publications" upperBound="-1" eType="//DatasetPublication" containment="true" eOpposite="//DatasetPublication/dataset"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/auth#//AuditInfo"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExternalDataset" eSuperTypes="#//AbstractDataset">
+  <eClassifiers xsi:type="ecore:EClass" name="ExternalDataset" eSuperTypes="//AbstractDataset">
     <eOperations name="refreshScheme">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РћР±РЅРѕРІРёС‚СЊ СЃС…РµРјСѓ"/>
+        <details key="caption" value="&#x420;&#x45b;&#x420;&#xb1;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a; &#x421;&#x403;&#x421;&#x2026;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x453;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sqlExpr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sqlExpr">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10485760)"/>
       </eAnnotations>
       <eAnnotations source="mspace.ui">
         <details key="multiline" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Context"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Context"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExportFormat" abstract="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="CsvFormat" eSuperTypes="#//ExportFormat">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldDelimiter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        defaultValueLiteral="|"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quoteField" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        defaultValueLiteral=""/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeHeaders" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="false"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExcelFormat" eSuperTypes="#//ExportFormat"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OperationLogEntry">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="finishTs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="datasetName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jobId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="teneo.jpa">
-        <details key="value" value="@Column(length=10485760)"/>
-      </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="CsvFormat" eSuperTypes="//ExportFormat">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldDelimiter" defaultValueLiteral="|">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="opStatus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quoteField" defaultValueLiteral="">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeHeaders" defaultValueLiteral="false">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExcelFormat" eSuperTypes="//ExportFormat"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OperationLogEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTs">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="finishTs">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="datasetName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jobId">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameters">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10485760)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="opStatus">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorText">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ZeppelinConnection">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseUrl">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DatasetPublication">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="#//AbstractDataset"
-        eOpposite="#//AbstractDataset/publications"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="//AbstractDataset" eOpposite="//AbstractDataset/publications"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="KlikoFormat" eSuperTypes="#//ExportFormat"/>
+  <eClassifiers xsi:type="ecore:EClass" name="KlikoFormat" eSuperTypes="//ExportFormat"/>
   <eClassifiers xsi:type="ecore:EClass" name="DatasetNavigation">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="#//AbstractDataset"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="navigationItems" upperBound="-1"
-        eType="#//DatasetNavigationItem" containment="true" eOpposite="#//DatasetNavigationItem/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataset" eType="//AbstractDataset"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="navigationItems" upperBound="-1" eType="//DatasetNavigationItem" containment="true" eOpposite="//DatasetNavigationItem/parent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DatasetNavigationItem">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//DatasetNavigation"
-        eOpposite="#//DatasetNavigation/navigationItems"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="toDataset" eType="#//AbstractDataset"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="//DatasetNavigation" eOpposite="//DatasetNavigation/navigationItems"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toDataset" eType="//AbstractDataset"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterExpression">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="RuleExecutionOption">
     <eLiterals name="OVERWRITE"/>
     <eLiterals name="CONCATENATE" value="1"/>
     <eLiterals name="INSERT_NEW" value="2"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NonTerminalExpr" abstract="true" eSuperTypes="#//Expr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NonTerminalExpr" abstract="true" eSuperTypes="//Expr"/>
 </ecore:EPackage>
