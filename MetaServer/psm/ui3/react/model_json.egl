@@ -40,10 +40,6 @@ import "ui3_utils.eol";
         {"name": "ecore.EClass", "_type_": "ecore.EClass"},
         {"name": "ui3.Application", "_type_": "ecore.EClass"},
         {"name": "ui3.Module", "_type_": "ecore.EClass"},
-        [% application.name.println();%]
-        [% "application.~topClasses.json".println(); %]
-        [%  application.~topClasses.println(); %]
-
         [%for (eClass in application.~topClasses.values()) {%]
         {"name": "[%=eClass.getQName()%]", "_type_": "ecore.EClass"}[%if (hasMore) {%],[%}%]
       	[%}%]
@@ -124,7 +120,7 @@ import "ui3_utils.eol";
 	  {
 	      "name": "[%=sf.name%]",
 	      "type": "[%=fieldType%]"[%if (defaultValue.isDefined()) {%],
-	      "defaultValue": "[%=defaultValue.replace('\n', '\\\\n')%]"[%}%][%if (fieldType == "enum") {%],
+	      "defaultValue": "[%=defaultValue.replace('\r', '').replace('\n', '\\\\n')%]"[%}%][%if (fieldType == "enum") {%],
 	      "options": [[%=sf.eType.eLiterals.collect(eLiteral|'"' + eLiteral.name + '"').concat(", ")%]][%}%][%if (sf.getAnnotation("mspace.ui", "readOnly", "false") == "true") {%],
 	      "readOnly": true[%}%][%if (sf.getAnnotation("mspace.ui", "hidden", "false") == "true") {%],
 	      "hidden": true

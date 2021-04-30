@@ -61,11 +61,11 @@ public class GenerateEcoreTask extends Task {
 
             Files.find(Paths.get(baseDir.toURI()),
                     Integer.MAX_VALUE,
-                    (filePath, fileAttr) -> filePath.toFile().getName().endsWith(".ecore"))
+                    (filePath, fileAttr) -> filePath.toFile().getName().endsWith(".ecore") && !filePath.toFile().getAbsolutePath().contains("target"))
                     .forEach(f -> registerPackages(f.toFile()));
             Files.find(Paths.get(baseDir.toURI()),
                     Integer.MAX_VALUE,
-                    (filePath, fileAttr) -> filePath.toFile().getName().endsWith(".emf"))
+                    (filePath, fileAttr) -> filePath.toFile().getName().endsWith(".emf") && !filePath.toFile().getAbsolutePath().contains("target"))
                     .forEach(f -> processFile(f));
 
 

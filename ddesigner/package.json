@@ -4,7 +4,7 @@
   "private": true,
   "proxy": {
     "/*": {
-      "target": "http://localhost:8089",
+      "target": "http://localhost:8080",
       "ws": true
     }
   },
