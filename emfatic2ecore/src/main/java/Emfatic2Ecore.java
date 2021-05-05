@@ -16,9 +16,9 @@ import java.util.Objects;
 public class Emfatic2Ecore {
     private static boolean contains(Path path, String sub) {
         for (Path s1: path) {
-            if (s1.toString().equals(sub)) return false;
+            if (s1.toString().equals(sub)) return true;
         }
-        return true;
+        return false;
     }
 
     public static void main(String[] args) throws Exception {
