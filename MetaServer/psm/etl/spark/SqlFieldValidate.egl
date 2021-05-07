@@ -4,7 +4,7 @@ import "Utils.egl";
 import spark.implicits._
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
-
+import scala.collection.mutable
 [%
 var fields1 = Sequence{};
 var fields2 = Sequence{};
@@ -21,6 +21,10 @@ for (f in field.get('sourceFields')) {
 }
  
 %]
+val jobParameters: mutable.HashMap[String, AnyRef] = new mutable.HashMap[String, AnyRef]()
+[%for (param in parameters) {%]
+jobParameters.put("[%=param.get("name")%]", s"""[%=param.get("value").replace("\\\\/", "/")%]""")
+[%}%]
 
 [%if(field.get("parentType") == "devs.transformation.Projection") { %]
 val df = Seq(([%for (f in fields1) {%]null.asInstanceOf[[%=f.get('javaDomain')%]][%if (hasMore){%],[%}%][%}%])).toDF([%for (f in fields1) {%]"[%=f.get('name')%]"[%if (hasMore){%],[%}%][%}%])
@@ -30,6 +34,6 @@ val df2 = Seq(([%for (f in fields2) {%]null.asInstanceOf[[%=f.get('javaDomain')%
 val df = df1.joinWith(df2, df1("fakeFieldIDDQD") === df2("fakeFieldIDDQD"))
 [%}%]
 
-val ftype = df.select(expr(s"""[%=interpolareParameters(field.get("expression"))%]""").alias("[%=field.get('fieldName')%]")).schema("[%=field.get('fieldName')%]").dataType.typeName
+val ftype = df.select(expr(s"""[%=interpolareParameters(field.get("expression"))%]""").alias("[%=field.get('name')%]")).schema("[%=field.get('name')%]").dataType.typeName
 
 assert(ftype.startsWith("[%=field.get('dataTypeDomain')%]".toLowerCase))
