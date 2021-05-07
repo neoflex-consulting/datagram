@@ -190,17 +190,15 @@ function stepInputPortHasChanged(transformation, transformationStep, inputPort, 
                 }
             } else {
                 transformationStep.outputPort.fields.forEach(field => {
-                    if (field.name === oldField.name) {
-                        if (field._type_ === "etl.ProjectionField") {
-                            field.sourceFields = field.sourceFields.filter(sf => sf !== oldField)
-                            if (field.sourceFields.length === 0) field.toDelete = true
+                    if (field._type_ === "etl.ProjectionField") {
+                        field.sourceFields = field.sourceFields.filter(sf => sf !== oldField)
+                        if (field.sourceFields.length === 0) field.toDelete = true
+                    }
+                    else if (field._type_ === "etl.UnionField") {
+                        if (field.inputPortField === oldField) {
+                            field.inputPortField = undefined
                         }
-                        else if (field._type_ === "etl.UnionField") {
-                            if (field.inputPortField && field.inputPortField.name === oldField.name) {
-                                field.inputPortField = undefined
-                            }
-                            if (!field.inputPortField && !field.unionPortField) field.toDelete = true
-                        }
+                        if (!field.inputPortField && !field.unionPortField) field.toDelete = true
                     }
                 })
                 transformationStep.outputPort.fields = transformationStep.outputPort.fields.filter(field => field.toDelete !== true)
