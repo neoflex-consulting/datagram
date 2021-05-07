@@ -7,35 +7,65 @@
     <groupId>ru.neoflex.meta</groupId>
     <artifactId>emfatic2ecore</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <repositories>
+        <repository>
+            <id>Sonatype</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
+    <properties>
+        <epsilon.scope>compile</epsilon.scope>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.eclipse.emfatic/org.eclipse.emfatic.core -->
         <dependency>
             <groupId>org.eclipse.emfatic</groupId>
             <artifactId>org.eclipse.emfatic.core</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.eclipse.emfatic/org.eclipse.gymnast.runtime.core -->
         <dependency>
-            <groupId>org.eclipse.emfatic</groupId>
-            <artifactId>org.eclipse.gymnast.runtime.core</artifactId>
-            <version>1.0.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.eclipse.emfatic/org.eclipse.emf.emfatic -->
-        <dependency>
-            <groupId>org.eclipse.emfatic</groupId>
-            <artifactId>org.eclipse.emf.emfatic</artifactId>
-            <version>0.8.0</version>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-emf</artifactId>
+            <version>1.5.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
+
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>Emfatic2Ecore</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
