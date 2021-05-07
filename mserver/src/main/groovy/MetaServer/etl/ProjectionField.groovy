@@ -10,14 +10,16 @@ import org.eclipse.epsilon.common.util.StringProperties;
 
 /* protected region MetaServer.etlProjectionField.inport on begin */
 import MetaServer.utils.Scala
+
 /* protected region MetaServer.etlProjectionField.inport end */
+
 class ProjectionField {
     /* protected region MetaServer.etlProjectionField.statics on begin */
     /* protected region MetaServer.etlProjectionField.statics end */
     private final static Log logger = LogFactory.getLog(Transformation.class);
 
     public static Object test(Map entity, Map params = null) {
-    /* protected region MetaServer.etlProjectionField.test on begin */
+        /* protected region MetaServer.etlProjectionField.test on begin */
         def scalaSvc = Context.current.contextSvc.scalaSvc
         def result = [result: true]
         def inputs = [
@@ -29,28 +31,28 @@ class ProjectionField {
         def script = Scala.makeScript(inputs, entity.expression, Scala.getJavaType(entity.dataTypeDomain.toString()))
         scalaSvc.compile(script, inputs, result)
         return result
-    /* protected region MetaServer.etlProjectionField.test end */
+        /* protected region MetaServer.etlProjectionField.test end */
     }
 
     public static Object validateSQLField(Map entity, Map params = null) {
-      def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SqlFieldValidate.egl", [field: entity], [])
+        def trd = Transformation.findOrCreateTRD(entity.parent)
+        def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/SqlFieldValidate.egl", [field: entity, parameters: trd.parameters], [])
 
-      def livyServer = LivyServer.findCurrentLivyServer(Transformation.findOrCreateTRD(entity.parent), params)
+        def livyServer = LivyServer.findCurrentLivyServer(trd, params)
 
-      def deployDir = Context.current.getContextSvc().getDeployDir().getAbsolutePath();
-      def sessionId = LivyServer.getSessionId(params, livyServer)
-      def result = LivyServer.executeStatementAndWait(sessionId, code, logger, livyServer)
+        def sessionId = LivyServer.getSessionId(params, livyServer)
+        def result = LivyServer.executeStatementAndWait(sessionId, code, logger, livyServer)
 
-      if (result.output.status == 'error') {
-          return [result: "text/plain:${result.output}", sessionId:sessionId]
-      } else {
-          result = result.output.data
-          if (params.outputType == 'json') {
-              def jsonData = (result =~ /\{.*\}/)[0]
-              return [result: true, message: jsonData, sessionId: sessionId]
-          } else {
-              return [result: true, message: result, sessionId: sessionId]
-          }
-      }
+        if (result.output.status == 'error') {
+            return [result: "text/plain:${result.output}", sessionId: sessionId]
+        } else {
+            result = result.output.data
+            if (params.outputType == 'json') {
+                def jsonData = (result =~ /\{.*\}/)[0]
+                return [result: true, message: jsonData, sessionId: sessionId]
+            } else {
+                return [result: true, message: result, sessionId: sessionId]
+            }
+        }
     }
 }
