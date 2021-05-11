@@ -101,7 +101,7 @@ spark.sql("select * from dm_long_time_no_sale").show()
 ![img_22.png](img_22.png)  
 
 ## Дальнейшие шаги
-Справочная система встроена в программу:
+Справочная система встроена в программу:  
 ![img_26.png](img_26.png)  
 По ссылке [LabWorks](https://github.com/neoflex-consulting/datagram/tree/master/MetaServer/DOC/Labs) 
 расположены лабораторные работы для дальнейшего самостоятельного изучения Датаграм.
