@@ -1,7 +1,16 @@
 
 # Быстрый старт
+Рассмотрим решение модельной задачи с помощью Датаграм. 
+В качестве источника данных используется БД AdventureWorks, 
+первоначально [опубликованная](https://github.com/microsoft/sql-server-samples/tree/master/samples/databases/adventure-works) 
+компанией Микрософт и [сконвертированную](https://github.com/lorint/AdventureWorks-for-Postgres) 
+в БД Postgres.
+Модельная задача взята из книги **REAL SQL QUERIES 50 CHALLENGES** (QUESTION 17: LONG TIME NO SALE).
 
 ## Постановка задачи
+Необходимо найти всё магазины, 
+в которых дата последнего заказа раньше, чем 12 месяцев назад. 
+Принять в качестве текущей даты - 07.11.2008.
 
 ## Просмотр данных источников
 
