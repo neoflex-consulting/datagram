@@ -19369,7 +19369,7 @@
 	  {
 	      "name": "sparkVersion",
 	      "type": "enum",
-	      "options": ["DEFAULT", "SPARK2", "SPARK3"]
+	      "options": ["SPARK2", "SPARK3"]
       },
 	  {
 	      "name": "description",

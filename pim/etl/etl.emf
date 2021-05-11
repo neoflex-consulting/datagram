@@ -346,6 +346,7 @@ class SQLSource extends Source {
 }
 
 class LocalSource extends Source {
+  @teneo.jpa(value="@Column(length=2048)")
   attr String[1] localFileName;
   attr LocalFileFormat[1] localFileFormat = "JSON";
   attr Boolean streaming;
@@ -1023,7 +1024,6 @@ enum HiveTargetType {
 }
 
 enum SparkVersion {
-  DEFAULT = 0;
   SPARK2 = 2;
   SPARK3 = 3;
 }

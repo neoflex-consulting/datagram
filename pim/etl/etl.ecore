@@ -595,6 +595,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LocalSource" eSuperTypes="//Source">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="localFileName" lowerBound="1">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=2048)"/>
+      </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="localFileFormat" lowerBound="1" eType="//LocalFileFormat" defaultValueLiteral="JSON"/>
@@ -1710,7 +1713,6 @@
     <eLiterals name="ERROR" value="3"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SparkVersion">
-    <eLiterals name="DEFAULT"/>
     <eLiterals name="SPARK2" value="2"/>
     <eLiterals name="SPARK3" value="3"/>
   </eClassifiers>
