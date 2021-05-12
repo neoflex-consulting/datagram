@@ -487,7 +487,7 @@ operation tableNameIsValid(name): Boolean {
     }
     var i = 1;
     while (i < name.length()) {
-	    if (not ".".equals(name.charAt(i)) and not Native("java.lang.Character").isJavaIdentifierPart(name.charAt(i))) {
+	    if (not ".".charAt(0) <> name.charAt(i) and not Native("java.lang.Character").isJavaIdentifierPart(name.charAt(i))) {
 	        return false;
 	    }
 	    i = i + 1;
