@@ -308,10 +308,16 @@
 <!--            </exclusions>-->
 <!--        </dependency>-->
         <!-- use a newer version of icu4j -->
+<!--        <dependency>-->
+<!--            <groupId>com.ibm.icu</groupId>-->
+<!--            <artifactId>icu4j</artifactId>-->
+<!--            <version>3.4.4</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.ibm.icu/icu4j -->
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
-            <version>3.4.4</version>
+            <version>69.1</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.epsilon</groupId>
@@ -459,7 +465,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.192</version>
+            <version>1.4.200</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
