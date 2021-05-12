@@ -17,7 +17,8 @@ RUN apk add --no-cache \
     'coreutils=~8.31' \
     'procps=~3.3' \
     'findutils=~4.6' \
-    'ncurses=~6.1'
+    'ncurses=~6.1' \
+    jq
 
 # https://github.com/hadolint/hadolint/wiki/DL4006
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
