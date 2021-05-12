@@ -1,0 +1,35 @@
+Schema: humanresources
+Schema: person
+URL: jdbc:postgresql://hivemetastore:5432/Adventureworks
+User: postgres
+Password: new_password
+Driver: org.postgresql.Driver
+
+Name: tr_salary_step1
+Description: Формирование таблицы фактов повышения ЗП за предыдущий год
+
+Name: currentDate
+Value: 2013-12-01
+Description: Переменная для бизнес-правила: Повышение ЗП максимум 1 раз в год
+
+Spark SQL: Salary
+where months_between(cast('${jobParameters("currentDate")}' as date), ratechangedate, true) <= 12
+&currentDate
+
+Name: personName
+Expression:
+		concat( 
+		 if(_2.firstname is null, '', _2.firstname), 
+		 ' ', 
+		 if(_2.middlename is null, '', _2.middlename), 
+		 ' ',
+		 if(_2.lastname is null, '', _2.lastname) 
+		)
+		
+Path: /tmp/salary/lastYear.xls		
+
+Local File Name: /tmp/salary/lastYearSalary
+
+Hive: spark.sql("show tables").show()
+http://localhost:8888/
+
