@@ -33,3 +33,53 @@ Local File Name: /tmp/salary/lastYearSalary
 Hive: spark.sql("show tables").show()
 http://localhost:8888/
 
+
+Name: tr_salary_step2
+Description: Формирование таблицы плана повышения ЗП
+
+Name: maxRate
+Value: 20
+Description: Переменная для бизнес-правила: Максимальное повышение ЗП на 20% в год
+
+
+Aggregation: sumUpSalary
+Result Field Name: sumUpSalary
+Result Field Name: countUpSalary
+
+Projectin: excessSumAndCount
+Name: excessSum
+_2.sumUpSalary >= cast(&maxRate as integer)
+
+Name: maxRate
+cast(&maxRate as integer)
+
+Join: tableFactUp
+Name: newSum
+Expression: 
+if (_2.sumUpSalary is null, 
+    20, 
+   if(_2.sumUpSalary >= &maxRate,
+        0,
+       _2.sumUpSalary
+        )
+)
+
+
+selectNotExcessSum
+Expression: excessSum == false AND excessCount == true
+
+Local File Name: /tmp/salary/tableUpSalaryConflict
+
+Local File Name: /tmp/salary/tableUpSalary
+
+
+
+Workflow: wf_salary_analysis
+
+Name: currentDate
+Value: 2013-12-01
+Description: Переменная для бизнес-правила: Повышение ЗП максимум 1 раз в год
+
+Name: maxRate
+Value: 20
+Description: Переменная для бизнес-правила: Максимальное повышение ЗП на 20% в год
