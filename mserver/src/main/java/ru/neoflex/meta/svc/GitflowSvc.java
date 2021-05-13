@@ -245,6 +245,12 @@ public class GitflowSvc extends BaseSvc {
                 setCurrentBranch(branch);
                 logger.info(String.format("Updating new scheme"));
                 updateScheme();
+                try {
+                    copySequences(getSchema(branch), getSchema(currentBranch));
+                }
+                catch (Throwable e) {
+                    logger.error(e.getMessage());
+                }
             }
         });
         tagCurrentAsSynced();
@@ -368,6 +374,20 @@ public class GitflowSvc extends BaseSvc {
             logger.info(String.format("Copy table %s", tablename));
             createTable(tablename, name, template);
             copyTable(tablename, name, template);
+        }
+        Context.getCurrent().savepoint();
+    }
+
+    public void copySequences(String name, String template) {
+        Session session = Context.getCurrent().getSession();
+        String querySeqs = "select quote_ident(sequence_name) from information_schema.sequences where sequence_schema = '%s'";
+        List<String> seqs = session.createSQLQuery(String.format(querySeqs, name)).list();
+        for (String seq: seqs) {
+            String queryLast = "select last_value from %.%";
+            Long lastValue = (Long) session.createSQLQuery(String.format(queryLast, template, seq)).uniqueResult();
+            logger.info(String.format("Set sequence %s value %d", seq, lastValue));
+            String setLast = "select pg_catalog.setval('%s.%s', %d, true)";
+            session.createSQLQuery(String.format(setLast, name, seq, lastValue)).list();
         }
         Context.getCurrent().savepoint();
     }
