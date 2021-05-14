@@ -210,7 +210,7 @@ public class GitflowSvc extends BaseSvc {
         }
     }
 
-    public void deleteBranch(String branch) throws IOException, GitAPIException {
+    public void deleteBranch(String branch, String username, String password) throws IOException, GitAPIException {
         checkBranch(branch);
         if (MASTER.equals(branch)) {
             throw new RuntimeException("Cant delete " + MASTER);
@@ -218,6 +218,17 @@ public class GitflowSvc extends BaseSvc {
         String currentBranch = getCurrentBranch();
         String parentBranch = getParentBranch(branch);
         BranchUtils.deleteBranch(branch, repository);
+        RefSpec refSpec = new RefSpec()
+                .setSource(null)
+                .setDestination("refs/heads/" + branch);
+        Git git = new Git(repository);
+        PushCommand pushCommand = git.push().setRefSpecs(refSpec);
+        pushCommand.setRemote("origin");
+        if (StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(password)) {
+            CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(username, password);
+            pushCommand.setCredentialsProvider(credentialsProvider);
+        }
+        pushCommand.call();
         contextSvc.inContext(new Runnable() {
             @Override
             public void run() {
@@ -446,10 +457,11 @@ public class GitflowSvc extends BaseSvc {
         }
     }
 
-    public<T> T inDir(String dir, String message, BiFunction<Path, Path, T> transact) throws Exception {
+    public <T> T inDir(String dir, String message, BiFunction<Path, Path, T> transact) throws Exception {
         return inDir(dir, message, null, transact);
     }
-    public<T> T inDir(String dir, String message, Consumer<Path> pre, BiFunction<Path, Path, T> transact) throws Exception {
+
+    public <T> T inDir(String dir, String message, Consumer<Path> pre, BiFunction<Path, Path, T> transact) throws Exception {
         Path temp = Files.createTempDirectory("dg");
         try {
             if (pre != null) {
@@ -463,7 +475,7 @@ public class GitflowSvc extends BaseSvc {
         }
     }
 
-    public<T> T inCopy(String dir, String message, Function<File, T> process) throws Exception {
+    public <T> T inCopy(String dir, String message, Function<File, T> process) throws Exception {
         Path temp = Files.createTempDirectory("dg");
         try {
             inGitTransaction(null, () -> {
@@ -688,6 +700,7 @@ public class GitflowSvc extends BaseSvc {
         }
     }
 
+
     public void push(String remote, String username, String password) throws IOException, GitAPIException {
         Git git = new Git(repository);
         PushCommand command = git.push().setProgressMonitor(progressMonitor);
@@ -703,10 +716,18 @@ public class GitflowSvc extends BaseSvc {
     }
 
     private void checkPushResult(Iterable<PushResult> results) {
+        results:
         for (PushResult result : results) {
+            updates:
             for (RemoteRefUpdate update : result.getRemoteUpdates()) {
                 RemoteRefUpdate.Status status = update.getStatus();
                 if (status != RemoteRefUpdate.Status.OK && status != RemoteRefUpdate.Status.UP_TO_DATE) {
+                    if (status == RemoteRefUpdate.Status.REJECTED_NONFASTFORWARD) {
+                        if (!update.getRemoteName().contains(getCurrentBranch())) {
+                            logger.warn("Local copy of remote " + update.getRemoteName() + " need to be updated");
+                            continue updates;
+                        }
+                    }
                     String msg = status.toString();
                     if (update.getMessage() != null) {
                         msg = msg + ": " + update.getMessage();
@@ -799,8 +820,7 @@ public class GitflowSvc extends BaseSvc {
     public void tagRepo(String tag) throws IOException, GitAPIException {
         try (Git git = new Git(repository)) {
             git.tag().setName(tag).setForceUpdate(true).setAnnotated(false).call();
-        }
-        catch (JGitInternalException e) {
+        } catch (JGitInternalException e) {
             logger.warn("tagRepo " + tag, e);
         }
     }
@@ -873,12 +893,12 @@ public class GitflowSvc extends BaseSvc {
         RevCommit commit = getLastCommit(gfs, gfsPath);
 //        PersonIdent authorIdent = commit.getAuthorIdent();
 //        Date authorDate = authorIdent.getWhen();
-        return commit == null ? null : new Date(commit.getCommitTime()*1000L);
+        return commit == null ? null : new Date(commit.getCommitTime() * 1000L);
     }
 
     public RevCommit getLastCommit(GitFileSystem gfs, GitPath gfsPath) throws IOException {
         String relPath = gfs.getRootPath().relativize(gfsPath).toString();
-        try(RevWalk revCommits = new RevWalk(gfs.getRepository())) {
+        try (RevWalk revCommits = new RevWalk(gfs.getRepository())) {
             revCommits.setTreeFilter(PathFilter.create(relPath));
             ObjectId branchId = gfs.getRepository().resolve(gfs.getStatusProvider().branch());
             revCommits.markStart(revCommits.parseCommit(branchId));
@@ -900,7 +920,7 @@ public class GitflowSvc extends BaseSvc {
                     .forEach(path -> importRefPath(path));
             return null;
         });
-        Map result = new HashMap(){{
+        Map result = new HashMap() {{
             put("result", true);
             put("problems", false);
         }};
