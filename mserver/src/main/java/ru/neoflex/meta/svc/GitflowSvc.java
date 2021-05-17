@@ -30,6 +30,7 @@ import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.*;
 import org.eclipse.jgit.merge.MergeFormatter;
+import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.transport.*;
@@ -759,7 +760,7 @@ public class GitflowSvc extends BaseSvc {
         }
     }
 
-    public void pull(String remoteBranchName, String remote, String username, String password) throws IOException, GitAPIException, URISyntaxException {
+    public void pull(String remoteBranchName, String remote, String username, String password, String strategy) throws IOException, GitAPIException, URISyntaxException {
         Git git = new Git(repository);
         PullCommand command = git.pull().setProgressMonitor(progressMonitor);
         if (StringUtils.isNotEmpty(remote)) {
@@ -777,6 +778,10 @@ public class GitflowSvc extends BaseSvc {
         if (StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(password)) {
             CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(username, password);
             command.setCredentialsProvider(credentialsProvider);
+        }
+        MergeStrategy mergeStrategy = MergeStrategy.get(strategy);
+        if(mergeStrategy != null){
+            command.setStrategy(mergeStrategy);
         }
         command.call();
     }

@@ -125,7 +125,7 @@ class BranchCommandForm extends React.Component {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({remote: values.remote||null, username: values.username||null,
-                        password: values.password||null, remoteBranch: values.remoteBranch||null})
+                        password: values.password||null, remoteBranch: values.remoteBranch||null, strategy: values.strategy||null})
                 }).then(branchInfo => {
                     this.props.context.updateContext({branchInfo})
                     localStorage.setItem("currentBranch", branchInfo.current)
@@ -226,6 +226,19 @@ class BranchCommandForm extends React.Component {
                         rules: [{required: false, message: 'Please select remote'}],
                     })(
                         <Input placeholder="Remote"/>
+                    )}
+                </Form.Item>}
+                {[COMMANDS.PULL].includes(COMMANDS[getFieldValue("command")]) &&
+                <Form.Item label="Merge Strategy">
+                    {getFieldDecorator('strategy', {
+                        rules: [{required: false, message: 'Please select merge strategy'}],
+                    })(
+                    <Select
+                        placeholder="Select merge strategy">
+                        <Option value="default">DEFAULT</Option>
+                        <Option value="ours">OURS</Option>
+                        <Option value="theirs">THEIRS</Option>
+                    </Select>
                     )}
                 </Form.Item>}
                 {[COMMANDS.PULL].includes(COMMANDS[getFieldValue("command")]) &&
