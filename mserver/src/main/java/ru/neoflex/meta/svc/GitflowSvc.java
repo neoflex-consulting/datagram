@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.marschall.pathclassloader.PathClassLoader;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -259,8 +260,7 @@ public class GitflowSvc extends BaseSvc {
                 updateScheme();
                 try {
                     copySequences(getSchema(branch), getSchema(currentBranch));
-                }
-                catch (Throwable e) {
+                } catch (Throwable e) {
                     logger.error(e.getMessage());
                 }
             }
@@ -394,7 +394,7 @@ public class GitflowSvc extends BaseSvc {
         Session session = Context.getCurrent().getSession();
         String querySeqs = "select quote_ident(sequence_name) from information_schema.sequences where sequence_schema = '%s'";
         List<String> seqs = session.createSQLQuery(String.format(querySeqs, name)).list();
-        for (String seq: seqs) {
+        for (String seq : seqs) {
             String queryLast = "select last_value from %s.%s";
             BigInteger lastValue = (BigInteger) session.createSQLQuery(String.format(queryLast, template, seq)).uniqueResult();
             logger.info(String.format("Set sequence %s value %d", seq, lastValue));
@@ -961,12 +961,27 @@ public class GitflowSvc extends BaseSvc {
             logger.info("EObject has empty name");
             return;
         }
+        String sourcesDir = "/sources/" + eClass.getName() + "/" + name;
+
         try {
             inGitTransaction("deleteEObject " + dir + "/" + name, (Callable<Void>) () -> {
                 Path modelPath = getCurrentGfs().getPath(dir);
+                Path sourcesPath = getCurrentGfs().getPath(sourcesDir);
+                if (!Files.isDirectory(sourcesPath)) {
+                    return null;
+                }
+                Files.walk(sourcesPath)
+                        .filter(Files::isRegularFile).forEach(path -> {
+                            try {
+                                Files.delete(path);
+                            } catch (IOException e) {
+                                // pass
+                            }
+                        });
                 if (!Files.isDirectory(modelPath)) {
                     return null;
                 }
+
                 Files.walk(modelPath)
                         .filter(Files::isRegularFile).
                         filter(file -> file.getFileName().toString().startsWith(name + "."))
@@ -977,6 +992,8 @@ public class GitflowSvc extends BaseSvc {
                                 // pass
                             }
                         });
+
+
                 return null;
             });
         } catch (Exception e) {
