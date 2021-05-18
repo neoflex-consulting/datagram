@@ -181,10 +181,10 @@ if (workflowDeployment.get("oozie").get("spark2") == true) sparkVer = "2";
     <arg>JDBC_[%=deployment.get("softwareSystem").get("name")%]_SCHEMA=${JDBC_[%=deployment.get("softwareSystem").get("name")%]_SCHEMA}</arg>
     [%}%]    
     [%for (parameter in workflowDeployment.get("parameters")) {%]    
-    <arg>[%=escape(parameter.get("name"))%]=${[%=escape(parameter.get("name"))%]}</arg>
+    <arg>[%=escape(parameter.get("name"))%]=[%=parameter.get("name")%]</arg>
     [%}%]    
     [%for (parameter in self.parameters) {%]    
-    <arg>[%=escape(parameter.name)%]=${"[%=parameter.value%]"}</arg>
+    <arg>[%=escape(parameter.name)%]=[%=parameter.value%]</arg>
     [%}%]    
 </spark>
 [%}%]
