@@ -69,8 +69,10 @@ public class SystemController {
 
     @RequestMapping(value="/branch/{branch}", method=RequestMethod.DELETE, produces={"application/json"}, consumes={"application/json"})
     @ResponseBody
-    public JsonNode deleteBranch(@PathVariable("branch") String branch) throws IOException, GitAPIException {
-        gitflowSvc.deleteBranch(branch);
+    public JsonNode deleteBranch(@PathVariable("branch") String branch, @RequestBody ObjectNode body) throws IOException, GitAPIException {
+        String username = body.get("username").textValue();
+        String password = body.get("password").textValue();
+        gitflowSvc.deleteBranch(branch, username, password);
         return getBranchInfo();
     }
 
@@ -153,7 +155,8 @@ public class SystemController {
         String remoteBranchName = body.get("remoteBranch").textValue();
         String username = body.get("username").textValue();
         String password = body.get("password").textValue();
-        gitflowSvc.pull(remoteBranchName, remote, username, password);
+        String strategy = body.get("strategy").textValue();
+        gitflowSvc.pull(remoteBranchName, remote, username, password, strategy);
         return getBranchInfo();
     }
 
