@@ -18,6 +18,7 @@ const COMMANDS = Object.freeze({
     DELETE: Symbol("DELETE"),
     PUSH: Symbol("PUSH"),
     PULL: Symbol("PULL"),
+    RESET: Symbol("RESET"),
     MERGE: Symbol("MERGE"),
     CHANGES: Symbol("CHANGES"),
 })
@@ -126,6 +127,18 @@ class BranchCommandForm extends React.Component {
                     },
                     body: JSON.stringify({remote: values.remote||null, username: values.username||null,
                         password: values.password||null, remoteBranch: values.remoteBranch||null, strategy: values.strategy||null})
+                }).then(branchInfo => {
+                    this.props.context.updateContext({branchInfo})
+                    localStorage.setItem("currentBranch", branchInfo.current)
+                });
+            },
+            [COMMANDS.RESET]: (values) => {
+                resource.query(`/system/reset`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
                 }).then(branchInfo => {
                     this.props.context.updateContext({branchInfo})
                     localStorage.setItem("currentBranch", branchInfo.current)
