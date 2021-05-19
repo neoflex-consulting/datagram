@@ -14,7 +14,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="SoftwareSystem">
     <eOperations name="refreshScheme">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45b;&#x420;&#xb1;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a; &#x421;&#x403;&#x421;&#x2026;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x453;"/>
+        <details key="caption" value="&#x41e;&#x431;&#x43d;&#x43e;&#x432;&#x438;&#x442;&#x44c; &#x441;&#x445;&#x435;&#x43c;&#x443;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
@@ -34,7 +34,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="JdbcConnection" eSuperTypes="//Connection">
     <eOperations name="test">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x421;&#x201a;&#x420;&#xb5;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x442;&#x435;&#x441;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" lowerBound="1">
@@ -65,7 +65,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Deployment">
     <eOperations name="refreshScheme">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45b;&#x420;&#xb1;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a; &#x421;&#x403;&#x421;&#x2026;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x453;"/>
+        <details key="caption" value="&#x41e;&#x431;&#x43d;&#x43e;&#x432;&#x438;&#x442;&#x44c; &#x441;&#x445;&#x435;&#x43c;&#x443;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
@@ -86,7 +86,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Oozie">
     <eOperations name="deployKey">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x454;&#x420;&#x455;&#x420;&#x457;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x454;&#x420;&#xbb;&#x421;&#x40b;&#x421;&#x2021;"/>
+        <details key="caption" value="&#x421;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x43a;&#x43b;&#x44e;&#x447;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
@@ -160,13 +160,13 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isKerberosEnabled">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x452;&#x421;&#x453;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201e;&#x420;&#x451;&#x420;&#x454;&#x420;&#xb0;&#x421;&#x2020;&#x420;&#x451;&#x421;&#x40f; Kerberos"/>
+        <details key="caption" value="&#x410;&#x443;&#x43d;&#x442;&#x435;&#x43d;&#x442;&#x438;&#x444;&#x438;&#x43a;&#x430;&#x446;&#x438;&#x44f; Kerberos"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyTabLocation">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x421;&#x453;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x454; keytab"/>
+        <details key="caption" value="&#x41f;&#x443;&#x442;&#x44c; &#x43a; keytab"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
@@ -198,32 +198,32 @@
   <eClassifiers xsi:type="ecore:EClass" name="JobServer">
     <eOperations name="jobList">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454; &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#x2116;"/>
+        <details key="caption" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x437;&#x430;&#x434;&#x430;&#x43d;&#x438;&#x439;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="jobDetails">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x201d;&#x420;&#xb5;&#x421;&#x201a;&#x420;&#xb0;&#x420;&#xbb;&#x420;&#x451; &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+        <details key="caption" value="&#x414;&#x435;&#x442;&#x430;&#x43b;&#x438; &#x437;&#x430;&#x434;&#x430;&#x43d;&#x438;&#x44f;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="jobConfig">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x459;&#x420;&#x455;&#x420;&#x405;&#x421;&#x201e;&#x420;&#x451;&#x420;&#x456;&#x421;&#x453;&#x421;&#x402;&#x420;&#xb0;&#x421;&#x2020;&#x420;&#x451;&#x421;&#x40f; &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+        <details key="caption" value="&#x41a;&#x43e;&#x43d;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44f; &#x437;&#x430;&#x434;&#x430;&#x43d;&#x438;&#x44f;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="jobWait">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x201d;&#x420;&#x455;&#x420;&#xb6;&#x420;&#x491;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;&#x421;&#x403;&#x421;&#x40f; &#x420;&#x455;&#x420;&#x454;&#x420;&#x455;&#x420;&#x405;&#x421;&#x2021;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+        <details key="caption" value="&#x414;&#x43e;&#x436;&#x434;&#x430;&#x442;&#x44c;&#x441;&#x44f; &#x43e;&#x43a;&#x43e;&#x43d;&#x447;&#x430;&#x43d;&#x438;&#x44f;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="loadFile">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x456;&#x421;&#x402;&#x421;&#x453;&#x420;&#xb7;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a; &#x421;&#x201e;&#x420;&#xb0;&#x420;&#x2116;&#x420;&#xbb;"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x440;&#x443;&#x437;&#x438;&#x442;&#x44c; &#x444;&#x430;&#x439;&#x43b;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="runQuery">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2019;&#x421;&#x2039;&#x420;&#x457;&#x420;&#x455;&#x420;&#xbb;&#x420;&#x405;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403;"/>
+        <details key="caption" value="&#x412;&#x44b;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x44c; &#x437;&#x430;&#x43f;&#x440;&#x43e;&#x441;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
@@ -310,7 +310,7 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dynamicAllocation">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x201d;&#x420;&#x451;&#x420;&#x405;&#x420;&#xb0;&#x420;&#x458;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#xb0;&#x421;&#x40f; &#x420;&#xb0;&#x420;&#xbb;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x454;&#x420;&#xb0;&#x421;&#x2020;&#x420;&#x451;&#x421;&#x40f;"/>
+        <details key="caption" value="&#x414;&#x438;&#x43d;&#x430;&#x43c;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x430;&#x44f; &#x430;&#x43b;&#x43b;&#x43e;&#x43a;&#x430;&#x446;&#x438;&#x44f;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
@@ -323,42 +323,42 @@
   <eClassifiers xsi:type="ecore:EClass" name="WorkflowDeployment" eSuperTypes="//JobDeployment">
     <eOperations name="validate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="build">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x455;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="deploy">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x454;&#x420;&#x455;&#x420;&#x457;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="install">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x451; &#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#x457;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x441;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="run">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x417;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generateAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x451; &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="buildAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x455;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x451; &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="start">
@@ -371,47 +371,47 @@
   <eClassifiers xsi:type="ecore:EClass" name="CoordinatorDeployment" eSuperTypes="//JobDeployment">
     <eOperations name="validate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="build">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x455;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="deploy">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x454;&#x420;&#x455;&#x420;&#x457;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="install">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x451; &#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#x457;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x441;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="run">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x417;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generateAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x451; &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="buildAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x455;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x451; &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getStatus">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45e;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x453;&#x421;&#x2030;&#x420;&#xb5;&#x420;&#xb5; &#x421;&#x403;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x40f;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x422;&#x435;&#x43a;&#x443;&#x449;&#x435;&#x435; &#x441;&#x43e;&#x441;&#x442;&#x43e;&#x44f;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="coordinator">
@@ -427,42 +427,42 @@
   <eClassifiers xsi:type="ecore:EClass" name="TransformationDeployment">
     <eOperations name="validate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="build">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x455;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="deploy">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x454;&#x420;&#x455;&#x420;&#x457;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="install">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x451; &#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#x457;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x441;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="run">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x417;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generateAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x451; &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="buildAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x455;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x451; &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
@@ -598,17 +598,17 @@
   <eClassifiers xsi:type="ecore:EClass" name="Environment">
     <eOperations name="rewriteParameters">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x420;&#xb5;&#x421;&#x402;&#x420;&#xb5;&#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x457;&#x420;&#xb0;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x458;&#x420;&#xb5;&#x421;&#x201a;&#x421;&#x402;&#x421;&#x2039;"/>
+        <details key="caption" value="&#x41f;&#x435;&#x440;&#x435;&#x437;&#x430;&#x43f;&#x438;&#x441;&#x430;&#x442;&#x44c; &#x43f;&#x430;&#x440;&#x430;&#x43c;&#x435;&#x442;&#x440;&#x44b;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="rewriteCurrent">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x420;&#xb5;&#x421;&#x402;&#x420;&#xb5;&#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x457;&#x420;&#xb0;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x458;&#x420;&#xb5;&#x421;&#x201a;&#x421;&#x402;&#x421;&#x2039; &#x421;&#x201a;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x453;&#x421;&#x2030;&#x420;&#xb5;&#x420;&#x2116; &#x421;&#x403;&#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x421;&#x2039;"/>
+        <details key="caption" value="&#x41f;&#x435;&#x440;&#x435;&#x437;&#x430;&#x43f;&#x438;&#x441;&#x430;&#x442;&#x44c; &#x43f;&#x430;&#x440;&#x430;&#x43c;&#x435;&#x442;&#x440;&#x44b; &#x442;&#x435;&#x43a;&#x443;&#x449;&#x435;&#x439; &#x441;&#x440;&#x435;&#x434;&#x44b;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="encryptString">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x421;&#x20ac;&#x420;&#x451;&#x421;&#x201e;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x421;&#x403;&#x421;&#x201a;&#x421;&#x402;&#x420;&#x455;&#x420;&#x454;&#x421;&#x453;"/>
+        <details key="caption" value="&#x417;&#x430;&#x448;&#x438;&#x444;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x441;&#x442;&#x440;&#x43e;&#x43a;&#x443;"/>
       </eAnnotations>
       <eParameters name="plainString">
         <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -616,7 +616,7 @@
     </eOperations>
     <eOperations name="decryptString">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#xa0;&#x420;&#xb0;&#x421;&#x403;&#x421;&#x20ac;&#x420;&#x451;&#x421;&#x201e;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x421;&#x403;&#x421;&#x201a;&#x421;&#x402;&#x420;&#x455;&#x420;&#x454;&#x421;&#x453;"/>
+        <details key="caption" value="&#x420;&#x430;&#x441;&#x448;&#x438;&#x444;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x441;&#x442;&#x440;&#x43e;&#x43a;&#x443;"/>
       </eAnnotations>
       <eParameters name="encryptedString">
         <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -668,7 +668,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="LivyServer">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#xb7;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
@@ -677,7 +677,7 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="project">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x435;&#x43a;&#x442;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
     </eStructuralFeatures>
@@ -690,13 +690,13 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="home">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x459;&#x420;&#xb0;&#x421;&#x201a;&#x420;&#xb0;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x456;"/>
+        <details key="caption" value="&#x41a;&#x430;&#x442;&#x430;&#x43b;&#x43e;&#x433;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="user">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x420;&#x455;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#xb7;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#xbb;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x41f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x442;&#x435;&#x43b;&#x44c;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
@@ -708,13 +708,13 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isKerberosEnabled">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x452;&#x421;&#x453;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x201e;&#x420;&#x451;&#x420;&#x454;&#x420;&#xb0;&#x421;&#x2020;&#x420;&#x451;&#x421;&#x40f; Kerberos"/>
+        <details key="caption" value="&#x410;&#x443;&#x43d;&#x442;&#x435;&#x43d;&#x442;&#x438;&#x444;&#x438;&#x43a;&#x430;&#x446;&#x438;&#x44f; Kerberos"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyTabLocation">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x421;&#x453;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x454; keytab"/>
+        <details key="caption" value="&#x41f;&#x443;&#x442;&#x44c; &#x43a; keytab"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
@@ -738,7 +738,7 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#xfffd;&#x421;&#x403;&#x420;&#x457;&#x420;&#x455;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#xb7;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x457;&#x420;&#x455; &#x421;&#x453;&#x420;&#x458;&#x420;&#x455;&#x420;&#xbb;&#x421;&#x2021;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40b;"/>
+        <details key="caption" value="&#x418;&#x441;&#x43f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x43f;&#x43e; &#x443;&#x43c;&#x43e;&#x43b;&#x447;&#x430;&#x43d;&#x438;&#x44e;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
@@ -746,12 +746,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="MLFlowServer">
     <eOperations name="testConnection">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x457;&#x420;&#x455;&#x420;&#x491;&#x420;&#x454;&#x420;&#xbb;&#x421;&#x40b;&#x421;&#x2021;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x438;&#x442;&#x44c; &#x43f;&#x43e;&#x434;&#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#xb7;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
@@ -780,7 +780,7 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#xfffd;&#x421;&#x403;&#x420;&#x457;&#x420;&#x455;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#xb7;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x457;&#x420;&#x455; &#x421;&#x453;&#x420;&#x458;&#x420;&#x455;&#x420;&#xbb;&#x421;&#x2021;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40b;"/>
+        <details key="caption" value="&#x418;&#x441;&#x43f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x43f;&#x43e; &#x443;&#x43c;&#x43e;&#x43b;&#x447;&#x430;&#x43d;&#x438;&#x44e;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
@@ -804,7 +804,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Zeppelin">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#xb7;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
@@ -813,7 +813,7 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="project">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x435;&#x43a;&#x442;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
     </eStructuralFeatures>
@@ -1013,12 +1013,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="Atlas">
     <eOperations name="publishSchemes">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45b;&#x420;&#x457;&#x421;&#x453;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x420;&#x454;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x421;&#x403;&#x421;&#x2026;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x2039;"/>
+        <details key="caption" value="&#x41e;&#x43f;&#x443;&#x431;&#x43b;&#x438;&#x43a;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x441;&#x445;&#x435;&#x43c;&#x44b;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#xb7;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
@@ -1027,7 +1027,7 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="project">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x435;&#x43a;&#x442;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
     </eStructuralFeatures>
@@ -1052,12 +1052,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="AtlasScheme">
     <eOperations name="publish">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45b;&#x420;&#x457;&#x421;&#x453;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x420;&#x454;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x421;&#x403;&#x421;&#x2026;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x453;"/>
+        <details key="caption" value="&#x41e;&#x43f;&#x443;&#x431;&#x43b;&#x438;&#x43a;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x441;&#x445;&#x435;&#x43c;&#x443;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#xb7;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
@@ -1072,12 +1072,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="AtlasProject">
     <eOperations name="publish">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45b;&#x420;&#x457;&#x421;&#x453;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x420;&#x454;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; Lineage &#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#xb0;"/>
+        <details key="caption" value="&#x41e;&#x43f;&#x443;&#x431;&#x43b;&#x438;&#x43a;&#x43e;&#x432;&#x430;&#x442;&#x44c; Lineage &#x43f;&#x440;&#x43e;&#x435;&#x43a;&#x442;&#x430;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#xb7;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
@@ -1151,17 +1151,17 @@
     </eAnnotations>
     <eOperations name="loadMetadata">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x456;&#x421;&#x402;&#x421;&#x453;&#x420;&#xb7;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x458;&#x420;&#xb5;&#x421;&#x201a;&#x420;&#xb0;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x440;&#x443;&#x437;&#x438;&#x442;&#x44c; &#x43c;&#x435;&#x442;&#x430;&#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x435;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generateWorkflow">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; &#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x43f;&#x440;&#x43e;&#x435;&#x43a;&#x442;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="uploadSpecification">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x456;&#x421;&#x402;&#x421;&#x453;&#x420;&#xb7;&#x420;&#x451;&#x421;&#x201a;&#x421;&#x40a; &#x421;&#x403;&#x420;&#x457;&#x420;&#xb5;&#x421;&#x2020;&#x420;&#x451;&#x421;&#x201e;&#x420;&#x451;&#x420;&#x454;&#x420;&#xb0;&#x421;&#x2020;&#x420;&#x451;&#x421;&#x40b; CSV"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x440;&#x443;&#x437;&#x438;&#x442;&#x44c; &#x441;&#x43f;&#x435;&#x446;&#x438;&#x444;&#x438;&#x43a;&#x430;&#x446;&#x438;&#x44e; CSV"/>
       </eAnnotations>
       <eParameters name="file">
         <eAnnotations source="mspace.ui">

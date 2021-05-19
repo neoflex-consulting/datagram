@@ -511,12 +511,6 @@
             <artifactId>livyjobserver</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.epsilon</groupId>
-            <artifactId>epsilon-core</artifactId>
-            <version>1.5.1</version>
-            <scope>compile</scope>
-        </dependency>
         <!--Livy job server-->
 
 

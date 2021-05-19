@@ -245,7 +245,8 @@ services:
       - master
       - worker1
       - worker2
-#    volumes:
+    volumes:
+      - ./bd-base/data:/data
 #      - ./bd-base/extralib:/extralib
 #      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
 #      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
