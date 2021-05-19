@@ -754,7 +754,7 @@ public class GitflowSvc extends BaseSvc {
                     if (update.getMessage() != null) {
                         msg = msg + ": " + update.getMessage();
                     }
-                    throw new RuntimeException(msg);
+                    throw new RuntimeException(update.getRemoteName() + "|" +msg);
                 }
             }
         }
@@ -782,8 +782,34 @@ public class GitflowSvc extends BaseSvc {
         MergeStrategy mergeStrategy = MergeStrategy.get(strategy);
         if(mergeStrategy != null){
             command.setStrategy(mergeStrategy);
+            command.setFastForward(MergeCommand.FastForwardMode.NO_FF);
         }
-        command.call();
+        PullResult pullResult = command.call();
+        MergeResult mergeResult  = pullResult.getMergeResult();
+        if(MergeResult.MergeStatus.CONFLICTING.equals(mergeResult.getMergeStatus())){
+            StringBuilder message = new StringBuilder("");
+            for(Map.Entry<java.lang.String, int[][]> confict : mergeResult.getConflicts().entrySet()){
+                message.append("File " + confict.getKey() + " conflicted " + (confict.getValue().length > 0 ? ("at line " + confict.getValue()[0] +
+                        (confict.getValue().length > 1 ? ", row " + confict.getValue()[1] : "")) : ""));
+                message.append('\n');
+            }
+            message.append("RESET current branch and apply NON DEFAULT strategy you preffered");
+            message.append('\n');
+            throw new RuntimeException(message.toString());
+        }
+    }
+
+
+    public void resetToHead() {
+        try {
+            Git git = new Git(repository);
+            git.reset().setMode(ResetCommand.ResetType.HARD).call();
+            logger.info(getCurrentBranch() + "  reset to HEAD");
+        }catch (Throwable th){
+            logger.error("Unable reset to HEAD "+ getCurrentBranch());
+            throw new RuntimeException(th);
+        }
+
     }
 
     public void merge(String from, String to) throws Exception {
