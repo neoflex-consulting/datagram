@@ -89,7 +89,7 @@ Password: admin
 
 ## Просмотр результирующих данных через запрос в Hive
 Для просмотра данных через Hive наша трансформация регистрирует результирующие
-файлы формата ORC и PARQUET как внешние тавлицы Hive.  
+файлы формата ORC и PARQUET как внешние таблицы Hive.  
 ![img_24.png](img/img_24.png)  
 Сделаем запрос к этим таблицам. Откроем интерпретатор Spark:
 ![img_19.png](img/img_19.png) / SERVERS / livy / bd-livy / ![img_16.png](img/img_16.png) / Livy Console / Interpreter 1;
