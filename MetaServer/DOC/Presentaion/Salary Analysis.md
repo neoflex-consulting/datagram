@@ -18,8 +18,10 @@
 
 Следующим шагом необходимо создать Connection-ны к СУБД AdventureWorks
 
-Её содержимое, можно посмотреть с помощью встроенного продукта Hadoop - Hue
+Её содержимое, можно посмотреть с помощью Hue
+Так как он включен в сборку мини кластера
 http://localhost:8888/ (перейти в интерфейс)
+
 
 Я буду использовать две Схемы: humanresources и person
  - В humanresources понадобится таблица employeepayhistory (наприметь простой запрос select * from humanresources.employeepayhistory)
@@ -85,8 +87,10 @@ http://localhost:8888/ (перейти в интерфейс)
     - Connection: Выбрать humanresources
     - Software System: humanresources
 4. ![](../Labs/img/Common/save.PNG) Сохранить
-5. ![](../Labs/img/Common/action.PNG) Запустить в верхней панели инструментов Refresh Scheme 
+5. ![](../Labs/img/Common/action.PNG) Запустить в верхней панели инструментов Refresh Scheme* 
 6. Получить сообщение об успешном создании Schema: [ "humanresources_at_humanresources" ]
+
+>Refresh Scheme* - Функция считывания метаданных из внешних источников и копирования их в Datagram 
 
 Её мы проверим позже
 

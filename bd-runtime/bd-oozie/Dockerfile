@@ -66,7 +66,7 @@ RUN    cp $SPARK_HOME/jars/*.jar "${OOZIE_HOME}/sharelib/lib/spark2/" \
     && cp ${OOZIE_HOME}/sharelib/lib/spark/oozie-sharelib-spark-${OOZIE_VERSION}.jar ${OOZIE_HOME}/sharelib/lib/spark2
 
 FROM alpine:3.10.4
-RUN apk add --no-cache openjdk8 bash coreutils findutils python3
+RUN apk add --no-cache openjdk8 bash coreutils findutils python3 curl jq
 
 ENV OOZIE_VERSION=5.2.0
 ENV OOZIE_HOME=/usr/oozie

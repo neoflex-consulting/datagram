@@ -2,12 +2,12 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ui2" nsURI="http://www.neoflex.ru/meta/ui2" nsPrefix="ui2">
   <eClassifiers xsi:type="ecore:EClass" name="UIPackage">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45f;&#x420;&#xb0;&#x420;&#x454;&#x420;&#xb5;&#x421;&#x201a; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
-      <details key="caption.plural" value="&#x420;&#x45f;&#x420;&#xb0;&#x420;&#x454;&#x420;&#xb5;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
+      <details key="caption" value="&#x41f;&#x430;&#x43a;&#x435;&#x442; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x43e;&#x432;"/>
+      <details key="caption.plural" value="&#x41f;&#x430;&#x43a;&#x435;&#x442;&#x44b; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x43e;&#x432;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x438;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
         <details key="display" value="true"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -16,31 +16,31 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UIClass">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45b;&#x421;&#x201a;&#x420;&#x455;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb0;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x2039;&#x420;&#x2116; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;"/>
-      <details key="caption.plural" value="&#x420;&#x45b;&#x421;&#x201a;&#x420;&#x455;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb0;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x2039;&#x420;&#xb5; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x41e;&#x442;&#x43e;&#x431;&#x440;&#x430;&#x436;&#x430;&#x435;&#x43c;&#x44b;&#x439; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;"/>
+      <details key="caption.plural" value="&#x41e;&#x442;&#x43e;&#x431;&#x440;&#x430;&#x436;&#x430;&#x435;&#x43c;&#x44b;&#x435; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x44b;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x438;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseName" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2018;&#x420;&#xb0;&#x420;&#xb7;&#x420;&#x455;&#x420;&#x406;&#x420;&#x455;&#x420;&#xb5; &#x420;&#x405;&#x420;&#xb0;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x411;&#x430;&#x437;&#x43e;&#x432;&#x43e;&#x435; &#x43d;&#x430;&#x438;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caption" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x456;&#x420;&#x455;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x406;&#x420;&#x455;&#x420;&#x454;"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x43e;&#x43b;&#x43e;&#x432;&#x43e;&#x43a;"/>
         <details key="display" value="true"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="qName" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x459;&#x420;&#x406;&#x420;&#xb0;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x201e;&#x420;&#x451;&#x421;&#x2020;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x420;&#x455;&#x420;&#xb5; &#x420;&#x405;&#x420;&#xb0;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41a;&#x432;&#x430;&#x43b;&#x438;&#x444;&#x438;&#x446;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x43d;&#x43e;&#x435; &#x43d;&#x430;&#x438;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
@@ -48,37 +48,37 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="uiForms" upperBound="-1" eType="//UIForm" containment="true" eOpposite="//UIForm/uiClass"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="editForm" eType="//EditForm">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x401;&#x420;&#xb0;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x405; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x421;&#x2039; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+        <details key="caption" value="&#x428;&#x430;&#x431;&#x43b;&#x43e;&#x43d; &#x444;&#x43e;&#x440;&#x43c;&#x44b; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x44f;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mainListForm" eType="//MainListForm">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#xa4;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x420;&#xb0; &#x421;&#x403;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x454;&#x420;&#xb0;"/>
+        <details key="caption" value="&#x424;&#x43e;&#x440;&#x43c;&#x430; &#x441;&#x43f;&#x438;&#x441;&#x43a;&#x430;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mainEditForm" eType="//MainEditForm">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#xa4;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x420;&#xb0; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+        <details key="caption" value="&#x424;&#x43e;&#x440;&#x43c;&#x430; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x44f;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="hiers" upperBound="-1" eType="//UIClass">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x421;&#x403;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x491;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454;&#x420;&#x451;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x441;&#x43b;&#x435;&#x434;&#x43d;&#x438;&#x43a;&#x438;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="uiOperations" upperBound="-1" eType="//UIOperation" containment="true" eOpposite="//UIOperation/uiClass">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45b;&#x420;&#x457;&#x420;&#xb5;&#x421;&#x402;&#x420;&#xb0;&#x421;&#x2020;&#x420;&#x451;&#x420;&#x451;"/>
+        <details key="caption" value="&#x41e;&#x43f;&#x435;&#x440;&#x430;&#x446;&#x438;&#x438;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="uiSuperTypes" upperBound="-1" eType="//UIClass">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#xa0;&#x420;&#x455;&#x420;&#x491;&#x420;&#x451;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#xbb;&#x420;&#x451;"/>
+        <details key="caption" value="&#x420;&#x43e;&#x434;&#x438;&#x442;&#x435;&#x43b;&#x438;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="designerLink">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x201d;&#x420;&#x451;&#x420;&#xb7;&#x420;&#xb0;&#x420;&#x2116;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;"/>
+        <details key="caption" value="&#x414;&#x438;&#x437;&#x430;&#x439;&#x43d;&#x435;&#x440;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
@@ -90,19 +90,19 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="uiClass" lowerBound="1" eType="//UIClass" eOpposite="//UIClass/uiOperations"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x438;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeQName" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x459;&#x420;&#x406;&#x420;&#xb0;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x201e;&#x420;&#x451;&#x421;&#x2020;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x420;&#x455;&#x420;&#xb5; &#x420;&#x451;&#x420;&#x458;&#x421;&#x40f; &#x421;&#x201a;&#x420;&#x451;&#x420;&#x457;&#x420;&#xb0;"/>
+        <details key="caption" value="&#x41a;&#x432;&#x430;&#x43b;&#x438;&#x444;&#x438;&#x446;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x43d;&#x43e;&#x435; &#x438;&#x43c;&#x44f; &#x442;&#x438;&#x43f;&#x430;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caption" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x456;&#x420;&#x455;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x406;&#x420;&#x455;&#x420;&#x454;"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x43e;&#x43b;&#x43e;&#x432;&#x43e;&#x43a;"/>
         <details key="display" value="true"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -110,36 +110,36 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UIForm" abstract="true" eSuperTypes="//Layout">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xa4;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#xa4;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x424;&#x43e;&#x440;&#x43c;&#x430;"/>
+      <details key="caption.plural" value="&#x424;&#x43e;&#x440;&#x43c;&#x44b;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="uiClass" lowerBound="1" eType="//UIClass" eOpposite="//UIClass/uiForms"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedForms" upperBound="-1" eType="//UIForm">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2019;&#x420;&#xbb;&#x420;&#x455;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x420;&#xb5; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x421;&#x2039;"/>
+        <details key="caption" value="&#x412;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x43d;&#x44b;&#x435; &#x444;&#x43e;&#x440;&#x43c;&#x44b;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dataSources" upperBound="-1" eType="//DataSource" containment="true" eOpposite="//DataSource/form">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#xfffd;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454;&#x420;&#x451; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
+        <details key="caption" value="&#x418;&#x441;&#x442;&#x43e;&#x447;&#x43d;&#x438;&#x43a;&#x438; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EditForm" eSuperTypes="//UIForm">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xa4;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x420;&#xb0; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
-      <details key="caption.plural" value="&#x420;&#xa4;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x421;&#x2039; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+      <details key="caption" value="&#x424;&#x43e;&#x440;&#x43c;&#x430; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x44f;"/>
+      <details key="caption.plural" value="&#x424;&#x43e;&#x440;&#x43c;&#x44b; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x44f;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="objectItem" eType="//DataSource">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#xfffd;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#xb0;"/>
+        <details key="caption" value="&#x418;&#x441;&#x442;&#x43e;&#x447;&#x43d;&#x438;&#x43a; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x430;"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MainListForm" eSuperTypes="//UIForm">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x201c;&#x420;&#xbb;&#x420;&#xb0;&#x420;&#x406;&#x420;&#x405;&#x420;&#xb0;&#x421;&#x40f; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x420;&#xb0; &#x421;&#x403;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x454;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#x201c;&#x420;&#xbb;&#x420;&#xb0;&#x420;&#x406;&#x420;&#x405;&#x421;&#x2039;&#x420;&#xb5; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x421;&#x2039; &#x421;&#x403;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#x406;"/>
+      <details key="caption" value="&#x413;&#x43b;&#x430;&#x432;&#x43d;&#x430;&#x44f; &#x444;&#x43e;&#x440;&#x43c;&#x430; &#x441;&#x43f;&#x438;&#x441;&#x43a;&#x430;"/>
+      <details key="caption.plural" value="&#x413;&#x43b;&#x430;&#x432;&#x43d;&#x44b;&#x435; &#x444;&#x43e;&#x440;&#x43c;&#x44b; &#x441;&#x43f;&#x438;&#x441;&#x43a;&#x43e;&#x432;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="objectList" lowerBound="1" eType="//ObjectList"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="entryPoint">
@@ -148,43 +148,43 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MainEditForm" eSuperTypes="//EditForm">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x201c;&#x420;&#xbb;&#x420;&#xb0;&#x420;&#x406;&#x420;&#x405;&#x420;&#xb0;&#x421;&#x40f; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x420;&#xb0; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
-      <details key="caption.plural" value="&#x420;&#x201c;&#x420;&#xbb;&#x420;&#xb0;&#x420;&#x406;&#x420;&#x405;&#x421;&#x2039;&#x420;&#xb5; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x421;&#x2039; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+      <details key="caption" value="&#x413;&#x43b;&#x430;&#x432;&#x43d;&#x430;&#x44f; &#x444;&#x43e;&#x440;&#x43c;&#x430; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x44f;"/>
+      <details key="caption.plural" value="&#x413;&#x43b;&#x430;&#x432;&#x43d;&#x44b;&#x435; &#x444;&#x43e;&#x440;&#x43c;&#x44b; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x44f;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="itemId" lowerBound="1" eType="//DataModel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UIElement" abstract="true">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2019;&#x420;&#x451;&#x420;&#xb7;&#x421;&#x453;&#x420;&#xb0;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#x405;&#x421;&#x2039;&#x420;&#x2116; &#x421;&#x40c;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;"/>
-      <details key="caption.plural" value="&#x420;&#x2019;&#x420;&#x451;&#x420;&#xb7;&#x421;&#x453;&#x420;&#xb0;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#x405;&#x421;&#x2039;&#x420;&#xb5; &#x421;&#x40c;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x412;&#x438;&#x437;&#x443;&#x430;&#x43b;&#x44c;&#x43d;&#x44b;&#x439; &#x44d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;"/>
+      <details key="caption.plural" value="&#x412;&#x438;&#x437;&#x443;&#x430;&#x43b;&#x44c;&#x43d;&#x44b;&#x435; &#x44d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x438;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caption">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x456;&#x420;&#x455;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x406;&#x420;&#x455;&#x420;&#x454;"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x43e;&#x43b;&#x43e;&#x432;&#x43e;&#x43a;"/>
         <details key="display" value="true"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hint">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x420;&#x455;&#x420;&#x491;&#x421;&#x403;&#x420;&#x454;&#x420;&#xb0;&#x420;&#xb7;&#x420;&#x454;&#x420;&#xb0;"/>
+        <details key="caption" value="&#x41f;&#x43e;&#x434;&#x441;&#x43a;&#x430;&#x437;&#x43a;&#x430;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="hideOn" eType="//OrExpression" containment="true">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x408;&#x421;&#x403;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x406;&#x420;&#x451;&#x421;&#x40f; &#x420;&#x405;&#x420;&#xb5;&#x420;&#x406;&#x420;&#x451;&#x420;&#x491;&#x420;&#x451;&#x420;&#x458;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;"/>
+        <details key="caption" value="&#x423;&#x441;&#x43b;&#x43e;&#x432;&#x438;&#x44f; &#x43d;&#x435;&#x432;&#x438;&#x434;&#x438;&#x43c;&#x43e;&#x441;&#x442;&#x438;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="disableOn" eType="//OrExpression" containment="true">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x408;&#x421;&#x403;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x406;&#x420;&#x451;&#x421;&#x40f; &#x420;&#x405;&#x420;&#xb5;&#x420;&#x491;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x421;&#x453;&#x420;&#x457;&#x420;&#x405;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;"/>
+        <details key="caption" value="&#x423;&#x441;&#x43b;&#x43e;&#x432;&#x438;&#x44f; &#x43d;&#x435;&#x434;&#x43e;&#x441;&#x442;&#x443;&#x43f;&#x43d;&#x43e;&#x441;&#x442;&#x438;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="readOnly">
@@ -193,134 +193,134 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LayoutElement" abstract="true" eSuperTypes="//UIElement">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;"/>
-      <details key="caption.plural" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;"/>
+      <details key="caption.plural" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="layout" eType="//Layout" eOpposite="//Layout/elements"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Layout" abstract="true" eSuperTypes="//LayoutElement">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x459;&#x420;&#x455;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#x2116;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402; &#x421;&#x40c;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
-      <details key="caption.plural" value="&#x420;&#x459;&#x420;&#x455;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#x2116;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x421;&#x2039; &#x421;&#x40c;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
+      <details key="caption" value="&#x41a;&#x43e;&#x43d;&#x442;&#x435;&#x439;&#x43d;&#x435;&#x440; &#x44d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x43e;&#x432;"/>
+      <details key="caption.plural" value="&#x41a;&#x43e;&#x43d;&#x442;&#x435;&#x439;&#x43d;&#x435;&#x440;&#x44b; &#x44d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x43e;&#x432;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1" eType="//LayoutElement" containment="true" eOpposite="//LayoutElement/layout"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RowLayout" eSuperTypes="//Layout">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x201c;&#x420;&#x455;&#x421;&#x402;&#x420;&#x451;&#x420;&#xb7;&#x420;&#x455;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb0;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#x405;&#x421;&#x2039;&#x420;&#x2116; &#x420;&#x454;&#x420;&#x455;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#x2116;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;"/>
-      <details key="caption.plural" value="&#x420;&#x201c;&#x420;&#x455;&#x421;&#x402;&#x420;&#x451;&#x420;&#xb7;&#x420;&#x455;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb0;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#x405;&#x421;&#x2039;&#x420;&#xb5; &#x420;&#x454;&#x420;&#x455;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#x2116;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x413;&#x43e;&#x440;&#x438;&#x437;&#x43e;&#x43d;&#x442;&#x430;&#x43b;&#x44c;&#x43d;&#x44b;&#x439; &#x43a;&#x43e;&#x43d;&#x442;&#x435;&#x439;&#x43d;&#x435;&#x440;"/>
+      <details key="caption.plural" value="&#x413;&#x43e;&#x440;&#x438;&#x437;&#x43e;&#x43d;&#x442;&#x430;&#x43b;&#x44c;&#x43d;&#x44b;&#x435; &#x43a;&#x43e;&#x43d;&#x442;&#x435;&#x439;&#x43d;&#x435;&#x440;&#x44b;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ColumnLayout" eSuperTypes="//Layout">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2019;&#x420;&#xb5;&#x421;&#x402;&#x421;&#x201a;&#x420;&#x451;&#x420;&#x454;&#x420;&#xb0;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#x405;&#x421;&#x2039;&#x420;&#x2116; &#x420;&#x454;&#x420;&#x455;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#x2116;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;"/>
-      <details key="caption.plural" value="&#x420;&#x2019;&#x420;&#xb5;&#x421;&#x402;&#x421;&#x201a;&#x420;&#x451;&#x420;&#x454;&#x420;&#xb0;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#x405;&#x421;&#x2039;&#x420;&#xb5; &#x420;&#x454;&#x420;&#x455;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#x2116;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x412;&#x435;&#x440;&#x442;&#x438;&#x43a;&#x430;&#x43b;&#x44c;&#x43d;&#x44b;&#x439; &#x43a;&#x43e;&#x43d;&#x442;&#x435;&#x439;&#x43d;&#x435;&#x440;"/>
+      <details key="caption.plural" value="&#x412;&#x435;&#x440;&#x442;&#x438;&#x43a;&#x430;&#x43b;&#x44c;&#x43d;&#x44b;&#x435; &#x43a;&#x43e;&#x43d;&#x442;&#x435;&#x439;&#x43d;&#x435;&#x440;&#x44b;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GroupListLayout" eSuperTypes="//Layout">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454; &#x420;&#x456;&#x421;&#x402;&#x421;&#x453;&#x420;&#x457;&#x420;&#x457; &#x421;&#x40c;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
-      <details key="caption.plural" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454;&#x420;&#x451; &#x420;&#x456;&#x421;&#x402;&#x421;&#x453;&#x420;&#x457;&#x420;&#x457; &#x421;&#x40c;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
+      <details key="caption" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x433;&#x440;&#x443;&#x43f;&#x43f; &#x44d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x43e;&#x432;"/>
+      <details key="caption.plural" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a;&#x438; &#x433;&#x440;&#x443;&#x43f;&#x43f; &#x44d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x43e;&#x432;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="showStyle" eType="//GroupListStyleEnum" defaultValueLiteral="SHOW_FIRST"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FormLayout" eSuperTypes="//Layout">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x420;&#xb0;&#x421;&#x40f; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x421;&#x2039;&#x420;&#xb5; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x41f;&#x440;&#x43e;&#x441;&#x442;&#x430;&#x44f; &#x444;&#x43e;&#x440;&#x43c;&#x430;"/>
+      <details key="caption.plural" value="&#x41f;&#x440;&#x43e;&#x441;&#x442;&#x44b;&#x435; &#x444;&#x43e;&#x440;&#x43c;&#x44b;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataControl" abstract="true" eSuperTypes="//LayoutElement">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
-      <details key="caption.plural" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
+      <details key="caption" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
+      <details key="caption.plural" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dataModel" lowerBound="1" eType="//DataModel">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#xa0;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x421;&#x453;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x2039;&#x420;&#x2116; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;"/>
+        <details key="caption" value="&#x420;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x443;&#x435;&#x43c;&#x44b;&#x439; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="requiredOn" eType="//OrExpression" containment="true">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x408;&#x421;&#x403;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x406;&#x420;&#x451;&#x421;&#x40f; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x40f;&#x420;&#xb7;&#x420;&#xb0;&#x421;&#x201a;&#x420;&#xb5;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#x405;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x451;"/>
+        <details key="caption" value="&#x423;&#x441;&#x43b;&#x43e;&#x432;&#x438;&#x44f; &#x43e;&#x431;&#x44f;&#x437;&#x430;&#x442;&#x435;&#x43b;&#x44c;&#x43d;&#x43e;&#x441;&#x442;&#x438;"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OptionControl" eSuperTypes="//DataControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a; &#x420;&#x406;&#x421;&#x2039;&#x420;&#xb1;&#x420;&#x455;&#x421;&#x402;&#x420;&#xb0; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
-      <details key="caption.plural" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x406;&#x421;&#x2039;&#x420;&#xb1;&#x420;&#x455;&#x421;&#x402;&#x420;&#xb0; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
+      <details key="caption" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442; &#x432;&#x44b;&#x431;&#x43e;&#x440;&#x430; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
+      <details key="caption.plural" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b; &#x432;&#x44b;&#x431;&#x43e;&#x440;&#x430; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="refModel" lowerBound="1" eType="//DataModel">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454; &#x420;&#x406;&#x421;&#x2039;&#x420;&#xb1;&#x420;&#x455;&#x421;&#x402;&#x420;&#xb0;"/>
+        <details key="caption" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x432;&#x44b;&#x431;&#x43e;&#x440;&#x430;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x459;&#x420;&#xbb;&#x421;&#x40b;&#x421;&#x2021;&#x420;&#xb5;&#x420;&#x406;&#x420;&#x455;&#x420;&#xb5; &#x420;&#x457;&#x420;&#x455;&#x420;&#xbb;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41a;&#x43b;&#x44e;&#x447;&#x435;&#x432;&#x43e;&#x435; &#x43f;&#x43e;&#x43b;&#x435;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="display">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x420;&#x455;&#x420;&#xbb;&#x420;&#xb5; &#x420;&#x491;&#x420;&#xbb;&#x421;&#x40f; &#x420;&#x455;&#x421;&#x201a;&#x420;&#x455;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+        <details key="caption" value="&#x41f;&#x43e;&#x43b;&#x435; &#x434;&#x43b;&#x44f; &#x43e;&#x442;&#x43e;&#x431;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x44f;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45a;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x403;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb0;&#x420;&#xbb;&#x421;&#x40a;&#x420;&#x405;&#x420;&#x455;&#x420;&#xb5; &#x420;&#x454;&#x420;&#x455;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x406;&#x420;&#x455; &#x420;&#x406;&#x421;&#x2039;&#x420;&#xb1;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
+        <details key="caption" value="&#x41c;&#x430;&#x43a;&#x441;&#x438;&#x43c;&#x430;&#x43b;&#x44c;&#x43d;&#x43e;&#x435; &#x43a;&#x43e;&#x43b;&#x438;&#x447;&#x435;&#x441;&#x442;&#x432;&#x43e; &#x432;&#x44b;&#x431;&#x440;&#x430;&#x43d;&#x43d;&#x44b;&#x445; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x43e;&#x432;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextControl" eSuperTypes="//DataControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x421;&#x201a;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x403;&#x421;&#x201a;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x421;&#x201a;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x403;&#x421;&#x201a;&#x420;&#xb0;"/>
+      <details key="caption" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x442;&#x435;&#x43a;&#x441;&#x442;&#x430;"/>
+      <details key="caption.plural" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x442;&#x435;&#x43a;&#x441;&#x442;&#x430;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiline" defaultValueLiteral="false">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45a;&#x420;&#x405;&#x420;&#x455;&#x420;&#x456;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x421;&#x402;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x421;&#x2039;&#x420;&#x2116;"/>
+        <details key="caption" value="&#x41c;&#x43d;&#x43e;&#x433;&#x43e;&#x441;&#x442;&#x440;&#x43e;&#x447;&#x43d;&#x44b;&#x439;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" defaultValueLiteral="false">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45f;&#x420;&#xb0;&#x421;&#x402;&#x420;&#x455;&#x420;&#xbb;&#x421;&#x40a;"/>
+        <details key="caption" value="&#x41f;&#x430;&#x440;&#x43e;&#x43b;&#x44c;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EmbeddedListControl" eSuperTypes="//DataControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x421;&#x403;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x454;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x421;&#x403;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x454;&#x420;&#xb0;"/>
+      <details key="caption" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x441;&#x43f;&#x438;&#x441;&#x43a;&#x430;"/>
+      <details key="caption.plural" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x441;&#x43f;&#x438;&#x441;&#x43a;&#x430;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NumberControl" eSuperTypes="//DataControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x421;&#x2021;&#x420;&#x451;&#x421;&#x403;&#x420;&#xbb;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x421;&#x2021;&#x420;&#x451;&#x421;&#x403;&#x420;&#xb5;&#x420;&#xbb;"/>
+      <details key="caption" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x447;&#x438;&#x441;&#x43b;&#x430;"/>
+      <details key="caption.plural" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x447;&#x438;&#x441;&#x435;&#x43b;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DateControl" eSuperTypes="//DataControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x420;&#x491;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x2039;"/>
-      <details key="caption.plural" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x420;&#x491;&#x420;&#xb0;&#x421;&#x201a;"/>
+      <details key="caption" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x434;&#x430;&#x442;&#x44b;"/>
+      <details key="caption.plural" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x434;&#x430;&#x442;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DateTimeControl" eSuperTypes="//DataControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x420;&#x491;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x451; &#x420;&#x406;&#x421;&#x402;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;"/>
-      <details key="caption.plural" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x420;&#x491;&#x420;&#xb0;&#x421;&#x201a; &#x420;&#x451; &#x420;&#x406;&#x421;&#x402;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;"/>
+      <details key="caption" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x434;&#x430;&#x442;&#x44b; &#x438; &#x432;&#x440;&#x435;&#x43c;&#x435;&#x43d;&#x438;"/>
+      <details key="caption.plural" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x434;&#x430;&#x442; &#x438; &#x432;&#x440;&#x435;&#x43c;&#x435;&#x43d;&#x438;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BooleanControl" eSuperTypes="//DataControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x420;&#xbb;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#x456;&#x420;&#x455; &#x420;&#xb7;&#x420;&#x405;&#x420;&#xb0;&#x421;&#x2021;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
-      <details key="caption.plural" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x420;&#xbb;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#x456;&#x420;&#x455; &#x420;&#xb7;&#x420;&#x405;&#x420;&#xb0;&#x421;&#x2021;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+      <details key="caption" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x43b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x43e;&#x433;&#x43e; &#x437;&#x43d;&#x430;&#x447;&#x435;&#x43d;&#x438;&#x44f;"/>
+      <details key="caption.plural" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x43b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x43e;&#x433;&#x43e; &#x437;&#x43d;&#x430;&#x447;&#x435;&#x43d;&#x438;&#x44f;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ClassControl" abstract="true" eSuperTypes="//DataControl">
@@ -328,64 +328,64 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EditFormControl" eSuperTypes="//ClassControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x420;&#xb7;&#x420;&#x405;&#x420;&#xb0;&#x421;&#x2021;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#xad;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x406;&#x420;&#x406;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb0; &#x420;&#xb7;&#x420;&#x405;&#x420;&#xb0;&#x421;&#x2021;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#x2116; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
+      <details key="caption" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x437;&#x43d;&#x430;&#x447;&#x435;&#x43d;&#x438;&#x44f; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x430;"/>
+      <details key="caption.plural" value="&#x42d;&#x43b;&#x435;&#x43c;&#x435;&#x43d;&#x442;&#x44b; &#x432;&#x432;&#x43e;&#x434;&#x430; &#x437;&#x43d;&#x430;&#x447;&#x435;&#x43d;&#x438;&#x439; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x43e;&#x432;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MainEditFormControl" eSuperTypes="//EditFormControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x201c;&#x420;&#xbb;&#x420;&#xb0;&#x420;&#x406;&#x420;&#x405;&#x420;&#xb0;&#x421;&#x40f; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x420;&#xb0; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#x201c;&#x420;&#xbb;&#x420;&#xb0;&#x420;&#x406;&#x420;&#x405;&#x421;&#x2039;&#x420;&#xb5; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x421;&#x2039; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
+      <details key="caption" value="&#x413;&#x43b;&#x430;&#x432;&#x43d;&#x430;&#x44f; &#x444;&#x43e;&#x440;&#x43c;&#x430; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x44f; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x430;"/>
+      <details key="caption.plural" value="&#x413;&#x43b;&#x430;&#x432;&#x43d;&#x44b;&#x435; &#x444;&#x43e;&#x440;&#x43c;&#x44b; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x44f; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x43e;&#x432;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TableControl" abstract="true" eSuperTypes="//ClassControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45e;&#x420;&#xb0;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x2020;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#x45e;&#x420;&#xb0;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x2020;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x422;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x430;"/>
+      <details key="caption.plural" value="&#x422;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x44b;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1" eType="//TableColumn" containment="true" eOpposite="//TableColumn/table"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TableColumn" eSuperTypes="//UIElement">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x459;&#x420;&#x455;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x405;&#x420;&#x454;&#x420;&#xb0; &#x421;&#x201a;&#x420;&#xb0;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x2020;&#x421;&#x2039;"/>
-      <details key="caption.plural" value="&#x420;&#x459;&#x420;&#x455;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x405;&#x420;&#x454;&#x420;&#x451; &#x421;&#x201a;&#x420;&#xb0;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x2020;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x41a;&#x43e;&#x43b;&#x43e;&#x43d;&#x43a;&#x430; &#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x44b;"/>
+      <details key="caption.plural" value="&#x41a;&#x43e;&#x43b;&#x43e;&#x43d;&#x43a;&#x438; &#x442;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x44b;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="table" lowerBound="1" eType="//TableControl" eOpposite="//TableControl/columns"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MasterDetail" eSuperTypes="//TableControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45e;&#x420;&#xb0;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x2020;&#x420;&#xb0; &#x421;&#x403; &#x420;&#x406;&#x420;&#x405;&#x421;&#x453;&#x421;&#x201a;&#x421;&#x402;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x405;&#x420;&#x451;&#x420;&#x458; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;&#x420;&#x458;"/>
-      <details key="caption.plural" value="&#x420;&#x45e;&#x420;&#xb0;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x2020;&#x421;&#x2039; &#x421;&#x403; &#x420;&#x406;&#x420;&#x405;&#x421;&#x453;&#x421;&#x201a;&#x421;&#x402;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x405;&#x420;&#x451;&#x420;&#x458; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;&#x420;&#x458;"/>
+      <details key="caption" value="&#x422;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x430; &#x441; &#x432;&#x43d;&#x443;&#x442;&#x440;&#x435;&#x43d;&#x43d;&#x438;&#x43c; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;&#x43c;"/>
+      <details key="caption.plural" value="&#x422;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x44b; &#x441; &#x432;&#x43d;&#x443;&#x442;&#x440;&#x435;&#x43d;&#x43d;&#x438;&#x43c; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;&#x43c;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TableGroupControl" eSuperTypes="//TableControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45e;&#x420;&#xb0;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x2020;&#x420;&#xb0; &#x421;&#x403; &#x420;&#x406;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x20ac;&#x420;&#x405;&#x420;&#x451;&#x420;&#x458; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;&#x420;&#x458;"/>
-      <details key="caption.plural" value="&#x420;&#x45e;&#x420;&#xb0;&#x420;&#xb1;&#x420;&#xbb;&#x420;&#x451;&#x421;&#x2020;&#x421;&#x2039; &#x421;&#x403; &#x420;&#x406;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x20ac;&#x420;&#x405;&#x420;&#x451;&#x420;&#x458; &#x421;&#x402;&#x420;&#xb5;&#x420;&#x491;&#x420;&#xb0;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;&#x420;&#x458;"/>
+      <details key="caption" value="&#x422;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x430; &#x441; &#x432;&#x43d;&#x435;&#x448;&#x43d;&#x438;&#x43c; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;&#x43c;"/>
+      <details key="caption.plural" value="&#x422;&#x430;&#x431;&#x43b;&#x438;&#x446;&#x44b; &#x441; &#x432;&#x43d;&#x435;&#x448;&#x43d;&#x438;&#x43c; &#x440;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;&#x43c;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GraphControl" eSuperTypes="//ClassControl">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x201d;&#x420;&#x451;&#x420;&#xb0;&#x420;&#x456;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x458;&#x420;&#x458;&#x420;&#xb0; &#x420;&#x201c;&#x420;&#xb0;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#x201d;&#x420;&#x451;&#x420;&#xb0;&#x420;&#x456;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x458;&#x421;&#x2039; &#x420;&#x201c;&#x420;&#xb0;&#x420;&#x405;&#x421;&#x201a;&#x420;&#xb0;"/>
+      <details key="caption" value="&#x414;&#x438;&#x430;&#x433;&#x440;&#x430;&#x43c;&#x43c;&#x430; &#x413;&#x430;&#x43d;&#x442;&#x430;"/>
+      <details key="caption.plural" value="&#x414;&#x438;&#x430;&#x433;&#x440;&#x430;&#x43c;&#x44b; &#x413;&#x430;&#x43d;&#x442;&#x430;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
-      <details key="caption.plural" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+      <details key="caption" value="&#x412;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x435;"/>
+      <details key="caption.plural" value="&#x412;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x44f;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BooleanExpression" abstract="true" eSuperTypes="//Expression">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x203a;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#xb5; &#x420;&#x406;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
-      <details key="caption.plural" value="&#x420;&#x203a;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x451;&#x420;&#xb5; &#x420;&#x406;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+      <details key="caption" value="&#x41b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x43e;&#x435; &#x432;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x435;"/>
+      <details key="caption.plural" value="&#x41b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x438;&#x435; &#x432;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x44f;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EvalBooleanExpression" eSuperTypes="//BooleanExpression">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x2021;&#x420;&#x451;&#x421;&#x403;&#x420;&#xbb;&#x421;&#x40f;&#x420;&#xb5;&#x420;&#x458;&#x420;&#x455;&#x420;&#xb5; &#x420;&#xbb;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#xb5; &#x420;&#x406;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
-      <details key="caption.plural" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x2021;&#x420;&#x451;&#x421;&#x403;&#x420;&#xbb;&#x421;&#x40f;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x2039;&#x420;&#xb5; &#x420;&#xbb;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x451;&#x420;&#xb5; &#x420;&#x406;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+      <details key="caption" value="&#x412;&#x44b;&#x447;&#x438;&#x441;&#x43b;&#x44f;&#x435;&#x43c;&#x43e;&#x435; &#x43b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x43e;&#x435; &#x432;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x435;"/>
+      <details key="caption.plural" value="&#x412;&#x44b;&#x447;&#x438;&#x441;&#x43b;&#x44f;&#x435;&#x43c;&#x44b;&#x435; &#x43b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x438;&#x435; &#x432;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x44f;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="expr">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -393,50 +393,50 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataModelComparison" abstract="true" eSuperTypes="//EvalBooleanExpression">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5; &#x421;&#x403;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x406;&#x420;&#x405;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
-      <details key="caption.plural" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f; &#x421;&#x403;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x406;&#x420;&#x405;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+      <details key="caption" value="&#x412;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x435; &#x441;&#x440;&#x430;&#x432;&#x43d;&#x435;&#x43d;&#x438;&#x44f;"/>
+      <details key="caption.plural" value="&#x412;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x44f; &#x441;&#x440;&#x430;&#x432;&#x43d;&#x435;&#x43d;&#x438;&#x44f;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dataModel" lowerBound="1" eType="//DataModel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EqEvalExpression" eSuperTypes="//DataModelComparison">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5; &#x421;&#x402;&#x420;&#xb0;&#x420;&#x406;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x406;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f; &#x421;&#x402;&#x420;&#xb0;&#x420;&#x406;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x406;&#x420;&#xb0;"/>
+      <details key="caption" value="&#x412;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x435; &#x440;&#x430;&#x432;&#x435;&#x43d;&#x441;&#x442;&#x432;&#x430;"/>
+      <details key="caption.plural" value="&#x412;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x44f; &#x440;&#x430;&#x432;&#x435;&#x43d;&#x441;&#x442;&#x432;&#x430;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NeEvalExpression" eSuperTypes="//DataModelComparison">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5; &#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x406;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x406;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f; &#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x406;&#x420;&#xb5;&#x420;&#x405;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x406;&#x420;&#xb0;"/>
+      <details key="caption" value="&#x412;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x435; &#x43d;&#x435;&#x440;&#x430;&#x432;&#x435;&#x43d;&#x441;&#x442;&#x432;&#x430;"/>
+      <details key="caption.plural" value="&#x412;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x44f; &#x43d;&#x435;&#x440;&#x430;&#x432;&#x435;&#x43d;&#x441;&#x442;&#x432;&#x430;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ListExpression" abstract="true" eSuperTypes="//BooleanExpression">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454; &#x420;&#xbb;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x451;&#x421;&#x2026; &#x420;&#x406;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#x2116;"/>
-      <details key="caption.plural" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x454;&#x420;&#x451; &#x420;&#xbb;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x451;&#x421;&#x2026; &#x420;&#x406;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#x2116;"/>
+      <details key="caption" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x43b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x438;&#x445; &#x432;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x439;"/>
+      <details key="caption.plural" value="&#x421;&#x43f;&#x438;&#x441;&#x43a;&#x438; &#x43b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x438;&#x445; &#x432;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x439;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="content" upperBound="-1" eType="//BooleanExpression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AndExpression" eSuperTypes="//ListExpression">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x203a;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#xb5; &#x420;&#xfffd;"/>
-      <details key="caption.plural" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454; &#x420;&#xbb;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x451;&#x421;&#x2026; &#x420;&#xfffd;"/>
+      <details key="caption" value="&#x41b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x43e;&#x435; &#x418;"/>
+      <details key="caption.plural" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x43b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x438;&#x445; &#x418;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrExpression" eSuperTypes="//ListExpression">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x203a;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#xb5; &#x420;&#xfffd;&#x420;&#x203a;&#x420;&#xfffd;"/>
-      <details key="caption.plural" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454; &#x420;&#xbb;&#x420;&#x455;&#x420;&#x456;&#x420;&#x451;&#x421;&#x2021;&#x420;&#xb5;&#x421;&#x403;&#x420;&#x454;&#x420;&#x451;&#x421;&#x2026; &#x420;&#xfffd;&#x420;&#x203a;&#x420;&#xfffd;"/>
+      <details key="caption" value="&#x41b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x43e;&#x435; &#x418;&#x41b;&#x418;"/>
+      <details key="caption.plural" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x43b;&#x43e;&#x433;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x438;&#x445; &#x418;&#x41b;&#x418;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataModel" abstract="true">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45a;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb5;&#x420;&#xbb;&#x421;&#x40a; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
-      <details key="caption.plural" value="&#x420;&#x45a;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb5;&#x420;&#xbb;&#x420;&#x451; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
+      <details key="caption" value="&#x41c;&#x43e;&#x434;&#x435;&#x43b;&#x44c; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
+      <details key="caption.plural" value="&#x41c;&#x43e;&#x434;&#x435;&#x43b;&#x438; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x438;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
         <details key="display" value="true"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -445,28 +445,28 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ModelProperty" eSuperTypes="//DataModel">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x40e;&#x420;&#x406;&#x420;&#x455;&#x420;&#x2116;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x406;&#x420;&#x455; &#x420;&#x458;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb5;&#x420;&#xbb;&#x420;&#x451; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
-      <details key="caption.plural" value="&#x420;&#x40e;&#x420;&#x406;&#x420;&#x455;&#x420;&#x2116;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x406;&#x420;&#xb0; &#x420;&#x458;&#x420;&#x455;&#x420;&#x491;&#x420;&#xb5;&#x420;&#xbb;&#x420;&#x451; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
+      <details key="caption" value="&#x421;&#x432;&#x43e;&#x439;&#x441;&#x442;&#x432;&#x43e; &#x43c;&#x43e;&#x434;&#x435;&#x43b;&#x438; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
+      <details key="caption.plural" value="&#x421;&#x432;&#x43e;&#x439;&#x441;&#x442;&#x432;&#x430; &#x43c;&#x43e;&#x434;&#x435;&#x43b;&#x438; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="//DataModel" eOpposite="//DataModel/properties"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataSource" abstract="true" eSuperTypes="//DataModel">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xfffd;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
-      <details key="caption.plural" value="&#x420;&#xfffd;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454;&#x420;&#x451; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
+      <details key="caption" value="&#x418;&#x441;&#x442;&#x43e;&#x447;&#x43d;&#x438;&#x43a; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
+      <details key="caption.plural" value="&#x418;&#x441;&#x442;&#x43e;&#x447;&#x43d;&#x438;&#x43a;&#x438; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="form" lowerBound="1" eType="//UIForm" eOpposite="//UIForm/dataSources"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="//DataSource">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45f;&#x420;&#xb0;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x458;&#x420;&#xb5;&#x421;&#x201a;&#x421;&#x402; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x421;&#x2039;"/>
-      <details key="caption.plural" value="&#x420;&#x45f;&#x420;&#xb0;&#x421;&#x402;&#x420;&#xb0;&#x420;&#x458;&#x420;&#xb5;&#x421;&#x201a;&#x421;&#x402;&#x421;&#x2039; &#x421;&#x201e;&#x420;&#x455;&#x421;&#x402;&#x420;&#x458;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x41f;&#x430;&#x440;&#x430;&#x43c;&#x435;&#x442;&#x440; &#x444;&#x43e;&#x440;&#x43c;&#x44b;"/>
+      <details key="caption.plural" value="&#x41f;&#x430;&#x440;&#x430;&#x43c;&#x435;&#x442;&#x440;&#x44b; &#x444;&#x43e;&#x440;&#x43c;&#x44b;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Eval" eSuperTypes="//DataSource">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x2021;&#x420;&#x451;&#x421;&#x403;&#x420;&#xbb;&#x421;&#x40f;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x2039;&#x420;&#x2116; &#x420;&#x451;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
-      <details key="caption.plural" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x2021;&#x420;&#x451;&#x421;&#x403;&#x420;&#xbb;&#x421;&#x40f;&#x420;&#xb5;&#x420;&#x458;&#x421;&#x2039;&#x420;&#xb5; &#x420;&#x451;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454;&#x420;&#x451; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
+      <details key="caption" value="&#x412;&#x44b;&#x447;&#x438;&#x441;&#x43b;&#x44f;&#x435;&#x43c;&#x44b;&#x439; &#x438;&#x441;&#x442;&#x43e;&#x447;&#x43d;&#x438;&#x43a; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
+      <details key="caption.plural" value="&#x412;&#x44b;&#x447;&#x438;&#x441;&#x43b;&#x44f;&#x435;&#x43c;&#x44b;&#x435; &#x438;&#x441;&#x442;&#x43e;&#x447;&#x43d;&#x438;&#x43a;&#x438; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="expr" lowerBound="1">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -474,20 +474,20 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExternalSource" eSuperTypes="//DataSource">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2019;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x20ac;&#x420;&#x405;&#x420;&#x451;&#x420;&#x2116; &#x420;&#x451;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
-      <details key="caption.plural" value="&#x420;&#x2019;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x20ac;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5; &#x420;&#x451;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454;&#x420;&#x451; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
+      <details key="caption" value="&#x412;&#x43d;&#x435;&#x448;&#x43d;&#x438;&#x439; &#x438;&#x441;&#x442;&#x43e;&#x447;&#x43d;&#x438;&#x43a; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
+      <details key="caption.plural" value="&#x412;&#x43d;&#x435;&#x448;&#x43d;&#x438;&#x435; &#x438;&#x441;&#x442;&#x43e;&#x447;&#x43d;&#x438;&#x43a;&#x438; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Null" eSuperTypes="//DataSource">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45f;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x2116; &#x420;&#x451;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
-      <details key="caption.plural" value="&#x420;&#x45f;&#x421;&#x453;&#x421;&#x403;&#x421;&#x201a;&#x421;&#x2039;&#x420;&#xb5; &#x420;&#x451;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x451;&#x420;&#x454;&#x420;&#x451; &#x420;&#x491;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026;"/>
+      <details key="caption" value="&#x41f;&#x443;&#x441;&#x442;&#x43e;&#x439; &#x438;&#x441;&#x442;&#x43e;&#x447;&#x43d;&#x438;&#x43a; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
+      <details key="caption.plural" value="&#x41f;&#x443;&#x441;&#x442;&#x44b;&#x435; &#x438;&#x441;&#x442;&#x43e;&#x447;&#x43d;&#x438;&#x43a;&#x438; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DBSource" abstract="true" eSuperTypes="//DataSource">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403; &#x420;&#x454; &#x420;&#x2018;&#x420;&#x201d;"/>
-      <details key="caption.plural" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403;&#x421;&#x2039; &#x420;&#x454; &#x420;&#x2018;&#x420;&#x201d;"/>
+      <details key="caption" value="&#x417;&#x430;&#x43f;&#x440;&#x43e;&#x441; &#x43a; &#x411;&#x414;"/>
+      <details key="caption.plural" value="&#x417;&#x430;&#x43f;&#x440;&#x43e;&#x441;&#x44b; &#x43a; &#x411;&#x414;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="up" defaultValueLiteral="-2">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -501,8 +501,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="QuerySource" abstract="true" eSuperTypes="//DBSource">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="SQL &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403;"/>
-      <details key="caption.plural" value="SQL &#x420;&#xb7;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403;&#x421;&#x2039;"/>
+      <details key="caption" value="SQL &#x437;&#x430;&#x43f;&#x440;&#x43e;&#x441;"/>
+      <details key="caption.plural" value="SQL &#x437;&#x430;&#x43f;&#x440;&#x43e;&#x441;&#x44b;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="query">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -510,27 +510,27 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ObjectSource" abstract="true" eSuperTypes="//DBSource">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403;&#x421;&#x2039; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
+      <details key="caption" value="&#x417;&#x430;&#x43f;&#x440;&#x43e;&#x441; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x430;"/>
+      <details key="caption.plural" value="&#x417;&#x430;&#x43f;&#x440;&#x43e;&#x441;&#x44b; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x43e;&#x432;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="uiClass" lowerBound="1" eType="//UIClass"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ObjectItem" eSuperTypes="//ObjectSource">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403; &#x420;&#xb5;&#x420;&#x491;&#x420;&#x451;&#x420;&#x405;&#x420;&#x451;&#x421;&#x2021;&#x420;&#x405;&#x420;&#x455;&#x420;&#x456;&#x420;&#x455; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403;&#x421;&#x2039; &#x420;&#xb5;&#x420;&#x491;&#x420;&#x451;&#x420;&#x405;&#x420;&#x451;&#x421;&#x2021;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
+      <details key="caption" value="&#x417;&#x430;&#x43f;&#x440;&#x43e;&#x441; &#x435;&#x434;&#x438;&#x43d;&#x438;&#x447;&#x43d;&#x43e;&#x433;&#x43e; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x430;"/>
+      <details key="caption.plural" value="&#x417;&#x430;&#x43f;&#x440;&#x43e;&#x441;&#x44b; &#x435;&#x434;&#x438;&#x43d;&#x438;&#x447;&#x43d;&#x44b;&#x445; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x43e;&#x432;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modeModel" lowerBound="1" eType="//DataModel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ObjectList" eSuperTypes="//ObjectSource">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403; &#x421;&#x403;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x454;&#x420;&#xb0; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#xb0;"/>
-      <details key="caption.plural" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x457;&#x421;&#x402;&#x420;&#x455;&#x421;&#x403;&#x421;&#x2039; &#x421;&#x403;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x454;&#x420;&#x455;&#x420;&#x406; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
+      <details key="caption" value="&#x417;&#x430;&#x43f;&#x440;&#x43e;&#x441; &#x441;&#x43f;&#x438;&#x441;&#x43a;&#x430; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x430;"/>
+      <details key="caption.plural" value="&#x417;&#x430;&#x43f;&#x440;&#x43e;&#x441;&#x44b; &#x441;&#x43f;&#x438;&#x441;&#x43a;&#x43e;&#x432; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x43e;&#x432;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="filter" eType="//AndExpression" containment="true">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#xa4;&#x420;&#x451;&#x420;&#xbb;&#x421;&#x40a;&#x421;&#x201a;&#x421;&#x402;"/>
-        <details key="caption.plural" value="&#x420;&#xa4;&#x420;&#x451;&#x420;&#xbb;&#x421;&#x40a;&#x421;&#x201a;&#x421;&#x402;&#x421;&#x2039;"/>
+        <details key="caption" value="&#x424;&#x438;&#x43b;&#x44c;&#x442;&#x440;"/>
+        <details key="caption.plural" value="&#x424;&#x438;&#x43b;&#x44c;&#x442;&#x440;&#x44b;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="joined" upperBound="-1" eType="//JoinedObject" containment="true"/>
@@ -545,51 +545,51 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConstObjectList" eSuperTypes="//DataSource">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454; &#x420;&#x457;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x40f;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
-      <details key="caption.plural" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x454;&#x420;&#x451; &#x420;&#x457;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x40f;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x421;&#x2026; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x420;&#x455;&#x420;&#x406;"/>
+      <details key="caption" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x43f;&#x43e;&#x441;&#x442;&#x43e;&#x44f;&#x43d;&#x43d;&#x44b;&#x445; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x43e;&#x432;"/>
+      <details key="caption.plural" value="&#x421;&#x43f;&#x438;&#x441;&#x43a;&#x438; &#x43f;&#x43e;&#x441;&#x442;&#x43e;&#x44f;&#x43d;&#x43d;&#x44b;&#x445; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x43e;&#x432;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="content" upperBound="-1" eType="//ConstObject" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConstObject">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45f;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x40f;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x420;&#x2116; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;"/>
-      <details key="caption.plural" value="&#x420;&#x45f;&#x420;&#x455;&#x421;&#x403;&#x421;&#x201a;&#x420;&#x455;&#x421;&#x40f;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x420;&#xb5; &#x420;&#x455;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x421;&#x2039;"/>
+      <details key="caption" value="&#x41f;&#x43e;&#x441;&#x442;&#x43e;&#x44f;&#x43d;&#x43d;&#x44b;&#x439; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;"/>
+      <details key="caption.plural" value="&#x41f;&#x43e;&#x441;&#x442;&#x43e;&#x44f;&#x43d;&#x43d;&#x44b;&#x435; &#x43e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x44b;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="content" upperBound="-1" eType="//NamedExpression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NamedExpression">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#xfffd;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x420;&#x455;&#x420;&#xb5; &#x420;&#x406;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
-      <details key="caption.plural" value="&#x420;&#xfffd;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x405;&#x421;&#x2039;&#x420;&#xb5; &#x420;&#x406;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x421;&#x40f;"/>
+      <details key="caption" value="&#x418;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x43d;&#x43e;&#x435; &#x432;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x435;"/>
+      <details key="caption.plural" value="&#x418;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x43d;&#x44b;&#x435; &#x432;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x44f;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x438;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
         <details key="display" value="true"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="expr">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2019;&#x421;&#x2039;&#x421;&#x402;&#x420;&#xb0;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x412;&#x44b;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Application">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45f;&#x421;&#x402;&#x420;&#x451;&#x420;&#xbb;&#x420;&#x455;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
-      <details key="caption.plural" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454; &#x420;&#x457;&#x421;&#x402;&#x420;&#x451;&#x420;&#xbb;&#x420;&#x455;&#x420;&#xb6;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x451;&#x420;&#x2116;"/>
+      <details key="caption" value="&#x41f;&#x440;&#x438;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x435;"/>
+      <details key="caption.plural" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x43f;&#x440;&#x438;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x439;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x438;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caption">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x456;&#x420;&#x455;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x406;&#x420;&#x455;&#x420;&#x454;"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x43e;&#x43b;&#x43e;&#x432;&#x43e;&#x43a;"/>
         <details key="display" value="true"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -598,37 +598,37 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Module">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x45a;&#x420;&#x455;&#x420;&#x491;&#x421;&#x453;&#x420;&#xbb;&#x421;&#x40a;"/>
-      <details key="caption.plural" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454; &#x420;&#x458;&#x420;&#x455;&#x420;&#x491;&#x421;&#x453;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x2116;"/>
+      <details key="caption" value="&#x41c;&#x43e;&#x434;&#x443;&#x43b;&#x44c;"/>
+      <details key="caption.plural" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x43c;&#x43e;&#x434;&#x443;&#x43b;&#x435;&#x439;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="application" lowerBound="1" eType="//Application" eOpposite="//Application/modules"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#x451;&#x420;&#x458;&#x420;&#xb5;&#x420;&#x405;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
+        <details key="caption" value="&#x41d;&#x430;&#x438;&#x43c;&#x435;&#x43d;&#x43e;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="caption">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x2014;&#x420;&#xb0;&#x420;&#x456;&#x420;&#x455;&#x420;&#xbb;&#x420;&#x455;&#x420;&#x406;&#x420;&#x455;&#x420;&#x454;"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x43e;&#x43b;&#x43e;&#x432;&#x43e;&#x43a;"/>
         <details key="display" value="true"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entryClasses" upperBound="-1" eType="//UIClass">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x45b;&#x420;&#xb1;&#x421;&#x409;&#x420;&#xb5;&#x420;&#x454;&#x421;&#x201a;&#x421;&#x2039; &#x420;&#x458;&#x420;&#x455;&#x420;&#x491;&#x421;&#x453;&#x420;&#xbb;&#x421;&#x40f;"/>
+        <details key="caption" value="&#x41e;&#x431;&#x44a;&#x435;&#x43a;&#x442;&#x44b; &#x43c;&#x43e;&#x434;&#x443;&#x43b;&#x44f;"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExternalModule" eSuperTypes="//Module">
     <eAnnotations source="mspace.ui">
-      <details key="caption" value="&#x420;&#x2019;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x20ac;&#x420;&#x405;&#x420;&#x451;&#x420;&#x2116; &#x420;&#x45a;&#x420;&#x455;&#x420;&#x491;&#x421;&#x453;&#x420;&#xbb;&#x421;&#x40a;"/>
-      <details key="caption.plural" value="&#x420;&#x40e;&#x420;&#x457;&#x420;&#x451;&#x421;&#x403;&#x420;&#x455;&#x420;&#x454; &#x420;&#x406;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x20ac;&#x420;&#x405;&#x420;&#x451;&#x421;&#x2026; &#x420;&#x458;&#x420;&#x455;&#x420;&#x491;&#x421;&#x453;&#x420;&#xbb;&#x420;&#xb5;&#x420;&#x2116;"/>
+      <details key="caption" value="&#x412;&#x43d;&#x435;&#x448;&#x43d;&#x438;&#x439; &#x41c;&#x43e;&#x434;&#x443;&#x43b;&#x44c;"/>
+      <details key="caption.plural" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x432;&#x43d;&#x435;&#x448;&#x43d;&#x438;&#x445; &#x43c;&#x43e;&#x434;&#x443;&#x43b;&#x435;&#x439;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="link">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x420;&#x40e;&#x421;&#x403;&#x421;&#x2039;&#x420;&#xbb;&#x420;&#x454;&#x420;&#xb0;"/>
+        <details key="caption" value="&#x421;&#x441;&#x44b;&#x43b;&#x43a;&#x430;"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
