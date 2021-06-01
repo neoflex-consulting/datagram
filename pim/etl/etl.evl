@@ -481,6 +481,20 @@ operation nameIsValid(name): Boolean {
     return true;
 }
 
+operation tableNameIsValid(name): Boolean {
+    if (not Native("java.lang.Character").isJavaIdentifierStart(name.charAt(0))) {
+        return false;
+    }
+    var i = 1;
+    while (i < name.length()) {
+	    if (".".charAt(0) <> name.charAt(i) and not Native("java.lang.Character").isJavaIdentifierPart(name.charAt(i))) {
+	        return false;
+	    }
+	    i = i + 1;
+    }
+    return true;
+}
+
 operation src!Transformation getNames() {
   return self.sources.includingAll(self.targets.includingAll(self.transformationSteps)).collect(x|x.name);
 }
@@ -599,7 +613,7 @@ context src!HiveTarget {
     }
     constraint TableNameIsValid {      
         guard : self.satisfies("TableNameIsDefined")      
-        check : nameIsValid(self.tableName) 
+        check : tableNameIsValid(self.tableName)
         message : "Не корректное имя таблицы Target: \"" + self.name + "\""
     }
     constraint PartitionsNamesAreDefined {

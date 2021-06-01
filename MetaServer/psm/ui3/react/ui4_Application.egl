@@ -3,17 +3,26 @@
     
     "ui4_Application.egl: generation parameters".println();
     mspaceRoot.println("mspaceRoot: ");
-    
 
-    TemplateFactory.setTemplateRoot("file:///" + mspaceRoot + "/psm/ui3/react/");
-    
+    for(epackage in EPackage){
+
+        epackage.name.println();
+
+    }
+
+
+    TemplateFactory.setTemplateRoot("file:///" + mspaceRoot + "/MetaServer/psm/ui3/react/");
+
     var model_json: Template = TemplateFactory.load("model_json.egl");
+    model_json.reset();
+
     var locales_json: Template = TemplateFactory.load("locales.egl");
-    var webDir = mspaceRoot + "/psm/ui3/react/WEB/";
-    
+    var webDir = mspaceRoot + "/MetaServer/psm/ui3/react/WEB/";
+
     for (application in Application) {
-        var aDir = mspaceRoot + "/cim/ddesigner/src/";
+        var aDir = mspaceRoot + "/ddesigner/src/";
         application.populateClasses();
+
         model_json.run(Map{"application" = application}, aDir + "model.json");
         //for (locale in application.locales) {
         //    for (language in application.languages) {
@@ -22,16 +31,19 @@
         //}
     }
 
+
+
 operation LocNS generate(template, aDir, language) {
     var lDir = aDir + "locales/" + language + "/";
     template.run(Map{"ns" = self, "language" = language}, lDir + self.name + ".json");
 }
-    
+
 operation Template run(m, o) {
-    self.reset();
+
     for (k in m.keySet) {
-        self.populate(k, m.get(k));
+      self.populate(k, m.get(k));
     }
     self.generate(o);
+    o.println("Model result: ");
 }   
 %]

@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rel:Scheme xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rel="http://www.neoflex.ru/meta/relational" name="person_at_person">
+  <tables name="address" description="Street address information for customers, employees, and vendors.">
+    <columns name="addressid" description="Primary key for Address records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="addressline1" description="First street address line.">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <columns name="addressline2" nullable="true" description="Second street address line.">
+      <dataType xsi:type="rel:VARCHAR" length="60"/>
+    </columns>
+    <columns name="city" description="Name of the city.">
+      <dataType xsi:type="rel:VARCHAR" length="30"/>
+    </columns>
+    <columns name="stateprovinceid" description="Unique identification number for the state or province. Foreign key to StateProvince table.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="postalcode" description="Postal code for the street address.">
+      <dataType xsi:type="rel:VARCHAR" length="15"/>
+    </columns>
+    <columns name="spatiallocation" nullable="true" description="Latitude and longitude of this address.">
+      <dataType xsi:type="rel:VARCHAR" length="44"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="address_pk">
+      <keyFeatures column="//@tables.0/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_Address_StateProvince_StateProvinceID" target="//@tables.12">
+      <keyFeatures column="//@tables.0/@columns.4"/>
+    </foreignKeys>
+  </tables>
+  <tables name="addresstype" description="Types of addresses stored in the Address table.">
+    <columns name="addresstypeid" description="Primary key for AddressType records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Address type description. For example, Billing, Home, or Shipping.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="addresstype_pk">
+      <keyFeatures column="//@tables.1/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="businessentity" description="Source of the ID that connects vendors, customers, and employees with address and contact information.">
+    <columns name="businessentityid" description="Primary key for all customers, vendors, and employees.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="businessentity_pk">
+      <keyFeatures column="//@tables.2/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="businessentityaddress" description="Cross-reference table mapping customers, vendors, and employees to their addresses.">
+    <columns name="businessentityid" description="Primary key. Foreign key to BusinessEntity.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="addressid" description="Primary key. Foreign key to Address.AddressID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="addresstypeid" description="Primary key. Foreign key to AddressType.AddressTypeID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="businessentityaddress_pk">
+      <keyFeatures column="//@tables.3/@columns.0"/>
+      <keyFeatures column="//@tables.3/@columns.1"/>
+      <keyFeatures column="//@tables.3/@columns.2"/>
+    </primaryKey>
+    <foreignKeys name="FK_BusinessEntityAddress_Address_AddressID" target="//@tables.0">
+      <keyFeatures column="//@tables.3/@columns.1"/>
+    </foreignKeys>
+    <foreignKeys name="FK_BusinessEntityAddress_AddressType_AddressTypeID" target="//@tables.1">
+      <keyFeatures column="//@tables.3/@columns.2"/>
+    </foreignKeys>
+    <foreignKeys name="FK_BusinessEntityAddress_BusinessEntity_BusinessEntityID" target="//@tables.2">
+      <keyFeatures column="//@tables.3/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="businessentitycontact" description="Cross-reference table mapping stores, vendors, and employees to people">
+    <columns name="businessentityid" description="Primary key. Foreign key to BusinessEntity.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="personid" description="Primary key. Foreign key to Person.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="contacttypeid" description="Primary key.  Foreign key to ContactType.ContactTypeID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="businessentitycontact_pk">
+      <keyFeatures column="//@tables.4/@columns.0"/>
+      <keyFeatures column="//@tables.4/@columns.1"/>
+      <keyFeatures column="//@tables.4/@columns.2"/>
+    </primaryKey>
+    <foreignKeys name="FK_BusinessEntityContact_BusinessEntity_BusinessEntityID" target="//@tables.2">
+      <keyFeatures column="//@tables.4/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_BusinessEntityContact_ContactType_ContactTypeID" target="//@tables.5">
+      <keyFeatures column="//@tables.4/@columns.2"/>
+    </foreignKeys>
+    <foreignKeys name="FK_BusinessEntityContact_Person_PersonID" target="//@tables.9">
+      <keyFeatures column="//@tables.4/@columns.1"/>
+    </foreignKeys>
+  </tables>
+  <tables name="contacttype" description="Lookup table containing the types of business entity contacts.">
+    <columns name="contacttypeid" description="Primary key for ContactType records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Contact type description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="contacttype_pk">
+      <keyFeatures column="//@tables.5/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="countryregion" description="Lookup table containing the ISO standard codes for countries and regions.">
+    <columns name="countryregioncode" description="ISO standard code for countries and regions.">
+      <dataType xsi:type="rel:VARCHAR" length="3"/>
+    </columns>
+    <columns name="name" description="Country or region name.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="countryregion_pk">
+      <keyFeatures column="//@tables.6/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="emailaddress" description="Where to send a person email.">
+    <columns name="businessentityid" description="Primary key. Person associated with this email address.  Foreign key to Person.BusinessEntityID">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="emailaddressid" description="Primary key. ID of this email address.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="emailaddress" nullable="true" description="E-mail address for the person.">
+      <dataType xsi:type="rel:VARCHAR" length="50"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="emailaddress_pk">
+      <keyFeatures column="//@tables.7/@columns.0"/>
+      <keyFeatures column="//@tables.7/@columns.1"/>
+    </primaryKey>
+    <foreignKeys name="FK_EmailAddress_Person_BusinessEntityID" target="//@tables.9">
+      <keyFeatures column="//@tables.7/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="password" description="One way hashed authentication information">
+    <columns name="businessentityid">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="passwordhash" description="Password for the e-mail account.">
+      <dataType xsi:type="rel:VARCHAR" length="128"/>
+    </columns>
+    <columns name="passwordsalt" description="Random value concatenated with the password string before the password is hashed.">
+      <dataType xsi:type="rel:VARCHAR" length="10"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="password_pk">
+      <keyFeatures column="//@tables.8/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_Password_Person_BusinessEntityID" target="//@tables.9">
+      <keyFeatures column="//@tables.8/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="person" description="Human beings involved with AdventureWorks: employees, customer contacts, and vendor contacts.">
+    <columns name="businessentityid" description="Primary key for Person records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="persontype" description="Primary type of person: SC = Store Contact, IN = Individual (retail) customer, SP = Sales person, EM = Employee (non-sales), VC = Vendor contact, GC = General contact">
+      <dataType xsi:type="rel:CHAR" length="2"/>
+    </columns>
+    <columns name="namestyle" description="0 = The data in FirstName and LastName are stored in western style (first name, last name) order.  1 = Eastern style (last name, first name) order.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="title" nullable="true" description="A courtesy title. For example, Mr. or Ms.">
+      <dataType xsi:type="rel:VARCHAR" length="8"/>
+    </columns>
+    <columns name="firstname" description="First name of the person.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="middlename" nullable="true" description="Middle name or middle initial of the person.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="lastname" description="Last name of the person.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="suffix" nullable="true" description="Surname suffix. For example, Sr. or Jr.">
+      <dataType xsi:type="rel:VARCHAR" length="10"/>
+    </columns>
+    <columns name="emailpromotion" description="0 = Contact does not wish to receive e-mail promotions, 1 = Contact does wish to receive e-mail promotions from AdventureWorks, 2 = Contact does wish to receive e-mail promotions from AdventureWorks and selected partners.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="additionalcontactinfo" nullable="true" description="Additional contact information about the person stored in xml format.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="demographics" nullable="true" description="Personal information such as hobbies, and income collected from online shoppers. Used for sales analysis.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="person_pk">
+      <keyFeatures column="//@tables.9/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_Person_BusinessEntity_BusinessEntityID" target="//@tables.2">
+      <keyFeatures column="//@tables.9/@columns.0"/>
+    </foreignKeys>
+  </tables>
+  <tables name="personphone" description="Telephone number and type of a person.">
+    <columns name="businessentityid" description="Business entity identification number. Foreign key to Person.BusinessEntityID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="phonenumber" description="Telephone number identification number.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="phonenumbertypeid" description="Kind of phone number. Foreign key to PhoneNumberType.PhoneNumberTypeID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="personphone_pk">
+      <keyFeatures column="//@tables.10/@columns.0"/>
+      <keyFeatures column="//@tables.10/@columns.1"/>
+      <keyFeatures column="//@tables.10/@columns.2"/>
+    </primaryKey>
+    <foreignKeys name="FK_PersonPhone_Person_BusinessEntityID" target="//@tables.9">
+      <keyFeatures column="//@tables.10/@columns.0"/>
+    </foreignKeys>
+    <foreignKeys name="FK_PersonPhone_PhoneNumberType_PhoneNumberTypeID" target="//@tables.11">
+      <keyFeatures column="//@tables.10/@columns.2"/>
+    </foreignKeys>
+  </tables>
+  <tables name="phonenumbertype" description="Type of phone number of a person.">
+    <columns name="phonenumbertypeid" description="Primary key for telephone number type records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="name" description="Name of the telephone number type">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="phonenumbertype_pk">
+      <keyFeatures column="//@tables.11/@columns.0"/>
+    </primaryKey>
+  </tables>
+  <tables name="stateprovince" description="State and province lookup table.">
+    <columns name="stateprovinceid" description="Primary key for StateProvince records.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="stateprovincecode" description="ISO standard state or province code.">
+      <dataType xsi:type="rel:CHAR" length="3"/>
+    </columns>
+    <columns name="countryregioncode" description="ISO standard country or region code. Foreign key to CountryRegion.CountryRegionCode.">
+      <dataType xsi:type="rel:VARCHAR" length="3"/>
+    </columns>
+    <columns name="isonlystateprovinceflag" description="0 = StateProvinceCode exists. 1 = StateProvinceCode unavailable, using CountryRegionCode.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="name" description="State or province description.">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="territoryid" description="ID of the territory in which the state or province is located. Foreign key to SalesTerritory.SalesTerritoryID.">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="rowguid">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+    <primaryKey name="stateprovince_pk">
+      <keyFeatures column="//@tables.12/@columns.0"/>
+    </primaryKey>
+    <foreignKeys name="FK_StateProvince_CountryRegion_CountryRegionCode" target="//@tables.6">
+      <keyFeatures column="//@tables.12/@columns.2"/>
+    </foreignKeys>
+    <foreignKeys name="FK_StateProvince_SalesTerritory_TerritoryID">
+      <keyFeatures column="//@tables.12/@columns.5"/>
+    </foreignKeys>
+  </tables>
+  <views name="vadditionalcontactinfo">
+    <columns name="businessentityid" nullable="true">
+      <dataType xsi:type="rel:INTEGER"/>
+    </columns>
+    <columns name="firstname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="middlename" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="lastname" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="telephonenumber" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="telephonespecialinstructions" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="street" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="city" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="stateprovince" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="postalcode" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="countryregion" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="homeaddressspecialinstructions" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="emailaddress" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="emailspecialinstructions" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="emailtelephonenumber" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="rowguid" nullable="true">
+      <dataType xsi:type="rel:VARCHAR" length="2147483647"/>
+    </columns>
+    <columns name="modifieddate" nullable="true">
+      <dataType xsi:type="rel:DATETIME"/>
+    </columns>
+  </views>
+</rel:Scheme>

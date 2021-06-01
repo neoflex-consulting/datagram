@@ -2,9 +2,9 @@
 import "ui3_utils.eol";
 %]
 {
-  "eClasses": 
+  "eClasses":
   {
-    "ui3.Application": 
+    "ui3.Application":
     {
       "containerName": "ApplicationContainer",
       "instances": [
@@ -20,7 +20,7 @@ import "ui3_utils.eol";
 	  ],
 	  "icon": "info.svg"
     },
-    "ui3.Module": 
+    "ui3.Module":
     {
       "containerName": "ApplicationContainer",
       "instances": [
@@ -28,27 +28,26 @@ import "ui3_utils.eol";
         {"name": "[%=module.name%]", "_type_": "ui3.Module", "icon": "[%=module.icon%]", "classes": [
 	      [%=module.eClasses.collect(eClass|'"' + eClass.getQName() + '"').concat(", ")%]
         ]}[%if (hasMore) {%],[%}%]
-        
+
 		[%}%]
       ],
       "icon": "etl.svg"
     },
-    "ecore.EClass": 
+    "ecore.EClass":
     {
       "containerName": "GridContainer",
       "instances": [
         {"name": "ecore.EClass", "_type_": "ecore.EClass"},
         {"name": "ui3.Application", "_type_": "ecore.EClass"},
         {"name": "ui3.Module", "_type_": "ecore.EClass"},
-		[%for (eClass in application.~topClasses.values()) {%]
+        [%for (eClass in application.~topClasses.values()) {%]
         {"name": "[%=eClass.getQName()%]", "_type_": "ecore.EClass"}[%if (hasMore) {%],[%}%]
-        
-		[%}%]
+      	[%}%]
       ],
       "icon": "sub-right.svg"
     },
 	[%for (eClass in application.~eClasses.values().select(it | it.getName() <> "EClass")) {%]
-    "[%=eClass.getQName()%]": 
+    "[%=eClass.getQName()%]":
     {
       "ancestors": [[%=eClass.getESuperTypes().collect(eClass|'"' + eClass.getQName() + '"').concat(", ")%]],
       "successors": [[%=eClass.getSubTypes().collect(eClass|'"' + eClass.getQName() + '"').concat(", ")%]],
@@ -69,16 +68,16 @@ import "ui3_utils.eol";
               var fieldType = parameter.getFieldType();%]
                   {
 				      "name": "[%=parameter.name%]",
-				      "type": "[%=fieldType%]"[%if (fieldType == "enum") {%],	      
+				      "type": "[%=fieldType%]"[%if (fieldType == "enum") {%],
 				      "options": [[%=parameter.eType.eLiterals.collect(eLiteral|'"' + eLiteral.name + '"').concat(", ")%]]
 				      [%}%]
-				      
+
                   }[%if (hasMore) {%],[%}%]
-                  
+
               [%}%]
               ]
           }[%if (hasMore) {%],[%}%]
-                
+
       [%}%]
       ],
       "columns": [
@@ -89,7 +88,7 @@ import "ui3_utils.eol";
 	            var refClass = sf.getEReferenceType();
 	            for (sf2 in refClass.getEAllAttributes().select(sf|(sf.getUpperBound() == 1)).select(sf|sf.getAnnotation("mspace.ui", "password", "false") == "false")) {
 	        	%][%if (columnCount > 0) {%],[%}%]
-	        	 
+
 	    {
 		  "Header": "[%=refClass.getQName()%].attrs.[%=sf2.name%].caption",
 		  "accessor": "[%=sf.name + '.' + sf2.name%]",
@@ -101,7 +100,7 @@ import "ui3_utils.eol";
 	        }
 	        else {
 	        	%][%if (columnCount > 0) {%],[%}%]
-	        	 
+
 	    {
 		  "Header": "[%=eClass.getQName()%].attrs.[%=sf.name%].caption",
 		  "accessor": "[%=sf.getAccessor()%]",
@@ -110,9 +109,9 @@ import "ui3_utils.eol";
 			    columnCount = columnCount + 1;
 	        }
 	    }
-		
+
 		%]
-      
+
       ],
       "fields": [
       [%for (sf in eClass.getEAllStructuralFeatures().select(sf|not sf.isKindOf(EReference) or not sf.isContainer())) {
@@ -121,7 +120,7 @@ import "ui3_utils.eol";
 	  {
 	      "name": "[%=sf.name%]",
 	      "type": "[%=fieldType%]"[%if (defaultValue.isDefined()) {%],
-	      "defaultValue": "[%=defaultValue.replace('\n', '\\\\n')%]"[%}%][%if (fieldType == "enum") {%],	      
+	      "defaultValue": "[%=defaultValue.replace('\r', '').replace('\n', '\\\\n')%]"[%}%][%if (fieldType == "enum") {%],
 	      "options": [[%=sf.eType.eLiterals.collect(eLiteral|'"' + eLiteral.name + '"').concat(", ")%]][%}%][%if (sf.getAnnotation("mspace.ui", "readOnly", "false") == "true") {%],
 	      "readOnly": true[%}%][%if (sf.getAnnotation("mspace.ui", "hidden", "false") == "true") {%],
 	      "hidden": true
@@ -163,15 +162,15 @@ import "ui3_utils.eol";
 		  "filter": "[%=expr%]",
 		  "dataModel": "[%=dataModel%]"
 	      [%}%]
-	      
+
       }[%if (hasMore) {%],[%}%]
-      
+
       [%}%]
       ]
     }[%if (hasMore) {%],[%}%]
-    
+
 	[%}%]
-  }	
+  }
 }
 [%
 
@@ -209,7 +208,7 @@ operation ETypedElement getFieldType() {
 				}
 				else {
 		            return "stringList";
-				}	            
+				}
 			}
 			else {
 				return "json";
@@ -217,7 +216,7 @@ operation ETypedElement getFieldType() {
 		}
 		else if(self.eType.isKindOf(EEnum)) {
 			return "enum";
-		} 
+		}
 	    else if (self.eType.name == "EString") {
             if (self.getAnnotation("mspace.ui", "multiline", "false") == "true") {
                return "text";
@@ -235,7 +234,7 @@ operation ETypedElement getFieldType() {
                return "string";
             }
 	    }
-	    else if (Sequence{"EShort", "EInt", "ELong", "EFloat", "EDouble", "EDoubleObject", "EFloatObject", 
+	    else if (Sequence{"EShort", "EInt", "ELong", "EFloat", "EDouble", "EDoubleObject", "EFloatObject",
 	        "ELongObject", "EIntegerObject", "EBigDecimal"}.contains(self.getEType().name)) {
 	        return "number";
 	    }
@@ -252,5 +251,5 @@ operation ETypedElement getFieldType() {
 		    return "json";
 	    }
 	}
-}    
+}
 %]

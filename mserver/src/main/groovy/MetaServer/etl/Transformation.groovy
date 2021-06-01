@@ -13,9 +13,10 @@ import org.eclipse.epsilon.emc.emf.EmfModel
 import ru.neoflex.meta.model.Database
 import ru.neoflex.meta.utils.Context
 
+import java.nio.file.Files
+
 /* protected region MetaServer.etlTransformation.inport on begin */
 
-import java.nio.file.Files
 import java.nio.file.Path
 import java.text.SimpleDateFormat
 import java.util.function.BiFunction
@@ -111,15 +112,10 @@ class Transformation extends GenerationBase {
                 emfModel.load(properties, "")
 
                 def transformationGenerator = "/psm/etl/spark/Transformation2.egx";
-                if (transformation.sparkVersion == null) {
-                    if (version.toLowerCase().contains("spark3")) {
-                        transformationGenerator = "/psm/etl/spark/Transformation3.egx";
-                    }else{
-                        transformationGenerator = "/psm/etl/spark/Transformation2.egx";
-                    }
-                }
-                if(transformation.sparkVersion.name  == "SPARK3"){
+                if (transformation.sparkVersion.name == "SPARK3") {
                     transformationGenerator = "/psm/etl/spark/Transformation3.egx";
+                } else {
+                    transformationGenerator = "/psm/etl/spark/Transformation2.egx";
                 }
                 Context.current.getContextSvc().epsilonSvc.executeEgx(transformationGenerator, [mspaceRoot: tmp.toUri().toString(), nodeName: params.nodeName, outputType: params.outputType, version: version], [emfModel])
                 def tests = Database.new.session.createQuery("from etl.TransformationTest where transformation.e_id=${entity.e_id}").list()

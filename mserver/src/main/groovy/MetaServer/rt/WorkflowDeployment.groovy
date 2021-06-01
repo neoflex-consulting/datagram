@@ -199,11 +199,9 @@ class WorkflowDeployment extends GenerationBase {
                     def changeDateTime = auditInfo.changeDateTime
                     def transformationGenerateDate = gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/Transformation/${transformation.name}/pom.xml"))
                     def transformationBuildDate = gitFlow.getLastModified(gitFlow.getCurrentGfs().getRootPath().resolve(gitFlow.SOURCES + "/Transformation/${transformation.name}/target/ru.neoflex.meta.etl2.spark.${transformation.name}-${buildVersion}.jar"))
-                    return changeDateTime != null && (
-                            transformationGenerateDate == null || transformationBuildDate == null ||
+                    return changeDateTime != null && (transformationGenerateDate == null || transformationBuildDate == null ||
                                     transformationGenerateDate.before(changeDateTime) ||
-                                    transformationBuildDate.before(changeDateTime)
-                    )
+                                    transformationBuildDate.before(changeDateTime))
                 }
             });
             if(needRebuild) {
@@ -245,7 +243,6 @@ class WorkflowDeployment extends GenerationBase {
 
     static Object deploy(Map entity, Map params = null) {
     /* protected region MetaServer.rtWorkflowDeployment.deploy on begin */
-        def deployDir = Context.current.getContextSvc().getmSpaceSvc().getDeployDir().getAbsolutePath()
         def jobDeployment = new Database("teneo").get("rt.JobDeployment", (Long)entity.e_id)
         println(jobDeployment.name + " loaded")
         def oozie = jobDeployment.oozie

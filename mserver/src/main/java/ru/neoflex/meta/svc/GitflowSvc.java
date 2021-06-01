@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.marschall.pathclassloader.PathClassLoader;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,6 +30,7 @@ import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.*;
 import org.eclipse.jgit.merge.MergeFormatter;
+import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.transport.*;
@@ -56,6 +58,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -210,7 +213,7 @@ public class GitflowSvc extends BaseSvc {
         }
     }
 
-    public void deleteBranch(String branch) throws IOException, GitAPIException {
+    public void deleteBranch(String branch, String username, String password) throws IOException, GitAPIException {
         checkBranch(branch);
         if (MASTER.equals(branch)) {
             throw new RuntimeException("Cant delete " + MASTER);
@@ -218,6 +221,17 @@ public class GitflowSvc extends BaseSvc {
         String currentBranch = getCurrentBranch();
         String parentBranch = getParentBranch(branch);
         BranchUtils.deleteBranch(branch, repository);
+        RefSpec refSpec = new RefSpec()
+                .setSource(null)
+                .setDestination("refs/heads/" + branch);
+        Git git = new Git(repository);
+        PushCommand pushCommand = git.push().setRefSpecs(refSpec);
+        pushCommand.setRemote("origin");
+        if (StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(password)) {
+            CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(username, password);
+            pushCommand.setCredentialsProvider(credentialsProvider);
+        }
+        pushCommand.call();
         contextSvc.inContext(new Runnable() {
             @Override
             public void run() {
@@ -245,6 +259,11 @@ public class GitflowSvc extends BaseSvc {
                 setCurrentBranch(branch);
                 logger.info(String.format("Updating new scheme"));
                 updateScheme();
+                try {
+                    copySequences(getSchema(branch), getSchema(currentBranch));
+                } catch (Throwable e) {
+                    logger.error(e.getMessage());
+                }
             }
         });
         tagCurrentAsSynced();
@@ -372,6 +391,20 @@ public class GitflowSvc extends BaseSvc {
         Context.getCurrent().savepoint();
     }
 
+    public void copySequences(String name, String template) {
+        Session session = Context.getCurrent().getSession();
+        String querySeqs = "select quote_ident(sequence_name) from information_schema.sequences where sequence_schema = '%s'";
+        List<String> seqs = session.createSQLQuery(String.format(querySeqs, name)).list();
+        for (String seq : seqs) {
+            String queryLast = "select last_value from %s.%s";
+            BigInteger lastValue = (BigInteger) session.createSQLQuery(String.format(queryLast, template, seq)).uniqueResult();
+            logger.info(String.format("Set sequence %s value %d", seq, lastValue));
+            String setLast = "select pg_catalog.setval('%s.%s', %d, true)";
+            session.createSQLQuery(String.format(setLast, name, seq, lastValue)).list();
+        }
+        Context.getCurrent().savepoint();
+    }
+
     public PersonIdent getPersonIdent() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
@@ -446,10 +479,11 @@ public class GitflowSvc extends BaseSvc {
         }
     }
 
-    public<T> T inDir(String dir, String message, BiFunction<Path, Path, T> transact) throws Exception {
+    public <T> T inDir(String dir, String message, BiFunction<Path, Path, T> transact) throws Exception {
         return inDir(dir, message, null, transact);
     }
-    public<T> T inDir(String dir, String message, Consumer<Path> pre, BiFunction<Path, Path, T> transact) throws Exception {
+
+    public <T> T inDir(String dir, String message, Consumer<Path> pre, BiFunction<Path, Path, T> transact) throws Exception {
         Path temp = Files.createTempDirectory("dg");
         try {
             if (pre != null) {
@@ -463,7 +497,7 @@ public class GitflowSvc extends BaseSvc {
         }
     }
 
-    public<T> T inCopy(String dir, String message, Function<File, T> process) throws Exception {
+    public <T> T inCopy(String dir, String message, Function<File, T> process) throws Exception {
         Path temp = Files.createTempDirectory("dg");
         try {
             inGitTransaction(null, () -> {
@@ -688,6 +722,7 @@ public class GitflowSvc extends BaseSvc {
         }
     }
 
+
     public void push(String remote, String username, String password) throws IOException, GitAPIException {
         Git git = new Git(repository);
         PushCommand command = git.push().setProgressMonitor(progressMonitor);
@@ -703,21 +738,29 @@ public class GitflowSvc extends BaseSvc {
     }
 
     private void checkPushResult(Iterable<PushResult> results) {
+        results:
         for (PushResult result : results) {
+            updates:
             for (RemoteRefUpdate update : result.getRemoteUpdates()) {
                 RemoteRefUpdate.Status status = update.getStatus();
                 if (status != RemoteRefUpdate.Status.OK && status != RemoteRefUpdate.Status.UP_TO_DATE) {
+                    if (status == RemoteRefUpdate.Status.REJECTED_NONFASTFORWARD) {
+                        if (!update.getRemoteName().contains(getCurrentBranch())) {
+                            logger.warn("Local copy of remote " + update.getRemoteName() + " need to be updated");
+                            continue updates;
+                        }
+                    }
                     String msg = status.toString();
                     if (update.getMessage() != null) {
                         msg = msg + ": " + update.getMessage();
                     }
-                    throw new RuntimeException(msg);
+                    throw new RuntimeException(update.getRemoteName() + "|" +msg);
                 }
             }
         }
     }
 
-    public void pull(String remoteBranchName, String remote, String username, String password) throws IOException, GitAPIException, URISyntaxException {
+    public void pull(String remoteBranchName, String remote, String username, String password, String strategy) throws IOException, GitAPIException, URISyntaxException {
         Git git = new Git(repository);
         PullCommand command = git.pull().setProgressMonitor(progressMonitor);
         if (StringUtils.isNotEmpty(remote)) {
@@ -736,7 +779,37 @@ public class GitflowSvc extends BaseSvc {
             CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(username, password);
             command.setCredentialsProvider(credentialsProvider);
         }
-        command.call();
+        MergeStrategy mergeStrategy = MergeStrategy.get(strategy);
+        if(mergeStrategy != null){
+            command.setStrategy(mergeStrategy);
+            command.setFastForward(MergeCommand.FastForwardMode.NO_FF);
+        }
+        PullResult pullResult = command.call();
+        MergeResult mergeResult  = pullResult.getMergeResult();
+        if(MergeResult.MergeStatus.CONFLICTING.equals(mergeResult.getMergeStatus())){
+            StringBuilder message = new StringBuilder("");
+            for(Map.Entry<java.lang.String, int[][]> confict : mergeResult.getConflicts().entrySet()){
+                message.append("File " + confict.getKey() + " conflicted " + (confict.getValue().length > 0 ? ("at line " + confict.getValue()[0] +
+                        (confict.getValue().length > 1 ? ", row " + confict.getValue()[1] : "")) : ""));
+                message.append('\n');
+            }
+            message.append("RESET current branch and apply NON DEFAULT strategy you preffered");
+            message.append('\n');
+            throw new RuntimeException(message.toString());
+        }
+    }
+
+
+    public void resetToHead() {
+        try {
+            Git git = new Git(repository);
+            git.reset().setMode(ResetCommand.ResetType.HARD).call();
+            logger.info(getCurrentBranch() + "  reset to HEAD");
+        }catch (Throwable th){
+            logger.error("Unable reset to HEAD "+ getCurrentBranch());
+            throw new RuntimeException(th);
+        }
+
     }
 
     public void merge(String from, String to) throws Exception {
@@ -799,8 +872,7 @@ public class GitflowSvc extends BaseSvc {
     public void tagRepo(String tag) throws IOException, GitAPIException {
         try (Git git = new Git(repository)) {
             git.tag().setName(tag).setForceUpdate(true).setAnnotated(false).call();
-        }
-        catch (JGitInternalException e) {
+        } catch (JGitInternalException e) {
             logger.warn("tagRepo " + tag, e);
         }
     }
@@ -867,15 +939,18 @@ public class GitflowSvc extends BaseSvc {
 
     public Date getLastModified(GitPath gfsPath) throws IOException {
         GitFileSystem gfs = getCurrentGfs();
+        if (!Files.exists(gfsPath)) {
+            return null;
+        }
         RevCommit commit = getLastCommit(gfs, gfsPath);
 //        PersonIdent authorIdent = commit.getAuthorIdent();
 //        Date authorDate = authorIdent.getWhen();
-        return commit == null ? null : new Date(commit.getCommitTime()*1000L);
+        return commit == null ? null : new Date(commit.getCommitTime() * 1000L);
     }
 
     public RevCommit getLastCommit(GitFileSystem gfs, GitPath gfsPath) throws IOException {
         String relPath = gfs.getRootPath().relativize(gfsPath).toString();
-        try(RevWalk revCommits = new RevWalk(gfs.getRepository())) {
+        try (RevWalk revCommits = new RevWalk(gfs.getRepository())) {
             revCommits.setTreeFilter(PathFilter.create(relPath));
             ObjectId branchId = gfs.getRepository().resolve(gfs.getStatusProvider().branch());
             revCommits.markStart(revCommits.parseCommit(branchId));
@@ -897,7 +972,7 @@ public class GitflowSvc extends BaseSvc {
                     .forEach(path -> importRefPath(path));
             return null;
         });
-        Map result = new HashMap(){{
+        Map result = new HashMap() {{
             put("result", true);
             put("problems", false);
         }};
@@ -917,12 +992,27 @@ public class GitflowSvc extends BaseSvc {
             logger.info("EObject has empty name");
             return;
         }
+        String sourcesDir = "/sources/" + eClass.getName() + "/" + name;
+
         try {
             inGitTransaction("deleteEObject " + dir + "/" + name, (Callable<Void>) () -> {
                 Path modelPath = getCurrentGfs().getPath(dir);
+                Path sourcesPath = getCurrentGfs().getPath(sourcesDir);
+                if (!Files.isDirectory(sourcesPath)) {
+                    return null;
+                }
+                Files.walk(sourcesPath)
+                        .filter(Files::isRegularFile).forEach(path -> {
+                            try {
+                                Files.delete(path);
+                            } catch (IOException e) {
+                                // pass
+                            }
+                        });
                 if (!Files.isDirectory(modelPath)) {
                     return null;
                 }
+
                 Files.walk(modelPath)
                         .filter(Files::isRegularFile).
                         filter(file -> file.getFileName().toString().startsWith(name + "."))
@@ -933,6 +1023,8 @@ public class GitflowSvc extends BaseSvc {
                                 // pass
                             }
                         });
+
+
                 return null;
             });
         } catch (Exception e) {

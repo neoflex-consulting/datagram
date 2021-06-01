@@ -10,7 +10,7 @@ import org.eclipse.epsilon.egl.EglTemplateFactory;
 import org.eclipse.epsilon.egl.EgxModule;
 import org.eclipse.epsilon.emc.emf.CachedResourceSet;
 import org.eclipse.epsilon.eol.EolModule;
-import org.eclipse.epsilon.eol.IEolExecutableModule;
+import org.eclipse.epsilon.eol.IEolModule;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.exceptions.flowcontrol.EolAbortTransactionException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
@@ -36,7 +36,7 @@ import java.util.Map;
 public class EpsilonSvc extends BaseSvc {
     private final static Log logger = LogFactory.getLog(EpsilonSvc.class);
 
-    public Object execute(IEolExecutableModule module, URI eolURI, Map<String, Object> params, List<IModel> models, boolean dispose) {
+    public Object execute(IEolModule module, URI eolURI, Map<String, Object> params, List<IModel> models, boolean dispose) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         try {
             parse(module, eolURI);
@@ -75,7 +75,7 @@ public class EpsilonSvc extends BaseSvc {
         }
     }
 
-    private static void parse(IEolExecutableModule module, URI eolURI) {
+    private static void parse(IEolModule module, URI eolURI) {
         try {
             module.parse(eolURI);
             if (module.getParseProblems().size() > 0) {

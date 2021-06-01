@@ -149,6 +149,7 @@ public final class BranchUtils {
     if(currentHead == null)
       currentHead = zeroId();
 
+
     RefUpdate update = repo.updateRef(refName);
     update.setRefLogMessage(refLogMessage, false);
     update.setForceUpdate(forceUpdate);

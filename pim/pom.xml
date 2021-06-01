@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ru.neoflex</groupId>
@@ -11,6 +12,183 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>bintray</id>
+            <url>https://dl.bintray.com/subclipse/maven/</url>
+        </repository>
+        <repository>
+            <id>emf</id>
+            <url>https://dl.bintray.com/epsilonlabs/epsilon-standalone/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+        <!-- Eclipse EMF -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore</artifactId>
+            <version>2.11.0-v20150123-0347</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.common</artifactId>
+            <version>2.11.0-v20150123-0347</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
+            <version>2.11.0-v20150123-0347</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore.change -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore.change</artifactId>
+            <version>2.14.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emfatic/org.eclipse.emfatic.core -->
+        <dependency>
+            <groupId>org.eclipse.emfatic</groupId>
+            <artifactId>org.eclipse.emfatic.core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>1.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-graphml</artifactId>
+            <version>1.4.0</version>
+            <!-- avoid icu4j 2.6.1 : erroneous jar -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.ibm.icu</groupId>
+                    <artifactId>icu4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- use a newer version of icu4j -->
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>3.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-core</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.epsilon/org.eclipse.epsilon.eol.engine -->
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>org.eclipse.epsilon.eol.engine</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-emf</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-hutn</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit.http.server</artifactId>
+            <version>5.11.0.202103091610-r</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>runtime</artifactId>
+            <version>3.10.0-v20140318-2214</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-workflow</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.teneo.hibernate.mapper -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.teneo.hibernate.mapper</artifactId>
+            <version>2.1.0-v201501071531</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.teneo.hibernate -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.teneo.hibernate</artifactId>
+            <version>2.1.0-v201501071531</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.teneo.annotations -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.teneo.annotations</artifactId>
+            <version>2.1.0-v201501071531</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.teneo -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.teneo</artifactId>
+            <version>2.1.0-v201501071531</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.core/org.eclipse.core.resources -->
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>org.eclipse.core.resources</artifactId>
+            <version>3.7.100</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.equinox.common -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.equinox.registry -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.registry</artifactId>
+            <version>3.8.800</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.emfatic/org.eclipse.gymnast.runtime.core -->
+        <dependency>
+            <groupId>org.eclipse.emfatic</groupId>
+            <artifactId>org.eclipse.gymnast.runtime.core</artifactId>
+            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>Sonatype</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <groupId>ru.neoflex.mspace</groupId>
     <artifactId>metaserver.pim</artifactId>
@@ -122,6 +300,59 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>model-execute</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target name="emf2ecore">
+                                <property name="compile_classpath" refid="maven.compile.classpath"/>
+                                <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+                                <property name="test_classpath" refid="maven.test.classpath"/>
+                                <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+
+                                <taskdef name="genecore"
+                                         classname="ru.neoflex.meta.utils.GenerateEcoreTask"
+                                         classpathref="maven.runtime.classpath" classpath="target/classes">
+                                </taskdef>
+                                <genecore/>
+                                <property name="classpath" refid="maven.compile.classpath"/>
+                                <property environment="env"/>
+                                <!--echo message="${classpath}"/-->
+                                <echo message="${env.JAVA_HOME}"/>
+                                <echo message="${basedir}"/>
+                                <ant antfile="${basedir}/src/main/resources/build.xml" target="generate-all"
+                                     inheritAll="true">
+                                    <property name="file.encoding" value="UTF-8"/>
+                                </ant>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.eclipse.epsilon</groupId>
+                        <artifactId>org.eclipse.epsilon.workflow</artifactId>
+                        <version>2.3.0-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.eclipse.epsilon</groupId>
+                        <artifactId>org.eclipse.epsilon.workflow.emf</artifactId>
+                        <version>2.3.0-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.eclipse.epsilon</groupId>
+                        <artifactId>org.eclipse.epsilon.eunit.cmp.emf</artifactId>
+                        <version>2.3.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>

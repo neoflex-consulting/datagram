@@ -14,28 +14,3 @@ rule JobProps transform jobDeployment: JobDeployment {
   template : MetaResource.getURL("/psm/etl/spark/properties.egl")
   target : mspaceRoot + "/" + jobDeployment.get("name") + "/job/job.properties"   
 }
-
-@greedy
-rule POMRun transform jobDeployment: JobDeployment {
-  parameters {
-    var params : new Map;
-    params.put("packagePrefix",  "ru.neoflex.meta.etl.spark");
-    params.put("mspaceRoot",  mspaceRoot.replace("\\\\", "/"));
-    return params;
-  }
-  template : MetaResource.getURL("/psm/etl/spark/pom-run.egl")
-  target : mspaceRoot + "/" + jobDeployment.get("name") + "/job/pom-run.xml"   
-}
-
-@greedy
-rule POMMove transform jobDeployment: JobDeployment {
-  parameters {
-    var params : new Map;
-    params.put("packagePrefix",  "ru.neoflex.meta.etl.spark");
-    params.put("mspaceRoot",  mspaceRoot.replace("\\\\", "/"));
-    return params;
-  }
-  template : MetaResource.getURL("/psm/etl/spark/pom-move.egl")
-  target : mspaceRoot + "/" + jobDeployment.get("name") + "/job/pom-moveto.xml"   
-}
-

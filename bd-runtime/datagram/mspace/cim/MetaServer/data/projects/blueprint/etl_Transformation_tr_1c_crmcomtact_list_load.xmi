@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="ASCII"?>
+<etl:Transformation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:etl="http://www.neoflex.ru/meta/etl" name="tr_1c_crmcomtact_list_load" label="tr_1c_crmcomtact_list_load" sparkVersion="SPARK3" jsonView="{&quot;cells&quot;:[{&quot;type&quot;:&quot;devs.transformation.LocalSource&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[],&quot;outPorts&quot;:[&quot;out&quot;],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;out&quot;,&quot;group&quot;:&quot;out&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;out&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:49,&quot;y&quot;:117},&quot;angle&quot;:0,&quot;id&quot;:&quot;b18364ee-f979-4cec-bd54-64aadec7a0bd&quot;,&quot;name&quot;:&quot;json_file&quot;,&quot;z&quot;:1,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;json_file&quot;}}},{&quot;type&quot;:&quot;devs.transformation.LocalTarget&quot;,&quot;size&quot;:{&quot;width&quot;:80,&quot;height&quot;:80},&quot;inPorts&quot;:[&quot;in&quot;],&quot;outPorts&quot;:[],&quot;ports&quot;:{&quot;groups&quot;:{&quot;in&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;white&quot;,&quot;magnet&quot;:&quot;passive&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;left&quot;,&quot;args&quot;:{&quot;y&quot;:10}}}},&quot;out&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;},&quot;label&quot;:{&quot;position&quot;:{&quot;name&quot;:&quot;right&quot;,&quot;args&quot;:{&quot;y&quot;:10}}},&quot;attrs&quot;:{&quot;.port-body&quot;:{&quot;fill&quot;:&quot;#4d4d4dde&quot;,&quot;stroke&quot;:&quot;#000&quot;,&quot;r&quot;:10,&quot;magnet&quot;:true},&quot;.port-label&quot;:{&quot;text&quot;:&quot;&quot;,&quot;visibility&quot;:&quot;hidden&quot;,&quot;fill&quot;:&quot;#000&quot;},&quot;circle&quot;:{&quot;r&quot;:7,&quot;stroke&quot;:&quot;#4d4d4dde&quot;,&quot;stroke-width&quot;:1}}}},&quot;items&quot;:[{&quot;id&quot;:&quot;in&quot;,&quot;group&quot;:&quot;in&quot;,&quot;attrs&quot;:{&quot;.port-label&quot;:{&quot;text&quot;:&quot;in&quot;}}}]},&quot;position&quot;:{&quot;x&quot;:330,&quot;y&quot;:150},&quot;angle&quot;:0,&quot;id&quot;:&quot;a2e6c127-301e-4482-b528-291b3fa9bbbd&quot;,&quot;name&quot;:&quot;contact_list_orc&quot;,&quot;z&quot;:2,&quot;attrs&quot;:{&quot;.label&quot;:{&quot;text&quot;:&quot;contact_list_orc&quot;}}},{&quot;type&quot;:&quot;devs.transformation.Flow&quot;,&quot;source&quot;:{&quot;id&quot;:&quot;b18364ee-f979-4cec-bd54-64aadec7a0bd&quot;,&quot;port&quot;:&quot;out&quot;},&quot;target&quot;:{&quot;id&quot;:&quot;a2e6c127-301e-4482-b528-291b3fa9bbbd&quot;,&quot;port&quot;:&quot;in&quot;},&quot;id&quot;:&quot;4004aea0-e661-4e57-81e4-c6ca7e135a50&quot;,&quot;z&quot;:3,&quot;attrs&quot;:{}}]}">
+  <targets xsi:type="etl:LocalTarget" name="contact_list_orc" label="contact_list_orc" sampleSize="1000" localFileName="/contact_list" localFileFormat="ORC" registerTable="true" hiveTableName="contact_list">
+    <inputPort name="Local_1in">
+      <fields name="ADDRESS" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_2" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_CITY" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_COUNTRY" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_LOC_ADDR_ID" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_POSTAL_CODE" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_PROVINCE" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_REGION" dataTypeDomain="STRING"/>
+      <fields name="ASSIGNED_BY_ID" dataTypeDomain="STRING"/>
+      <fields name="BIRTHDATE" dataTypeDomain="STRING"/>
+      <fields name="COMMENTS" dataTypeDomain="STRING"/>
+      <fields name="COMPANY_ID" dataTypeDomain="STRING"/>
+      <fields name="CREATED_BY_ID" dataTypeDomain="STRING"/>
+      <fields name="DATE_CREATE" dataTypeDomain="STRING"/>
+      <fields name="DATE_MODIFY" dataTypeDomain="STRING"/>
+      <fields name="EXPORT" dataTypeDomain="STRING"/>
+      <fields name="FACE_ID" dataTypeDomain="STRING"/>
+      <fields name="HAS_EMAIL" dataTypeDomain="STRING"/>
+      <fields name="HAS_IMOL" dataTypeDomain="STRING"/>
+      <fields name="HAS_PHONE" dataTypeDomain="STRING"/>
+      <fields name="HONORIFIC" dataTypeDomain="STRING"/>
+      <fields name="ID" dataTypeDomain="STRING"/>
+      <fields name="LAST_NAME" dataTypeDomain="STRING"/>
+      <fields name="LEAD_ID" dataTypeDomain="STRING"/>
+      <fields name="MODIFY_BY_ID" dataTypeDomain="STRING"/>
+      <fields name="NAME" dataTypeDomain="STRING"/>
+      <fields name="OPENED" dataTypeDomain="STRING"/>
+      <fields name="ORIGINATOR_ID" dataTypeDomain="STRING"/>
+      <fields name="ORIGIN_ID" dataTypeDomain="STRING"/>
+      <fields name="ORIGIN_VERSION" dataTypeDomain="STRING"/>
+      <fields name="PHOTO" dataTypeDomain="STRING"/>
+      <fields name="POST" dataTypeDomain="STRING"/>
+      <fields name="SECOND_NAME" dataTypeDomain="STRING"/>
+      <fields name="SOURCE_DESCRIPTION" dataTypeDomain="STRING"/>
+      <fields name="SOURCE_ID" dataTypeDomain="STRING"/>
+      <fields name="TYPE_ID" dataTypeDomain="STRING"/>
+      <fields name="UTM_CAMPAIGN" dataTypeDomain="STRING"/>
+      <fields name="UTM_CONTENT" dataTypeDomain="STRING"/>
+      <fields name="UTM_MEDIUM" dataTypeDomain="STRING"/>
+      <fields name="UTM_SOURCE" dataTypeDomain="STRING"/>
+      <fields name="UTM_TERM" dataTypeDomain="STRING"/>
+    </inputPort>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ADDRESS" targetColumnName="ADDRESS"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ADDRESS_2" targetColumnName="ADDRESS_2"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ADDRESS_CITY" targetColumnName="ADDRESS_CITY"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ADDRESS_COUNTRY" targetColumnName="ADDRESS_COUNTRY"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ADDRESS_LOC_ADDR_ID" targetColumnName="ADDRESS_LOC_ADDR_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ADDRESS_POSTAL_CODE" targetColumnName="ADDRESS_POSTAL_CODE"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ADDRESS_PROVINCE" targetColumnName="ADDRESS_PROVINCE"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ADDRESS_REGION" targetColumnName="ADDRESS_REGION"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ASSIGNED_BY_ID" targetColumnName="ASSIGNED_BY_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="BIRTHDATE" targetColumnName="BIRTHDATE"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="COMMENTS" targetColumnName="COMMENTS"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="COMPANY_ID" targetColumnName="COMPANY_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="CREATED_BY_ID" targetColumnName="CREATED_BY_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="DATE_CREATE" targetColumnName="DATE_CREATE"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="DATE_MODIFY" targetColumnName="DATE_MODIFY"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="EXPORT" targetColumnName="EXPORT"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="FACE_ID" targetColumnName="FACE_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="HAS_EMAIL" targetColumnName="HAS_EMAIL"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="HAS_IMOL" targetColumnName="HAS_IMOL"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="HAS_PHONE" targetColumnName="HAS_PHONE"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="HONORIFIC" targetColumnName="HONORIFIC"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ID" targetColumnName="ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="LAST_NAME" targetColumnName="LAST_NAME"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="LEAD_ID" targetColumnName="LEAD_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="MODIFY_BY_ID" targetColumnName="MODIFY_BY_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="NAME" targetColumnName="NAME"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="OPENED" targetColumnName="OPENED"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ORIGINATOR_ID" targetColumnName="ORIGINATOR_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ORIGIN_ID" targetColumnName="ORIGIN_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="ORIGIN_VERSION" targetColumnName="ORIGIN_VERSION"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="PHOTO" targetColumnName="PHOTO"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="POST" targetColumnName="POST"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="SECOND_NAME" targetColumnName="SECOND_NAME"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="SOURCE_DESCRIPTION" targetColumnName="SOURCE_DESCRIPTION"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="SOURCE_ID" targetColumnName="SOURCE_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="TYPE_ID" targetColumnName="TYPE_ID"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="UTM_CAMPAIGN" targetColumnName="UTM_CAMPAIGN"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="UTM_CONTENT" targetColumnName="UTM_CONTENT"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="UTM_MEDIUM" targetColumnName="UTM_MEDIUM"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="UTM_SOURCE" targetColumnName="UTM_SOURCE"/>
+    <inputFieldsMapping xsi:type="etl:TableTargetFeature" inputFieldName="UTM_TERM" targetColumnName="UTM_TERM"/>
+  </targets>
+  <sources xsi:type="etl:LocalSource" name="json_file" label="json_file" schemaOnRead="true" localFileName="file:///data/crm/${jobParameters(&quot;date&quot;)}/contact.list.json">
+    <outputPort name="Local_0out">
+      <fields name="ADDRESS" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_2" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_CITY" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_COUNTRY" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_LOC_ADDR_ID" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_POSTAL_CODE" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_PROVINCE" dataTypeDomain="STRING"/>
+      <fields name="ADDRESS_REGION" dataTypeDomain="STRING"/>
+      <fields name="ASSIGNED_BY_ID" dataTypeDomain="STRING"/>
+      <fields name="BIRTHDATE" dataTypeDomain="STRING"/>
+      <fields name="COMMENTS" dataTypeDomain="STRING"/>
+      <fields name="COMPANY_ID" dataTypeDomain="STRING"/>
+      <fields name="CREATED_BY_ID" dataTypeDomain="STRING"/>
+      <fields name="DATE_CREATE" dataTypeDomain="STRING"/>
+      <fields name="DATE_MODIFY" dataTypeDomain="STRING"/>
+      <fields name="EXPORT" dataTypeDomain="STRING"/>
+      <fields name="FACE_ID" dataTypeDomain="STRING"/>
+      <fields name="HAS_EMAIL" dataTypeDomain="STRING"/>
+      <fields name="HAS_IMOL" dataTypeDomain="STRING"/>
+      <fields name="HAS_PHONE" dataTypeDomain="STRING"/>
+      <fields name="HONORIFIC" dataTypeDomain="STRING"/>
+      <fields name="ID" dataTypeDomain="STRING"/>
+      <fields name="LAST_NAME" dataTypeDomain="STRING"/>
+      <fields name="LEAD_ID" dataTypeDomain="STRING"/>
+      <fields name="MODIFY_BY_ID" dataTypeDomain="STRING"/>
+      <fields name="NAME" dataTypeDomain="STRING"/>
+      <fields name="OPENED" dataTypeDomain="STRING"/>
+      <fields name="ORIGINATOR_ID" dataTypeDomain="STRING"/>
+      <fields name="ORIGIN_ID" dataTypeDomain="STRING"/>
+      <fields name="ORIGIN_VERSION" dataTypeDomain="STRING"/>
+      <fields name="PHOTO" dataTypeDomain="STRING"/>
+      <fields name="POST" dataTypeDomain="STRING"/>
+      <fields name="SECOND_NAME" dataTypeDomain="STRING"/>
+      <fields name="SOURCE_DESCRIPTION" dataTypeDomain="STRING"/>
+      <fields name="SOURCE_ID" dataTypeDomain="STRING"/>
+      <fields name="TYPE_ID" dataTypeDomain="STRING"/>
+      <fields name="UTM_CAMPAIGN" dataTypeDomain="STRING"/>
+      <fields name="UTM_CONTENT" dataTypeDomain="STRING"/>
+      <fields name="UTM_MEDIUM" dataTypeDomain="STRING"/>
+      <fields name="UTM_SOURCE" dataTypeDomain="STRING"/>
+      <fields name="UTM_TERM" dataTypeDomain="STRING"/>
+    </outputPort>
+  </sources>
+  <transitions name="081dad7d-c2af-471a-bfc5-6ef5025a8d78" start="//@sources.0/@outputPort" finish="//@targets.0/@inputPort"/>
+  <auditInfo changeUser="admin" changeDateTime="2021-05-18T10:20:09.226+0300" createUser="admin" createDateTime="2021-05-17T15:42:00.333+0300"/>
+</etl:Transformation>

@@ -18,6 +18,7 @@ const COMMANDS = Object.freeze({
     DELETE: Symbol("DELETE"),
     PUSH: Symbol("PUSH"),
     PULL: Symbol("PULL"),
+    RESET: Symbol("RESET"),
     MERGE: Symbol("MERGE"),
     CHANGES: Symbol("CHANGES"),
 })
@@ -110,7 +111,9 @@ class BranchCommandForm extends React.Component {
                     method: "DELETE",
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({username: values.username||null,
+                        password: values.password||null})
                 }).then(branchInfo => {
                     this.props.context.updateContext({branchInfo})
                     localStorage.setItem("currentBranch", branchInfo.current)
@@ -123,7 +126,19 @@ class BranchCommandForm extends React.Component {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({remote: values.remote||null, username: values.username||null,
-                        password: values.password||null, remoteBranch: values.remoteBranch||null})
+                        password: values.password||null, remoteBranch: values.remoteBranch||null, strategy: values.strategy||null})
+                }).then(branchInfo => {
+                    this.props.context.updateContext({branchInfo})
+                    localStorage.setItem("currentBranch", branchInfo.current)
+                });
+            },
+            [COMMANDS.RESET]: (values) => {
+                resource.query(`/system/reset`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
                 }).then(branchInfo => {
                     this.props.context.updateContext({branchInfo})
                     localStorage.setItem("currentBranch", branchInfo.current)
@@ -227,6 +242,19 @@ class BranchCommandForm extends React.Component {
                     )}
                 </Form.Item>}
                 {[COMMANDS.PULL].includes(COMMANDS[getFieldValue("command")]) &&
+                <Form.Item label="Merge Strategy">
+                    {getFieldDecorator('strategy', {
+                        rules: [{required: false, message: 'Please select merge strategy'}],
+                    })(
+                    <Select
+                        placeholder="Select merge strategy">
+                        <Option value="default">DEFAULT</Option>
+                        <Option value="ours">OURS</Option>
+                        <Option value="theirs">THEIRS</Option>
+                    </Select>
+                    )}
+                </Form.Item>}
+                {[COMMANDS.PULL].includes(COMMANDS[getFieldValue("command")]) &&
                 <Form.Item label="Remote Branch">
                     {getFieldDecorator('remoteBranch', {
                         rules: [{required: false, message: 'Please enter remote branch'}],
@@ -234,7 +262,7 @@ class BranchCommandForm extends React.Component {
                         <Input placeholder="Remote Branch"/>
                     )}
                 </Form.Item>}
-                {[COMMANDS.PULL, COMMANDS.PUSH].includes(COMMANDS[getFieldValue("command")]) &&
+                {[COMMANDS.PULL, COMMANDS.PUSH, COMMANDS.DELETE].includes(COMMANDS[getFieldValue("command")]) &&
                 <Form.Item label="User Name">
                     {getFieldDecorator('username', {
                         rules: [{required: false, message: 'Please enter user name'}],
@@ -242,7 +270,7 @@ class BranchCommandForm extends React.Component {
                         <Input placeholder="User Name"/>
                     )}
                 </Form.Item>}
-                {[COMMANDS.PULL, COMMANDS.PUSH].includes(COMMANDS[getFieldValue("command")]) &&
+                {[COMMANDS.PULL, COMMANDS.PUSH, COMMANDS.DELETE].includes(COMMANDS[getFieldValue("command")]) &&
                 <Form.Item label="Password">
                     {getFieldDecorator('password', {
                         rules: [{required: false, message: 'Please enter password'}],

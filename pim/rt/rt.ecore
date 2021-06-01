@@ -1,724 +1,972 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rt" nsURI="http://www.neoflex.ru/meta/rt" nsPrefix="rt">
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rt" nsURI="http://www.neoflex.ru/meta/rt" nsPrefix="rt">
   <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SoftwareSystem">
     <eOperations name="refreshScheme">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РћР±РЅРѕРІРёС‚СЊ СЃС…РµРјСѓ"/>
+        <details key="caption" value="&#x41e;&#x431;&#x43d;&#x43e;&#x432;&#x438;&#x442;&#x44c; &#x441;&#x445;&#x435;&#x43c;&#x443;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scheme" eType="ecore:EClass http://www.neoflex.ru/meta/relational#//Scheme"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultDeployment" eType="#//Deployment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scheme">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/relational#//Scheme"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultDeployment" eType="//Deployment"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="JdbcConnection" eSuperTypes="#//Connection">
+  <eClassifiers xsi:type="ecore:EClass" name="JdbcConnection" eSuperTypes="//Connection">
     <eOperations name="test">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСЂРѕС‚РµСЃС‚РёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x442;&#x435;&#x441;&#x442;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schema" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalog" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectAsLoggedUser" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schema">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalog">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectAsLoggedUser">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password">
       <eAnnotations source="mspace.ui">
         <details key="password" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driver" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driver" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Deployment">
     <eOperations name="refreshScheme">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РћР±РЅРѕРІРёС‚СЊ СЃС…РµРјСѓ"/>
+        <details key="caption" value="&#x41e;&#x431;&#x43d;&#x43e;&#x432;&#x438;&#x442;&#x44c; &#x441;&#x445;&#x435;&#x43c;&#x443;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="#//Connection"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="softwareSystem" eType="#//SoftwareSystem"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadStoredProcs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="//Connection"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="softwareSystem" eType="//SoftwareSystem"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadStoredProcs">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Oozie">
     <eOperations name="deployKey">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРєРѕРїРёСЂРѕРІР°С‚СЊ РєР»СЋС‡"/>
+        <details key="caption" value="&#x421;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x43a;&#x43b;&#x44e;&#x447;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jobTracker" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nameNode" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="master" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="queue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retryMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retryInterval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cred" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sftp" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jobTracker" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nameNode" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="master" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="queue">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retryMax">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retryInterval">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cred">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sftp" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http" lowerBound="1">
       <eAnnotations source="mspace.ui">
         <details key="url" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="webhdfs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="home" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filesBrowserUtilUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="webhdfs">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="home" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filesBrowserUtilUrl">
       <eAnnotations source="mspace.ui">
         <details key="url" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isKerberosEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isKerberosEnabled">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РђСѓРЅС‚РµРЅС‚РёС„РёРєР°С†РёСЏ Kerberos"/>
+        <details key="caption" value="&#x410;&#x443;&#x43d;&#x442;&#x435;&#x43d;&#x442;&#x438;&#x444;&#x438;&#x43a;&#x430;&#x446;&#x438;&#x44f; Kerberos"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyTabLocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyTabLocation">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСѓС‚СЊ Рє keytab"/>
+        <details key="caption" value="&#x41f;&#x443;&#x442;&#x44c; &#x43a; keytab"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userPrincipal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userPrincipal">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="User Principal"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hcatUri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hcatUri">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="HCAT URI"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hcatPrincipal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hcatPrincipal">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="HCAT Principal"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spark2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spark2">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JobServer">
     <eOperations name="jobList">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРїРёСЃРѕРє Р·Р°РґР°РЅРёР№"/>
+        <details key="caption" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a; &#x437;&#x430;&#x434;&#x430;&#x43d;&#x438;&#x439;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="jobDetails">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р”РµС‚Р°Р»Рё Р·Р°РґР°РЅРёСЏ"/>
+        <details key="caption" value="&#x414;&#x435;&#x442;&#x430;&#x43b;&#x438; &#x437;&#x430;&#x434;&#x430;&#x43d;&#x438;&#x44f;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="jobConfig">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ Р·Р°РґР°РЅРёСЏ"/>
+        <details key="caption" value="&#x41a;&#x43e;&#x43d;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44f; &#x437;&#x430;&#x434;&#x430;&#x43d;&#x438;&#x44f;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="jobWait">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р”РѕР¶РґР°С‚СЊСЃСЏ РѕРєРѕРЅС‡Р°РЅРёСЏ"/>
+        <details key="caption" value="&#x414;&#x43e;&#x436;&#x434;&#x430;&#x442;&#x44c;&#x441;&#x44f; &#x43e;&#x43a;&#x43e;&#x43d;&#x447;&#x430;&#x43d;&#x438;&#x44f;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="loadFile">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р—Р°РіСЂСѓР·РёС‚СЊ С„Р°Р№Р»"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x440;&#x443;&#x437;&#x438;&#x442;&#x44c; &#x444;&#x430;&#x439;&#x43b;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="runQuery">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р’С‹РїРѕР»РЅРёС‚СЊ Р·Р°РїСЂРѕСЃ"/>
+        <details key="caption" value="&#x412;&#x44b;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x44c; &#x437;&#x430;&#x43f;&#x440;&#x43e;&#x441;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="home" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filesBrowserUtilUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultFS" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="home">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filesBrowserUtilUrl">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultFS">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JobDeployment" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="oozie" eType="#//Oozie"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="workflows" upperBound="-1"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Workflow"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="deployments" upperBound="-1"
-        eType="#//Deployment"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="slideSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
-        defaultValueLiteral="500"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rejectSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
-        defaultValueLiteral="1000"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fetchSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
-        defaultValueLiteral="100000"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionNum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
-        defaultValueLiteral="4"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persistOnDisk" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="master" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Property" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dynamicAllocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oozie" eType="//Oozie"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workflows" upperBound="-1">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Workflow"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deployments" upperBound="-1" eType="//Deployment"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="slideSize" defaultValueLiteral="500">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rejectSize" defaultValueLiteral="1000">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fetchSize" defaultValueLiteral="100000">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionNum" defaultValueLiteral="4">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persistOnDisk">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="master">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Property"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/auth#//AuditInfo"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dynamicAllocation">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р”РёРЅР°РјРёС‡РµСЃРєР°СЏ Р°Р»Р»РѕРєР°С†РёСЏ"/>
+        <details key="caption" value="&#x414;&#x438;&#x43d;&#x430;&#x43c;&#x438;&#x447;&#x435;&#x441;&#x43a;&#x430;&#x44f; &#x430;&#x43b;&#x43b;&#x43e;&#x43a;&#x430;&#x446;&#x438;&#x44f;"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sparkOpts" upperBound="-1"
-        eType="#//SparkOption" containment="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sparkOpts" upperBound="-1" eType="//SparkOption" containment="true">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="Spark Options"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="WorkflowDeployment" eSuperTypes="#//JobDeployment">
+  <eClassifiers xsi:type="ecore:EClass" name="WorkflowDeployment" eSuperTypes="//JobDeployment">
     <eOperations name="validate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСЂРѕРІРµСЂРёС‚СЊ"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="build">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРѕР±СЂР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="deploy">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРєРѕРїРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="install">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ Рё СЃРєРѕРїРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x441;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="run">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р—Р°РїСѓСЃС‚РёС‚СЊ"/>
+        <details key="caption" value="&#x417;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generateAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ Рё Р·Р°РїСѓСЃС‚РёС‚СЊ"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="buildAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРѕР±СЂР°С‚СЊ Рё Р·Р°РїСѓСЃС‚РёС‚СЊ"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Workflow"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jvmOpts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        defaultValueLiteral="-XX:MaxPermSize=1024m -Xmx2048m"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Workflow"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jvmOpts" defaultValueLiteral="-XX:MaxPermSize=1024m -Xmx2048m">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CoordinatorDeployment" eSuperTypes="#//JobDeployment">
+  <eClassifiers xsi:type="ecore:EClass" name="CoordinatorDeployment" eSuperTypes="//JobDeployment">
     <eOperations name="validate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСЂРѕРІРµСЂРёС‚СЊ"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="build">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРѕР±СЂР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="deploy">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРєРѕРїРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="install">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ Рё СЃРєРѕРїРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x441;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="run">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р—Р°РїСѓСЃС‚РёС‚СЊ"/>
+        <details key="caption" value="&#x417;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generateAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ Рё Р·Р°РїСѓСЃС‚РёС‚СЊ"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="buildAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРѕР±СЂР°С‚СЊ Рё Р·Р°РїСѓСЃС‚РёС‚СЊ"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getStatus">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РўРµРєСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ"/>
+        <details key="caption" value="&#x422;&#x435;&#x43a;&#x443;&#x449;&#x435;&#x435; &#x441;&#x43e;&#x441;&#x442;&#x43e;&#x44f;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="coordinator" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//CoJob"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jobId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jvmOpts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        defaultValueLiteral="-XX:MaxPermSize=1024m -Xmx2048m"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coordinator">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//CoJob"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jobId">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jvmOpts" defaultValueLiteral="-XX:MaxPermSize=1024m -Xmx2048m">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TransformationDeployment">
     <eOperations name="validate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСЂРѕРІРµСЂРёС‚СЊ"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generate">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="build">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРѕР±СЂР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="deploy">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРєРѕРїРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="install">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ Рё СЃРєРѕРїРёСЂРѕРІР°С‚СЊ"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x441;&#x43a;&#x43e;&#x43f;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="run">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р—Р°РїСѓСЃС‚РёС‚СЊ"/>
+        <details key="caption" value="&#x417;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generateAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ Рё Р·Р°РїСѓСЃС‚РёС‚СЊ"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="buildAndRun">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРѕР±СЂР°С‚СЊ Рё Р·Р°РїСѓСЃС‚РёС‚СЊ"/>
+        <details key="caption" value="&#x421;&#x43e;&#x431;&#x440;&#x430;&#x442;&#x44c; &#x438; &#x437;&#x430;&#x43f;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44c;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="livyServer" eType="#//LivyServer"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Transformation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="deployments" upperBound="-1"
-        eType="#//Deployment"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="slideSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
-        defaultValueLiteral="500"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rejectSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
-        defaultValueLiteral="1000"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fetchSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
-        defaultValueLiteral="100000"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionNum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
-        defaultValueLiteral="4"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persistOnDisk" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="master" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Property" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sparkConf" upperBound="-1"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="livyServer" eType="//LivyServer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Transformation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deployments" upperBound="-1" eType="//Deployment"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="slideSize" defaultValueLiteral="500">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rejectSize" defaultValueLiteral="1000">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fetchSize" defaultValueLiteral="100000">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionNum" defaultValueLiteral="4">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persistOnDisk">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="master">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Property"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/auth#//AuditInfo"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sparkConf" upperBound="-1" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Property"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Airflow">
     <eOperations name="testConnection"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http" lowerBound="1">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="URL"/>
         <details key="url" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dagsFolder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dagsFolder">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10000)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RunIteration">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Property"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RunTask">
     <eOperations name="generate"/>
     <eOperations name="deployAllTransformations"/>
     <eOperations name="deployDagToAirflow"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pool" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dependsOn" upperBound="-1"
-        eType="#//RunTask"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="transformationDeployment"
-        eType="#//TransformationDeployment"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="airflow" eType="#//Airflow"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pool">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependsOn" upperBound="-1" eType="//RunTask"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformationDeployment" eType="//TransformationDeployment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="airflow" eType="//Airflow"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="IterationTask" eSuperTypes="#//RunTask">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="iterations" upperBound="-1"
-        eType="#//RunIteration" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="branch" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IterationTask" eSuperTypes="//RunTask">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iterations" upperBound="-1" eType="//RunIteration" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="branch">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ParametrizedTask" eSuperTypes="#//RunTask">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Property" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="count" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="branch" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ParametrizedTask" eSuperTypes="//RunTask">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Property"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="count">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="branch">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Environment">
     <eOperations name="rewriteParameters">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџРµСЂРµР·Р°РїРёСЃР°С‚СЊ РїР°СЂР°РјРµС‚СЂС‹"/>
+        <details key="caption" value="&#x41f;&#x435;&#x440;&#x435;&#x437;&#x430;&#x43f;&#x438;&#x441;&#x430;&#x442;&#x44c; &#x43f;&#x430;&#x440;&#x430;&#x43c;&#x435;&#x442;&#x440;&#x44b;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="rewriteCurrent">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџРµСЂРµР·Р°РїРёСЃР°С‚СЊ РїР°СЂР°РјРµС‚СЂС‹ С‚РµРєСѓС‰РµР№ СЃСЂРµРґС‹"/>
+        <details key="caption" value="&#x41f;&#x435;&#x440;&#x435;&#x437;&#x430;&#x43f;&#x438;&#x441;&#x430;&#x442;&#x44c; &#x43f;&#x430;&#x440;&#x430;&#x43c;&#x435;&#x442;&#x440;&#x44b; &#x442;&#x435;&#x43a;&#x443;&#x449;&#x435;&#x439; &#x441;&#x440;&#x435;&#x434;&#x44b;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="encryptString">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р—Р°С€РёС„СЂРѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ"/>
+        <details key="caption" value="&#x417;&#x430;&#x448;&#x438;&#x444;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x441;&#x442;&#x440;&#x43e;&#x43a;&#x443;"/>
       </eAnnotations>
-      <eParameters name="plainString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="plainString">
+        <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eParameters>
     </eOperations>
     <eOperations name="decryptString">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р Р°СЃС€РёС„СЂРѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ"/>
+        <details key="caption" value="&#x420;&#x430;&#x441;&#x448;&#x438;&#x444;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x441;&#x442;&#x440;&#x43e;&#x43a;&#x443;"/>
       </eAnnotations>
-      <eParameters name="encryptedString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="encryptedString">
+        <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eParameters>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description">
       <eAnnotations source="mspace.ui">
         <details key="multiline" value="true"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10000)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-        eType="#//EnvironmentParameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1" eType="//EnvironmentParameter" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EnvironmentParameter">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description">
       <eAnnotations source="mspace.ui">
         <details key="multiline" value="true"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10000)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectClass" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectName" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributePath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectClass" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectName" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributePath">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterValue">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LivyServer">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РќР°Р·РІР°РЅРёРµ"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСЂРѕРµРєС‚"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x435;&#x43a;&#x442;"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http" lowerBound="1">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="URL"/>
         <details key="url" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="home" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="home">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РљР°С‚Р°Р»РѕРі"/>
+        <details key="caption" value="&#x41a;&#x430;&#x442;&#x430;&#x43b;&#x43e;&#x433;"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ"/>
+        <details key="caption" value="&#x41f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x442;&#x435;&#x43b;&#x44c;"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="webhdfs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="webhdfs">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="WebHDFS"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isKerberosEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isKerberosEnabled">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РђСѓРЅС‚РµРЅС‚РёС„РёРєР°С†РёСЏ Kerberos"/>
+        <details key="caption" value="&#x410;&#x443;&#x43d;&#x442;&#x435;&#x43d;&#x442;&#x438;&#x444;&#x438;&#x43a;&#x430;&#x446;&#x438;&#x44f; Kerberos"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyTabLocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyTabLocation">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСѓС‚СЊ Рє keytab"/>
+        <details key="caption" value="&#x41f;&#x443;&#x442;&#x44c; &#x43a; keytab"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userPrincipal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userPrincipal">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="User Principal"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р�СЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ"/>
+        <details key="caption" value="&#x418;&#x441;&#x43f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x43f;&#x43e; &#x443;&#x43c;&#x43e;&#x43b;&#x447;&#x430;&#x43d;&#x438;&#x44e;"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MLFlowServer">
     <eOperations name="testConnection">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСЂРѕРІРµСЂРёС‚СЊ РїРѕРґРєР»СЋС‡РµРЅРёРµ"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x432;&#x435;&#x440;&#x438;&#x442;&#x44c; &#x43f;&#x43e;&#x434;&#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РќР°Р·РІР°РЅРёРµ"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="host" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="host" lowerBound="1">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="Host"/>
         <details key="url" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="port" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="port" lowerBound="1">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="Port"/>
         <details key="url" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="artifactRoot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="artifactRoot">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="artifactRoot"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р�СЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ"/>
+        <details key="caption" value="&#x418;&#x441;&#x43f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x43f;&#x43e; &#x443;&#x43c;&#x43e;&#x43b;&#x447;&#x430;&#x43d;&#x438;&#x44e;"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SparkOption">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AtlasQNameOption">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Zeppelin">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РќР°Р·РІР°РЅРёРµ"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСЂРѕРµРєС‚"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x435;&#x43a;&#x442;"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="URL"/>
         <details key="url" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password">
       <eAnnotations source="mspace.ui">
         <details key="password" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BackOffPolicy" abstract="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="NoBackOffPolicy" eSuperTypes="#//BackOffPolicy"/>
-  <eClassifiers xsi:type="ecore:EClass" name="FixedBackOffPolicy" eSuperTypes="#//BackOffPolicy">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backOffPeriod" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NoBackOffPolicy" eSuperTypes="//BackOffPolicy"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FixedBackOffPolicy" eSuperTypes="//BackOffPolicy">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backOffPeriod">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExponentialBackOffPolicy" eSuperTypes="#//BackOffPolicy">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialInterval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxInterval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExponentialBackOffPolicy" eSuperTypes="//BackOffPolicy">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialInterval">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplier">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxInterval">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExponentialRandomBackOffPolicy" eSuperTypes="#//ExponentialBackOffPolicy"/>
-  <eClassifiers xsi:type="ecore:EClass" name="UniformRandomBackOffPolicy" eSuperTypes="#//BackOffPolicy">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minBackOffPeriod" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxBackOffPeriod" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExponentialRandomBackOffPolicy" eSuperTypes="//ExponentialBackOffPolicy"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UniformRandomBackOffPolicy" eSuperTypes="//BackOffPolicy">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minBackOffPeriod">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxBackOffPeriod">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Scheduler" abstract="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OnceScheduler" eSuperTypes="#//Scheduler">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+  <eClassifiers xsi:type="ecore:EClass" name="OnceScheduler" eSuperTypes="//Scheduler">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Temporal(TIMESTAMP)"/>
       </eAnnotations>
       <eAnnotations source="mspace.ui">
         <details key="timestamp" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disableAfterRun" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disableAfterRun">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CronScheduler" eSuperTypes="#//Scheduler">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cronExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CronScheduler" eSuperTypes="//Scheduler">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cronExpression">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DelayScheduler" eSuperTypes="#//Scheduler">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+  <eClassifiers xsi:type="ecore:EClass" name="DelayScheduler" eSuperTypes="//Scheduler">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Temporal(TIMESTAMP)"/>
       </eAnnotations>
       <eAnnotations source="mspace.ui">
         <details key="timestamp" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delay">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PeriodScheduler" eSuperTypes="#//Scheduler">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+  <eClassifiers xsi:type="ecore:EClass" name="PeriodScheduler" eSuperTypes="//Scheduler">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Temporal(TIMESTAMP)"/>
       </eAnnotations>
       <eAnnotations source="mspace.ui">
         <details key="timestamp" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RetryPolicy" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="RetryableException">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exceptionClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retryable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exceptionClass">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retryable">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleRetryPolicy" eSuperTypes="#//RetryPolicy">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxAttempts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="retryableExceptions" upperBound="-1"
-        eType="#//RetryableException" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleRetryPolicy" eSuperTypes="//RetryPolicy">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxAttempts">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="retryableExceptions" upperBound="-1" eType="//RetryableException" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AlwaysRetryPolicy" eSuperTypes="#//RetryPolicy"/>
-  <eClassifiers xsi:type="ecore:EClass" name="NeverRetryPolicy" eSuperTypes="#//RetryPolicy"/>
-  <eClassifiers xsi:type="ecore:EClass" name="TimeoutRetryPolicy" eSuperTypes="#//RetryPolicy">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AlwaysRetryPolicy" eSuperTypes="//RetryPolicy"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NeverRetryPolicy" eSuperTypes="//RetryPolicy"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeoutRetryPolicy" eSuperTypes="//RetryPolicy">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeout">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ScheduledTask">
     <eOperations name="refreshScheduler"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entityType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entityName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="methodName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scheduler" eType="#//Scheduler"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="backOffPolicy" eType="#//BackOffPolicy"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="retryPolicy" eType="#//RetryPolicy"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runAsUser" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runAsPassword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entityType">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entityName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="methodName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scheduler" eType="//Scheduler" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="backOffPolicy" eType="//BackOffPolicy" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="retryPolicy" eType="//RetryPolicy" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runAsUser">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runAsPassword">
       <eAnnotations source="mspace.ui">
         <details key="password" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastScheduleTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastScheduleTime">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Temporal(TIMESTAMP)"/>
       </eAnnotations>
@@ -726,8 +974,9 @@
         <details key="timestamp" value="true"/>
         <details key="readOnly" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastRunTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastRunTime">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Temporal(TIMESTAMP)"/>
       </eAnnotations>
@@ -735,8 +984,9 @@
         <details key="timestamp" value="true"/>
         <details key="readOnly" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastErrorTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastErrorTime">
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Temporal(TIMESTAMP)"/>
       </eAnnotations>
@@ -744,8 +994,9 @@
         <details key="timestamp" value="true"/>
         <details key="readOnly" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastError" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastError">
       <eAnnotations source="mspace.ui">
         <details key="multiline" value="true"/>
         <details key="readOnly" value="true"/>
@@ -753,104 +1004,144 @@
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(length=10485760)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" eType="ecore:EClass http://www.neoflex.ru/meta/auth#//AuditInfo"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/auth#//AuditInfo"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Atlas">
     <eOperations name="publishSchemes">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РћРїСѓР±Р»РёРєРѕРІР°С‚СЊ СЃС…РµРјС‹"/>
+        <details key="caption" value="&#x41e;&#x43f;&#x443;&#x431;&#x43b;&#x438;&#x43a;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x441;&#x445;&#x435;&#x43c;&#x44b;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РќР°Р·РІР°РЅРёРµ"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РџСЂРѕРµРєС‚"/>
+        <details key="caption" value="&#x41f;&#x440;&#x43e;&#x435;&#x43a;&#x442;"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="http">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="URL"/>
         <details key="url" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userName">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password">
       <eAnnotations source="mspace.ui">
         <details key="password" value="true"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="qnamePatterns" upperBound="-1"
-        eType="#//AtlasQNameOption" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qnamePatterns" upperBound="-1" eType="//AtlasQNameOption" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AtlasScheme">
     <eOperations name="publish">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РћРїСѓР±Р»РёРєРѕРІР°С‚СЊ СЃС…РµРјСѓ"/>
+        <details key="caption" value="&#x41e;&#x43f;&#x443;&#x431;&#x43b;&#x438;&#x43a;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x441;&#x445;&#x435;&#x43c;&#x443;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РќР°Р·РІР°РЅРёРµ"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scheme" eType="ecore:EClass http://www.neoflex.ru/meta/relational#//Scheme"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="atlas" eType="#//Atlas"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scheme">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/relational#//Scheme"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="atlas" eType="//Atlas"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AtlasProject">
     <eOperations name="publish">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РћРїСѓР±Р»РёРєРѕРІР°С‚СЊ Lineage РїСЂРѕРµРєС‚Р°"/>
+        <details key="caption" value="&#x41e;&#x43f;&#x443;&#x431;&#x43b;&#x438;&#x43a;&#x43e;&#x432;&#x430;&#x442;&#x44c; Lineage &#x43f;&#x440;&#x43e;&#x435;&#x43a;&#x442;&#x430;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РќР°Р·РІР°РЅРёРµ"/>
+        <details key="caption" value="&#x41d;&#x430;&#x437;&#x432;&#x430;&#x43d;&#x438;&#x435;"/>
       </eAnnotations>
       <eAnnotations source="teneo.jpa">
         <details key="value" value="@Column(unique=true, nullable=false)"/>
       </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="atlas" eType="#//Atlas"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="atlas" eType="//Atlas"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ImportEntityType">
     <eLiterals name="TABLE" value="1"/>
     <eLiterals name="VIEW" value="2"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ImportEntity">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schema" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importEntityType" eType="#//ImportEntityType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="wizard" lowerBound="1"
-        eType="#//ImportWizard" eOpposite="#//ImportWizard/entities"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="templateTransformation"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Transformation"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleted" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionField" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preStatement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="whereCondition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="idField" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="idParallelism" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sparkOpts" upperBound="-1"
-        eType="#//SparkOption" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schema">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importEntityType" eType="//ImportEntityType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wizard" lowerBound="1" eType="//ImportWizard" eOpposite="//ImportWizard/entities"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateTransformation">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Transformation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleted">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionField">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partitionExpression">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preStatement">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="whereCondition">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="idField">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="idParallelism">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numExecutors">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorCores">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverMemory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sparkOpts" upperBound="-1" eType="//SparkOption" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ImportWizard">
     <eAnnotations source="mspace.ui">
@@ -860,46 +1151,77 @@
     </eAnnotations>
     <eOperations name="loadMetadata">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р—Р°РіСЂСѓР·РёС‚СЊ РјРµС‚Р°РґР°РЅРЅС‹Рµ"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x440;&#x443;&#x437;&#x438;&#x442;&#x44c; &#x43c;&#x435;&#x442;&#x430;&#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x435;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="generateWorkflow">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ РїСЂРѕРµРєС‚"/>
+        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; &#x43f;&#x440;&#x43e;&#x435;&#x43a;&#x442;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="uploadSpecification">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="Р—Р°РіСЂСѓР·РёС‚СЊ СЃРїРµС†РёС„РёРєР°С†РёСЋ CSV"/>
+        <details key="caption" value="&#x417;&#x430;&#x433;&#x440;&#x443;&#x437;&#x438;&#x442;&#x44c; &#x441;&#x43f;&#x435;&#x446;&#x438;&#x444;&#x438;&#x43a;&#x430;&#x446;&#x438;&#x44e; CSV"/>
       </eAnnotations>
-      <eParameters name="file" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="file">
         <eAnnotations source="mspace.ui">
           <details key="file" value="true"/>
         </eAnnotations>
+        <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       </eParameters>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Project"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="jdbcContext" eType="ecore:EClass http://www.neoflex.ru/meta/etl#//JdbcContext"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="oozie" eType="#//Oozie"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="templateTransformation"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Transformation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="loggingTransformation"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Transformation"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="wfParallelism" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfsPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="registerHiveTable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="database" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tablePrefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableSuffix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewPrefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewSuffix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="showTables" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="showViews" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exitOnFail" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="workflowParameters" upperBound="-1"
-        eType="ecore:EClass http://www.neoflex.ru/meta/etl#//Property" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="entities" upperBound="-1"
-        eType="#//ImportEntity" containment="true" eOpposite="#//ImportEntity/wizard"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="jdbcContext">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//JdbcContext"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oozie" eType="//Oozie"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateTransformation">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Transformation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loggingTransformation">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Transformation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="wfParallelism">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdfsPath">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="registerHiveTable">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="database">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tablePrefix">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableSuffix">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewPrefix">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewSuffix">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="showTables">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="showViews">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exitOnFail">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workflowParameters" upperBound="-1" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Property"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entities" upperBound="-1" eType="//ImportEntity" containment="true" eOpposite="//ImportEntity/wizard"/>
   </eClassifiers>
 </ecore:EPackage>

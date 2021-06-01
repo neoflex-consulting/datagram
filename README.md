@@ -16,17 +16,12 @@
 git config --global core.autocrlf false
 ```
 Убедитесь, что у вас установлен maven и работает команда mvn.
-### Сборка и запуск
+### Запуск через docker-compose
 ```
 git clone https://github.com/neoflex-consulting/datagram.git
 cd datagram
-# По умолчанию используется профайл для spark3, если нужна сборка для spark2 
-# добавить к строке запуска следующей команды -Pspark2
-mvn clean install 
 docker-compose -f bd-runtime/docker-compose.yml pull
-docker-compose -f bd-runtime/docker-compose.yml up -d datagram
-# Загрузка тестовых данных для проверки работоспособности
-docker-compose -f bd-runtime/docker-compose.yml up -d samples
+docker-compose -f bd-runtime/docker-compose.yml up -d
 ```
 
 ### Проверка работоспособности
@@ -78,6 +73,16 @@ docker-compose -f bd-runtime/docker-compose.yml up -d hue
 ```
 Интерфейс доступен по ссылке: http://localhost:8888/.
 При первом входе введите user/password: root/root.
+
+### Сборка docker образов
+```
+git clone https://github.com/neoflex-consulting/datagram.git
+cd datagram
+docker-compose -f bd-runtime/docker-compose.yml build datagram
+docker-compose -f bd-runtime/docker-compose.yml build
+```
+
+
 
 ## Ссылки на WEB UI
 Ресурс|URL

@@ -13,5 +13,5 @@ rule CoordXml transform coJob: CoJob {
     return params;
   }
   template : MetaResource.getURL("/psm/etl/spark/coord.egl").toString()
-  target : mspaceRoot + "/deployments/" + jobDeployment.get("name") + "/job/coordinator.xml"   
+  target: mspaceRoot + "/" + jobDeployment.get("name") + "/job/coordinator.xml"
 }
