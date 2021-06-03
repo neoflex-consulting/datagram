@@ -43,8 +43,8 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.emfatic</groupId>
-      <artifactId>org.eclipse.emf.emfatic</artifactId>
-      <version>0.8.0</version>
+      <artifactId>org.eclipse.emfatic.core</artifactId>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.jdom</groupId>
@@ -70,7 +70,7 @@
     <dependency>
       <groupId>org.eclipse.epsilon</groupId>
       <artifactId>epsilon-core</artifactId>
-      <version>1.4.0</version>
+      <version>1.5.1</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.epsilon</groupId>
@@ -90,7 +90,7 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit.http.server</artifactId>
-      <version>5.3.0.201903130848-r</version>
+      <version>5.11.0.202103091610-r</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.core</groupId>
@@ -279,36 +279,25 @@
         <executions>
           <execution>
             <id>model-execute</id>
-            <phase>generate-sources</phase>
+            <phase>package</phase>
             <goals>
               <goal>run</goal>
             </goals>
             <configuration>
-              <target name="genmodel">
-                <property name="classpath" refid="maven.compile.classpath" />
-                <property environment="env" />
-                <echo message="${classpath}" />
-                <echo message="${env.JAVA_HOME}" />
-                <echo message="${basedir}" />
-                <ant antfile="${basedir}/src/main/resources/build.xml" inheritAll="true" target="generate-all">
-                  <property name="file.encoding" value="UTF-8" />
-                </ant>
-              </target>
-            </configuration>
-          </execution>
-          <execution>
-            <id>emf2ecore</id>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target name="main">
+              <target name="emf2ecore">
                 <property name="compile_classpath" refid="maven.compile.classpath" />
                 <property name="runtime_classpath" refid="maven.runtime.classpath" />
                 <property name="test_classpath" refid="maven.test.classpath" />
                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
                 <taskdef classname="ru.neoflex.meta.utils.GenerateEcoreTask" classpath="target/classes" name="genecore" classpathref="maven.runtime.classpath"></taskdef>
                 <genecore />
+                <property name="classpath" refid="maven.compile.classpath" />
+                <property environment="env" />
+                <echo message="${env.JAVA_HOME}" />
+                <echo message="${basedir}" />
+                <ant antfile="${basedir}/src/main/resources/build.xml" inheritAll="true" target="generate-all">
+                  <property name="file.encoding" value="UTF-8" />
+                </ant>
               </target>
             </configuration>
           </execution>
