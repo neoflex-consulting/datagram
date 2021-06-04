@@ -8,7 +8,7 @@
     </eAnnotations>
     <eOperations name="genarateWorkflow">
       <eAnnotations source="mspace.ui">
-        <details key="caption" value="&#x421;&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x43e;&#x432;&#x430;&#x442;&#x44c; Workflow"/>
+        <details key="caption" value="&#x420;&#x40e;&#x420;&#x456;&#x420;&#xb5;&#x420;&#x405;&#x420;&#xb5;&#x421;&#x402;&#x420;&#x451;&#x421;&#x402;&#x420;&#x455;&#x420;&#x406;&#x420;&#xb0;&#x421;&#x201a;&#x421;&#x40a; Workflow"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">

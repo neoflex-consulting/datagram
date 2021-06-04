@@ -153,6 +153,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="BLOB" eSuperTypes="//SQLSimpleType"/>
   <eClassifiers xsi:type="ecore:EClass" name="BOOLEAN" eSuperTypes="//SQLSimpleType"/>
   <eClassifiers xsi:type="ecore:EClass" name="XML" eSuperTypes="//SQLSimpleType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ARRAY" eSuperTypes="//SQLSimpleType"/>
   <eClassifiers xsi:type="ecore:EClass" name="StoredProcedure" eSuperTypes="//DataSet">
     <eStructuralFeatures xsi:type="ecore:EReference" name="scheme" lowerBound="1" eType="//Scheme" eOpposite="//Scheme/storedProcedures"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalogName">

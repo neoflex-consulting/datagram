@@ -6196,7 +6196,7 @@
     "rel.SQLSimpleType":
     {
       "ancestors": [],
-      "successors": ["rel.BLOB", "rel.BOOLEAN", "rel.CHAR", "rel.DATE", "rel.DATETIME", "rel.DECIMAL", "rel.DOUBLE", "rel.FLOAT", "rel.INTEGER", "rel.LONG", "rel.SQLType", "rel.TIME", "rel.VARCHAR", "rel.XML"],
+      "successors": ["rel.ARRAY", "rel.BLOB", "rel.BOOLEAN", "rel.CHAR", "rel.DATE", "rel.DATETIME", "rel.DECIMAL", "rel.DOUBLE", "rel.FLOAT", "rel.INTEGER", "rel.LONG", "rel.SQLType", "rel.TIME", "rel.VARCHAR", "rel.XML"],
       "containerName": "ViewContainer",
       "views": ["FormView"],
       "actions": [
@@ -12825,6 +12825,20 @@
 	      "name": "versionColumn",
 	      "type": "string"
       }
+      ]
+    },
+    "rel.ARRAY":
+    {
+      "ancestors": ["rel.SQLSimpleType"],
+      "successors": ["rel.ARRAY"],
+      "containerName": "ViewContainer",
+      "views": ["FormView"],
+      "actions": [
+      ],
+      "columns": [
+
+      ],
+      "fields": [
       ]
     },
     "rt.AtlasScheme":
