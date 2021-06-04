@@ -151,6 +151,9 @@ class BOOLEAN extends SQLSimpleType {
 class XML extends SQLSimpleType {
 }
 
+class ARRAY extends SQLSimpleType {
+}
+
 class StoredProcedure extends DataSet {
   ref Scheme[1]#storedProcedures scheme;
   attr String catalogName;
