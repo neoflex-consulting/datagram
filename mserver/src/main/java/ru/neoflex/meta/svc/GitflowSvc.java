@@ -754,7 +754,7 @@ public class GitflowSvc extends BaseSvc {
                     if (update.getMessage() != null) {
                         msg = msg + ": " + update.getMessage();
                     }
-                    throw new RuntimeException(update.getRemoteName() + "|" +msg);
+                    throw new RuntimeException(update.getRemoteName() + "|" + msg);
                 }
             }
         }
@@ -780,15 +780,16 @@ public class GitflowSvc extends BaseSvc {
             command.setCredentialsProvider(credentialsProvider);
         }
         MergeStrategy mergeStrategy = MergeStrategy.get(strategy);
-        if(mergeStrategy != null){
+        if (mergeStrategy != null) {
             command.setStrategy(mergeStrategy);
             command.setFastForward(MergeCommand.FastForwardMode.NO_FF);
         }
         PullResult pullResult = command.call();
-        MergeResult mergeResult  = pullResult.getMergeResult();
-        if(MergeResult.MergeStatus.CONFLICTING.equals(mergeResult.getMergeStatus())){
+        MergeResult mergeResult = pullResult.getMergeResult();
+        MergeResult.MergeStatus mergeStatus = mergeResult.getMergeStatus();
+        if (MergeResult.MergeStatus.CONFLICTING.equals(mergeStatus)) {
             StringBuilder message = new StringBuilder("");
-            for(Map.Entry<java.lang.String, int[][]> confict : mergeResult.getConflicts().entrySet()){
+            for (Map.Entry<java.lang.String, int[][]> confict : mergeResult.getConflicts().entrySet()) {
                 message.append("File " + confict.getKey() + " conflicted " + (confict.getValue().length > 0 ? ("at line " + confict.getValue()[0] +
                         (confict.getValue().length > 1 ? ", row " + confict.getValue()[1] : "")) : ""));
                 message.append('\n');
@@ -796,6 +797,16 @@ public class GitflowSvc extends BaseSvc {
             message.append("RESET current branch and apply NON DEFAULT strategy you preffered");
             message.append('\n');
             throw new RuntimeException(message.toString());
+        }
+        try {
+            if (!MergeResult.MergeStatus.ABORTED.equals(mergeStatus) &&
+                    !MergeResult.MergeStatus.FAILED.equals(mergeStatus) &&
+                    !MergeResult.MergeStatus.ALREADY_UP_TO_DATE.equals(mergeStatus) &&
+                    !MergeResult.MergeStatus.CHECKOUT_CONFLICT.equals(mergeStatus)) {
+                importCurrentBranch();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Unable re-import branch " + getCurrentBranch(), e);
         }
     }
 
@@ -805,8 +816,8 @@ public class GitflowSvc extends BaseSvc {
             Git git = new Git(repository);
             git.reset().setMode(ResetCommand.ResetType.HARD).call();
             logger.info(getCurrentBranch() + "  reset to HEAD");
-        }catch (Throwable th){
-            logger.error("Unable reset to HEAD "+ getCurrentBranch());
+        } catch (Throwable th) {
+            logger.error("Unable reset to HEAD " + getCurrentBranch());
             throw new RuntimeException(th);
         }
 
@@ -1003,12 +1014,12 @@ public class GitflowSvc extends BaseSvc {
                 }
                 Files.walk(sourcesPath)
                         .filter(Files::isRegularFile).forEach(path -> {
-                            try {
-                                Files.delete(path);
-                            } catch (IOException e) {
-                                // pass
-                            }
-                        });
+                    try {
+                        Files.delete(path);
+                    } catch (IOException e) {
+                        // pass
+                    }
+                });
                 if (!Files.isDirectory(modelPath)) {
                     return null;
                 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="jobserver-runner/src/main/java"/>
+	<classpathentry kind="src" path="jobserver-runner/src/test/java"/>
+	<classpathentry kind="src" path="livyjobserver/src/main/java"/>
+	<classpathentry kind="src" path="mserver/src/main/java"/>
+	<classpathentry kind="src" path="mserver/src/test/java"/>
+	<classpathentry kind="src" path="spark2lib/src/main/java"/>
+	<classpathentry kind="lib" path="bd-runtime/bd-base/extralib/HiveJDBC4.jar"/>
+	<classpathentry kind="lib" path="bd-runtime/bd-base/extralib/livy-api-0.8.0-incubating-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="bd-runtime/bd-base/extralib/livy-client-common-0.8.0-incubating-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="bd-runtime/bd-base/extralib/livy-rsc-0.8.0-incubating-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="bd-runtime/bd-base/extralib/ojdbc8.jar"/>
+	<classpathentry kind="lib" path="bd-runtime/bd-base/extralib/postgresql-42.2.12.jre6.jar"/>
+	<classpathentry kind="lib" path="ddesigner/target/classes/cim/ddesigner/target/ddesigner-spark3-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="ddesigner/target/ddesigner-spark3-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="jobserver-runner/target/jobserver-runner-spark3-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="livyjobserver/target/livyjobserver-spark3-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="MetaServer/target/metaserver-spark3-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="mserver/target/mserver-spark3-2.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="mserver/target/mserver-spark3-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="pim/target/metaserver.pim-spark3-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="runtime/target/ru.neoflex.meta.etl.spark.runtime-spark3-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-spark3-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="C:/Users/maxim/.m2/repository"/>
+	<classpathentry kind="output" path="jobserver-runner/target/classes"/>
+</classpath>
