@@ -944,6 +944,11 @@
         <details key="caption" value="SVN Commit"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="migrateToGitFlow">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Migrate to GitFlow"/>
+      </eAnnotations>
+    </eOperations>
     <eOperations name="svnCleanup">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="SVN Cleanup"/>

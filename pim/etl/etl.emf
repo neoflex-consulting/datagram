@@ -542,6 +542,10 @@ class Project {
   @mspace.ui(caption="SVN Commit")
   op void svnCommit();
 
+  @mspace.ui(caption="Migrate to GitFlow")
+  op void migrateToGitFlow();
+
+
   @mspace.ui(caption="SVN Cleanup")
   op void svnCleanup();
   attr String[1] name;

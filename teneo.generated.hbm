@@ -788,6 +788,10 @@
 		<meta attribute="eclassName" inherit="false">XML</meta>
 		<meta attribute="epackage" inherit="false">http://www.neoflex.ru/meta/relational</meta>
 	</subclass>
+	<subclass entity-name="rel.ARRAY" abstract="false" lazy="true" extends="rel.SQLSimpleType" discriminator-value="rel.ARRAY">
+		<meta attribute="eclassName" inherit="false">ARRAY</meta>
+		<meta attribute="epackage" inherit="false">http://www.neoflex.ru/meta/relational</meta>
+	</subclass>
 	<subclass entity-name="rel.StoredProcedure" abstract="false" lazy="true" extends="rel.DataSet" discriminator-value="rel.StoredProcedure">
 		<meta attribute="eclassName" inherit="false">StoredProcedure</meta>
 		<meta attribute="epackage" inherit="false">http://www.neoflex.ru/meta/relational</meta>

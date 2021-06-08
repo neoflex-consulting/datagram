@@ -3852,6 +3852,11 @@
               ]
           },
           {
+              "name": "migrateToGitFlow",
+              "parameters": [
+              ]
+          },
+          {
               "name": "svnCleanup",
               "parameters": [
               ]
