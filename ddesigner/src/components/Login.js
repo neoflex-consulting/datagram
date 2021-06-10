@@ -29,7 +29,7 @@ class Login extends Component {
                     <Header style={{ height: '20vh', backgroundColor: '#ffffff' }}>
                         <Row type="flex" justify="space-between">
                             <Col span={16}>
-                                <Avatar shape="square" className="logogo" src={'images/logogo.png'} />
+                                <Avatar shape="square" className="logogo" src={'images/Logo_Datagram_Grey.svg'} />
                             </Col>
                             <Col>
                                 <Button type="dashed" onClick={()=> i18n.language === ('ru-RU') ? setLang('en-EN') : setLang('ru-RU')}>
