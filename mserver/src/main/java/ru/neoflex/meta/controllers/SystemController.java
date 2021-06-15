@@ -155,7 +155,7 @@ public class SystemController {
         String username = body.get("username").textValue();
         String password = body.get("password").textValue();
         String strategy = body.get("strategy") != null ? body.get("strategy").textValue() : "";
-        gitflowSvc.pull(remoteBranchName, remote, username, password, strategy);
+        gitflowSvc.pull(remoteBranchName, remote, username, password, strategy, false);
         return getBranchInfo();
     }
 

@@ -2,7 +2,7 @@ FROM maven:3.6.3-openjdk-8-slim as builder
 RUN apt-get update && apt-get install -y git \
   && git clone https://github.com/neoflex-consulting/datagram.git \
   && cd datagram \
-  && mvn clean install
+  && mvn -q clean install
 
 FROM maven:3.6.3-openjdk-8-slim
 

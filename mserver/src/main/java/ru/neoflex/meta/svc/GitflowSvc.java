@@ -760,7 +760,7 @@ public class GitflowSvc extends BaseSvc {
         }
     }
 
-    public void pull(String remoteBranchName, String remote, String username, String password, String strategy) throws IOException, GitAPIException, URISyntaxException {
+    public void pull(String remoteBranchName, String remote, String username, String password, String strategy, boolean truncate) throws IOException, GitAPIException, URISyntaxException {
         Git git = new Git(repository);
         PullCommand command = git.pull().setProgressMonitor(progressMonitor);
         if (StringUtils.isNotEmpty(remote)) {
@@ -803,7 +803,7 @@ public class GitflowSvc extends BaseSvc {
                     !MergeResult.MergeStatus.FAILED.equals(mergeStatus) &&
                     !MergeResult.MergeStatus.ALREADY_UP_TO_DATE.equals(mergeStatus) &&
                     !MergeResult.MergeStatus.CHECKOUT_CONFLICT.equals(mergeStatus)) {
-                importCurrentBranch();
+                importCurrentBranch(truncate);
             }
         } catch (Exception e) {
             throw new RuntimeException("Unable re-import branch " + getCurrentBranch(), e);

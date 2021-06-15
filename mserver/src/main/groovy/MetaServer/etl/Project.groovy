@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import ru.neoflex.meta.model.Database
 import ru.neoflex.meta.svc.BaseSvc
+import ru.neoflex.meta.svc.GitflowSvc
 import ru.neoflex.meta.utils.*
 import ru.neoflex.meta.utils.vcs.IVCS
 import MetaServer.rt.Environment
@@ -449,6 +450,79 @@ class Project extends GenerationBase {
         getVCS(entity).commit(SecurityContextHolder.context.authentication.name + ": " + entity.svnCommitMessage)
         return ["OK"]
         /* protected region MetaServer.etlProject.svnCommit end */
+    }
+
+
+    static Object migrateToGitFlow(Map entity, Map params = null) {
+        if (entity.svnEnabled != true) {
+            return ["VCS not enabled for project ${entity.name}".toString()]
+        }
+        File projectDir = getProjectDir(entity)
+        File modelDir = new File(projectDir, "model");
+        modelDir.mkdirs();
+
+        File sourcesDir = new File(projectDir, "sources");
+        sourcesDir.mkdir();
+
+        Map<String, List<File>> mappedByPrefix = new HashMap<String, List<File>>();
+
+        FilenameFilter xmiFilter = new FilenameFilter() {
+            @Override
+            boolean accept(File dir, String name) {
+                return name.endsWith("xmi");
+            }
+        }
+
+        FilenameFilter groovyFilter = new FilenameFilter() {
+            @Override
+            boolean accept(File dir, String name) {
+                return name.endsWith("groovy");
+            }
+        }
+
+        for (File f in projectDir.listFiles(xmiFilter)) {
+            String pref = f.getName().split("_")[0];
+            if (mappedByPrefix.get(pref) == null) {
+                mappedByPrefix.put(pref, new ArrayList<File>());
+            }
+            mappedByPrefix.get(pref).add(f);
+        }
+        for (String key in mappedByPrefix.keySet()) {
+            for (File file : mappedByPrefix.get(key)) {
+                String type = file.getName().split("_")[1];
+                File targetDir = new File(modelDir, key)
+                if (!targetDir.exists()) {
+                    new File(targetDir, type).mkdirs();
+                    targetDir = new File(modelDir, key)
+
+                }
+                File typeDir = new File(targetDir, type);
+                if (!typeDir.exists()) {
+                    new File(targetDir, type).mkdirs();
+                    typeDir = new File(targetDir, type)
+                }
+                String entityName = "";
+                String[] split = file.getName().split("_");
+                if (split.length == 3) {
+                    entityName = split[2];
+                } else {
+                    for (int i = 2; i < split.length; i++) {
+                        entityName += "_" + split[i];
+                    }
+                    entityName = entityName.substring(1);
+                }
+                file.renameTo(new File(typeDir, entityName));
+            }
+        }
+
+        for(File groov in projectDir.listFiles(groovyFilter)){
+            groov.delete();
+        }
+        svnCommit(entity, params);
+
+        GitflowSvc gitFlowSVC = Context.current.contextSvc.getGitflowSvc();
+        gitFlowSVC.pull("master", entity.get("svnURL"), entity.get("svnUserName"), entity.get("svnPassword"), "theirs", true);
+
     }
 
     static Object svnCleanup(Map entity, Map params = null) {

@@ -1732,6 +1732,10 @@
           "caption": "VCS Checkout Or Update",
           "params": {}
         },
+        "migrateToGitFlow": {
+          "caption": "Migrate Project to GitFlow",
+          "params": {}
+        },
         "svnCommit": {
           "caption": "VCS Commit",
           "params": {}
