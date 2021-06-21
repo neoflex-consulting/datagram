@@ -106,9 +106,9 @@ class LivyServer {
 
         def data = REST.getHTTPClient(entity).post(
                 path: "/sessions/${params.sessionId}/statements",
-                requestContentType: MediaType.APPLICATION_JSON_UTF8_VALUE ,
+                requestContentType: MediaType.APPLICATION_JSON_UTF8_VALUE,
                 headers: ["X-Requested-By": InetAddress.getLocalHost().getHostAddress()],
-                contentType: MediaType.APPLICATION_JSON_UTF8_VALUE ,
+                contentType: MediaType.APPLICATION_JSON_UTF8_VALUE,
                 body: body)?.reader
         return [result: data]
     }
@@ -116,8 +116,8 @@ class LivyServer {
     static Object checkStatement(Map entity, Map params = null) {
         def data = REST.getHTTPClient(entity).get(
                 path: "/sessions/${params.sessionId}/statements/${params.statementId}",
-                requestContentType: MediaType.APPLICATION_JSON_UTF8_VALUE ,
-                contentType: MediaType.APPLICATION_JSON_UTF8_VALUE )?.reader
+                requestContentType: MediaType.APPLICATION_JSON_UTF8_VALUE,
+                contentType: MediaType.APPLICATION_JSON_UTF8_VALUE)?.reader
         return [result: data]
     }
 
@@ -211,16 +211,37 @@ class LivyServer {
     }
 
 
-    private static String getLivyUser(Map livyServer){
-        if(livyServer.user == null || livyServer.user == ""){
+    private static String getLivyUser(Map livyServer) {
+        if (livyServer.user == null || livyServer.user == "") {
             return "hdfs";
         }
         return livyServer.user;
     }
 
+    private static String getWebHDFS(Map livyServer) {
+
+        String addressProperty = livyServer.webhdfs;
+        if (addressProperty.indexOf(";") < 0) {
+            return addressProperty;
+        }
+
+        List<String> addressArray = Arrays.asList(addressProperty.split(";"));
+        for (String address : addressArray) {
+            try {
+                URLConnection connection = new URL(address).openConnection();
+                connection.setConnectTimeout(3000);
+                connection.connect();
+                return address;
+            } catch (Exception e) {
+            }
+        }
+        return "";
+    }
+
+
     private static Map getFileStatus(Map livyServer, String path) {
 
-        def http = REST.getHTTPClient(livyServer.webhdfs + "/", livyServer)
+        def http = REST.getHTTPClient(getWebHDFS(livyServer) + "/", livyServer)
         def user = getLivyUser(livyServer)
         def fileStatus = http.get([
                 path              : UriUtils.encodePath(path, "UTF-8").substring(1),
@@ -253,8 +274,7 @@ class LivyServer {
             if (it.type == "DIRECTORY") {
                 def status = getFileStatus(livyServer, newPath)
                 zipDirectory(livyServer, newPath, status.children as List, zipOutputStream)
-            }
-            else if (it.type == "FILE") {
+            } else if (it.type == "FILE") {
                 InputStream is = getFileInputStream(livyServer, newPath)
                 try {
                     ZipUtils.zipInputStream(newPath, is, zipOutputStream)
@@ -279,7 +299,7 @@ class LivyServer {
         PipedInputStream pipedInputStream = new PipedInputStream()
         PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream)
         new Thread() {
-            void run () {
+            void run() {
                 try {
                     ZipOutputStream zipOutputStream = new java.util.zip.ZipOutputStream(pipedOutputStream)
                     try {
@@ -302,13 +322,13 @@ class LivyServer {
 
     private static InputStream getFileInputStream(Map livyServer, String path) {
         Map entity
-        def http = REST.getSimpleHTTPClient(livyServer.webhdfs + "/", livyServer)
+        def http = REST.getSimpleHTTPClient(getWebHDFS(livyServer) + "/", livyServer)
         def user = getLivyUser(livyServer)
         def response = http.get([
                 path              : UriUtils.encodePath(path, "UTF-8").substring(1),
                 requestContentType: ContentType.ANY,
                 contentType       : ContentType.ANY,
-                query             : ['user.name': user , 'op': "OPEN"]
+                query             : ['user.name': user, 'op': "OPEN"]
         ])
         def inputStream = response.data as InputStream
         inputStream
@@ -322,7 +342,7 @@ class LivyServer {
     }
 
     private static void uploadInputStream(Map livyServer, String newFileName, InputStream inputStream) {
-        def http = REST.getHTTPClient(livyServer.webhdfs + "/", livyServer)
+        def http = REST.getHTTPClient(getWebHDFS(livyServer) + "/", livyServer)
         def user = getLivyUser(livyServer)
         def put1 = http.put(
                 path: UriUtils.encodePath(newFileName, "UTF-8").substring(1),
@@ -403,7 +423,7 @@ class LivyServer {
         }
     }
 
-    static Object executeStatementAndWait(Integer sessionId, String code, Log logger, Map livyServer, String kind='spark') {
+    static Object executeStatementAndWait(Integer sessionId, String code, Log logger, Map livyServer, String kind = 'spark') {
         def result
         def statementId
         logger.info("sessionId:" + sessionId)
@@ -453,7 +473,7 @@ class LivyServer {
             throw new RuntimeException("No default Livy Server")
         }
         if (list.size() > 1) {
-            def servers = list.collect {it.name}.join(", ")
+            def servers = list.collect { it.name }.join(", ")
             throw new RuntimeException("No unique default Livy Servers: ${servers}")
         }
         return list.get(0)
@@ -470,8 +490,7 @@ class LivyServer {
                 def subList = downloadDirectory(livyServer, path + it.name, dataDir)
                 result.addAll(subList)
             }
-        }
-        else if (status.type == "FILE") {
+        } else if (status.type == "FILE") {
             logger.info("Donnloading ${path}".toString())
             def inputStream = getFileInputStream(livyServer, path)
             try {
@@ -501,10 +520,9 @@ class LivyServer {
         dataDir.listFiles().each {
             def subPath = path + it.name
             def subFile = new File(dataDir, it.name)
-            if(it.isDirectory()) {
+            if (it.isDirectory()) {
                 result.addAll(uploadDirectory(livyServer, subFile, subPath))
-            }
-            else if (it.isFile()) {
+            } else if (it.isFile()) {
                 def inputStream = it.newInputStream()
                 try {
                     try {
