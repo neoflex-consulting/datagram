@@ -75,18 +75,20 @@ function correctOutputFields(node) {
 }
 
 function diffPorts(newFields, oldFields) {
-    const deleted = oldFields.filter(of => newFields.every(nf => of.name.toLowerCase() !== nf.name.toLowerCase())).map(f => {
+    const deleted = oldFields.filter(of => newFields.every(
+        nf => (of.name.toLowerCase() !== nf.name.toLowerCase()) || (of.e_id !== nf.e_id)
+    )).map(f => {
         return {oldField: f, newField: undefined}
     })
     const added = newFields.map((nf, index) => {
-        let of = oldFields.find(of => of.name.toLowerCase() === nf.name.toLowerCase())
+        let of = oldFields.find(of => (of.name.toLowerCase() === nf.name.toLowerCase()) && (of.e_id === nf.e_id))
         return {oldField: of, newField: nf}
     }).filter(item => !item.oldField || item.oldField.dataTypeDomain !== item.newField.dataTypeDomain)
     if (added.length === 1 && deleted.length === 1) {
         added[0].oldField = deleted[0].oldField
         deleted.length = 0
     }
-    return [...deleted, ...added]
+    return [...added, ...deleted]
 }
 
 function targetInputPortHasChanged(transformation, target, inputPort, oldFields) {
@@ -174,49 +176,38 @@ function stepInputPortHasChanged(transformation, transformationStep, inputPort, 
     diffPorts(inputPort.fields, oldFields).forEach(diff => {
         const {oldField, newField} = diff
         if (oldField) {
-            if (newField) {
-                const field = transformationStep.outputPort.fields.find(f => f.name === oldField.name)
-                if (field) {
-                    field.name = newField.name
-                    field.dataTypeDomain = newField.dataTypeDomain
-                    if (field._type_ === "etl.ProjectionField") {
-                        field.sourceFields = field.sourceFields.filter(sf => sf !== oldField)
+            transformationStep.outputPort.fields.forEach(field => {
+                if (field._type_ === "etl.ProjectionField") {
+                    field.sourceFields = field.sourceFields.filter(sf => sf !== oldField)
+                    if (newField && field.name === oldField.name) {
                         field.sourceFields.push(newField)
-                    } else if (field._type_ === "etl.UnionField") {
-                        if (field.inputPortField && field.inputPortField.name === oldField.name) {
-                            field.inputPortField = newField
-                        }
+                    }
+                } else if (field._type_ === "etl.UnionField") {
+                    if (field.inputPortField === oldField) {
+                        field.inputPortField = undefined
+                    }
+                    if (newField && field.name === oldField.name) {
+                        field.inputPortField = newField
                     }
                 }
-            } else {
-                transformationStep.outputPort.fields.forEach(field => {
-                    if (field._type_ === "etl.ProjectionField") {
-                        field.sourceFields = field.sourceFields.filter(sf => sf !== oldField)
-                        if (field.sourceFields.length === 0) field.toDelete = true
-                    }
-                    else if (field._type_ === "etl.UnionField") {
-                        if (field.inputPortField === oldField) {
-                            field.inputPortField = undefined
-                        }
-                        if (!field.inputPortField && !field.unionPortField) field.toDelete = true
-                    }
-                })
-                transformationStep.outputPort.fields = transformationStep.outputPort.fields.filter(field => field.toDelete !== true)
-            }
+            })
         } else {
             const field = transformationStep.outputPort.fields.find(f => f.name === newField.name)
             if (field) {
                 if (fieldType === "etl.ProjectionField") {
-                    if (field.sourceFields.length === 0) {
-                        field.sourceFields.push(newField)
-                    }
+                    field.sourceFields.push(newField)
                 }
-                if (fieldType === "etl.UnionField") {
+                else if (fieldType === "etl.UnionField") {
                     field.inputPortField = newField
                 }
             }
             else {
-                const field = {_type_: fieldType, name: newField.name, dataTypeDomain: newField.dataTypeDomain}
+                const field = {
+                    _type_: fieldType,
+                    name: newField.name,
+                    dataTypeDomain: newField.dataTypeDomain,
+                    domainStructure: copyFieldType(newField.domainStructure)
+                }
                 if (fieldType === "etl.ProjectionField") {
                     field.sourceFields = [newField]
                     field.fieldOperationType = "ADD"
@@ -228,6 +219,10 @@ function stepInputPortHasChanged(transformation, transformationStep, inputPort, 
             }
         }
     })
+    transformationStep.outputPort.fields = transformationStep.outputPort.fields.filter(field =>!(
+        (field._type_ === "etl.ProjectionField" && field.fieldOperationType === "ADD" && field.sourceFields.length === 0) ||
+        (field._type_ === "etl.UnionField" && !field.inputPortField && !field.unionPortField)
+    ))
     outputPortHasChanged(transformation, transformationStep.outputPort)
 }
 
@@ -236,23 +231,12 @@ function stepJoineePortHasChanged(transformation, transformationStep, inputPort,
     diffPorts(inputPort.fields, oldFields).forEach(diff => {
         const {oldField, newField} = diff
         if (oldField) {
-            if (newField) {
-                const field = transformationStep.outputPort.fields.find(f => f.name === oldField.name)
-                if (field) {
-                    field.name = newField.name
-                    field.dataTypeDomain = newField.dataTypeDomain
-                    field.sourceFields = field.sourceFields.filter(sf => sf !== oldField)
+            transformationStep.outputPort.fields.forEach(field => {
+                field.sourceFields = field.sourceFields.filter(sf => sf !== oldField)
+                if (newField && field.name === oldField.name) {
                     field.sourceFields.push(newField)
                 }
-            } else {
-                transformationStep.outputPort.fields.forEach(field => {
-                    if (field.name === oldField.name) {
-                        field.sourceFields = field.sourceFields.filter(sf => sf !== oldField)
-                        if (field.sourceFields.length === 0) field.toDelete = true
-                    }
-                })
-                transformationStep.outputPort.fields = transformationStep.outputPort.fields.filter(field => field.toDelete !== true)
-            }
+            })
         } else {
             const field = transformationStep.outputPort.fields.find(f => f.name === newField.name)
             if (field) {
@@ -265,11 +249,15 @@ function stepJoineePortHasChanged(transformation, transformationStep, inputPort,
                     _type_: fieldType,
                     name: newField.name,
                     dataTypeDomain: newField.dataTypeDomain,
+                    domainStructure: copyFieldType(newField.domainStructure),
                     sourceFields: [newField]
                 })
             }
         }
     })
+    transformationStep.outputPort.fields = transformationStep.outputPort.fields.filter(field =>!(
+        (field._type_ === "etl.ProjectionField" && field.fieldOperationType === "ADD" && field.sourceFields.length === 0)
+    ))
     outputPortHasChanged(transformation, transformationStep.outputPort)
 }
 
@@ -278,24 +266,14 @@ function stepUnionPortHasChanged(transformation, transformationStep, inputPort, 
     diffPorts(inputPort.fields, oldFields).forEach(diff => {
         const {oldField, newField} = diff
         if (oldField) {
-            if (newField) {
-                const field = transformationStep.outputPort.fields.find(f => f.name === oldField.name)
-                if (field) {
-                    field.name = newField.name
-                    field.dataTypeDomain = newField.dataTypeDomain
-                    if (field.unionPortField && field.unionPortField.name === oldField.name) {
-                        field.unionPortField = newField
-                    }
+            transformationStep.outputPort.fields.forEach(field => {
+                if (field.unionPortField === oldField) {
+                    field.unionPortField = undefined
                 }
-            } else {
-                transformationStep.outputPort.fields = transformationStep.outputPort.fields.filter(field => {
-                    if (field.name !== oldField.name) return true
-                    if (field.unionPortField && field.unionPortField.name === oldField.name) {
-                        field.unionPortField = undefined
-                    }
-                    return !!field.inputPortField || !!field.unionPortField
-                })
-            }
+                if (newField && field.name === oldField.name) {
+                    field.unionPortField = newField
+                }
+            })
         } else {
             const field = transformationStep.outputPort.fields.find(f => f.name === newField.name)
             if (field) {
@@ -306,12 +284,16 @@ function stepUnionPortHasChanged(transformation, transformationStep, inputPort, 
                     _type_: fieldType,
                     name: newField.name,
                     dataTypeDomain: newField.dataTypeDomain,
+                    domainStructure: copyFieldType(newField.domainStructure),
                     unionPortField: newField
                 }
                 transformationStep.outputPort.fields.push(field)
             }
         }
     })
+    transformationStep.outputPort.fields = transformationStep.outputPort.fields.filter(field =>!(
+        (field._type_ === "etl.UnionField" && !field.inputPortField && !field.unionPortField)
+    ))
     outputPortHasChanged(transformation, transformationStep.outputPort)
 }
 

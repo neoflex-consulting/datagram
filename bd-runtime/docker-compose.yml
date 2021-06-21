@@ -69,9 +69,9 @@ services:
     volumes:
       - dfs_name:/dfs/name
       - ./bd-base/data:/data
-#      - ./bd-base/extralib:/extralib
-#      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
-#      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ./bd-base/extralib:/extralib
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
 #      - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
 #      - ./bd-base/conf/hadoop/yarn-site.xml:/usr/hadoop/etc/hadoop/yarn-site.xml
 #      - ./bd-base/conf/spark/spark-defaults.conf:/usr/spark/conf/spark-defaults.conf
@@ -113,9 +113,9 @@ services:
     volumes:
       - dfs_data_1:/dfs/data
       - ./bd-base/data:/data
-#      - ./bd-base/extralib:/extralib
-#      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
-#      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ./bd-base/extralib:/extralib
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
 #      - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
 #      - ./bd-base/conf/hadoop/yarn-site.xml:/usr/hadoop/etc/hadoop/yarn-site.xml
 #      - ./bd-base/conf/spark/spark-defaults.conf:/usr/spark/conf/spark-defaults.conf
@@ -158,9 +158,9 @@ services:
     volumes:
       - dfs_data_2:/dfs/data
       - ./bd-base/data:/data
-#      - ./bd-base/extralib:/extralib
-#      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
-#      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ./bd-base/extralib:/extralib
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
 #      - ./bd-base/conf/hadoop/core-site.xml:/usr/hadoop/etc/hadoop/core-site.xml
 #      - ./bd-base/conf/hadoop/yarn-site.xml:/usr/hadoop/etc/hadoop/yarn-site.xml
 #      - ./bd-base/conf/spark/spark-defaults.conf:/usr/spark/conf/spark-defaults.conf
@@ -186,9 +186,9 @@ services:
       - worker2
     volumes:
       - ./livy_batches:/livy_batches
-#      - ./bd-base/extralib:/extralib
-#      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
-#      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ./bd-base/extralib:/extralib
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
 #      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
 #      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/usr/livy/repl_2.12-jars/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
     environment:
@@ -247,9 +247,9 @@ services:
       - worker2
     volumes:
       - ./bd-base/data:/data
-#      - ./bd-base/extralib:/extralib
-#      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
-#      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
+      - ./bd-base/extralib:/extralib
+      - ../spark2lib/target/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar:/extralib/ru.neoflex.meta.etl2.spark.spark2lib-$VERSION.jar
+      - ../runtime/target/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar:/extralib/ru.neoflex.meta.etl.spark.runtime-$VERSION.jar
 #      - ./bd-oozie/conf/oozie/oozie-site.xml:/usr/oozie/conf/oozie-site.xml
     expose:
       - 1-65535
