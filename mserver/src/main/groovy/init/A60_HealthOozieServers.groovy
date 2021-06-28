@@ -15,19 +15,22 @@ contextSvc.applicationContext.beanFactory.registerSingleton("OozieHealthIndicato
         contextSvc.inContext(new Runnable() {
             @Override
             void run() {
-                builder.up()
+                def details = []
+                builder.up().withDetail("showStatus", true).withDetail("services", details)
                 for (oozie in Database.new.list("rt.Oozie")) {
                     logger.info("test oozie health for ${oozie.name}")
                     try {
                         def client = REST.getSimpleHTTPClient( oozie )
                         def resp = client.get(path : "/oozie/versions")
-                        builder.withDetail(oozie.name, resp.statusLine.toString())
+                        details.add([status: "UP", name: oozie.name, detail: resp.statusLine.toString()])
+//                        builder.withDetail(oozie.name, resp.statusLine.toString())
                         if (resp.status < 200 || resp.status > 300) {
                             builder.down()
                         }
                     }
                     catch (Throwable th) {
-                        builder.down().withDetail(oozie.name, th.toString())
+                        details.add([status: "DOWN", name: oozie.name, detail: th.toString()])
+                        builder.down()//.withDetail(oozie.name, th.toString())
                     }
                 }
             }

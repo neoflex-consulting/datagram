@@ -17,7 +17,8 @@ contextSvc.applicationContext.beanFactory.registerSingleton("LivyServerHealthInd
         contextSvc.inContext(new Runnable() {
             @Override
             void run() {
-                builder.up()
+                def details = []
+                builder.up().withDetail("showStatus", true).withDetail("services", details)
                 for (livyServer in Database.new.list("rt.LivyServer")) {
                     logger.info("test livy-server health for ${livyServer.name}")
                     try {
@@ -26,13 +27,15 @@ contextSvc.applicationContext.beanFactory.registerSingleton("LivyServerHealthInd
                                 path : "/sessions",
                                 requestContentType : groovyx.net.http.ContentType.JSON,
                                 contentType : groovyx.net.http.ContentType.JSON)
-                        builder.withDetail(livyServer.name, resp.statusLine.toString())
+                        details.add([status: "UP", name: livyServer.name, detail: resp.statusLine.toString()])
+//                        builder.withDetail(livyServer.name, resp.statusLine.toString())
                         if (resp.status < 200 || resp.status > 300) {
                             builder.down()
                         }
                     }
                     catch (Throwable th) {
-                        builder.down().withDetail(livyServer.name, th.toString())
+                        details.add([status: "DOWN", name: livyServer.name, detail: th.toString()])
+                        builder.down()//.withDetail(livyServer.name, th.toString())
                     }
                 }
             }
