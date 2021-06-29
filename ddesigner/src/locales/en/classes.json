@@ -11,6 +11,9 @@
         "env": {
           "caption": "Environment"
         },
+        "health": {
+          "caption": "Health"
+        },
         "metrics": {
           "caption": "Metrics"
         },

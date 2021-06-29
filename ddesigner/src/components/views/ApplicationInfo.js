@@ -19,7 +19,8 @@ class ApplicationInfo extends Component {
                 systemProperties: {},
                 systemEnvironment: {}
             },
-            metrics: {}
+            metrics: {},
+            health: {}
         }
     }
 
@@ -33,10 +34,14 @@ class ApplicationInfo extends Component {
         resource.query('/env').then(env => {
             this.setState({env})
         })
+        resource.query('/health').then(health => {
+            this.setState({health})
+        })
     }
 
     render() {
         const {t} = this.props
+        const {health} = this.state
         return (
             <Tabs type="editable-card" forceRender={true} className="no-margin" hideAdd>
                 <Tabs.TabPane key={"build"} tab={t("ui3.ApplicationInfo.attrs.build.caption", {ns: "classes"})}
@@ -82,12 +87,32 @@ class ApplicationInfo extends Component {
                             return {key, value: this.state.metrics[key]}
                         })}/>
                 </Tabs.TabPane>
+                <Tabs.TabPane key={"health"} tab={t("ui3.ApplicationInfo.attrs.health.caption", {ns: "classes"})} closable={false}>
+                    <Table showHeader={false} pagination={false} size="small" columns={[
+                        {dataIndex: "key", width: "20%"},
+                        {dataIndex: "value"},
+                    ]} dataSource={
+                        _.sortBy(Object.keys(health), key=>key.toLowerCase()).filter(key => health[key].showStatus === true).map(key => {
+                            return {key, value: this.groupTable(health[key])}
+                        })}/>
+                </Tabs.TabPane>
                 <Tabs.TabPane key={"branches"} tab={t("ui3.ApplicationInfo.attrs.branches.caption", {ns: "classes"})} closable={false}>
                     <BranchesInfo {...this.props}/>
                 </Tabs.TabPane>
             </Tabs>
         )
     }
+
+    groupTable = (group) => {
+        return <Table bordered={false} footer={null} showHeader={false} pagination={false} size="small" columns={[
+            {dataIndex: "name", width: "25%"},
+            {dataIndex: "detail"},
+        ]} dataSource={
+            _.sortBy(group.services, service=>service.name.toLowerCase()).map(service => {
+                return {name: service.name, detail: <span style={{color: service.status === "UP" ? "black" : "red"}}>{service.detail}</span>}
+            })
+        }/>
+    };
 
 }
 

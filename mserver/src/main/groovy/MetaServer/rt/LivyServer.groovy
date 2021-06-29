@@ -239,8 +239,7 @@ class LivyServer {
     }
 
 
-    private static Map getFileStatus(Map livyServer, String path) {
-
+    public static Map getFileStatus(Map livyServer, String path) {
         def http = REST.getHTTPClient(getWebHDFS(livyServer) + "/", livyServer)
         def user = getLivyUser(livyServer)
         def fileStatus = http.get([

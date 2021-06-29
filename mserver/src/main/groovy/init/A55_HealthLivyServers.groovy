@@ -1,5 +1,6 @@
 package init
 
+import MetaServer.rt.LivyServer
 import MetaServer.utils.REST
 import groovyx.net.http.RESTClient
 import org.apache.commons.logging.Log
@@ -31,6 +32,16 @@ contextSvc.applicationContext.beanFactory.registerSingleton("LivyServerHealthInd
 //                        builder.withDetail(livyServer.name, resp.statusLine.toString())
                         if (resp.status < 200 || resp.status > 300) {
                             builder.down()
+                        }
+                        else {
+                            try {
+                                LivyServer.getFileStatus(livyServer, "/")
+                                details.add([status: "UP", name: livyServer.name + "/webhdfs", detail: "OK"])
+                            }
+                            catch (Throwable th) {
+                                details.add([status: "DOWN", name: livyServer.name + "/webhdfs", detail: th.toString()])
+                                builder.down()
+                            }
                         }
                     }
                     catch (Throwable th) {
