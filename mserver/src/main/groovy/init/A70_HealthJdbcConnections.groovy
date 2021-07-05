@@ -16,7 +16,8 @@ contextSvc.applicationContext.beanFactory.registerSingleton("JdbcConnectionHealt
         contextSvc.inContext(new Runnable() {
             @Override
             void run() {
-                builder.up()
+                def details = []
+                builder.up().withDetail("showStatus", true).withDetail("services", details)
                 for (jdbcConnection in Database.new.list("rt.JdbcConnection")) {
                     logger.info("test jdbc connection health for ${jdbcConnection.name}")
                     try {
@@ -26,11 +27,13 @@ contextSvc.applicationContext.beanFactory.registerSingleton("JdbcConnectionHealt
                         connectionProperties.put("user", jdbcConnection.user)
                         connectionProperties.put("password", JdbcConnection.getPassword(jdbcConnection))
                         def conn = driver.connect(jdbcConnection.url, connectionProperties)
-                        builder.withDetail(jdbcConnection.name, "${conn.metaData.databaseProductName} (${conn.metaData.databaseProductVersion})".toString())
+                        details.add([status: "UP", name: jdbcConnection.name, detail: "${conn.metaData.databaseProductName} (${conn.metaData.databaseProductVersion})".toString()])
+//                        builder.withDetail(jdbcConnection.name, "${conn.metaData.databaseProductName} (${conn.metaData.databaseProductVersion})".toString())
                         conn.close()
                     }
                     catch (Throwable th) {
-                        builder.down().withDetail(jdbcConnection.name, th.toString())
+                        details.add([status: "DOWN", name: jdbcConnection.name, detail: th.toString()])
+                        builder.down()//.withDetail(jdbcConnection.name, th.toString())
                     }
                 }
             }
