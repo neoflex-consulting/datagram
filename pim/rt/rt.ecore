@@ -666,6 +666,7 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LivyServer">
+    <eOperations name="applyDefSparkOpts"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
       <eAnnotations source="mspace.ui">
         <details key="caption" value="&#x420;&#x45c;&#x420;&#xb0;&#x420;&#xb7;&#x420;&#x406;&#x420;&#xb0;&#x420;&#x405;&#x420;&#x451;&#x420;&#xb5;"/>
@@ -735,6 +736,12 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="executorMemory">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultSparkConf" upperBound="-1" containment="true">
+      <eAnnotations source="mspace.ui">
+        <details key="caption" value="Spark Opts"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Property"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault">
       <eAnnotations source="mspace.ui">

@@ -20,6 +20,7 @@ import ru.neoflex.meta.model.Database
 import ru.neoflex.meta.utils.Context
 import ru.neoflex.meta.utils.ZipUtils
 
+import java.time.LocalDateTime
 import java.util.zip.ZipOutputStream
 
 /* protected region MetaServer.rtLivyServer.inport end */
@@ -539,5 +540,56 @@ class LivyServer {
             }
         }
         return result
+    }
+
+
+    static List applyDefSparkOpts(Map livyServer, Map params = null) {
+        def result = []
+        List trs = Database.new.list('rt.TransformationDeployment', ['livyServer': livyServer]);
+        if (trs == null || trs.size() == 0) {
+            result.add("No transformation deployments found");
+            return result;
+        }
+        //livyServer = Database.new.get(livyServer);
+
+        Database db = Database.new;
+        for (Map deployment : trs) {
+            if (deployment.sparkConf == null || deployment.sparkConf.size() == 0) {
+
+                for (Map conf : livyServer.defaultSparkConf) {
+                    logger.debug("Conf:" + conf.name + ", " + conf.value);
+                    def p = db.instantiate("etl.Property")
+                    p.name = conf.name;
+                    p.value = conf.value;
+                    p.expression = conf.expression;
+                    p.description = "Auto from Livy:" + conf.description;
+                    deployment.sparkConf.add(p);
+                }
+                db.update(deployment);
+                result.add(""  + deployment.name + ", " + livyServer.defaultSparkConf.size() + " rows inserted")
+            } else {
+                int i = 0;
+                for (Map conf : livyServer.defaultSparkConf) {
+                    for (Map dConf : deployment.sparkConf) {
+                        logger.debug("Conf:" + conf.name + ", " + conf.value);
+                        if (dConf.name == conf.name) {
+
+                            dConf.value = conf.value;
+                            dConf.expression = conf.expression;
+                            dConf.description = "Auto from Livy:" + dConf.desciption;
+                            db.update(dConf);
+                        }
+                        i++;
+                    }
+
+                }
+                result.add(""  + deployment.name + ", " + i + " rows updated");
+                db.update(deployment);
+            }
+            db.commit();
+        }
+
+        return result;
+
     }
 }

@@ -1446,6 +1446,13 @@
 		<property name="executorMemory" lazy="false" insert="true" update="true" not-null="false" unique="false" type="java.lang.String">
 			<column not-null="false" unique="false" name="executormemory"/>
 		</property>
+		<list name="defaultSparkConf" lazy="true" cascade="all,delete-orphan">
+			<key foreign-key="rt_livyserver_defaultsparkconf_key" update="true">
+				<column name="livyserver_defaultsparkconf_e_id" unique="false"/>
+			</key>
+			<list-index column="livyserver_defaultsparkconf_idx"/>
+			<one-to-many entity-name="etl.Property"/>
+		</list>
 		<property name="isDefault" lazy="false" insert="true" update="true" not-null="false" unique="false" type="boolean">
 			<column not-null="false" unique="false" name="isdefault"/>
 		</property>

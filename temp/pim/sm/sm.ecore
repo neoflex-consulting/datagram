@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sm" nsURI="http://www.neoflex.ru/meta/sm" nsPrefix="sm">
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachine">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="InstanceType">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1" eType="//SMState" containment="true" eOpposite="//SMState/stateMachine"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="//SMState">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.states"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/etl#//Project"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SMState">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateMachine" eType="//StateMachine" eOpposite="//StateMachine/states"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1" eType="//SMTransition" containment="true" eOpposite="//SMTransition/state"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SMTransition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" eType="//SMState" eOpposite="//SMState/transitions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toState" eType="//SMState">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="props.entity.__parent.__parent.states"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="action">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userRoles" upperBound="-1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="guardCondition">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SMTransitionInstance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transition" eType="//SMTransition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="smInstance" eType="//SMInstance" eOpposite="//SMInstance/transitionInstances"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transitionDateTime">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Temporal(TIMESTAMP)"/>
+      </eAnnotations>
+      <eAnnotations source="mspace.ui">
+        <details key="timestamp" value="true"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionError">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionResult">
+      <eAnnotations source="mspace.ui">
+        <details key="multiline" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Column(length=10485760)"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="succesfull">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SMInstance">
+    <eOperations name="go" eType="//SMTransitionInstance">
+      <eParameters name="transitionName">
+        <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eParameters>
+    </eOperations>
+    <eOperations name="getAvailableTransitions" upperBound="-1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateMachine" eType="//StateMachine"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target">
+      <eAnnotations source="mspace.ui">
+        <details key="listeval" value="[props.entity.target].filter(e => !!e)"/>
+      </eAnnotations>
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Cascade(value=REFRESH)"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentState" eType="//SMState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitionInstances" upperBound="-1" eType="//SMTransitionInstance" eOpposite="//SMTransitionInstance/smInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditInfo" containment="true">
+      <eType xsi:type="ecore:EClass" href="http://www.neoflex.ru/meta/auth#//AuditInfo"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

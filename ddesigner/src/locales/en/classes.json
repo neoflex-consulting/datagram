@@ -6969,10 +6969,11 @@
         "executorMemory": {
           "caption": "Executor memory"
         },
+        "defaultSparkConf": {
+          "caption": "Default Spark Conf"
+        },
         "isDefault": {
-          "caption": "Is Default",
-          "placeholder": "Enter Is Default...",
-          "help": ""
+          "caption": "Is Default"
         },
         "id": {
           "caption": "Id"
@@ -7002,7 +7003,11 @@
           "caption": "Code"
         }
       },
-      "ops": {},
+      "ops": {
+        "applyDefSparkOpts": {
+          "caption": "Apply Default Spark Conf to All Deployments"
+        }
+      },
       "groups": {}
     },
     "Zeppelin": {

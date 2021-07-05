@@ -7199,6 +7199,11 @@
       "containerName": "ViewContainer",
       "views": ["FormView"],
       "actions": [
+          {
+              "name": "applyDefSparkOpts",
+              "parameters": [
+              ]
+          }
       ],
       "columns": [
 
@@ -7330,6 +7335,11 @@
 	  {
 	      "name": "executorMemory",
 	      "type": "string"
+      },
+	  {
+	      "name": "defaultSparkConf",
+	      "type": "table",
+	      "entityType": "etl.Property"
       },
 	  {
 	      "name": "isDefault",

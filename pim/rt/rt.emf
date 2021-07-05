@@ -351,8 +351,11 @@ class LivyServer {
   attr Integer executorCores;
   attr String driverMemory;
   attr String executorMemory;
+  @mspace.ui(caption="Spark Opts")
+  val etl.Property[*] defaultSparkConf;
   @mspace.ui(caption="Использовать по умолчанию")
-  attr boolean isDefault;  
+  attr boolean isDefault;
+  op void applyDefSparkOpts();
 }
 
 

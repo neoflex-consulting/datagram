@@ -6943,10 +6943,11 @@
         "executorMemory": {
           "caption": "Пямять исполнителя"
         },
+        "defaultSparkConf": {
+          "caption": "Default Spark Conf"
+        },
         "isDefault": {
-          "caption": "Использовать по умолчанию",
-          "placeholder": "Введите Использовать по умолчанию...",
-          "help": ""
+          "caption": "Использовать по умолчанию"
         },
         "id": {
           "caption": "Id"
@@ -6973,7 +6974,11 @@
           "caption": "Code"
         }
       },
-      "ops": {},
+      "ops": {
+        "applyDefSparkOpts": {
+          "caption": "Apply Default Spark Conf to All Deployments"
+        }
+      },
       "groups": {}
     },
     "Zeppelin": {
