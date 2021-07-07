@@ -64,7 +64,7 @@ public class EpsilonSvc extends BaseSvc {
         catch (Exception e) {
             if (e instanceof EolRuntimeException) {
                 EolRuntimeException ee = (EolRuntimeException) e;
-                if (ee.getAst() != null) {
+                if (ee.getAst() != null && ee.getAst().getFile() != null && ee.getAst().getRegion() != null) {
                     logger.error(String.format("Error in %c at %s", ee.getAst().getFile().toString(), ee.getAst().getRegion().toString()));
                 }
             }
