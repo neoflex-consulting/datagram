@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.util.UriUtils
 import ru.neoflex.meta.model.Database
 import ru.neoflex.meta.utils.Context
+import ru.neoflex.meta.utils.JSONHelper
 import ru.neoflex.meta.utils.ZipUtils
 
 import java.time.LocalDateTime
@@ -56,6 +57,11 @@ class LivyServer {
         if (entity.executorMemory) props["executorMemory"] = entity.executorMemory
         if (entity.executorCores) props["executorCores"] = entity.executorCores
         if (entity.numExecutors) props["numExecutors"] = entity.numExecutors
+        if(entity.defaultSparkConf){
+            entity.defaultSparkConf.each {
+                props["${it.name}"] = "${it.value}".toString()
+            }
+        }
         def data = REST.getHTTPClient(entity).post(
                 path: "/sessions",
                 requestContentType: MediaType.APPLICATION_JSON_UTF8_VALUE,
