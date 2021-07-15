@@ -348,6 +348,7 @@ class SQLSource extends Source {
 class LocalSource extends Source {
   attr String[1] localFileName;
   attr LocalFileFormat[1] localFileFormat = "JSON";
+  attr String formatName;
   attr Boolean streaming;
   val SourceOption[*]#localSource options;
 }
