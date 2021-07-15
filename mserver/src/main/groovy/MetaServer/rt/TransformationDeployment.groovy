@@ -238,6 +238,9 @@ class TransformationDeployment extends GenerationBase {
         trDeployment.parameters.each {
             jobParams.add(JSONHelper.escape("${it.name}=${it.value}").toString())
         }
+        trDeployment.sparkConf.each {
+            jobParams.add(JSONHelper.escape("${it.name}=${it.value}").toString())
+        }
 
         Path deployDir = java.nio.file.Files.createTempDirectory("dg")
         try {
