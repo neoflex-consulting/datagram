@@ -105,7 +105,7 @@ if (self.partitionsFromString == true) {
     dsOut[%=self.repartition()%][%=self.coalesce()%]
         .write
         .mode(SaveMode.[%if (self.saveMode==SaveMode#APPEND) {%]Append[%}else{%]Overwrite[%}%])
-        .format("[%=self.localFileFormat.toString().toLowerCase()%]")
+        .format("[%=self.formatName()%]")
         [%for (option in self.options) {%]
         .option("[%=option.key%]", s"""[%=option.value%]""")
         [%}%]
