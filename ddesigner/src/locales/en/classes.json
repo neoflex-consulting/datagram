@@ -1383,6 +1383,11 @@
           "placeholder": "Enter Local File Format...",
           "help": ""
         },
+        "formatName": {
+          "caption": "Format Name",
+          "placeholder": "Enter Format Name...",
+          "help": ""
+        },
         "deleteBeforeSave": {
           "caption": "Delete Before Save",
           "placeholder": "Enter Delete Before Save...",
@@ -3692,6 +3697,11 @@
         "localFileFormat": {
           "caption": "Local File Format",
           "placeholder": "Enter Local File Format...",
+          "help": ""
+        },
+        "formatName": {
+          "caption": "Format Name",
+          "placeholder": "Enter Format Name...",
           "help": ""
         },
         "streaming": {

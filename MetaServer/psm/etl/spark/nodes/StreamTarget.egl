@@ -8,6 +8,16 @@ operation src!StreamTarget imports(){
     };
 } 
 
+operation src!StreamTarget formatName() {
+    if (self.localFileFormat <> LocalFileFormat#OTHER) {
+      return self.localFileFormat.toString().toLowerCase();
+    }
+    else {
+      return self.formatName.toLowerCase();
+    }
+}
+
+
 @template
 operation src!StreamTarget globals(){
     var format = "";
@@ -16,7 +26,7 @@ operation src!StreamTarget globals(){
             format = option.value.toLowerCase();
         }
     }
-    var hbaseFormat = format == "org.apache.spark.sql.execution.datasources.hbase" or self.localFileFormat.toString() == "HBASE";
+    var hbaseFormat = format == "org.apache.spark.sql.execution.datasources.hbase" or self.formatName() == "hbase";
     
     %]
     [%if (hbaseFormat) {%] 
@@ -56,7 +66,7 @@ class HBaseSinkProvider[%=self.name%] extends org.apache.spark.sql.sources.Strea
 
 operation src!StreamTarget define(){
 var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == self)).~sourceNode;
-var format = self.localFileFormat.toString().toLowerCase();
+var format = self.formatName();
 var localFileName = "";
 var checkpointLocation = "";
 var catalog;
@@ -81,7 +91,7 @@ for (option in self.options) {
     }
 }
 var jdbcFormat = format == "jdbc";
-var hbaseFormat = format == "org.apache.spark.sql.execution.datasources.hbase" or self.localFileFormat.toString() == "HBASE";
+var hbaseFormat = format == "org.apache.spark.sql.execution.datasources.hbase" or format == "hbase";
 var catalogFormatted = true;
 if (hbaseFormat) {
     format = "org.apache.spark.sql.execution.datasources.hbase";
@@ -185,7 +195,7 @@ if (hbaseFormat) {
         .option("catalog", s"""[%=catalog%]""")
             [%}%]
         [%}%]
-        [%if (self.localFileFormat.toString() == "HBASE") {%]
+        [%if (self.formatName() == "hbase") {%]
         .option("newtable", "[%=self.newTable%]")
         [%}%]
         [%for (option in self.options) {

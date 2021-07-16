@@ -1382,6 +1382,11 @@
           "placeholder": "Введите Local File Format...",
           "help": ""
         },
+        "formatName": {
+          "caption": "Format Name",
+          "placeholder": "Введите Format Name...",
+          "help": ""
+        },
         "deleteBeforeSave": {
           "caption": "Delete Before Save",
           "placeholder": "Введите Delete Before Save...",
@@ -3710,6 +3715,11 @@
         "localFileFormat": {
           "caption": "Local File Format",
           "placeholder": "Введите Local File Format...",
+          "help": ""
+        },
+        "formatName": {
+          "caption": "Format Name",
+          "placeholder": "Введите Format Name...",
           "help": ""
         },
         "streaming": {

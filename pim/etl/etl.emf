@@ -452,6 +452,7 @@ class LocalTarget extends Target {
   @teneo.jpa(value="@Column(length=2048)")
   attr String localFileName;
   attr LocalFileFormat[1] localFileFormat = "JSON";
+  attr String formatName;
   attr boolean deleteBeforeSave = false;
   attr String[*] partitions;
   attr boolean partitionsFromString;
@@ -881,7 +882,6 @@ enum CSVFormat {
 
 class CSVSource extends Source {
   attr CSVFormat csvFormat = "CSV";
-  attr boolean hdfs = true;
   attr String[1] path;
   attr boolean header = false;
   // csv specific
@@ -920,7 +920,6 @@ enum QuoteMode {
 
 class CSVTarget extends Target {
   attr CSVFormat csvFormat = "CSV";
-  attr boolean hdfs = true;
   attr String[1] path;
   attr boolean header = false;
   attr String dateFormat = "yyyy-MM-dd";
@@ -1201,7 +1200,6 @@ class XMLSource extends Source {
   @mspace.ui(caption="Развернуть")
   op void expand();
 
-  attr boolean hdfs = true;
   attr String[1] path;
   attr String charset = "UTF-8";
   attr String[1] rowTag;
@@ -1218,7 +1216,6 @@ class XMLSource extends Source {
 
 class XMLTarget extends Target {
 
-  attr boolean hdfs = true;
   attr String[1] path;
   attr String charset = "UTF-8";
   attr String[1] rowTag;
@@ -1248,7 +1245,6 @@ class AVROSource extends Source {
   @mspace.ui(caption="Развернуть")
   op void expand();
 
-  attr boolean hdfs = true;
   attr String[1] path;
   attr boolean schemaHdfs = false;
   attr String schemaPath;  

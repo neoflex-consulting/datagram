@@ -45,9 +45,7 @@ class CSVTarget {
                 jobParams.add(JSONHelper.escape("${key}=${params[key]}").toString())
             }
         }
-        def fs
-        if (entity.target.hdfs == null || entity.target.hdfs == true) fs = '${_defaultFS}' else fs = "file:///"
-        def path = 's"""' + fs + entity.target.path + '"""'
+        def path = 's"""' + entity.target.path + '"""'
         def options = []
         def format
         if (entity.target.csvFormat == "CSV") {

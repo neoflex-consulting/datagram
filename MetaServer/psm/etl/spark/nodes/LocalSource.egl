@@ -1,4 +1,13 @@
 [%
+operation src!LocalSource formatName() {
+    if (self.localFileFormat <> LocalFileFormat#OTHER) {
+      return self.localFileFormat.toString().toLowerCase();
+    }
+    else {
+      return self.formatName.toLowerCase();
+    }
+}
+
 operation src!LocalSource define(){
     %]
   def get[%=self.name%](spark: SparkSession) = {
@@ -15,11 +24,11 @@ operation src!LocalSource define(){
     [%}%]
     [%if (self.~makeDataset == false) {%].option("inferSchema", true)[%}%]
     [%else if (self.localFileFormat <> LocalFileFormat#JDBC) {%][%}%]
-    .format("[%=self.localFileFormat.toString().toLowerCase()%]")
+    .format("[%=self.formatName()%]")
     [%for (option in self.options) {%]
     .option("[%=option.key%]", s"""[%=option.value%]""")
     [%}%]
-    .[%if (self.localFileFormat <> LocalFileFormat#JDBC) {%]load(paths: _*)[%} else {%]load()[%}%]
+    .[%if (self.localFileFormat <> LocalFileFormat#JDBC and self.localFileFormat <> LocalFileFormat#OTHER) {%]load(paths: _*)[%} else {%]load()[%}%]
     [%if (self.~makeDataset <> false and self.schemaOnRead <> true) {%] 		
     [%if (not self.outputPort.isValidIdentifiers()) {%]	
     .toDF([%for(f in self.outputPort.fields) {%]"[%=f.getJavaName()%]"[%if (hasMore) {%], [%}%][%}%])

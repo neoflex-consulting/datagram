@@ -41,9 +41,7 @@ class LocalTarget {
                 jobParams.add(JSONHelper.escape("${key}=${params[key]}").toString())
             }
         }
-        def fs
-        if (entity.target.hdfs == null || entity.target.hdfs == true) fs = '${_defaultFS}' else fs = "file:///"
-        def path = 's"""' + fs + entity.target.localFileName + '"""'
+        def path = 's"""' + entity.target.localFileName + '"""'
         def code = Context.current.getContextSvc().epsilonSvc.executeEgl("/psm/etl/spark/showContent.egl", 
         	[path: path, format: entity.target.localFileFormat.toLowerCase(), size: "${entity.target.sampleSize?:20}", options: entity.target.options ?: [], jobParams: jobParams], [])
         return TransformationDeployment.runPart(trd, [code: code, outputType: 'json', sessionId: entity.sessionId])

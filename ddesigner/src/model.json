@@ -99,11 +99,6 @@
 		  "show": true
 		},
 	    {
-		  "Header": "etl.CSVTarget.attrs.hdfs.caption",
-		  "accessor": "hdfs",
-		  "show": false
-		},
-	    {
 		  "Header": "etl.CSVTarget.attrs.path.caption",
 		  "accessor": "path",
 		  "show": false
@@ -214,11 +209,6 @@
 	      "type": "enum",
 	      "defaultValue": "CSV",
 	      "options": ["CSV", "EXCEL"]
-      },
-	  {
-	      "name": "hdfs",
-	      "type": "boolean",
-	      "defaultValue": "true"
       },
 	  {
 	      "name": "path",
@@ -829,14 +819,9 @@
 		  "show": true
 		},
 	    {
-		  "Header": "etl.XMLTarget.attrs.hdfs.caption",
-		  "accessor": "hdfs",
-		  "show": true
-		},
-	    {
 		  "Header": "etl.XMLTarget.attrs.path.caption",
 		  "accessor": "path",
-		  "show": false
+		  "show": true
 		},
 	    {
 		  "Header": "etl.XMLTarget.attrs.charset.caption",
@@ -908,11 +893,6 @@
 	  {
 	      "name": "description",
 	      "type": "text"
-      },
-	  {
-	      "name": "hdfs",
-	      "type": "boolean",
-	      "defaultValue": "true"
       },
 	  {
 	      "name": "path",
@@ -2731,6 +2711,11 @@
 		  "show": false
 		},
 	    {
+		  "Header": "etl.LocalTarget.attrs.formatName.caption",
+		  "accessor": "formatName",
+		  "show": false
+		},
+	    {
 		  "Header": "etl.LocalTarget.attrs.deleteBeforeSave.caption",
 		  "accessor": "deleteBeforeSave",
 		  "show": false
@@ -2833,6 +2818,10 @@
 	      "type": "enum",
 	      "defaultValue": "JSON",
 	      "options": ["JSON", "PARQUET", "ORC", "JDBC", "CSV", "KAFKA", "HBASE", "OTHER"]
+      },
+	  {
+	      "name": "formatName",
+	      "type": "string"
       },
 	  {
 	      "name": "deleteBeforeSave",
@@ -4412,6 +4401,11 @@
 		  "show": false
 		},
 	    {
+		  "Header": "etl.StreamTarget.attrs.formatName.caption",
+		  "accessor": "formatName",
+		  "show": false
+		},
+	    {
 		  "Header": "etl.StreamTarget.attrs.deleteBeforeSave.caption",
 		  "accessor": "deleteBeforeSave",
 		  "show": false
@@ -4569,6 +4563,10 @@
 	      "type": "enum",
 	      "defaultValue": "JSON",
 	      "options": ["JSON", "PARQUET", "ORC", "JDBC", "CSV", "KAFKA", "HBASE", "OTHER"]
+      },
+	  {
+	      "name": "formatName",
+	      "type": "string"
       },
 	  {
 	      "name": "deleteBeforeSave",
@@ -6627,11 +6625,6 @@
 		  "show": false
 		},
 	    {
-		  "Header": "etl.AVROSource.attrs.hdfs.caption",
-		  "accessor": "hdfs",
-		  "show": false
-		},
-	    {
 		  "Header": "etl.AVROSource.attrs.path.caption",
 		  "accessor": "path",
 		  "show": false
@@ -6698,11 +6691,6 @@
 	  {
 	      "name": "description",
 	      "type": "text"
-      },
-	  {
-	      "name": "hdfs",
-	      "type": "boolean",
-	      "defaultValue": "true"
       },
 	  {
 	      "name": "path",
@@ -9213,6 +9201,11 @@
 		  "show": false
 		},
 	    {
+		  "Header": "etl.LocalSource.attrs.formatName.caption",
+		  "accessor": "formatName",
+		  "show": false
+		},
+	    {
 		  "Header": "etl.LocalSource.attrs.streaming.caption",
 		  "accessor": "streaming",
 		  "show": false
@@ -9274,6 +9267,10 @@
 	      "type": "enum",
 	      "defaultValue": "JSON",
 	      "options": ["JSON", "PARQUET", "ORC", "JDBC", "CSV", "KAFKA", "HBASE", "OTHER"]
+      },
+	  {
+	      "name": "formatName",
+	      "type": "string"
       },
 	  {
 	      "name": "streaming",
@@ -17169,11 +17166,6 @@
 		  "show": false
 		},
 	    {
-		  "Header": "etl.CSVSource.attrs.hdfs.caption",
-		  "accessor": "hdfs",
-		  "show": false
-		},
-	    {
 		  "Header": "etl.CSVSource.attrs.path.caption",
 		  "accessor": "path",
 		  "show": false
@@ -17296,11 +17288,6 @@
 	      "type": "enum",
 	      "defaultValue": "CSV",
 	      "options": ["CSV", "EXCEL"]
-      },
-	  {
-	      "name": "hdfs",
-	      "type": "boolean",
-	      "defaultValue": "true"
       },
 	  {
 	      "name": "path",
@@ -17491,11 +17478,6 @@
 		  "show": false
 		},
 	    {
-		  "Header": "etl.XMLSource.attrs.hdfs.caption",
-		  "accessor": "hdfs",
-		  "show": false
-		},
-	    {
 		  "Header": "etl.XMLSource.attrs.path.caption",
 		  "accessor": "path",
 		  "show": false
@@ -17597,11 +17579,6 @@
 	  {
 	      "name": "description",
 	      "type": "text"
-      },
-	  {
-	      "name": "hdfs",
-	      "type": "boolean",
-	      "defaultValue": "true"
       },
 	  {
 	      "name": "path",

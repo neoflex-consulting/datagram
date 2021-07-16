@@ -10,7 +10,7 @@ var inputNode = (self.transformation.transitions.selectOne(t|t.~targetNode == se
     logger.logInfo(s"CSVTarget [%=self.name%] path: ${path}")
     [%if (self.csvFormat <> src!CSVFormat#EXCEL) {%]
     val fs = org.apache.hadoop.fs.FileSystem.get(spark.sparkContext.hadoopConfiguration)
-    if ([%=self.hdfs%] && fs.exists(new org.apache.hadoop.fs.Path(path))) {
+    if (fs.exists(new org.apache.hadoop.fs.Path(path))) {
       fs.delete(new org.apache.hadoop.fs.Path(path), true)
     }
     [%}%]    

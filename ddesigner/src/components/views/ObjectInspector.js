@@ -75,34 +75,39 @@ let localModel = {
             }
         },
         "etl.TableSource": {
-            fields: [
-                {name: "name", type: "string"},
-                {name: "label", type: "string"},
-                {name: "sampleSize", type: "number"},
-                {name: "checkpoint", type: "boolean"},
-                {name: "context", type: "select", entityType: "etl.Context"},
-                {name: "tableName", type: "string"},
-                {name: "schemaOnRead", type: "boolean"},
-                {name: "outputPort", type: "form", entityType: "etl.OutputPort"},
-            ]
+            fields: (entity) => {
+                return [
+                    {name: "name", type: "string"},
+                    {name: "label", type: "string"},
+                    {name: "sampleSize", type: "number"},
+                    {name: "checkpoint", type: "boolean"},
+                    {name: "context", type: "select", entityType: "etl.Context"},
+                    {name: "tableName", type: "string"},
+                    {name: "schemaOnRead", type: "boolean"},
+                    {name: "outputPort", type: "form", entityType: "etl.OutputPort"},
+                ]
+            }
         },
         "etl.LocalSource": {
-            fields: [
-                {name: "name", type: "string"},
-                {name: "label", type: "string"},
-                {name: "sampleSize", type: "number"},
-                {name: "checkpoint", type: "boolean"},
-                {name: "localFileName", type: "string"},
-                {
-                    name: "localFileFormat",
-                    type: "enum",
-                    options: getTypeField("etl.LocalSource", "localFileFormat").options
-                },
-                {name: "schemaOnRead", type: "boolean"},
-                {name: "streaming", type: "boolean"},
-                {name: "options", type: "table", entityType: "etl.SourceOption"},
-                {name: "outputPort", type: "form", entityType: "etl.OutputPort"},
-            ]
+            fields: (entity) => {
+                return [
+                    {name: "name", type: "string"},
+                    {name: "label", type: "string"},
+                    {name: "sampleSize", type: "number"},
+                    {name: "checkpoint", type: "boolean"},
+                    {name: "localFileName", type: "string"},
+                    {
+                        name: "localFileFormat",
+                        type: "enum",
+                        options: getTypeField("etl.LocalSource", "localFileFormat").options
+                    },
+                    {name: "formatName", type: "string", hidden: entity.localFileFormat !== "OTHER"},
+                    {name: "schemaOnRead", type: "boolean"},
+                    {name: "streaming", type: "boolean"},
+                    {name: "options", type: "table", entityType: "etl.SourceOption"},
+                    {name: "outputPort", type: "form", entityType: "etl.OutputPort"},
+                ]
+            }
         },
         "etl.ExpressionSource": {
             fields: [
@@ -120,7 +125,6 @@ let localModel = {
                     {name: "label", type: "string"},
                     {name: "sampleSize", type: "number"},
                     {name: "checkpoint", type: "boolean"},
-                    {name: "hdfs", type: "boolean"},
                     {name: "path", type: "string"},
                     {
                         name: "csvFormat", type: "enum",
@@ -159,7 +163,6 @@ let localModel = {
                 {name: "label", type: "string"},
                 {name: "sampleSize", type: "number"},
                 {name: "checkpoint", type: "boolean"},
-                {name: "hdfs", type: "boolean"},
                 {name: "path", type: "string"},
                 {name: "charset", type: "string"},
                 {
@@ -186,7 +189,6 @@ let localModel = {
                 {name: "label", type: "string"},
                 {name: "sampleSize", type: "number"},
                 {name: "checkpoint", type: "boolean"},
-                {name: "hdfs", type: "boolean"},
                 {name: "path", type: "string"},
                 {name: "schemaHdfs", type: "boolean"},
                 {name: "schemaPath", type: "string"},
@@ -456,6 +458,7 @@ let localModel = {
                         type: "enum",
                         options: getTypeField("etl.LocalTarget", "localFileFormat").options
                     },
+                    {name: "formatName", type: "string", hidden: entity.localFileFormat !== "OTHER"},
                     {name: "saveMode", type: "enum", options: getTypeField("etl.LocalTarget", "saveMode").options},
                     {name: "localFileName", type: "string"},
                     {name: "deleteBeforeSave", type: "boolean"},
@@ -489,6 +492,7 @@ let localModel = {
                         type: "enum",
                         options: getTypeField("etl.StreamTarget", "localFileFormat").options
                     },
+                    {name: "formatName", type: "string", hidden: entity.localFileFormat !== "OTHER"},
                     {name: "localFileName", type: "string"},
                     {name: "trigger", type: "number"},
                     {
@@ -525,7 +529,6 @@ let localModel = {
                     {name: "name", type: "string"},
                     {name: "label", type: "string"},
                     {name: "sampleSize", type: "number"},
-                    {name: "hdfs", type: "boolean"},
                     {name: "path", type: "string"},
                     {
                         name: "csvFormat", type: "enum",
@@ -623,7 +626,6 @@ let localModel = {
             fields: [
                 {name: "name", type: "string"},
                 {name: "label", type: "string"},
-                {name: "hdfs", type: "boolean"},
                 {name: "path", type: "string"},
                 {name: "charset", type: "string"},
                 {
