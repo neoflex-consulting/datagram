@@ -141,7 +141,7 @@ if (self.partitionsFromString == true) {
     )
     [%}%]
     ${if(partStr == null || partStr == "") "" else s"PARTITIONED BY (${partStr})"}
-    STORED AS [%=self.localFileFormat%]
+    STORED AS [%=self.formatName()%]
     LOCATION '[%=self.localFileName%]'"""
     logger.logInfo(s"Create external table:\n${createQuery}")   
     spark.sql(createQuery)
